@@ -1,0 +1,8 @@
+.env
+.vscode/
+
+**/__pycache__/
+*.pyc
+
+smoke_test_logs/
+method_1_section_selection/outputs/

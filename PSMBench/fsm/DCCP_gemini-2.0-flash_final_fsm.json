@@ -1,0 +1,296 @@
+{
+  "states": [
+    "Closed",
+    "Listen",
+    "Request",
+    "Respond",
+    "PartOpen",
+    "Open",
+    "CloseReq",
+    "Closing",
+    "TimeWait",
+    "Stable",
+    "Changing",
+    "Unstable",
+    "CheckingDataChecksum",
+    "NotCheckingDataChecksum",
+    "DataChecksumMandatory",
+    "MinimumChecksumCoverageZero",
+    "MinimumChecksumCoverageNonZero",
+    "EcnCapable",
+    "EcnIncapableWaitingConfirm",
+    "EcnIncapable"
+  ],
+  "initial_state": "Closed",
+  "final_states": [
+    "Closed",
+    "TimeWait",
+    "EcnIncapable"
+  ],
+  "transitions": [
+    {
+      "from": "Closed",
+      "event": "send DCCP-Request",
+      "action": "transition Request",
+      "to": "Request"
+    },
+    {
+      "from": "Listen",
+      "event": "recv DCCP-Request",
+      "action": "transition Respond",
+      "to": "Respond"
+    },
+    {
+      "from": "Request",
+      "event": "recv DCCP-Response",
+      "action": "transition PartOpen",
+      "to": "PartOpen"
+    },
+    {
+      "from": "Respond",
+      "event": "send DCCP-Response",
+      "action": "transition Open",
+      "to": "Open"
+    },
+    {
+      "from": "PartOpen",
+      "event": "send DCCP-Ack or DCCP-DataAck",
+      "action": "transition Open",
+      "to": "Open"
+    },
+    {
+      "from": "Open",
+      "event": "recv DCCP-CloseReq",
+      "action": "transition CloseReq",
+      "to": "CloseReq"
+    },
+    {
+      "from": "CloseReq",
+      "event": "send DCCP-Close",
+      "action": "transition Closed",
+      "to": "Closed"
+    },
+    {
+      "from": "CloseReq",
+      "event": "send DCCP-Close",
+      "action": "transition TimeWait",
+      "to": "TimeWait"
+    },
+    {
+      "from": "Open",
+      "event": "send DCCP-Close",
+      "action": "transition Closing",
+      "to": "Closing"
+    },
+    {
+      "from": "Closing",
+      "event": "recv DCCP-Reset",
+      "action": "transition Closed",
+      "to": "Closed"
+    },
+    {
+      "from": "TimeWait",
+      "event": "timeout 2MSL",
+      "action": "transition Closed",
+      "to": "Closed"
+    },
+    {
+      "from": "Changing",
+      "event": "recv Confirm R",
+      "action": "ignore",
+      "to": "Changing"
+    },
+    {
+      "from": "Stable",
+      "event": "send Change L",
+      "action": "transition Changing",
+      "to": "Changing"
+    },
+    {
+      "from": "Changing",
+      "event": "recv Change R",
+      "action": "calc new value, send Confirm L",
+      "to": "Stable"
+    },
+    {
+      "from": "Changing",
+      "event": "recv empty Confirm R",
+      "action": "revert to old value",
+      "to": "Stable"
+    },
+    {
+      "from": "Stable",
+      "event": "recv Change R",
+      "action": "calc new value, send Confirm L",
+      "to": "Stable"
+    },
+    {
+      "from": "Stable",
+      "event": "pref list changes",
+      "action": "transition Unstable",
+      "to": "Unstable"
+    },
+    {
+      "from": "Unstable",
+      "event": "send Change L",
+      "action": "transition Changing",
+      "to": "Changing"
+    },
+    {
+      "from": "Unstable",
+      "event": "recv Confirm R",
+      "action": "ignore",
+      "to": "Unstable"
+    },
+    {
+      "from": "Unstable",
+      "event": "recv Change R",
+      "action": "ignore",
+      "to": "Unstable"
+    },
+    {
+      "from": "Closed",
+      "event": "recv DCCP-Data",
+      "action": "reply DCCP-Sync",
+      "to": "Closed"
+    },
+    {
+      "from": "Open",
+      "event": "recv sequence-invalid DCCP-Reset",
+      "action": "reply DCCP-Sync",
+      "to": "Open"
+    },
+    {
+      "from": "Request",
+      "event": "recv DCCP-Sync",
+      "action": "reply DCCP-Reset",
+      "to": "Request"
+    },
+    {
+      "from": "Listen",
+      "event": "recv Request",
+      "action": "send Response",
+      "to": "Respond"
+    },
+    {
+      "from": "Request",
+      "event": "recv Response",
+      "action": "send Ack",
+      "to": "PartOpen"
+    },
+    {
+      "from": "Respond",
+      "event": "recv Ack",
+      "action": "transition Open",
+      "to": "Open"
+    },
+    {
+      "from": "PartOpen",
+      "event": "recv packet",
+      "action": "transition Open",
+      "to": "Open"
+    },
+    {
+      "from": "Open",
+      "event": "send CloseReq",
+      "action": "transition CloseReq",
+      "to": "CloseReq"
+    },
+    {
+      "from": "Open",
+      "event": "send Close",
+      "action": "transition Closing",
+      "to": "Closing"
+    },
+    {
+      "from": "CloseReq",
+      "event": "recv Close",
+      "action": "send Reset",
+      "to": "Closed"
+    },
+    {
+      "from": "Closing",
+      "event": "recv Reset",
+      "action": "transition TimeWait",
+      "to": "TimeWait"
+    },
+    {
+      "from": "Open",
+      "event": "recv Close",
+      "action": "send Reset",
+      "to": "Closed"
+    },
+    {
+      "from": "ANY",
+      "event": "recv Reset",
+      "action": "transition TimeWait",
+      "to": "TimeWait"
+    },
+    {
+      "from": "Respond",
+      "event": "timeout 4MSL",
+      "action": "send Reset",
+      "to": "Closed"
+    },
+    {
+      "from": "PartOpen",
+      "event": "timeout 4MSL",
+      "action": "send Reset",
+      "to": "Closed"
+    },
+    {
+      "from": "NotCheckingDataChecksum",
+      "event": "recv ChangeRCheckDataChecksum1",
+      "action": "transition DataChecksumMandatory",
+      "to": "DataChecksumMandatory"
+    },
+    {
+      "from": "CheckingDataChecksum",
+      "event": "recv DataChecksumOption",
+      "action": "check data checksum",
+      "to": "CheckingDataChecksum"
+    },
+    {
+      "from": "NotCheckingDataChecksum",
+      "event": "recv DataChecksumOption",
+      "action": "may check data checksum",
+      "to": "NotCheckingDataChecksum"
+    },
+    {
+      "from": "MinimumChecksumCoverageZero",
+      "event": "recv ChangeRMinimumChecksumCoverageValue",
+      "action": "set minimum coverage value",
+      "to": "MinimumChecksumCoverageNonZero"
+    },
+    {
+      "from": "MinimumChecksumCoverageNonZero",
+      "event": "recv ChangeRMinimumChecksumCoverageZero",
+      "action": "set minimum coverage zero",
+      "to": "MinimumChecksumCoverageZero"
+    },
+    {
+      "from": "EcnCapable",
+      "event": "cond not ECN capable",
+      "action": "send Change L(ECN Incapable, 1)",
+      "to": "EcnIncapableWaitingConfirm"
+    },
+    {
+      "from": "EcnIncapableWaitingConfirm",
+      "event": "recv Confirm R(ECN Incapable, 1)",
+      "action": "transition to EcnIncapable",
+      "to": "EcnIncapable"
+    },
+    {
+      "from": "EcnIncapableWaitingConfirm",
+      "event": "timeout retransmit",
+      "action": "send Change L(ECN Incapable, 1)",
+      "to": "EcnIncapableWaitingConfirm"
+    },
+    {
+      "from": "EcnIncapableWaitingConfirm",
+      "event": "recv Data",
+      "action": "reply Data Dropped",
+      "to": "EcnIncapableWaitingConfirm"
+    }
+  ]
+}

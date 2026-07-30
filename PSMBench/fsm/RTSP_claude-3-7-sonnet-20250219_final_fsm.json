@@ -1,0 +1,564 @@
+{
+  "states": [
+    "Initial",
+    "TLSConnecting",
+    "AwaitingCredentials",
+    "Connected",
+    "Described",
+    "SetupAudio",
+    "SetupVideo",
+    "Ready",
+    "Play",
+    "Paused",
+    "AwaitingAck",
+    "Retransmitting",
+    "Informational",
+    "Success",
+    "Redirection",
+    "ClientError",
+    "ServerError",
+    "Overloaded",
+    "Processing",
+    "SessionEstablished"
+  ],
+  "initial_state": "Initial",
+  "final_states": [
+    "Idle"
+  ],
+  "transitions": [
+    {
+      "from": "Initial",
+      "event": "receive SETUP with rtsps",
+      "action": "set up TLS session",
+      "to": "TLSConnecting"
+    },
+    {
+      "from": "Initial",
+      "event": "receive SETUP",
+      "action": "reply 200",
+      "to": "Ready"
+    },
+    {
+      "from": "Initial",
+      "event": "receive DESCRIBE",
+      "action": "reply 200",
+      "to": "Described"
+    },
+    {
+      "from": "Initial",
+      "event": "receive request with rtsp URI",
+      "action": "reply 301",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "receive Request",
+      "action": "reply 100",
+      "to": "Informational"
+    },
+    {
+      "from": "Initial",
+      "event": "receive ValidRequest",
+      "action": "reply 200",
+      "to": "Success"
+    },
+    {
+      "from": "Initial",
+      "event": "receive RedirectableRequest",
+      "action": "reply 3xx",
+      "to": "Redirection"
+    },
+    {
+      "from": "Initial",
+      "event": "receive MalformedRequest",
+      "action": "reply 400",
+      "to": "ClientError"
+    },
+    {
+      "from": "Initial",
+      "event": "receive UnauthenticatedRequest",
+      "action": "reply 401",
+      "to": "ClientError"
+    },
+    {
+      "from": "Initial",
+      "event": "receive ForbiddenRequest",
+      "action": "reply 403",
+      "to": "ClientError"
+    },
+    {
+      "from": "Initial",
+      "event": "receive NonexistentResource",
+      "action": "reply 404",
+      "to": "ClientError"
+    },
+    {
+      "from": "Initial",
+      "event": "receive InvalidMethod",
+      "action": "reply 405",
+      "to": "ClientError"
+    },
+    {
+      "from": "Initial",
+      "event": "receive SessionNotFound",
+      "action": "reply 454",
+      "to": "ClientError"
+    },
+    {
+      "from": "Initial",
+      "event": "receive InvalidState",
+      "action": "reply 455",
+      "to": "ClientError"
+    },
+    {
+      "from": "Initial",
+      "event": "receive ServerOverload",
+      "action": "reply 503",
+      "to": "ServerError"
+    },
+    {
+      "from": "Initial",
+      "event": "receive InternalError",
+      "action": "reply 500",
+      "to": "ServerError"
+    },
+    {
+      "from": "Initial",
+      "event": "receive UnsupportedVersion",
+      "action": "reply 505",
+      "to": "ServerError"
+    },
+    {
+      "from": "Initial",
+      "event": "receive UnsupportedOption",
+      "action": "reply 551",
+      "to": "ServerError"
+    },
+    {
+      "from": "Initial",
+      "event": "receive request",
+      "action": "reply 100",
+      "to": "Processing"
+    },
+    {
+      "from": "TLSConnecting",
+      "event": "cond certificate_not_in_header",
+      "action": "reply 470",
+      "to": "AwaitingCredentials"
+    },
+    {
+      "from": "TLSConnecting",
+      "event": "cond certificate_in_header",
+      "action": "send request to next hop",
+      "to": "Connected"
+    },
+    {
+      "from": "TLSConnecting",
+      "event": "cond cipher_suite_mismatch",
+      "action": "reply 472",
+      "to": "Initial"
+    },
+    {
+      "from": "AwaitingCredentials",
+      "event": "receive request with certificate",
+      "action": "send request to next hop",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "receive SETUP",
+      "action": "reply 200",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "Connected",
+      "event": "timeout Connection",
+      "action": "close connection",
+      "to": "Idle"
+    },
+    {
+      "from": "Described",
+      "event": "receive SETUP",
+      "action": "reply 200",
+      "to": "SetupAudio"
+    },
+    {
+      "from": "SetupAudio",
+      "event": "receive SETUP",
+      "action": "reply 200",
+      "to": "SetupVideo"
+    },
+    {
+      "from": "SetupVideo",
+      "event": "receive PLAY",
+      "action": "reply 200",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "receive SETUP",
+      "action": "reply 200",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "receive PLAY",
+      "action": "reply 200",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "receive TEARDOWN",
+      "action": "reply 200",
+      "to": "Initial"
+    },
+    {
+      "from": "Ready",
+      "event": "receive SETUP new_uri",
+      "action": "set NRM+=1",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "receive SETUP existing_uri",
+      "action": "change transport_param",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "receive TEARDOWN prs_uri",
+      "action": "set NRM=0",
+      "to": "Initial"
+    },
+    {
+      "from": "Ready",
+      "event": "receive TEARDOWN md_uri NRM=1",
+      "action": "set NRM=0",
+      "to": "Initial"
+    },
+    {
+      "from": "Ready",
+      "event": "receive TEARDOWN md_uri NRM>1",
+      "action": "set NRM-=1",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "receive PLAY prs_uri no_range",
+      "action": "play from_RP",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "receive PLAY prs_uri range",
+      "action": "play according_to_range",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "receive PLAY md_uri NRM=1 range",
+      "action": "play according_to_range",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "receive PLAY md_uri NRM=1",
+      "action": "play from_RP",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "receive PAUSE prs_uri",
+      "action": "return PP",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "receive REDIRECT with_terminate_reason",
+      "action": "set RedP",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "receive REDIRECT no_terminate_reason",
+      "action": "remove session",
+      "to": "Initial"
+    },
+    {
+      "from": "Ready",
+      "event": "timeout",
+      "action": "terminate session",
+      "to": "Initial"
+    },
+    {
+      "from": "Ready",
+      "event": "cond RedP_reached",
+      "action": "teardown session",
+      "to": "Initial"
+    },
+    {
+      "from": "Play",
+      "event": "receive PAUSE",
+      "action": "reply 200",
+      "to": "Paused"
+    },
+    {
+      "from": "Play",
+      "event": "receive TEARDOWN",
+      "action": "reply 200",
+      "to": "Initial"
+    },
+    {
+      "from": "Play",
+      "event": "send PLAY_NOTIFY",
+      "action": "notify session changes",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "receive SETUP",
+      "action": "reply 200",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "receive PLAY",
+      "action": "reply 200",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "receive PAUSE prs_uri",
+      "action": "set RP_to_present_point",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "cond end_of_media all_media",
+      "action": "set RP_to_end_of_media",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "cond end_of_range",
+      "action": "set RP_to_end_of_range",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "receive PLAY prs_uri no_range",
+      "action": "play from_present_point",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "receive PLAY prs_uri range",
+      "action": "play according_to_range",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "receive PLAY_NOTIFY",
+      "action": "reply 200",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "receive SETUP new_uri",
+      "action": "reply 455",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "receive SETUP md_uri",
+      "action": "reply 455",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "receive SETUP md_uri IFI",
+      "action": "change transport_param",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "receive TEARDOWN prs_uri",
+      "action": "remove session",
+      "to": "Initial"
+    },
+    {
+      "from": "Play",
+      "event": "receive TEARDOWN md_uri NRM=1",
+      "action": "set NRM=0",
+      "to": "Initial"
+    },
+    {
+      "from": "Play",
+      "event": "receive TEARDOWN md_uri",
+      "action": "reply 455",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "receive REDIRECT with_time_parameter",
+      "action": "set RedP",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "receive REDIRECT",
+      "action": "remove session",
+      "to": "Initial"
+    },
+    {
+      "from": "Play",
+      "event": "cond RedP_reached",
+      "action": "teardown session",
+      "to": "Initial"
+    },
+    {
+      "from": "Play",
+      "event": "timeout",
+      "action": "stop media_playout",
+      "to": "Initial"
+    },
+    {
+      "from": "Play",
+      "event": "send PLAY_NOTIFY",
+      "action": "notify end-of-stream",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "send PLAY_NOTIFY",
+      "action": "notify media-properties-update",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "send PLAY_NOTIFY",
+      "action": "notify scale-change",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "receive PLAY",
+      "action": "replace previous request",
+      "to": "Play"
+    },
+    {
+      "from": "Paused",
+      "event": "receive PLAY",
+      "action": "reply 200",
+      "to": "Play"
+    },
+    {
+      "from": "Paused",
+      "event": "receive TEARDOWN",
+      "action": "reply 200",
+      "to": "Initial"
+    },
+    {
+      "from": "AwaitingAck",
+      "event": "receive Acknowledgement",
+      "action": "update RTT",
+      "to": "Idle"
+    },
+    {
+      "from": "AwaitingAck",
+      "event": "timeout RTT",
+      "action": "resend Request",
+      "to": "Retransmitting"
+    },
+    {
+      "from": "Retransmitting",
+      "event": "receive Acknowledgement",
+      "action": "update RTT",
+      "to": "Idle"
+    },
+    {
+      "from": "Retransmitting",
+      "event": "timeout RTT",
+      "action": "resend Request",
+      "to": "Retransmitting"
+    },
+    {
+      "from": "Processing",
+      "event": "cond request_successful",
+      "action": "reply 2xx",
+      "to": "Success"
+    },
+    {
+      "from": "Processing",
+      "event": "cond further_action_needed",
+      "action": "reply 3xx",
+      "to": "Redirection"
+    },
+    {
+      "from": "Processing",
+      "event": "cond bad_request",
+      "action": "reply 4xx",
+      "to": "ClientError"
+    },
+    {
+      "from": "Processing",
+      "event": "cond server_failure",
+      "action": "reply 5xx",
+      "to": "ServerError"
+    },
+    {
+      "from": "Processing",
+      "event": "cond method_not_valid_in_state",
+      "action": "reply 455",
+      "to": "ClientError"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "timeout Session",
+      "action": "close connection",
+      "to": "Idle"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive TEARDOWN",
+      "action": "reply 200",
+      "to": "Connected"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive SET_PARAMETER",
+      "action": "reply 200",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive GET_PARAMETER",
+      "action": "reply 200",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive OPTIONS",
+      "action": "reply 200",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "Overloaded",
+      "event": "receive request",
+      "action": "reply 503",
+      "to": "Overloaded"
+    },
+    {
+      "from": "Idle",
+      "event": "receive SETUP",
+      "action": "reply 200",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "Idle",
+      "event": "send Request",
+      "action": "set RTT 500ms",
+      "to": "AwaitingAck"
+    }
+  ]
+}

@@ -1,0 +1,370 @@
+{
+  "states": [
+    "SMTP_Client",
+    "SMTP_Server",
+    "MailTransaction",
+    "WaitingForReply",
+    "MessageTransfer",
+    "SessionInitiation",
+    "ClientInitiation",
+    "MailTransactionInProgress",
+    "DataReceiving",
+    "TransactionAborted",
+    "TransactionCompleted",
+    "LocatingTargetHost",
+    "MXRecordFound",
+    "ErrorCondition",
+    "MessageQueued",
+    "DeliveryAttempt",
+    "RelayMessage",
+    "FinalDelivery",
+    "AddressResolution",
+    "MessageAccepted",
+    "DeliveryFailure",
+    "NotificationSent",
+    "InvalidReturnAddress",
+    "HostileContentDetected",
+    "LoopDetected",
+    "MessageRepaired",
+    "AwaitingCommand",
+    "VerifyingAddress",
+    "AddressValid",
+    "AddressInvalid",
+    "ClosingConnection",
+    "SendingResponse",
+    "ProcessingRequest",
+    "ServiceReady",
+    "MailFromCommand",
+    "RcptToCommand",
+    "ResetCommand",
+    "VrfyCommand",
+    "UserNotFound",
+    "DataInput",
+    "TransactionClosed"
+  ],
+  "initial_state": "ServiceReady",
+  "final_states": [
+    "TransactionClosed",
+    "FinalDelivery",
+    "ErrorCondition",
+    "InvalidReturnAddress",
+    "HostileContentDetected",
+    "LoopDetected",
+    "MessageRepaired",
+    "AddressInvalid"
+  ],
+  "transitions": [
+    {
+      "from": "ServiceReady",
+      "event": "receive EHLO",
+      "action": "reply 250",
+      "to": "MailAccepted"
+    },
+    {
+      "from": "MailAccepted",
+      "event": "receive MAIL FROM",
+      "action": "reply 250",
+      "to": "MailFromCommand"
+    },
+    {
+      "from": "MailFromCommand",
+      "event": "receive RCPT TO",
+      "action": "reply 250",
+      "to": "MailAccepted"
+    },
+    {
+      "from": "MailFromCommand",
+      "event": "receive RCPT TO",
+      "action": "reply 550",
+      "to": "UserNotFound"
+    },
+    {
+      "from": "MailAccepted",
+      "event": "receive DATA",
+      "action": "reply 354",
+      "to": "DataInput"
+    },
+    {
+      "from": "DataInput",
+      "event": "receive message",
+      "action": "reply 250",
+      "to": "TransactionClosed"
+    },
+    {
+      "from": "TransactionClosed",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "ServiceReady"
+    },
+    {
+      "from": "MailAccepted",
+      "event": "receive RSET",
+      "action": "reply 250",
+      "to": "ServiceReady"
+    },
+    {
+      "from": "MailAccepted",
+      "event": "receive VRFY",
+      "action": "reply 250",
+      "to": "VrfyCommand"
+    },
+    {
+      "from": "SMTP_Client",
+      "event": "receive EHLO",
+      "action": "reply 250",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive MAIL",
+      "action": "reply 250",
+      "to": "MailTransaction"
+    },
+    {
+      "from": "MailTransaction",
+      "event": "receive RCPT",
+      "action": "reply 250",
+      "to": "MailTransaction"
+    },
+    {
+      "from": "MailTransaction",
+      "event": "receive DATA",
+      "action": "reply 354",
+      "to": "MessageTransfer"
+    },
+    {
+      "from": "MessageTransfer",
+      "event": "receive END_DATA",
+      "action": "reply 250",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "SessionInitiation",
+      "event": "receive CONNECT",
+      "action": "reply 220",
+      "to": "ClientInitiation"
+    },
+    {
+      "from": "ClientInitiation",
+      "event": "receive EHLO",
+      "action": "reply 250",
+      "to": "MailTransaction"
+    },
+    {
+      "from": "MailTransaction",
+      "event": "receive END_OF_DATA",
+      "action": "reply 250",
+      "to": "SessionInitiation"
+    },
+    {
+      "from": "SessionInitiation",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "TerminatingSessions"
+    },
+    {
+      "from": "TerminatingSessions",
+      "event": "timeout 5s",
+      "action": "close connection",
+      "to": "SessionInitiation"
+    },
+    {
+      "from": "InitialState",
+      "event": "receive EHLO",
+      "action": "reply 250",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "InitialState",
+      "event": "receive HELO",
+      "action": "reply 250",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive MAIL",
+      "action": "reply 250",
+      "to": "MailTransactionInProgress"
+    },
+    {
+      "from": "MailTransactionInProgress",
+      "event": "receive RCPT",
+      "action": "reply 250",
+      "to": "MailTransactionInProgress"
+    },
+    {
+      "from": "MailTransactionInProgress",
+      "event": "receive DATA",
+      "action": "reply 354",
+      "to": "DataReceiving"
+    },
+    {
+      "from": "DataReceiving",
+      "event": "receive <CRLF>.<CRLF>",
+      "action": "reply 250",
+      "to": "TransactionCompleted"
+    },
+    {
+      "from": "MailTransactionInProgress",
+      "event": "receive RSET",
+      "action": "reply 250",
+      "to": "TransactionAborted"
+    },
+    {
+      "from": "MailTransactionInProgress",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "InitialState"
+    },
+    {
+      "from": "TransactionAborted",
+      "event": "receive EHLO",
+      "action": "reply 250",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "TransactionCompleted",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "InitialState"
+    },
+    {
+      "from": "LocatingTargetHost",
+      "event": "receive DNS_LOOKUP",
+      "action": "set MXRecordFound",
+      "to": "MXRecordFound"
+    },
+    {
+      "from": "MXRecordFound",
+      "event": "cond CNAME_FOUND",
+      "action": "set AddressResolution",
+      "to": "AddressResolution"
+    },
+    {
+      "from": "MXRecordFound",
+      "event": "cond NON_EXISTENT_DOMAIN",
+      "action": "reply error",
+      "to": "ErrorCondition"
+    },
+    {
+      "from": "MXRecordFound",
+      "event": "cond TEMPORARY_ERROR",
+      "action": "set MessageQueued",
+      "to": "MessageQueued"
+    },
+    {
+      "from": "MXRecordFound",
+      "event": "cond EMPTY_MX_LIST",
+      "action": "set DeliveryAttempt",
+      "to": "DeliveryAttempt"
+    },
+    {
+      "from": "DeliveryAttempt",
+      "event": "receive DELIVERY_SUCCESS",
+      "action": "send success",
+      "to": "FinalDelivery"
+    },
+    {
+      "from": "DeliveryAttempt",
+      "event": "cond MX_UNUSABLE",
+      "action": "reply error",
+      "to": "ErrorCondition"
+    },
+    {
+      "from": "RelayMessage",
+      "event": "receive RELAY_MESSAGE",
+      "action": "send success",
+      "to": "FinalDelivery"
+    },
+    {
+      "from": "RelayMessage",
+      "event": "cond NO_RECORDS_LEFT",
+      "action": "reply undeliverable",
+      "to": "ErrorCondition"
+    },
+    {
+      "from": "MessageAccepted",
+      "event": "receive DATA",
+      "action": "reply 250 OK",
+      "to": "DeliveryFailure"
+    },
+    {
+      "from": "DeliveryFailure",
+      "event": "cond delivery_failed",
+      "action": "send notification",
+      "to": "NotificationSent"
+    },
+    {
+      "from": "NotificationSent",
+      "event": "receive null address",
+      "action": "stop notification",
+      "to": "MessageAccepted"
+    },
+    {
+      "from": "DeliveryFailure",
+      "event": "cond invalid_return_address",
+      "action": "log invalid address",
+      "to": "InvalidReturnAddress"
+    },
+    {
+      "from": "DeliveryFailure",
+      "event": "cond hostile_content",
+      "action": "log hostile content",
+      "to": "HostileContentDetected"
+    },
+    {
+      "from": "MessageAccepted",
+      "event": "receive loop detected",
+      "action": "reply 550 Loop Detected",
+      "to": "LoopDetected"
+    },
+    {
+      "from": "MessageAccepted",
+      "event": "cond repair_needed",
+      "action": "set message repaired",
+      "to": "MessageRepaired"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive VRFY",
+      "action": "send 252",
+      "to": "VerifyingAddress"
+    },
+    {
+      "from": "VerifyingAddress",
+      "event": "receive ADDRESS",
+      "action": "reply 250",
+      "to": "AddressValid"
+    },
+    {
+      "from": "VerifyingAddress",
+      "event": "receive ADDRESS",
+      "action": "reply 550",
+      "to": "AddressInvalid"
+    },
+    {
+      "from": "AddressInvalid",
+      "event": "timeout",
+      "action": "close",
+      "to": "ClosingConnection"
+    },
+    {
+      "from": "AddressValid",
+      "event": "receive RCPT",
+      "action": "send 251",
+      "to": "MailAccepted"
+    },
+    {
+      "from": "MailRejected",
+      "event": "receive RCPT",
+      "action": "send 550",
+      "to": "ClosingConnection"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "receive END",
+      "action": "send 250",
+      "to": "ClosingConnection"
+    }
+  ]
+}

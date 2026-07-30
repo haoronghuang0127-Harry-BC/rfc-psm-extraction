@@ -1,0 +1,310 @@
+{
+  "states": [
+    "Disconnected",
+    "Connected",
+    "NotAuthenticated",
+    "TLSNegotiation",
+    "AuthenticationInProgress",
+    "Authenticated",
+    "Selected",
+    "CommandInProgress",
+    "CommandContinuation",
+    "Logout",
+    "Terminated"
+  ],
+  "initial_state": "Disconnected",
+  "final_states": [
+    "Logout",
+    "Terminated"
+  ],
+  "transitions": [
+    {
+      "from": "Disconnected",
+      "event": "establish connection",
+      "action": "send greeting",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "receive command",
+      "action": "parse command",
+      "to": "CommandInProgress"
+    },
+    {
+      "from": "Connected",
+      "event": "cond server_data_available",
+      "action": "send *",
+      "to": "Connected"
+    },
+    {
+      "from": "CommandInProgress",
+      "event": "cond command_requires_continuation",
+      "action": "send +",
+      "to": "CommandContinuation"
+    },
+    {
+      "from": "CommandInProgress",
+      "event": "cond command_error",
+      "action": "reply BAD",
+      "to": "Connected"
+    },
+    {
+      "from": "CommandInProgress",
+      "event": "cond command_success",
+      "action": "reply OK",
+      "to": "Connected"
+    },
+    {
+      "from": "CommandInProgress",
+      "event": "cond command_failure",
+      "action": "reply NO",
+      "to": "Connected"
+    },
+    {
+      "from": "CommandContinuation",
+      "event": "receive continuation",
+      "action": "process continuation",
+      "to": "CommandInProgress"
+    },
+    {
+      "from": "Connected",
+      "event": "cond connection_established",
+      "action": "set state",
+      "to": "NotAuthenticated"
+    },
+    {
+      "from": "NotAuthenticated",
+      "event": "receive CAPABILITY",
+      "action": "reply CAPABILITY",
+      "to": "NotAuthenticated"
+    },
+    {
+      "from": "NotAuthenticated",
+      "event": "receive NOOP",
+      "action": "reply OK",
+      "to": "NotAuthenticated"
+    },
+    {
+      "from": "NotAuthenticated",
+      "event": "receive LOGOUT",
+      "action": "reply BYE",
+      "to": "Logout"
+    },
+    {
+      "from": "NotAuthenticated",
+      "event": "receive STARTTLS",
+      "action": "reply OK",
+      "to": "TLSNegotiation"
+    },
+    {
+      "from": "TLSNegotiation",
+      "event": "receive AUTHENTICATE",
+      "action": "reply Challenge",
+      "to": "AuthenticationInProgress"
+    },
+    {
+      "from": "AuthenticationInProgress",
+      "event": "receive AuthResponse",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "NotAuthenticated",
+      "event": "receive AUTHENTICATE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "NotAuthenticated",
+      "event": "receive LOGIN",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive CAPABILITY",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive NOOP",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive LOGOUT",
+      "action": "reply BYE",
+      "to": "Logout"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive ENABLE",
+      "action": "reply ENABLED",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive SELECT",
+      "action": "reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive EXAMINE",
+      "action": "reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive CREATE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive DELETE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive RENAME",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive SUBSCRIBE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive UNSUBSCRIBE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive LIST",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive NAMESPACE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive STATUS",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive APPEND",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive IDLE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "receive CAPABILITY",
+      "action": "reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "receive NOOP",
+      "action": "reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "receive LOGOUT",
+      "action": "reply BYE",
+      "to": "Logout"
+    },
+    {
+      "from": "Selected",
+      "event": "receive SELECT",
+      "action": "reply CLOSED",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "receive EXAMINE",
+      "action": "reply CLOSED",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "receive CLOSE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "receive UNSELECT",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "receive EXPUNGE",
+      "action": "reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "receive SEARCH",
+      "action": "reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "receive FETCH",
+      "action": "reply FETCH",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "receive STORE",
+      "action": "reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "receive COPY",
+      "action": "reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "receive MOVE",
+      "action": "reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "receive UID",
+      "action": "reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "receive LOGOUT",
+      "action": "reply BYE",
+      "to": "Terminated"
+    }
+  ]
+}

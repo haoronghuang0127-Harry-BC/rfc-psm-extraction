@@ -1,0 +1,169 @@
+{
+  "states": [
+    "CLOSED",
+    "LISTEN",
+    "REQUEST",
+    "RESPOND",
+    "PARTOPEN",
+    "OPEN",
+    "CLOSEREQ",
+    "CLOSING",
+    "TIMEWAIT"
+  ],
+  "initial_state": "CLOSED",
+  "final_states": [
+    "CLOSED"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "active open",
+      "action": "Send REQUEST",
+      "to": "REQUEST"
+    },
+    {
+      "from": "CLOSED",
+      "event": "passive open",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "receive REQUEST",
+      "action": "send RESPONSE",
+      "to": "RESPOND"
+    },
+    {
+      "from": "LISTEN",
+      "event": "timeout",
+      "action": "timeout",
+      "to": "CLOSED"
+    },
+    {
+      "from": "RESPOND",
+      "event": "receive ACK or DATAACK",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "timeout",
+      "action": "timeout",
+      "to": "CLOSED"
+    },
+    {
+      "from": "RESPOND",
+      "event": "",
+      "action": "send DATA",
+      "to": "RESPOND"
+    },
+    {
+      "from": "REQUEST",
+      "event": "receive RESPONSE",
+      "action": "send ACK",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "receive RESET?",
+      "action": "reset DCCP",
+      "to": "CLOSED"
+    },
+    {
+      "from": "REQUEST",
+      "event": "timeout",
+      "action": "timeout",
+      "to": "CLOSED"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "receive packet",
+      "action": "send ACK!",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "receive CLOSEREQ?",
+      "action": "send CLOSE!",
+      "to": "CLOSING"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "active close",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "",
+      "action": "send DATAACK",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "timeout",
+      "action": "timeout",
+      "to": "CLOSED"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "receive RESET",
+      "action": "send RESET",
+      "to": "CLOSED"
+    },
+    {
+      "from": "OPEN",
+      "event": "receive data_ack",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "active close",
+      "action": "send CLOSEREQ",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "OPEN",
+      "event": "active close",
+      "action": "send close",
+      "to": "CLOSING"
+    },
+    {
+      "from": "OPEN",
+      "event": "receive closeReq",
+      "action": "send close",
+      "to": "CLOSING"
+    },
+    {
+      "from": "OPEN",
+      "event": "receive CLOSE",
+      "action": "send RESET",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "receive CLOSE",
+      "action": "send RESET?",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "receive Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "receive Close",
+      "action": "Send RESET?",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "receive Close",
+      "action": "send RESET",
+      "to": "CLOSED"
+    }
+  ]
+}

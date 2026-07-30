@@ -1,0 +1,178 @@
+{
+  "states": [
+    "Init",
+    "InitReboot",
+    "SelectingConfiguration",
+    "Selecting",
+    "RequestingConfiguration",
+    "Requesting",
+    "Renewing",
+    "Rebinding",
+    "Bound",
+    "ReleasingLease",
+    "Rebooting"
+  ],
+  "initial_state": "Init",
+  "final_states": [
+    "ReleasingLease",
+    "InitReboot"
+  ],
+  "transitions": [
+    {
+      "from": "Init",
+      "event": "receive DHCPDISCOVER",
+      "action": "send DHCPOFFER",
+      "to": "SelectingConfiguration"
+    },
+    {
+      "from": "SelectingConfiguration",
+      "event": "receive DHCPOFFER",
+      "action": "collect replies",
+      "to": "SelectingConfiguration"
+    },
+    {
+      "from": "SelectingConfiguration",
+      "event": "receive DHCPREQUEST",
+      "action": "send DHCPACK",
+      "to": "Bound"
+    },
+    {
+      "from": "SelectingConfiguration",
+      "event": "receive DHCPREQUEST",
+      "action": "send DHCPNAK",
+      "to": "Init"
+    },
+    {
+      "from": "Bound",
+      "event": "receive DHCPDECLINE",
+      "action": "reset",
+      "to": "Init"
+    },
+    {
+      "from": "Bound",
+      "event": "receive DHCPRELEASE",
+      "action": "close lease",
+      "to": "ReleasingLease"
+    },
+    {
+      "from": "ReleasingLease",
+      "event": "complete",
+      "action": "log release",
+      "to": "Init"
+    },
+    {
+      "from": "InitReboot",
+      "event": "send DHCPREQUEST",
+      "action": "wait for DHCPACK",
+      "to": "Bound"
+    },
+    {
+      "from": "InitReboot",
+      "event": "receive DHCPACK",
+      "action": "record lease",
+      "to": "Bound"
+    },
+    {
+      "from": "Bound",
+      "event": "timeout T1",
+      "action": "send DHCPREQUEST",
+      "to": "Renewing"
+    },
+    {
+      "from": "Renewing",
+      "event": "receive DHCPACK",
+      "action": "record lease",
+      "to": "Bound"
+    },
+    {
+      "from": "Renewing",
+      "event": "timeout T2",
+      "action": "send DHCPREQUEST",
+      "to": "Rebinding"
+    },
+    {
+      "from": "Rebinding",
+      "event": "receive DHCPACK",
+      "action": "record lease",
+      "to": "Bound"
+    },
+    {
+      "from": "Rebinding",
+      "event": "timeout",
+      "action": "send DHCPDISCOVER",
+      "to": "InitReboot"
+    },
+    {
+      "from": "Selecting",
+      "event": "receive DHCPOFFER",
+      "action": "send DHCPREQUEST",
+      "to": "Requesting"
+    },
+    {
+      "from": "Requesting",
+      "event": "receive DHCPACK",
+      "action": "record lease",
+      "to": "Bound"
+    },
+    {
+      "from": "Requesting",
+      "event": "receive DHCPNAK",
+      "action": "discard offer",
+      "to": "InitReboot"
+    },
+    {
+      "from": "Rebooting",
+      "event": "receive DHCPNAK",
+      "action": "restart",
+      "to": "InitReboot"
+    },
+    {
+      "from": "DHCPDiscover",
+      "event": "receive DHCPDiscover",
+      "action": "send DHCPOffer",
+      "to": "DHCPOffer"
+    },
+    {
+      "from": "DHCPOffer",
+      "event": "receive DHCPOffer",
+      "action": "send DHCPRequest",
+      "to": "DHCPRequest"
+    },
+    {
+      "from": "DHCPRequest",
+      "event": "receive DHCPRequest",
+      "action": "send DHCPAck",
+      "to": "DHCPAck"
+    },
+    {
+      "from": "DHCPAck",
+      "event": "timeout lease",
+      "action": "set Renew",
+      "to": "Renew"
+    },
+    {
+      "from": "Renew",
+      "event": "receive DHCPRequest",
+      "action": "send DHCPAck",
+      "to": "DHCPAck"
+    },
+    {
+      "from": "DHCPAck",
+      "event": "timeout lease",
+      "action": "set Rebinding",
+      "to": "Rebinding"
+    },
+    {
+      "from": "Rebinding",
+      "event": "receive DHCPRequest",
+      "action": "send DHCPAck",
+      "to": "DHCPAck"
+    },
+    {
+      "from": "DHCPAck",
+      "event": "receive DHCPRelease",
+      "action": "log release",
+      "to": "Bound"
+    }
+  ]
+}

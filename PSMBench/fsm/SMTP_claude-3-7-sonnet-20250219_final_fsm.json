@@ -1,0 +1,260 @@
+{
+  "states": [
+    "Initial",
+    "Connected",
+    "WaitingForMail",
+    "WaitingForRecipient",
+    "ProcessingData",
+    "SessionEnded",
+    "UnderAttack",
+    "Authenticated",
+    "Unauthenticated",
+    "Verifying"
+  ],
+  "initial_state": "Initial",
+  "final_states": [
+    "SessionEnded"
+  ],
+  "transitions": [
+    {
+      "from": "Initial",
+      "event": "connect",
+      "action": "reply 220",
+      "to": "Connected"
+    },
+    {
+      "from": "Initial",
+      "event": "connection established",
+      "action": "reply 220",
+      "to": "WaitingForMail"
+    },
+    {
+      "from": "Initial",
+      "event": "connection established",
+      "action": "reply 554",
+      "to": "WaitingForMail"
+    },
+    {
+      "from": "Initial",
+      "event": "receive EHLO",
+      "action": "reply 250",
+      "to": "WaitingForMail"
+    },
+    {
+      "from": "Initial",
+      "event": "receive HELO",
+      "action": "reply 250",
+      "to": "WaitingForMail"
+    },
+    {
+      "from": "Connected",
+      "event": "receive EHLO",
+      "action": "reply 250",
+      "to": "WaitingForMail"
+    },
+    {
+      "from": "Connected",
+      "event": "receive HELO",
+      "action": "reply 250",
+      "to": "WaitingForMail"
+    },
+    {
+      "from": "Connected",
+      "event": "receive EHLO",
+      "action": "reply 250",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "receive MAIL FROM",
+      "action": "reply 250",
+      "to": "WaitingForRecipient"
+    },
+    {
+      "from": "Connected",
+      "event": "receive VRFY",
+      "action": "reply 250",
+      "to": "Verifying"
+    },
+    {
+      "from": "Connected",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "Initial"
+    },
+    {
+      "from": "WaitingForMail",
+      "event": "receive EHLO",
+      "action": "reply 250",
+      "to": "WaitingForMail"
+    },
+    {
+      "from": "WaitingForMail",
+      "event": "receive HELO",
+      "action": "reply 250",
+      "to": "WaitingForMail"
+    },
+    {
+      "from": "WaitingForMail",
+      "event": "receive MAIL",
+      "action": "reply 250",
+      "to": "WaitingForRecipient"
+    },
+    {
+      "from": "WaitingForMail",
+      "event": "receive VRFY",
+      "action": "reply 250",
+      "to": "WaitingForMail"
+    },
+    {
+      "from": "WaitingForMail",
+      "event": "receive EXPN",
+      "action": "reply 250",
+      "to": "WaitingForMail"
+    },
+    {
+      "from": "WaitingForMail",
+      "event": "receive HELP",
+      "action": "reply 211",
+      "to": "WaitingForMail"
+    },
+    {
+      "from": "WaitingForMail",
+      "event": "receive NOOP",
+      "action": "reply 250",
+      "to": "WaitingForMail"
+    },
+    {
+      "from": "WaitingForMail",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "SessionEnded"
+    },
+    {
+      "from": "WaitingForMail",
+      "event": "timeout",
+      "action": "close connection",
+      "to": "SessionEnded"
+    },
+    {
+      "from": "WaitingForRecipient",
+      "event": "receive RCPT",
+      "action": "reply 250",
+      "to": "WaitingForRecipient"
+    },
+    {
+      "from": "WaitingForRecipient",
+      "event": "receive RCPT TO",
+      "action": "reply 250",
+      "to": "WaitingForRecipient"
+    },
+    {
+      "from": "WaitingForRecipient",
+      "event": "receive RCPT TO invalid",
+      "action": "reply 550",
+      "to": "WaitingForRecipient"
+    },
+    {
+      "from": "WaitingForRecipient",
+      "event": "receive DATA",
+      "action": "reply 354",
+      "to": "ProcessingData"
+    },
+    {
+      "from": "WaitingForRecipient",
+      "event": "receive RSET",
+      "action": "reply 250",
+      "to": "Connected"
+    },
+    {
+      "from": "WaitingForRecipient",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "Initial"
+    },
+    {
+      "from": "ProcessingData",
+      "event": "receive <CRLF>.<CRLF>",
+      "action": "reply 250",
+      "to": "WaitingForMail"
+    },
+    {
+      "from": "ProcessingData",
+      "event": "receive end of data",
+      "action": "reply 250",
+      "to": "WaitingForMail"
+    },
+    {
+      "from": "ProcessingData",
+      "event": "receive .",
+      "action": "reply 250",
+      "to": "Connected"
+    },
+    {
+      "from": "Normal",
+      "event": "receive VRFY",
+      "action": "reply 252",
+      "to": "Normal"
+    },
+    {
+      "from": "Normal",
+      "event": "receive EXPN",
+      "action": "reply 252",
+      "to": "Normal"
+    },
+    {
+      "from": "Normal",
+      "event": "cond many_invalid_RCPT",
+      "action": "reply 550",
+      "to": "UnderAttack"
+    },
+    {
+      "from": "UnderAttack",
+      "event": "cond attack_continues",
+      "action": "close connection",
+      "to": "Normal"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "receive EHLO",
+      "action": "reply 550",
+      "to": "Unauthenticated"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "receive HELO",
+      "action": "reply 550",
+      "to": "Unauthenticated"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "receive MAIL",
+      "action": "reply 550",
+      "to": "Unauthenticated"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "receive RCPT",
+      "action": "reply 550",
+      "to": "Unauthenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive VRFY",
+      "action": "reply 250",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive EXPN",
+      "action": "reply 250",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Verifying",
+      "event": "receive MAIL FROM",
+      "action": "reply 250",
+      "to": "WaitingForRecipient"
+    }
+  ]
+}

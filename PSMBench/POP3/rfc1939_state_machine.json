@@ -1,0 +1,122 @@
+{
+    "states": [
+      "AUTHORIZATION",
+      "TRANSACTION",
+      "UPDATE"
+    ],
+    "initial_state": "AUTHORIZATION",
+    "final_states": [
+      "UPDATE"
+    ],
+    "transitions": [
+        {
+            "from": "AUTHORIZATION",
+            "event": "send greeting",
+            "action": "reply +OK POP3 server ready",
+            "to": "AUTHORIZATION"
+          },
+          {
+            "from": "AUTHORIZATION",
+            "event": "receive USER",
+            "action": "reply request password",
+            "to": "AUTHORIZATION"
+          },
+          {
+            "from": "AUTHORIZATION",
+            "event": "receive PASS",
+            "action": "cond check password",
+            "to": "AUTHORIZATION"
+          },
+          {
+            "from": "AUTHORIZATION",
+            "event": "cond valid USER/PASS",
+            "action": "set authenticated true",
+            "to": "TRANSACTION"
+          },
+          {
+            "from": "AUTHORIZATION",
+            "event": "receive APOP",
+            "action": "cond check digest",
+            "to": "AUTHORIZATION"
+          },
+          {
+            "from": "AUTHORIZATION",
+            "event": "cond valid APOP",
+            "action": "set authenticated true",
+            "to": "TRANSACTION"
+          },
+          {
+            "from": "AUTHORIZATION",
+            "event": "cond open maildrop failed",
+            "action": "reply -ERR and release lock",
+            "to": "AUTHORIZATION"
+          },
+          {
+            "from": "AUTHORIZATION",
+            "event": "receive QUIT",
+            "action": "reply +OK and close TCP",
+            "to": "UPDATE"
+          },
+          {
+            "from": "TRANSACTION",
+            "event": "receive STAT",
+            "action": "reply message count size",
+            "to": "TRANSACTION"
+          },
+          {
+            "from": "TRANSACTION",
+            "event": "receive LIST",
+            "action": "reply scan listing",
+            "to": "TRANSACTION"
+          },
+          {
+            "from": "TRANSACTION",
+            "event": "receive RETR",
+            "action": "reply full message",
+            "to": "TRANSACTION"
+          },
+          {
+            "from": "TRANSACTION",
+            "event": "receive DELE",
+            "action": "set message deleted",
+            "to": "TRANSACTION"
+          },
+          {
+            "from": "TRANSACTION",
+            "event": "receive NOOP",
+            "action": "reply OK",
+            "to": "TRANSACTION"
+          },
+          {
+            "from": "TRANSACTION",
+            "event": "receive RSET",
+            "action": "reset deleted flags",
+            "to": "TRANSACTION"
+          },
+          {
+            "from": "TRANSACTION",
+            "event": "receive QUIT",
+            "action": "set session closing",
+            "to": "UPDATE"
+          },
+          {
+            "from": "UPDATE",
+            "event": "cond deleted messages exist",
+            "action": "delete marked messages",
+            "to": "UPDATE"
+          },
+          {
+            "from": "UPDATE",
+            "event": "cond cleanup complete",
+            "action": "release lock and close TCP",
+            "to": "UPDATE"
+          },
+          {
+            "from": "UPDATE",
+            "event": "timeout 5s",
+            "action": "close TCP connection",
+            "to": "UPDATE"
+          }
+    ]
+  }
+  

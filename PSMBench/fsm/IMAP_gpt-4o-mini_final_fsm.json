@@ -1,0 +1,372 @@
+{
+  "states": [
+    "WaitingForCommand",
+    "CommandInProgress",
+    "CommandCompleted",
+    "ErrorDetected",
+    "ReceivingData",
+    "SendingResponse",
+    "NotAuthenticated",
+    "Authenticated",
+    "Selected",
+    "Logout",
+    "Idle",
+    "WaitingForResponse",
+    "CommandContinuation",
+    "ServiceReady",
+    "TLSNegotiation",
+    "Enabled",
+    "Fetching",
+    "Storing",
+    "LoggingOut",
+    "Cleartext",
+    "WaitingForTLS"
+  ],
+  "initial_state": "WaitingForCommand",
+  "final_states": [
+    "CommandCompleted",
+    "ErrorDetected",
+    "Logout",
+    "Idle",
+    "LoggingOut",
+    "Error"
+  ],
+  "transitions": [
+    {
+      "from": "WaitingForCommand",
+      "event": "receive COMMAND",
+      "action": "set CommandInProgress",
+      "to": "CommandInProgress"
+    },
+    {
+      "from": "CommandInProgress",
+      "event": "receive CONTINUATION",
+      "action": "reply +",
+      "to": "ReceivingData"
+    },
+    {
+      "from": "ReceivingData",
+      "event": "receive DATA",
+      "action": "set CommandCompleted",
+      "to": "CommandCompleted"
+    },
+    {
+      "from": "CommandInProgress",
+      "event": "receive ERROR",
+      "action": "set ErrorDetected",
+      "to": "ErrorDetected"
+    },
+    {
+      "from": "CommandCompleted",
+      "event": "send RESPONSE",
+      "action": "reply OK",
+      "to": "WaitingForCommand"
+    },
+    {
+      "from": "ErrorDetected",
+      "event": "send ERROR_RESPONSE",
+      "action": "reply BAD",
+      "to": "WaitingForCommand"
+    },
+    {
+      "from": "NotAuthenticated",
+      "event": "receive LOGIN",
+      "action": "reply 230",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive SELECT",
+      "action": "reply 200",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive CLOSE",
+      "action": "reply 200",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive UNSELECT",
+      "action": "reply 200",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "receive LOGOUT",
+      "action": "send BYE",
+      "to": "Logout"
+    },
+    {
+      "from": "Logout",
+      "event": "timeout",
+      "action": "close connection",
+      "to": "Logout"
+    },
+    {
+      "from": "NotAuthenticated",
+      "event": "receive PREAUTH",
+      "action": "reply 230",
+      "to": "Authenticated"
+    },
+    {
+      "from": "NotAuthenticated",
+      "event": "receive BYE",
+      "action": "close connection",
+      "to": "Logout"
+    },
+    {
+      "from": "Idle",
+      "event": "receive COMMAND",
+      "action": "set CommandInProgress",
+      "to": "CommandInProgress"
+    },
+    {
+      "from": "CommandInProgress",
+      "event": "send RESPONSE",
+      "action": "set WaitingForResponse",
+      "to": "WaitingForResponse"
+    },
+    {
+      "from": "WaitingForResponse",
+      "event": "receive COMMAND",
+      "action": "reply ERROR",
+      "to": "WaitingForResponse"
+    },
+    {
+      "from": "WaitingForResponse",
+      "event": "timeout 30m",
+      "action": "close session",
+      "to": "Idle"
+    },
+    {
+      "from": "AnyState",
+      "event": "receive CAPABILITY",
+      "action": "reply OK",
+      "to": "AnyState"
+    },
+    {
+      "from": "AnyState",
+      "event": "receive NOOP",
+      "action": "reply OK",
+      "to": "AnyState"
+    },
+    {
+      "from": "AnyState",
+      "event": "receive LOGOUT",
+      "action": "reply BYE",
+      "to": "AnyState"
+    },
+    {
+      "from": "NotAuthenticatedState",
+      "event": "receive STARTTLS",
+      "action": "reply OK",
+      "to": "NotAuthenticatedState"
+    },
+    {
+      "from": "NotAuthenticatedState",
+      "event": "receive AUTHENTICATE",
+      "action": "reply OK",
+      "to": "AuthenticatedState"
+    },
+    {
+      "from": "NotAuthenticatedState",
+      "event": "receive LOGIN",
+      "action": "reply OK",
+      "to": "AuthenticatedState"
+    },
+    {
+      "from": "AuthenticatedState",
+      "event": "receive ENABLE",
+      "action": "reply OK",
+      "to": "AuthenticatedState"
+    },
+    {
+      "from": "AuthenticatedState",
+      "event": "receive SELECT",
+      "action": "reply OK",
+      "to": "SelectedState"
+    },
+    {
+      "from": "AuthenticatedState",
+      "event": "receive EXAMINE",
+      "action": "reply OK",
+      "to": "SelectedState"
+    },
+    {
+      "from": "SelectedState",
+      "event": "receive CLOSE",
+      "action": "reply OK",
+      "to": "AuthenticatedState"
+    },
+    {
+      "from": "SelectedState",
+      "event": "receive UNSELECT",
+      "action": "reply OK",
+      "to": "AuthenticatedState"
+    },
+    {
+      "from": "SelectedState",
+      "event": "receive EXPUNGE",
+      "action": "reply OK",
+      "to": "SelectedState"
+    },
+    {
+      "from": "SelectedState",
+      "event": "receive SEARCH",
+      "action": "reply OK",
+      "to": "SelectedState"
+    },
+    {
+      "from": "SelectedState",
+      "event": "receive FETCH",
+      "action": "reply OK",
+      "to": "SelectedState"
+    },
+    {
+      "from": "SelectedState",
+      "event": "receive STORE",
+      "action": "reply OK",
+      "to": "SelectedState"
+    },
+    {
+      "from": "SelectedState",
+      "event": "receive COPY",
+      "action": "reply OK",
+      "to": "SelectedState"
+    },
+    {
+      "from": "SelectedState",
+      "event": "receive MOVE",
+      "action": "reply OK",
+      "to": "SelectedState"
+    },
+    {
+      "from": "SelectedState",
+      "event": "receive UID",
+      "action": "reply OK",
+      "to": "SelectedState"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive COMMAND",
+      "action": "reply CODE",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive STATUS",
+      "action": "reply UNTAGGED",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive DATA",
+      "action": "reply UNTAGGED",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive CONTINUATION",
+      "action": "send CONTINUATION",
+      "to": "CommandContinuation"
+    },
+    {
+      "from": "CommandContinuation",
+      "event": "receive DATA",
+      "action": "reply CODE",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "Selected",
+      "event": "receive EXISTS",
+      "action": "update mailbox size",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "receive EXPUNGE",
+      "action": "update mailbox size",
+      "to": "Selected"
+    },
+    {
+      "from": "ServiceReady",
+      "event": "receive starttls",
+      "action": "reply OK Proceed with TLS negotiation",
+      "to": "TLSNegotiation"
+    },
+    {
+      "from": "TLSNegotiation",
+      "event": "complete TLS negotiation",
+      "action": "send AUTHENTICATE SCRAM-SHA-256",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive SCRAM-SHA-256 authentication successful",
+      "action": "reply ENABLED IMAP4rev2",
+      "to": "Enabled"
+    },
+    {
+      "from": "Enabled",
+      "event": "receive select inbox",
+      "action": "reply SELECT completed",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "receive fetch 12 full",
+      "action": "reply FETCH completed",
+      "to": "Fetching"
+    },
+    {
+      "from": "Fetching",
+      "event": "receive fetch 12 body[header]",
+      "action": "reply FETCH completed",
+      "to": "Fetching"
+    },
+    {
+      "from": "Fetching",
+      "event": "receive store 12 +flags \\deleted",
+      "action": "reply +FLAGS completed",
+      "to": "Storing"
+    },
+    {
+      "from": "Storing",
+      "event": "receive logout",
+      "action": "reply LOGOUT completed",
+      "to": "LoggingOut"
+    },
+    {
+      "from": "Cleartext",
+      "event": "receive STARTTLS",
+      "action": "reply 220",
+      "to": "WaitingForTLS"
+    },
+    {
+      "from": "WaitingForTLS",
+      "event": "send TLS negotiation",
+      "action": "reply 200",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive AUTHENTICATE",
+      "action": "reply 200",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Cleartext",
+      "event": "receive AUTHENTICATE",
+      "action": "reply 400",
+      "to": "Error"
+    },
+    {
+      "from": "Error",
+      "event": "timeout 5s",
+      "action": "reset",
+      "to": "Cleartext"
+    }
+  ]
+}

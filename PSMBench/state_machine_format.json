@@ -1,0 +1,13 @@
+{
+  "states": ["state1", "state2"],
+  "initial_state": "stateX",
+  "final_states": ["stateY"],
+  "transitions": [
+    {
+      "from": "state1",
+      "event": "recv COMMAND",
+      "action": "reply CODE",
+      "to": "state2"
+    }
+  ]
+}

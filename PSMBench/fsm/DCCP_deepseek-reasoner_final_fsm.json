@@ -1,0 +1,194 @@
+{
+  "states": [
+    "CLOSED",
+    "LISTEN",
+    "REQUEST",
+    "RESPOND",
+    "PARTOPEN",
+    "OPEN",
+    "CLOSEREQ",
+    "CLOSING",
+    "TIMEWAIT",
+    "STABLE",
+    "CHANGING",
+    "UNSTABLE"
+  ],
+  "initial_state": "LISTEN",
+  "final_states": [],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "send DCCP-Request",
+      "action": "send DCCP-Request",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "recv DCCP-Response",
+      "action": "send DCCP-Ack",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "send DCCP-Ack",
+      "action": "send DCCP-Ack",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "send DCCP-DataAck",
+      "action": "send DCCP-DataAck",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "recv DCCP-CloseReq",
+      "action": "send DCCP-Close",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "recv DCCP-Reset",
+      "action": "transition TIMEWAIT",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "timeout 2MSL",
+      "action": "close",
+      "to": "CLOSED"
+    },
+    {
+      "from": "OPEN",
+      "event": "send DCCP-Close",
+      "action": "send DCCP-Close",
+      "to": "CLOSING"
+    },
+    {
+      "from": "LISTEN",
+      "event": "recv DCCP-Request",
+      "action": "send DCCP-Response",
+      "to": "RESPOND"
+    },
+    {
+      "from": "RESPOND",
+      "event": "recv DCCP-Ack",
+      "action": "transition OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "recv DCCP-DataAck",
+      "action": "transition OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "send DCCP-CloseReq",
+      "action": "send DCCP-CloseReq",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "recv DCCP-Close",
+      "action": "send DCCP-Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "OPEN",
+      "event": "recv DCCP-Close",
+      "action": "send DCCP-Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "recv valid packet",
+      "action": "set OSR",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "recv Ack",
+      "action": "set OSR",
+      "to": "OPEN"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "timeout",
+      "action": "reply CloseReq",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "CLOSING",
+      "event": "timeout",
+      "action": "reply Close",
+      "to": "CLOSING"
+    },
+    {
+      "from": "REQUEST",
+      "event": "timeout 3min",
+      "action": "reply Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "timeout 8min",
+      "action": "reply Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "RESPOND",
+      "event": "timeout 8min",
+      "action": "reply Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "OPEN",
+      "event": "recv CloseReq",
+      "action": "reply Close",
+      "to": "CLOSING"
+    },
+    {
+      "from": "OPEN",
+      "event": "recv Close",
+      "action": "reply Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "STABLE",
+      "event": "cond app_event",
+      "action": "send Change L",
+      "to": "CHANGING"
+    },
+    {
+      "from": "CHANGING",
+      "event": "recv Confirm R",
+      "action": "set value",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "timeout",
+      "action": "send Change L",
+      "to": "CHANGING"
+    },
+    {
+      "from": "CHANGING",
+      "event": "cond preference_change",
+      "action": "transition",
+      "to": "UNSTABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "recv Change R",
+      "action": "send Confirm L",
+      "to": "STABLE"
+    },
+    {
+      "from": "UNSTABLE",
+      "event": "send Change L",
+      "action": "send Change L",
+      "to": "CHANGING"
+    }
+  ]
+}

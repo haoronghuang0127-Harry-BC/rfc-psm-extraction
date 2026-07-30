@@ -1,0 +1,130 @@
+{
+    "states": [
+      "INIT",
+      "INIT-REBOOT",
+      "REBOOTING",
+      "SELECTING",
+      "REQUESTING",
+      "BOUND",
+      "RENEWING",
+      "REBINDING"
+    ],
+    "initial_state": "INIT",
+    "final_states": ["INIT"],
+    "transitions": [
+      {
+        "from": "INIT",
+        "event": "",
+        "action": "Send DHCPDISCOVER",
+        "to": "SELECTING"
+      },
+      {
+        "from": "SELECTING",
+        "event": "Select offer",
+        "action": "Send DHCPREQUEST",
+        "to": "REQUESTING"
+      },
+      {
+        "from": "SELECTING",
+        "event": "receive DHCPOFFER",
+        "action": "Collect replies",
+        "to": "SELECTING"
+      },
+      {
+        "from": "REQUESTING",
+        "event": "receive DHCPACK",
+        "action": "Record lease Set timers",
+        "to": "BOUND"
+      },
+      {
+        "from": "REQUESTING",
+        "event": "receive DHCPACK (not accept)",
+        "action": "Send DHCPDECLINE",
+        "to": "INIT"
+      },
+      {
+        "from": "REQUESTING",
+        "event": "receive DHCPNAK",
+        "action": "Discard offer",
+        "to": "INIT"
+      },
+      {
+        "from": "REQUESTING",
+        "event": "receive DHCPOFFER",
+        "action": "Discard",
+        "to": "REQUESTING"
+      },
+      {
+        "from": "INIT-REBOOT",
+        "event": "",
+        "action": "Send DHCPREQUEST",
+        "to": "REBOOTING"
+      },
+      {
+        "from": "REBOOTING",
+        "event": "receive DHCPACK",
+        "action": "Record lease Set timers T1 T2",
+        "to": "BOUND"
+      },
+      {
+        "from": "REBOOTING",
+        "event": "receive DHCPNAK",
+        "action": "Restart",
+        "to": "INIT"
+      },
+      {
+        "from": "BOUND",
+        "event": "timer T1 expires",
+        "action": "Send DHCPREQUEST",
+        "to": "RENEWING"
+      },
+      {
+        "from": "BOUND",
+        "event": "receive DHCPOFFER",
+        "action": "Discard",
+        "to": "BOUND"
+      },
+      {
+        "from": "BOUND",
+        "event": "receive DHCPACK",
+        "action": "Discard",
+        "to": "BOUND"
+      },
+      {
+        "from": "BOUND",
+        "event": "receive DHCPNAK",
+        "action": "Discard",
+        "to": "BOUND"
+      },
+      {
+        "from": "RENEWING",
+        "event": "Receive DHCPACK",
+        "action": "Record lease; Set timers T1, T2",
+        "to": "BOUND"
+      },
+      {
+        "from": "RENEWING",
+        "event": "timer T2 expires",
+        "action": "send Broadcast DHCPREQUEST",
+        "to": "REBINDING"
+      },
+      {
+        "from": "RENEWING",
+        "event": "receive DHCPNAK",
+        "action": "Halt network",
+        "to": "INIT"
+      },
+      {
+        "from": "REBINDING",
+        "event": "receive DHCPACK",
+        "action": "Record lease; Set timers T1, T2",
+        "to": "BOUND"
+      },
+      {
+        "from": "REBINDING",
+        "event": "receive DHCPNAK",
+        "action": "Halt network",
+        "to": "INIT"
+      }
+    ]
+  }

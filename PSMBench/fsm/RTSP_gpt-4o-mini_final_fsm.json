@@ -1,0 +1,483 @@
+{
+  "states": [
+    "SessionEstablished",
+    "MediaDeliveryControl",
+    "SessionMaintenance",
+    "SessionTermination",
+    "SessionParameterManipulations",
+    "ResponseReady",
+    "FinalResponseSent",
+    "InformationalResponseSent",
+    "WaitingForResponse",
+    "ConnectionClosed",
+    "ConnectionOpen",
+    "RequestSent",
+    "ResponseReceived",
+    "SessionTimedOut",
+    "OverloadDetected",
+    "Initial",
+    "MethodSupported",
+    "MethodNotSupported",
+    "FeatureTagSupported",
+    "FeatureTagNotSupported",
+    "ProcessingRequest",
+    "PipelinedRequest",
+    "WaitingForSetup",
+    "WaitingForPlay",
+    "SendingData",
+    "CacheValidating",
+    "CacheStale",
+    "CacheInvalid",
+    "Informational",
+    "Success",
+    "Redirection",
+    "ClientError",
+    "ServerError",
+    "Client",
+    "Proxy",
+    "Authenticated",
+    "ConnectionAuthorizationRequired",
+    "MediaSetup",
+    "Playing",
+    "Paused",
+    "Teardown",
+    "Error",
+    "PlayState",
+    "RTSP1_0",
+    "RTSP2_0",
+    "Init",
+    "Ready"
+  ],
+  "initial_state": "Init",
+  "final_states": [
+    "SessionTermination",
+    "FinalResponseSent",
+    "ConnectionClosed",
+    "CacheInvalid",
+    "ServerError",
+    "Error",
+    "Teardown"
+  ],
+  "transitions": [
+    {
+      "from": "SessionEstablished",
+      "event": "receive SETUP",
+      "action": "reply 200",
+      "to": "MediaDeliveryControl"
+    },
+    {
+      "from": "MediaDeliveryControl",
+      "event": "receive PLAY",
+      "action": "reply 200",
+      "to": "MediaDeliveryControl"
+    },
+    {
+      "from": "MediaDeliveryControl",
+      "event": "receive PAUSE",
+      "action": "reply 200",
+      "to": "MediaDeliveryControl"
+    },
+    {
+      "from": "MediaDeliveryControl",
+      "event": "receive TEARDOWN",
+      "action": "reply 200",
+      "to": "SessionTermination"
+    },
+    {
+      "from": "SessionMaintenance",
+      "event": "timeout 60s",
+      "action": "close session",
+      "to": "SessionTermination"
+    },
+    {
+      "from": "SessionParameterManipulations",
+      "event": "receive GET_PARAMETER",
+      "action": "reply 200",
+      "to": "SessionParameterManipulations"
+    },
+    {
+      "from": "SessionParameterManipulations",
+      "event": "receive SET_PARAMETER",
+      "action": "reply 200",
+      "to": "SessionParameterManipulations"
+    },
+    {
+      "from": "ResponseReady",
+      "event": "receive request",
+      "action": "reply 100",
+      "to": "InformationalResponseSent"
+    },
+    {
+      "from": "InformationalResponseSent",
+      "event": "receive request",
+      "action": "reply 200",
+      "to": "FinalResponseSent"
+    },
+    {
+      "from": "ResponseReady",
+      "event": "receive request",
+      "action": "reply 200",
+      "to": "FinalResponseSent"
+    },
+    {
+      "from": "ResponseReady",
+      "event": "receive request",
+      "action": "reply 3rr",
+      "to": "FinalResponseSent"
+    },
+    {
+      "from": "ResponseReady",
+      "event": "receive request",
+      "action": "reply 4xx",
+      "to": "FinalResponseSent"
+    },
+    {
+      "from": "ResponseReady",
+      "event": "receive request",
+      "action": "reply 5xx",
+      "to": "FinalResponseSent"
+    },
+    {
+      "from": "ConnectionOpen",
+      "event": "receive request",
+      "action": "send response",
+      "to": "ResponseReceived"
+    },
+    {
+      "from": "ResponseReceived",
+      "event": "timeout 10s",
+      "action": "close connection",
+      "to": "ConnectionClosed"
+    },
+    {
+      "from": "ResponseReceived",
+      "event": "receive 100",
+      "action": "log continue",
+      "to": "WaitingForResponse"
+    },
+    {
+      "from": "WaitingForResponse",
+      "event": "timeout 5s",
+      "action": "send 100",
+      "to": "WaitingForResponse"
+    },
+    {
+      "from": "WaitingForResponse",
+      "event": "receive final response",
+      "action": "log success",
+      "to": "ConnectionOpen"
+    },
+    {
+      "from": "ConnectionOpen",
+      "event": "receive overload",
+      "action": "log overload",
+      "to": "OverloadDetected"
+    },
+    {
+      "from": "OverloadDetected",
+      "event": "timeout 5s",
+      "action": "send retry after",
+      "to": "ConnectionOpen"
+    },
+    {
+      "from": "ConnectionClosed",
+      "event": "receive new request",
+      "action": "open connection",
+      "to": "ConnectionOpen"
+    },
+    {
+      "from": "SessionTimedOut",
+      "event": "receive new request",
+      "action": "log session timeout",
+      "to": "ConnectionClosed"
+    },
+    {
+      "from": "Initial",
+      "event": "receive OPTIONS",
+      "action": "reply PublicHeader",
+      "to": "MethodSupported"
+    },
+    {
+      "from": "Initial",
+      "event": "receive COMMAND",
+      "action": "reply 501",
+      "to": "MethodNotSupported"
+    },
+    {
+      "from": "MethodSupported",
+      "event": "receive SupportedHeader",
+      "action": "set feature support",
+      "to": "FeatureTagSupported"
+    },
+    {
+      "from": "MethodNotSupported",
+      "event": "receive RequireHeader",
+      "action": "reply 551",
+      "to": "FeatureTagNotSupported"
+    },
+    {
+      "from": "FeatureTagSupported",
+      "event": "receive ProxySupportedHeader",
+      "action": "set proxy feature support",
+      "to": "FeatureTagSupported"
+    },
+    {
+      "from": "FeatureTagNotSupported",
+      "event": "receive UnsupportedHeader",
+      "action": "log unsupported features",
+      "to": "FeatureTagNotSupported"
+    },
+    {
+      "from": "WaitingForResponse",
+      "event": "receive REQUEST",
+      "action": "set ProcessingRequest true",
+      "to": "ProcessingRequest"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "receive NEXT_REQUEST",
+      "action": "reply PROCESSING",
+      "to": "ProcessingRequest"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "send RESPONSE",
+      "action": "set WaitingForResponse true",
+      "to": "WaitingForResponse"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "receive PipelinedRequest",
+      "action": "set PipelinedRequest true",
+      "to": "ProcessingRequest"
+    },
+    {
+      "from": "WaitingForSetup",
+      "event": "receive SETUP",
+      "action": "reply 200 OK",
+      "to": "WaitingForPlay"
+    },
+    {
+      "from": "WaitingForPlay",
+      "event": "receive PLAY",
+      "action": "reply 200 OK",
+      "to": "SendingData"
+    },
+    {
+      "from": "SendingData",
+      "event": "send RTP",
+      "action": "send RTP packet",
+      "to": "SendingData"
+    },
+    {
+      "from": "SendingData",
+      "event": "send RTCP",
+      "action": "send RTCP packet",
+      "to": "SendingData"
+    },
+    {
+      "from": "CacheStale",
+      "event": "receive SETUP",
+      "action": "reply 304",
+      "to": "CacheValidating"
+    },
+    {
+      "from": "CacheValidating",
+      "event": "receive DESCRIBE",
+      "action": "reply 200",
+      "to": "CacheValidating"
+    },
+    {
+      "from": "CacheValidating",
+      "event": "receive SETUP",
+      "action": "reply 200",
+      "to": "CacheValidating"
+    },
+    {
+      "from": "CacheValidating",
+      "event": "receive PLAY",
+      "action": "reply 200",
+      "to": "CacheValidating"
+    },
+    {
+      "from": "CacheValidating",
+      "event": "receive PAUSE",
+      "action": "reply 200",
+      "to": "CacheValidating"
+    },
+    {
+      "from": "CacheInvalid",
+      "event": "receive DESCRIBE",
+      "action": "reply 200",
+      "to": "CacheValidating"
+    },
+    {
+      "from": "CacheInvalid",
+      "event": "receive SETUP",
+      "action": "reply 200",
+      "to": "CacheValidating"
+    },
+    {
+      "from": "Informational",
+      "event": "receive 100",
+      "action": "reply 100",
+      "to": "Informational"
+    },
+    {
+      "from": "Informational",
+      "event": "receive 200",
+      "action": "reply 200",
+      "to": "Success"
+    },
+    {
+      "from": "Success",
+      "event": "receive 3xx",
+      "action": "reply 3rr",
+      "to": "Redirection"
+    },
+    {
+      "from": "Redirection",
+      "event": "receive 400",
+      "action": "reply 400",
+      "to": "ClientError"
+    },
+    {
+      "from": "ClientError",
+      "event": "receive 500",
+      "action": "reply 500",
+      "to": "ServerError"
+    },
+    {
+      "from": "Client",
+      "event": "receive SETUP",
+      "action": "send 470",
+      "to": "ConnectionAuthorizationRequired"
+    },
+    {
+      "from": "ConnectionAuthorizationRequired",
+      "event": "receive Accept-Credentials",
+      "action": "send SETUP",
+      "to": "Proxy"
+    },
+    {
+      "from": "Proxy",
+      "event": "receive SETUP",
+      "action": "send 200",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Proxy",
+      "event": "receive 471",
+      "action": "log failure",
+      "to": "Client"
+    },
+    {
+      "from": "Authenticated",
+      "event": "timeout 5s",
+      "action": "reset",
+      "to": "Client"
+    },
+    {
+      "from": "WaitingForResponse",
+      "event": "receive DESCRIBE",
+      "action": "reply 200 OK",
+      "to": "MediaSetup"
+    },
+    {
+      "from": "MediaSetup",
+      "event": "receive SETUP",
+      "action": "reply 200 OK",
+      "to": "Playing"
+    },
+    {
+      "from": "Playing",
+      "event": "receive PLAY",
+      "action": "reply 200 OK",
+      "to": "Playing"
+    },
+    {
+      "from": "Playing",
+      "event": "receive PAUSE",
+      "action": "reply 200 OK",
+      "to": "Paused"
+    },
+    {
+      "from": "Paused",
+      "event": "receive PLAY",
+      "action": "reply 200 OK",
+      "to": "Playing"
+    },
+    {
+      "from": "Playing",
+      "event": "receive TEARDOWN",
+      "action": "reply 200 OK",
+      "to": "Teardown"
+    },
+    {
+      "from": "Init",
+      "event": "receive SETUP",
+      "action": "reply 200 OK",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "receive PLAY",
+      "action": "reply 200 OK",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "receive PAUSE",
+      "action": "reply 200 OK",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "receive TEARDOWN",
+      "action": "reply 200 OK",
+      "to": "Init"
+    },
+    {
+      "from": "InitialState",
+      "event": "receive REQUEST",
+      "action": "reply ACK",
+      "to": "WaitingForAck"
+    },
+    {
+      "from": "WaitingForAck",
+      "event": "timeout RTT",
+      "action": "set retransmit true",
+      "to": "Retransmitting"
+    },
+    {
+      "from": "Retransmitting",
+      "event": "receive ACK",
+      "action": "set retransmit false",
+      "to": "WaitingForAck"
+    },
+    {
+      "from": "PlayState",
+      "event": "receive PLAY",
+      "action": "reply immediate",
+      "to": "PlayState"
+    },
+    {
+      "from": "RTSP1_0",
+      "event": "receive REQUEST",
+      "action": "reply 505",
+      "to": "RTSP1_0"
+    },
+    {
+      "from": "RTSP2_0",
+      "event": "receive OPTIONS",
+      "action": "reply RTSP1_0",
+      "to": "RTSP1_0"
+    },
+    {
+      "from": "RTSP2_0",
+      "event": "receive OPTIONS",
+      "action": "reply 505",
+      "to": "RTSP1_0"
+    }
+  ]
+}

@@ -1,0 +1,178 @@
+{
+  "states": [
+    "Initial",
+    "SelectingAddress",
+    "RequestingAddress",
+    "Bound",
+    "Renewing",
+    "Rebinding"
+  ],
+  "initial_state": "Initial",
+  "final_states": [
+    "Initial"
+  ],
+  "transitions": [
+    {
+      "from": "Initial",
+      "event": "send DHCPDISCOVER",
+      "action": "collect DHCPOFFER",
+      "to": "SelectingAddress"
+    },
+    {
+      "from": "SelectingAddress",
+      "event": "receive DHCPOFFER",
+      "action": "collect replies",
+      "to": "SelectingAddress"
+    },
+    {
+      "from": "SelectingAddress",
+      "event": "select offer",
+      "action": "send DHCPREQUEST",
+      "to": "RequestingAddress"
+    },
+    {
+      "from": "SelectingAddress",
+      "event": "timeout DHCPOFFER",
+      "action": "send DHCPDISCOVER",
+      "to": "SelectingAddress"
+    },
+    {
+      "from": "SelectingAddress",
+      "event": "receive DHCPACK not accept",
+      "action": "send DHCPDECLINE",
+      "to": "SelectingAddress"
+    },
+    {
+      "from": "RequestingAddress",
+      "event": "receive DHCPACK",
+      "action": "record lease, set timers",
+      "to": "Bound"
+    },
+    {
+      "from": "RequestingAddress",
+      "event": "receive DHCPNAK lease expired",
+      "action": "halt network",
+      "to": "Initial"
+    },
+    {
+      "from": "RequestingAddress",
+      "event": "timeout DHCPREQUEST",
+      "action": "retransmit DHCPREQUEST",
+      "to": "RequestingAddress"
+    },
+    {
+      "from": "RequestingAddress",
+      "event": "timeout maxRetries",
+      "action": "restart process",
+      "to": "Initial"
+    },
+    {
+      "from": "Bound",
+      "event": "T1 expires",
+      "action": "send DHCPREQUEST to leasing server",
+      "to": "Renewing"
+    },
+    {
+      "from": "Bound",
+      "event": "T2 expires",
+      "action": "broadcast DHCPREQUEST",
+      "to": "Rebinding"
+    },
+    {
+      "from": "Bound",
+      "event": "lease time expires",
+      "action": "send DHCPREQUEST",
+      "to": "Renewing"
+    },
+    {
+      "from": "Bound",
+      "event": "network parameters change",
+      "action": "send DHCPREQUEST",
+      "to": "Renewing"
+    },
+    {
+      "from": "Bound",
+      "event": "client releases address",
+      "action": "send DHCPRELEASE",
+      "to": "Initial"
+    },
+    {
+      "from": "Bound",
+      "event": "send DHCPRELEASE",
+      "action": "discard lease",
+      "to": "Initial"
+    },
+    {
+      "from": "Bound",
+      "event": "receive DHCPOFFER, DHCPACK, DHCPNAK",
+      "action": "discard",
+      "to": "Bound"
+    },
+    {
+      "from": "Renewing",
+      "event": "receive DHCPACK",
+      "action": "record lease, set timers",
+      "to": "Bound"
+    },
+    {
+      "from": "Renewing",
+      "event": "receive DHCPNAK",
+      "action": "restart process",
+      "to": "Initial"
+    },
+    {
+      "from": "Renewing",
+      "event": "timeout DHCPREQUEST",
+      "action": "retransmit DHCPREQUEST",
+      "to": "Renewing"
+    },
+    {
+      "from": "Renewing",
+      "event": "timeout maxRetries",
+      "action": "send DHCPREQUEST",
+      "to": "Rebinding"
+    },
+    {
+      "from": "Renewing",
+      "event": "timeout T2",
+      "action": "broadcast DHCPREQUEST",
+      "to": "Rebinding"
+    },
+    {
+      "from": "Rebinding",
+      "event": "receive DHCPACK",
+      "action": "record lease, set timers",
+      "to": "Bound"
+    },
+    {
+      "from": "Rebinding",
+      "event": "receive DHCPNAK",
+      "action": "restart process",
+      "to": "Initial"
+    },
+    {
+      "from": "Rebinding",
+      "event": "timeout DHCPREQUEST",
+      "action": "retransmit DHCPREQUEST",
+      "to": "Rebinding"
+    },
+    {
+      "from": "Rebinding",
+      "event": "timeout maxRetries",
+      "action": "discontinue use",
+      "to": "Initial"
+    },
+    {
+      "from": "Rebinding",
+      "event": "lease expires",
+      "action": "halt network",
+      "to": "Initial"
+    },
+    {
+      "from": "Bound",
+      "event": "lease expired",
+      "action": "return to Initial",
+      "to": "Initial"
+    }
+  ]
+}

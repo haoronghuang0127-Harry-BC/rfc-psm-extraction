@@ -1,0 +1,392 @@
+{
+  "states": [
+    "CLOSED",
+    "LISTEN",
+    "REQUEST",
+    "RESPOND",
+    "PARTOPEN",
+    "OPEN",
+    "CLOSEREQ",
+    "CLOSING",
+    "TIMEWAIT",
+    "DCCP_Request",
+    "DCCP_Response",
+    "DCCP_Data",
+    "DCCP_Ack",
+    "DCCP_DataAck",
+    "DCCP_CloseReq",
+    "DCCP_Close",
+    "DCCP_Reset",
+    "DCCP_Sync",
+    "DCCP_SyncAck",
+    "Stable",
+    "Changing",
+    "Unstable",
+    "Initial",
+    "CCIDNegotiation",
+    "CongestionControl",
+    "BidirectionalConnection",
+    "UnidirectionalConnection",
+    "QuiescentState",
+    "AcknowledgementWindow",
+    "AckVector",
+    "DataDropped",
+    "ECN_Capable",
+    "ECN_Incapable",
+    "Awaiting_Confirmation",
+    "BufferOverflow",
+    "OldPacketReceived",
+    "AcknowledgementSent",
+    "StateCleared",
+    "PacketReceived",
+    "PacketECNMarked",
+    "PacketNotReceived"
+  ],
+  "initial_state": "CLOSED",
+  "final_states": [
+    "CLOSED",
+    "TIMEWAIT",
+    "DCCP_Close",
+    "DCCP_DataAck",
+    "DCCP_Ack",
+    "DCCP_Response",
+    "DCCP_Data",
+    "DCCP_SyncAck",
+    "Stable",
+    "Unstable",
+    "StateCleared",
+    "AcknowledgementSent"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "send DCCP-Request",
+      "action": "transition REQUEST",
+      "to": "REQUEST"
+    },
+    {
+      "from": "CLOSED",
+      "event": "recv DCCP-Request",
+      "action": "send DCCP-Sync",
+      "to": "REQUEST"
+    },
+    {
+      "from": "LISTEN",
+      "event": "recv DCCP-Request",
+      "action": "transition RESPOND",
+      "to": "RESPOND"
+    },
+    {
+      "from": "REQUEST",
+      "event": "recv DCCP-Response",
+      "action": "transition PARTOPEN",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "recv RESPONSE",
+      "action": "transition PARTOPEN",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "send DCCP-Ack",
+      "action": "transition OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "recv packet",
+      "action": "transition OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "recv DCCP-CloseReq",
+      "action": "transition CLOSEREQ",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "OPEN",
+      "event": "recv DCCP-Reset",
+      "action": "send DCCP-Sync",
+      "to": "CLOSED"
+    },
+    {
+      "from": "OPEN",
+      "event": "recv DATA",
+      "action": "send ACK",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "recv CLOSE",
+      "action": "send RESET",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "send DCCP-Close",
+      "action": "transition CLOSING",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "recv DCCP-Reset",
+      "action": "transition CLOSED",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "timeout 2MSL",
+      "action": "transition TIMEWAIT",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "timeout 2MSL",
+      "action": "transition CLOSED",
+      "to": "CLOSED"
+    },
+    {
+      "from": "DCCP_Request",
+      "event": "recv DCCP_Response",
+      "action": "reply 200",
+      "to": "DCCP_Response"
+    },
+    {
+      "from": "DCCP_Response",
+      "event": "recv DCCP_Data",
+      "action": "send ACK",
+      "to": "DCCP_Data"
+    },
+    {
+      "from": "DCCP_Data",
+      "event": "recv DCCP_Ack",
+      "action": "send ACK",
+      "to": "DCCP_Ack"
+    },
+    {
+      "from": "DCCP_Data",
+      "event": "recv DCCP_DataAck",
+      "action": "send ACK",
+      "to": "DCCP_DataAck"
+    },
+    {
+      "from": "DCCP_CloseReq",
+      "event": "recv DCCP_Close",
+      "action": "send ACK",
+      "to": "DCCP_Close"
+    },
+    {
+      "from": "DCCP_Reset",
+      "event": "recv DCCP_Sync",
+      "action": "send DCCP_SyncAck",
+      "to": "DCCP_SyncAck"
+    },
+    {
+      "from": "Stable",
+      "event": "recv Confirm R",
+      "action": "log ignore",
+      "to": "Stable"
+    },
+    {
+      "from": "Stable",
+      "event": "recv Change R",
+      "action": "set calculate new value",
+      "to": "Changing"
+    },
+    {
+      "from": "Changing",
+      "event": "recv Confirm R",
+      "action": "set stable",
+      "to": "Stable"
+    },
+    {
+      "from": "Changing",
+      "event": "recv empty Confirm R",
+      "action": "set revert to old value",
+      "to": "Stable"
+    },
+    {
+      "from": "Changing",
+      "event": "recv Change R",
+      "action": "set calculate new value",
+      "to": "Changing"
+    },
+    {
+      "from": "Changing",
+      "event": "recv Change R",
+      "action": "log ignore",
+      "to": "Changing"
+    },
+    {
+      "from": "Unstable",
+      "event": "recv Confirm R",
+      "action": "log ignore",
+      "to": "Unstable"
+    },
+    {
+      "from": "Unstable",
+      "event": "recv Change R",
+      "action": "set calculate new value",
+      "to": "Changing"
+    },
+    {
+      "from": "Initial",
+      "event": "recv ChangeR",
+      "action": "reply Confirm",
+      "to": "CCIDNegotiation"
+    },
+    {
+      "from": "CCIDNegotiation",
+      "event": "recv MandatoryChange",
+      "action": "set CCID",
+      "to": "CongestionControl"
+    },
+    {
+      "from": "CongestionControl",
+      "event": "timeout congestion_event",
+      "action": "reset congestion_state",
+      "to": "CongestionControl"
+    },
+    {
+      "from": "BidirectionalConnection",
+      "event": "recv DCCP-Ack",
+      "action": "reply Acknowledgement",
+      "to": "UnidirectionalConnection"
+    },
+    {
+      "from": "UnidirectionalConnection",
+      "event": "recv DCCP-Data",
+      "action": "reply Acknowledgement",
+      "to": "BidirectionalConnection"
+    },
+    {
+      "from": "UnidirectionalConnection",
+      "event": "timeout 0.2s",
+      "action": "set QuiescentState true",
+      "to": "QuiescentState"
+    },
+    {
+      "from": "QuiescentState",
+      "event": "recv DCCP-Data",
+      "action": "reset QuiescentState",
+      "to": "BidirectionalConnection"
+    },
+    {
+      "from": "BidirectionalConnection",
+      "event": "recv DataDropped",
+      "action": "set AcknowledgementWindow",
+      "to": "AcknowledgementWindow"
+    },
+    {
+      "from": "AcknowledgementWindow",
+      "event": "recv AckVector",
+      "action": "log coverage",
+      "to": "AcknowledgementWindow"
+    },
+    {
+      "from": "ECN_Capable",
+      "event": "recv Change L(ECN Incapable, 1)",
+      "action": "set ECN_Incapable true",
+      "to": "ECN_Incapable"
+    },
+    {
+      "from": "ECN_Incapable",
+      "event": "recv Confirm R(ECN Incapable, 1)",
+      "action": "set ECN_Incapable false",
+      "to": "ECN_Capable"
+    },
+    {
+      "from": "ECN_Incapable",
+      "event": "recv DATA",
+      "action": "send Data_Dropped",
+      "to": "Data_Dropped"
+    },
+    {
+      "from": "Data_Dropped",
+      "event": "recv DATA",
+      "action": "log failure",
+      "to": "Data_Dropped"
+    },
+    {
+      "from": "ECN_Capable",
+      "event": "recv ECN Nonce Echo mismatch",
+      "action": "set Aggression_Penalty true",
+      "to": "Aggression_Penalty"
+    },
+    {
+      "from": "Aggression_Penalty",
+      "event": "timeout 3s",
+      "action": "reset connection",
+      "to": "ECN_Capable"
+    },
+    {
+      "from": "WaitingForTimestamp",
+      "event": "recv Timestamp",
+      "action": "send TimestampEcho",
+      "to": "SendingTimestampEcho"
+    },
+    {
+      "from": "SendingTimestampEcho",
+      "event": "recv Acknowledgement",
+      "action": "set elapsed_time",
+      "to": "AcknowledgingPacket"
+    },
+    {
+      "from": "AcknowledgingPacket",
+      "event": "timeout 5s",
+      "action": "reset connection",
+      "to": "WaitingForTimestamp"
+    },
+    {
+      "from": "PacketNotReceived",
+      "event": "recv NewPacket",
+      "action": "set PacketReceived",
+      "to": "PacketReceived"
+    },
+    {
+      "from": "PacketReceived",
+      "event": "recv NewPacket",
+      "action": "set PacketECNMarked",
+      "to": "PacketECNMarked"
+    },
+    {
+      "from": "PacketReceived",
+      "event": "recv OldPacket",
+      "action": "set PacketNotReceived",
+      "to": "PacketNotReceived"
+    },
+    {
+      "from": "PacketReceived",
+      "event": "recv OldPacket",
+      "action": "set StateCleared",
+      "to": "StateCleared"
+    },
+    {
+      "from": "PacketECNMarked",
+      "event": "recv OldPacket",
+      "action": "set StateCleared",
+      "to": "StateCleared"
+    },
+    {
+      "from": "PacketNotReceived",
+      "event": "recv OldPacket",
+      "action": "set BufferOverflow",
+      "to": "BufferOverflow"
+    },
+    {
+      "from": "BufferOverflow",
+      "event": "recv Acknowledgement",
+      "action": "set StateCleared",
+      "to": "StateCleared"
+    },
+    {
+      "from": "StateCleared",
+      "event": "send Acknowledgement",
+      "action": "reply AcknowledgementSent",
+      "to": "AcknowledgementSent"
+    }
+  ]
+}

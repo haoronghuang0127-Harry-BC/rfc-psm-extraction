@@ -1,0 +1,496 @@
+{
+  "states": [
+    "Initial",
+    "Ready",
+    "Playing",
+    "Paused",
+    "TeardownRequested",
+    "Terminated",
+    "AwaitingRequest",
+    "ProcessingRequest",
+    "SendingResponse",
+    "ClosingConnection",
+    "RtpDataSent",
+    "RtcpDataSent",
+    "ClientRequestSent",
+    "ClientEvaluateCertificate",
+    "ProxyEvaluateCertificate",
+    "ProxyForwardRequest",
+    "ConnectionAuthorized"
+  ],
+  "initial_state": "Initial",
+  "final_states": [
+    "Terminated",
+    "ClosingConnection"
+  ],
+  "transitions": [
+    {
+      "from": "Initial",
+      "event": "receive SETUP",
+      "action": "reply 200",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "receive SETUP",
+      "action": "reply 200",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "receive PLAY",
+      "action": "reply 200",
+      "to": "Playing"
+    },
+    {
+      "from": "Playing",
+      "event": "receive PAUSE",
+      "action": "reply 200",
+      "to": "Paused"
+    },
+    {
+      "from": "Paused",
+      "event": "receive PLAY",
+      "action": "reply 200",
+      "to": "Playing"
+    },
+    {
+      "from": "Playing",
+      "event": "receive PLAY_NOTIFY",
+      "action": "send stream_end",
+      "to": "Playing"
+    },
+    {
+      "from": "Ready",
+      "event": "receive TEARDOWN",
+      "action": "reply 200",
+      "to": "Terminated"
+    },
+    {
+      "from": "Playing",
+      "event": "receive TEARDOWN",
+      "action": "reply 200",
+      "to": "Terminated"
+    },
+    {
+      "from": "Paused",
+      "event": "receive TEARDOWN",
+      "action": "reply 200",
+      "to": "Terminated"
+    },
+    {
+      "from": "Ready",
+      "event": "timeout session_timeout",
+      "action": "send TEARDOWN",
+      "to": "Terminated"
+    },
+    {
+      "from": "Playing",
+      "event": "timeout session_timeout",
+      "action": "send TEARDOWN",
+      "to": "Terminated"
+    },
+    {
+      "from": "Paused",
+      "event": "timeout session_timeout",
+      "action": "send TEARDOWN",
+      "to": "Terminated"
+    },
+    {
+      "from": "Ready",
+      "event": "receive REDIRECT",
+      "action": "reply 302",
+      "to": "TeardownRequested"
+    },
+    {
+      "from": "Playing",
+      "event": "receive REDIRECT",
+      "action": "reply 302",
+      "to": "TeardownRequested"
+    },
+    {
+      "from": "Paused",
+      "event": "receive REDIRECT",
+      "action": "reply 302",
+      "to": "TeardownRequested"
+    },
+    {
+      "from": "TeardownRequested",
+      "event": "timeout deadline",
+      "action": "send TEARDOWN",
+      "to": "Terminated"
+    },
+    {
+      "from": "AwaitingRequest",
+      "event": "cond RequestComplete",
+      "action": "process Request",
+      "to": "ProcessingRequest"
+    },
+    {
+      "from": "AwaitingRequest",
+      "event": "timeout IncompleteMessage",
+      "action": "close Connection",
+      "to": "ClosingConnection"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond ResponseReady",
+      "action": "send Response",
+      "to": "SendingResponse"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond Overload",
+      "action": "reply 503",
+      "to": "SendingResponse"
+    },
+    {
+      "from": "SendingResponse",
+      "event": "cond PersistentConnection",
+      "action": "reset Timeout",
+      "to": "AwaitingRequest"
+    },
+    {
+      "from": "SendingResponse",
+      "event": "receive Teardown",
+      "action": "reply 200",
+      "to": "AwaitingRequest"
+    },
+    {
+      "from": "SendingResponse",
+      "event": "timeout TeardownDelay",
+      "action": "close Connection",
+      "to": "ClosingConnection"
+    },
+    {
+      "from": "SendingResponse",
+      "event": "cond TransientConnection",
+      "action": "close Connection",
+      "to": "ClosingConnection"
+    },
+    {
+      "from": "AwaitingRequest",
+      "event": "cond SessionTimeout",
+      "action": "close Session",
+      "to": "AwaitingRequest"
+    },
+    {
+      "from": "RtpDataSent",
+      "event": "send RTP data",
+      "action": "send data",
+      "to": "RtpDataSent"
+    },
+    {
+      "from": "RtpDataSent",
+      "event": "send RTCP data",
+      "action": "send data",
+      "to": "RtcpDataSent"
+    },
+    {
+      "from": "RtcpDataSent",
+      "event": "send RTP data",
+      "action": "send data",
+      "to": "RtpDataSent"
+    },
+    {
+      "from": "RtcpDataSent",
+      "event": "send RTCP data",
+      "action": "send data",
+      "to": "RtcpDataSent"
+    },
+    {
+      "from": "Initial",
+      "event": "send RTSP request with Accept-Credentials: User",
+      "action": "collect certificate chain",
+      "to": "ClientRequestSent"
+    },
+    {
+      "from": "ClientRequestSent",
+      "event": "receive 470 or 407 with Connection-Credentials",
+      "action": "evaluate certificate",
+      "to": "ClientEvaluateCertificate"
+    },
+    {
+      "from": "ClientEvaluateCertificate",
+      "event": "cond certificate accepted",
+      "action": "send RTSP request with certificate hash",
+      "to": "ConnectionAuthorized"
+    },
+    {
+      "from": "ClientEvaluateCertificate",
+      "event": "cond certificate rejected",
+      "action": "close connection",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "send RTSP request with Accept-Credentials: Proxy",
+      "action": "evaluate certificate",
+      "to": "ProxyEvaluateCertificate"
+    },
+    {
+      "from": "ProxyEvaluateCertificate",
+      "event": "cond certificate accepted",
+      "action": "forward RTSP request",
+      "to": "ProxyForwardRequest"
+    },
+    {
+      "from": "ProxyEvaluateCertificate",
+      "event": "cond certificate rejected",
+      "action": "reply 471",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "send RTSP request with Accept-Credentials: Any",
+      "action": "forward RTSP request",
+      "to": "ProxyForwardRequest"
+    },
+    {
+      "from": "ConnectionAuthorized",
+      "event": "send RTSP request",
+      "action": "forward RTSP request",
+      "to": "ProxyForwardRequest"
+    },
+    {
+      "from": "Playing",
+      "event": "receive PLAY",
+      "action": "stop previous request",
+      "to": "Playing"
+    },
+    {
+      "from": "Initial",
+      "event": "receive RTSP 1.0 request",
+      "action": "reply 505",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "receive RTSP 2.0 request",
+      "action": "reply RTSP/2.0",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "receive OPTIONS",
+      "action": "reply 200",
+      "to": "Initial"
+    },
+    {
+      "from": "Ready",
+      "event": "receive OPTIONS",
+      "action": "reply 200",
+      "to": "Ready"
+    },
+    {
+      "from": "Playing",
+      "event": "receive OPTIONS",
+      "action": "reply 200",
+      "to": "Playing"
+    },
+    {
+      "from": "Paused",
+      "event": "receive OPTIONS",
+      "action": "reply 200",
+      "to": "Paused"
+    },
+    {
+      "from": "Terminated",
+      "event": "receive OPTIONS",
+      "action": "reply 200",
+      "to": "Terminated"
+    },
+    {
+      "from": "Initial",
+      "event": "receive SETUP",
+      "action": "set NRM=1, RP=0.0",
+      "to": "Ready"
+    },
+    {
+      "from": "Initial",
+      "event": "receive SETUP",
+      "action": "reply 3rr Redirect",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "receive S -> C: REDIRECT",
+      "action": "close all SES",
+      "to": "Initial"
+    },
+    {
+      "from": "Ready",
+      "event": "receive SETUP",
+      "action": "set NRM +=1",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "receive SETUP",
+      "action": "change transport param",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "receive TEARDOWN",
+      "action": "set NRM = 0",
+      "to": "Initial"
+    },
+    {
+      "from": "Ready",
+      "event": "receive TEARDOWN",
+      "action": "set NRM -= 1",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "receive PLAY",
+      "action": "play from RP",
+      "to": "Playing"
+    },
+    {
+      "from": "Ready",
+      "event": "receive PLAY",
+      "action": "according to range",
+      "to": "Playing"
+    },
+    {
+      "from": "Ready",
+      "event": "receive PAUSE",
+      "action": "return PP",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "receive SC:REDIRECT",
+      "action": "set RedP",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "receive SC:REDIRECT",
+      "action": "session is removed",
+      "to": "Initial"
+    },
+    {
+      "from": "Ready",
+      "event": "timeout",
+      "action": "",
+      "to": "Initial"
+    },
+    {
+      "from": "Ready",
+      "event": "cond RedP reached",
+      "action": "TEARDOWN of session",
+      "to": "Initial"
+    },
+    {
+      "from": "Playing",
+      "event": "receive PAUSE",
+      "action": "set RP to present point",
+      "to": "Ready"
+    },
+    {
+      "from": "Playing",
+      "event": "cond End of media",
+      "action": "set RP = End of media",
+      "to": "Playing"
+    },
+    {
+      "from": "Playing",
+      "event": "cond End of range",
+      "action": "set RP = End of range",
+      "to": "Playing"
+    },
+    {
+      "from": "Playing",
+      "event": "receive PLAY",
+      "action": "play from present point",
+      "to": "Playing"
+    },
+    {
+      "from": "Playing",
+      "event": "receive PLAY",
+      "action": "according to range",
+      "to": "Playing"
+    },
+    {
+      "from": "Playing",
+      "event": "receive SC:PLAY_NOTIFY",
+      "action": "reply 200",
+      "to": "Playing"
+    },
+    {
+      "from": "Playing",
+      "event": "receive SETUP",
+      "action": "reply 455",
+      "to": "Playing"
+    },
+    {
+      "from": "Playing",
+      "event": "receive TEARDOWN",
+      "action": "set NRM=0",
+      "to": "Initial"
+    },
+    {
+      "from": "Playing",
+      "event": "receive SC:REDIRECT",
+      "action": "set RedP",
+      "to": "Playing"
+    },
+    {
+      "from": "Playing",
+      "event": "receive SC:REDIRECT",
+      "action": "session is removed",
+      "to": "Initial"
+    },
+    {
+      "from": "Playing",
+      "event": "cond RedP reached",
+      "action": "TEARDOWN of session",
+      "to": "Initial"
+    },
+    {
+      "from": "Playing",
+      "event": "timeout",
+      "action": "stop Media playout",
+      "to": "Initial"
+    },
+    {
+      "from": "AwaitingRequest",
+      "event": "receive Request",
+      "action": "collect Request",
+      "to": "AwaitingRequest"
+    },
+    {
+      "from": "Idle",
+      "event": "send RTP data",
+      "action": "send data",
+      "to": "RtpDataSent"
+    },
+    {
+      "from": "Idle",
+      "event": "send RTCP data",
+      "action": "send data",
+      "to": "RtcpDataSent"
+    },
+    {
+      "from": "Ready",
+      "event": "receive PLAY",
+      "action": "reply 457 Invalid Range",
+      "to": "Ready"
+    },
+    {
+      "from": "Playing",
+      "event": "cond delivery point beyond stop",
+      "action": "pause delivery",
+      "to": "Playing"
+    },
+    {
+      "from": "Ready",
+      "event": "receive PAUSE",
+      "action": "reply 200 OK",
+      "to": "Ready"
+    }
+  ]
+}

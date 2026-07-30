@@ -1,0 +1,141 @@
+{
+    "states": [
+      "CLOSED",
+      "LISTEN",
+      "SYN_SENT",
+      "SYN_RCVD",
+      "ESTAB",
+      "FIN_WAIT-1",
+      "FIN_WAIT-2",
+      "CLOSING",
+      "TIME-WAIT",
+      "CLOSE_WAIT",
+      "LAST-ACK"
+    ],
+    "initial_state": "CLOSED",
+    "final_states": [
+      "CLOSED"
+    ],
+    "transitions": [
+      {
+        "from": "CLOSED",
+        "event": "passive OPEN",
+        "action": "create TCB",
+        "to": "LISTEN"
+      },
+      {
+        "from": "CLOSED",
+        "event": "active OPEN",
+        "action": "create TCB; send SYN",
+        "to": "SYN_SENT"
+      },
+      {
+        "from": "LISTEN",
+        "event": "receive SYN",
+        "action": "send SYN, ACK",
+        "to": "SYN_RCVD"
+      },
+      {
+        "from": "LISTEN",
+        "event": "send SYN",
+        "action": "send SYN",
+        "to": "SYN_SENT"
+      },
+      {
+        "from": "LISTEN",
+        "event": "CLOSE",
+        "action": "delete TCB",
+        "to": "CLOSED"
+      },
+      {
+        "from": "SYN_SENT",
+        "event": "receive SYN",
+        "action": "send SYN, ACK",
+        "to": "SYN_RCVD"
+      },
+      {
+        "from": "SYN_SENT",
+        "event": "receive SYN, ACK",
+        "action": "send ACK",
+        "to": "ESTAB"
+      },
+      {
+        "from": "SYN_SENT",
+        "event": "CLOSE",
+        "action": "delete TCB",
+        "to": "CLOSED"
+      },
+      {
+        "from": "SYN_RCVD",
+        "event": "receive ACK of SYN",
+        "action": "",
+        "to": "ESTAB"
+      },
+      {
+        "from": "SYN_RCVD",
+        "event": "CLOSE",
+        "action": "send FIN",
+        "to": "FIN_WAIT-1"
+      },
+      {
+        "from": "SYN_RCVD",
+        "event": "rcv RST (note1)",
+        "action": "",
+        "to": "LISTEN"
+      },
+      {
+        "from": "ESTAB",
+        "event": "CLOSE",
+        "action": "send FIN",
+        "to": "FIN_WAIT-1"
+      },
+      {
+        "from": "ESTAB",
+        "event": "receive FIN",
+        "action": "send ACK",
+        "to": "CLOSE_WAIT"
+      },
+      {
+        "from": "FIN_WAIT-1",
+        "event": "receive FIN",
+        "action": "send ACK",
+        "to": "CLOSING"
+      },
+      {
+        "from": "FIN_WAIT-1",
+        "event": "receive ACK of FIN",
+        "action": "",
+        "to": "FIN_WAIT-2"
+      },
+      {
+        "from": "FIN_WAIT-2",
+        "event": "receive FIN",
+        "action": "send ACK",
+        "to": "TIME-WAIT"
+      },
+      {
+        "from": "CLOSING",
+        "event": "receive ACK of FIN",
+        "action": "",
+        "to": "TIME-WAIT"
+      },
+      {
+        "from": "TIME-WAIT",
+        "event": "Timeout=2MSL",
+        "action": "delete TCB",
+        "to": "CLOSED"
+      },
+      {
+        "from": "CLOSE_WAIT",
+        "event": "CLOSE",
+        "action": "send FIN",
+        "to": "LAST-ACK"
+      },
+      {
+        "from": "LAST-ACK",
+        "event": "receive ACK of FIN",
+        "action": "delete TCB",
+        "to": "CLOSED"
+      }
+    ]
+  }

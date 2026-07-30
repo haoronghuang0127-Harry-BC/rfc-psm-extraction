@@ -1,0 +1,872 @@
+{
+  "states": [
+    "Idle",
+    "Trying",
+    "Ringing",
+    "OK",
+    "MediaSession",
+    "Bye",
+    "ClientTransaction",
+    "ServerTransaction",
+    "TransactionUser",
+    "UserAgentClient",
+    "UserAgentServer",
+    "StatelessProxy",
+    "StatefulProxy",
+    "Registrar",
+    "Dialog",
+    "RequestReceived",
+    "ResponseSent",
+    "MessageBodyPresent",
+    "MessageBodyAbsent",
+    "HeaderFieldPresent",
+    "HeaderFieldAbsent",
+    "UACBehavior",
+    "UASBehavior",
+    "ProcessingResponses",
+    "SendingRequest",
+    "GeneratingRequest",
+    "CANCELRequestSent",
+    "FinalResponseReceived",
+    "PendingTransaction",
+    "Authenticated",
+    "BindingUpdated",
+    "BindingRemoved",
+    "ErrorResponse",
+    "AwaitingOptionsRequest",
+    "ProcessingOptionsRequest",
+    "SendingOptionsResponse",
+    "Early",
+    "Confirmed",
+    "UAC_WaitingForResponse",
+    "UAC_ReceivingProvisional",
+    "UAC_ReceivingFinal",
+    "UAC_ProcessingACK",
+    "UAS_ProcessingINVITE",
+    "UAS_SendingResponse",
+    "UAS_IndicatingProgress",
+    "UAS_Redirecting",
+    "UAS_Rejecting",
+    "UAS_Accepting",
+    "UAC",
+    "UAS",
+    "OngoingInviteClientTransaction",
+    "OngoingInviteServerTransaction",
+    "SessionParametersUnchanged",
+    "SessionDescriptionChanged",
+    "NotAcceptableHere",
+    "RequestPending",
+    "ServerInternalError",
+    "DialogTerminated",
+    "SessionTerminated",
+    "PendingRequest",
+    "ProvisionalResponse",
+    "SuccessfulResponse",
+    "RedirectionResponse",
+    "RequestFailureResponse",
+    "ServerFailureResponse",
+    "GlobalFailureResponse",
+    "WaitingForCredentials",
+    "Unauthorized",
+    "ProxyAuthenticationRequired",
+    "ChallengeReceived",
+    "Keyring",
+    "CertificateValidation",
+    "UserNotification",
+    "SessionSecured",
+    "SessionNotSecured",
+    "CertificateChange",
+    "Registered",
+    "SessionSetup",
+    "Established",
+    "Terminated",
+    "CallTerminated",
+    "CallEstablished",
+    "CANCELSent",
+    "INVITESent",
+    "BYESent",
+    "ProvisionalResponseReceived",
+    "ACKReceived",
+    "ErrorResponseReceived"
+  ],
+  "initial_state": "Idle",
+  "final_states": [
+    "Bye",
+    "FinalResponseReceived",
+    "MessageBodyAbsent",
+    "HeaderFieldAbsent",
+    "UAS_Rejecting",
+    "UAS_Accepting",
+    "DialogTerminated",
+    "SessionTerminated",
+    "NotAcceptableHere",
+    "GlobalFailureResponse",
+    "SessionNotSecured",
+    "Terminated",
+    "CallTerminated"
+  ],
+  "transitions": [
+    {
+      "from": "Idle",
+      "event": "receive INVITE",
+      "action": "reply 100 Trying",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "receive INVITE",
+      "action": "reply 100 Trying",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "receive INVITE",
+      "action": "reply 180 Ringing",
+      "to": "Ringing"
+    },
+    {
+      "from": "Ringing",
+      "event": "receive ANSWER",
+      "action": "reply 200 OK",
+      "to": "OK"
+    },
+    {
+      "from": "OK",
+      "event": "send ACK",
+      "action": "open MediaSession",
+      "to": "MediaSession"
+    },
+    {
+      "from": "MediaSession",
+      "event": "receive BYE",
+      "action": "reply 200 OK",
+      "to": "Bye"
+    },
+    {
+      "from": "TransactionUser",
+      "event": "receive REQUEST",
+      "action": "create ClientTransaction",
+      "to": "ClientTransaction"
+    },
+    {
+      "from": "ClientTransaction",
+      "event": "send REQUEST",
+      "action": "forward to ServerTransaction",
+      "to": "ServerTransaction"
+    },
+    {
+      "from": "ServerTransaction",
+      "event": "receive RESPONSE",
+      "action": "match to ClientTransaction",
+      "to": "ClientTransaction"
+    },
+    {
+      "from": "ClientTransaction",
+      "event": "timeout",
+      "action": "log failure",
+      "to": "TransactionUser"
+    },
+    {
+      "from": "TransactionUser",
+      "event": "cancel TRANSACTION",
+      "action": "send CANCEL",
+      "to": "ClientTransaction"
+    },
+    {
+      "from": "UserAgentClient",
+      "event": "send INVITE",
+      "action": "create Dialog",
+      "to": "Dialog"
+    },
+    {
+      "from": "Dialog",
+      "event": "receive INVITE",
+      "action": "establish session",
+      "to": "UserAgentServer"
+    },
+    {
+      "from": "UserAgentServer",
+      "event": "send RESPONSE",
+      "action": "reply to ClientTransaction",
+      "to": "ClientTransaction"
+    },
+    {
+      "from": "RequestReceived",
+      "event": "receive REQUEST",
+      "action": "reply 200",
+      "to": "ResponseSent"
+    },
+    {
+      "from": "ResponseSent",
+      "event": "send RESPONSE",
+      "action": "set MessageBodyPresent",
+      "to": "MessageBodyPresent"
+    },
+    {
+      "from": "ResponseSent",
+      "event": "send RESPONSE",
+      "action": "set MessageBodyAbsent",
+      "to": "MessageBodyAbsent"
+    },
+    {
+      "from": "MessageBodyPresent",
+      "event": "receive HEADER",
+      "action": "set HeaderFieldPresent",
+      "to": "HeaderFieldPresent"
+    },
+    {
+      "from": "MessageBodyAbsent",
+      "event": "receive HEADER",
+      "action": "set HeaderFieldAbsent",
+      "to": "HeaderFieldAbsent"
+    },
+    {
+      "from": "UACBehavior",
+      "event": "receive request",
+      "action": "set generatingRequest true",
+      "to": "GeneratingRequest"
+    },
+    {
+      "from": "GeneratingRequest",
+      "event": "timeout 5s",
+      "action": "reply 408",
+      "to": "UACBehavior"
+    },
+    {
+      "from": "GeneratingRequest",
+      "event": "send request",
+      "action": "set sendingRequest true",
+      "to": "SendingRequest"
+    },
+    {
+      "from": "SendingRequest",
+      "event": "receive response",
+      "action": "set processingResponses true",
+      "to": "ProcessingResponses"
+    },
+    {
+      "from": "ProcessingResponses",
+      "event": "receive 4xx response",
+      "action": "log failure",
+      "to": "UACBehavior"
+    },
+    {
+      "from": "ProcessingResponses",
+      "event": "receive 3xx response",
+      "action": "log redirect",
+      "to": "UACBehavior"
+    },
+    {
+      "from": "UASBehavior",
+      "event": "receive request",
+      "action": "set processingRequest true",
+      "to": "ProcessingResponses"
+    },
+    {
+      "from": "PendingTransaction",
+      "event": "receive CANCEL",
+      "action": "reply 200",
+      "to": "CANCELRequestSent"
+    },
+    {
+      "from": "PendingTransaction",
+      "event": "receive INVITE",
+      "action": "reply 487",
+      "to": "FinalResponseReceived"
+    },
+    {
+      "from": "CANCELRequestSent",
+      "event": "receive FinalResponse",
+      "action": "set transaction cancelled",
+      "to": "FinalResponseReceived"
+    },
+    {
+      "from": "CANCELRequestSent",
+      "event": "timeout 64*T1",
+      "action": "set transaction cancelled",
+      "to": "FinalResponseReceived"
+    },
+    {
+      "from": "Idle",
+      "event": "receive REGISTER",
+      "action": "set ProcessingRequest",
+      "to": "ProcessingRequest"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond valid_credentials",
+      "action": "set Authenticated",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive Contact",
+      "action": "set BindingUpdated",
+      "to": "BindingUpdated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive Contact with 0 expires",
+      "action": "set BindingRemoved",
+      "to": "BindingRemoved"
+    },
+    {
+      "from": "BindingUpdated",
+      "event": "send 200 OK",
+      "action": "reply with bindings",
+      "to": "Idle"
+    },
+    {
+      "from": "BindingRemoved",
+      "event": "send 200 OK",
+      "action": "reply with bindings",
+      "to": "Idle"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond invalid_credentials",
+      "action": "send 403 Forbidden",
+      "to": "ErrorResponse"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond not_found",
+      "action": "send 404 Not Found",
+      "to": "ErrorResponse"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond invalid_request",
+      "action": "send 400 Invalid Request",
+      "to": "ErrorResponse"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond server_error",
+      "action": "send 500 Server Error",
+      "to": "ErrorResponse"
+    },
+    {
+      "from": "AwaitingOptionsRequest",
+      "event": "receive OPTIONS",
+      "action": "set processing true",
+      "to": "ProcessingOptionsRequest"
+    },
+    {
+      "from": "ProcessingOptionsRequest",
+      "event": "timeout no response",
+      "action": "reply 408",
+      "to": "AwaitingOptionsRequest"
+    },
+    {
+      "from": "ProcessingOptionsRequest",
+      "event": "send response",
+      "action": "reply 200",
+      "to": "SendingOptionsResponse"
+    },
+    {
+      "from": "SendingOptionsResponse",
+      "event": "receive ACK",
+      "action": "close dialog",
+      "to": "AwaitingOptionsRequest"
+    },
+    {
+      "from": "Early",
+      "event": "receive 2xx response",
+      "action": "set state Confirmed",
+      "to": "Confirmed"
+    },
+    {
+      "from": "Early",
+      "event": "receive non-2xx response",
+      "action": "close dialog",
+      "to": "None"
+    },
+    {
+      "from": "Confirmed",
+      "event": "send BYE",
+      "action": "close dialog",
+      "to": "None"
+    },
+    {
+      "from": "UAC_WaitingForResponse",
+      "event": "receive INVITE",
+      "action": "send 200",
+      "to": "UAS_Accepting"
+    },
+    {
+      "from": "UAC_WaitingForResponse",
+      "event": "timeout",
+      "action": "reply 408",
+      "to": "UAC_WaitingForResponse"
+    },
+    {
+      "from": "UAC_WaitingForResponse",
+      "event": "receive 1xx",
+      "action": "log progress",
+      "to": "UAC_ReceivingProvisional"
+    },
+    {
+      "from": "UAC_ReceivingProvisional",
+      "event": "receive 2xx",
+      "action": "send ACK",
+      "to": "UAC_ProcessingACK"
+    },
+    {
+      "from": "UAC_ReceivingProvisional",
+      "event": "receive non-2xx",
+      "action": "log failure",
+      "to": "UAC_WaitingForResponse"
+    },
+    {
+      "from": "UAS_ProcessingINVITE",
+      "event": "receive INVITE",
+      "action": "set timer",
+      "to": "UAS_SendingResponse"
+    },
+    {
+      "from": "UAS_SendingResponse",
+      "event": "send 2xx",
+      "action": "create dialog",
+      "to": "UAS_Accepting"
+    },
+    {
+      "from": "UAS_SendingResponse",
+      "event": "send 3xx",
+      "action": "redirect call",
+      "to": "UAS_Redirecting"
+    },
+    {
+      "from": "UAS_SendingResponse",
+      "event": "send 4xx",
+      "action": "reject call",
+      "to": "UAS_Rejecting"
+    },
+    {
+      "from": "UAS_SendingResponse",
+      "event": "send 1xx",
+      "action": "indicate progress",
+      "to": "UAS_IndicatingProgress"
+    },
+    {
+      "from": "UAC",
+      "event": "receive non-2xx response",
+      "action": "set SessionParametersUnchanged",
+      "to": "UAC"
+    },
+    {
+      "from": "UAC",
+      "event": "receive 491 response",
+      "action": "start timer T",
+      "to": "UAC"
+    },
+    {
+      "from": "UAC",
+      "event": "timeout T",
+      "action": "attempt re-INVITE",
+      "to": "UAC"
+    },
+    {
+      "from": "UAS",
+      "event": "receive second INVITE",
+      "action": "reply 500",
+      "to": "UAS"
+    },
+    {
+      "from": "UAS",
+      "event": "receive INVITE while ongoing INVITE",
+      "action": "reply 491",
+      "to": "UAS"
+    },
+    {
+      "from": "UAS",
+      "event": "receive re-INVITE",
+      "action": "check session description",
+      "to": "SessionDescriptionChanged"
+    },
+    {
+      "from": "SessionDescriptionChanged",
+      "event": "session description acceptable",
+      "action": "adjust session parameters",
+      "to": "UAS"
+    },
+    {
+      "from": "SessionDescriptionChanged",
+      "event": "session description not acceptable",
+      "action": "reply 488",
+      "to": "NotAcceptableHere"
+    },
+    {
+      "from": "UAS",
+      "event": "generate 2xx response",
+      "action": "send BYE",
+      "to": "UAS"
+    },
+    {
+      "from": "UAC",
+      "event": "send BYE",
+      "action": "set SessionTerminated",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "UAS",
+      "event": "receive BYE",
+      "action": "reply 2xx",
+      "to": "DialogTerminated"
+    },
+    {
+      "from": "UAS",
+      "event": "receive BYE",
+      "action": "set SessionTerminated",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "UAS",
+      "event": "receive BYE",
+      "action": "reply 481",
+      "to": "PendingRequest"
+    },
+    {
+      "from": "UAS",
+      "event": "timeout BYE",
+      "action": "set DialogTerminated",
+      "to": "DialogTerminated"
+    },
+    {
+      "from": "StatefulProxy",
+      "event": "receive request",
+      "action": "set transaction state",
+      "to": "RequestValidation"
+    },
+    {
+      "from": "RequestValidation",
+      "event": "validate request",
+      "action": "reply error code",
+      "to": "StatefulProxy"
+    },
+    {
+      "from": "RequestValidation",
+      "event": "request valid",
+      "action": "set routing info",
+      "to": "RouteInformationPreprocessing"
+    },
+    {
+      "from": "RouteInformationPreprocessing",
+      "event": "process routing info",
+      "action": "set targets",
+      "to": "DeterminingRequestTargets"
+    },
+    {
+      "from": "DeterminingRequestTargets",
+      "event": "targets determined",
+      "action": "forward request",
+      "to": "RequestForwarding"
+    },
+    {
+      "from": "RequestForwarding",
+      "event": "forward request",
+      "action": "send to target",
+      "to": "ResponseProcessing"
+    },
+    {
+      "from": "ResponseProcessing",
+      "event": "receive response",
+      "action": "update context",
+      "to": "ResponseProcessing"
+    },
+    {
+      "from": "ResponseProcessing",
+      "event": "final response received",
+      "action": "forward response",
+      "to": "StatefulProxy"
+    },
+    {
+      "from": "TimerCProcessing",
+      "event": "timer C fires",
+      "action": "terminate transaction",
+      "to": "StatefulProxy"
+    },
+    {
+      "from": "HandlingTransportErrors",
+      "event": "transport error",
+      "action": "reply 503",
+      "to": "StatefulProxy"
+    },
+    {
+      "from": "CANCELProcessing",
+      "event": "receive CANCEL",
+      "action": "reply 200",
+      "to": "StatefulProxy"
+    },
+    {
+      "from": "Calling",
+      "event": "receive INVITE from TU",
+      "action": "send INVITE",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "timeout Timer A",
+      "action": "reset A",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "receive 1xx",
+      "action": "send 1xx to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Calling",
+      "event": "receive 300-699",
+      "action": "send ACK",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive 2xx",
+      "action": "send 2xx to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive 300-699",
+      "action": "send response",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "timeout Timer D",
+      "action": "set terminated",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "receive 2xx",
+      "action": "send 2xx to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "receive request",
+      "action": "pass to TU",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "receive 1xx",
+      "action": "send response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "receive 200-699",
+      "action": "send response",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive 200-699",
+      "action": "send response",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "timeout Timer J",
+      "action": "set terminated",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "receive request",
+      "action": "send response",
+      "to": "Completed"
+    },
+    {
+      "from": "WaitingForCredentials",
+      "event": "receive request",
+      "action": "reply 401",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Unauthorized",
+      "event": "receive credentials",
+      "action": "set authenticated true",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Unauthorized",
+      "event": "receive challenge",
+      "action": "set challenge details",
+      "to": "ChallengeReceived"
+    },
+    {
+      "from": "ChallengeReceived",
+      "event": "retry request",
+      "action": "reply 407",
+      "to": "ProxyAuthenticationRequired"
+    },
+    {
+      "from": "ProxyAuthenticationRequired",
+      "event": "receive credentials",
+      "action": "set authenticated true",
+      "to": "Authenticated"
+    },
+    {
+      "from": "UAC",
+      "event": "send S/MIME body",
+      "action": "set SessionSecured true",
+      "to": "UAS"
+    },
+    {
+      "from": "UAS",
+      "event": "receive S/MIME body",
+      "action": "set CertificateValidation",
+      "to": "CertificateValidation"
+    },
+    {
+      "from": "CertificateValidation",
+      "event": "valid certificate",
+      "action": "add to Keyring",
+      "to": "SessionSecured"
+    },
+    {
+      "from": "CertificateValidation",
+      "event": "invalid certificate",
+      "action": "log failure",
+      "to": "UserNotification"
+    },
+    {
+      "from": "UserNotification",
+      "event": "user authorizes",
+      "action": "add to Keyring",
+      "to": "SessionSecured"
+    },
+    {
+      "from": "UserNotification",
+      "event": "user denies",
+      "action": "set SessionNotSecured true",
+      "to": "UAC"
+    },
+    {
+      "from": "UAC",
+      "event": "receive unsecured body",
+      "action": "set SessionNotSecured true",
+      "to": "UserNotification"
+    },
+    {
+      "from": "UAS",
+      "event": "receive S/MIME body",
+      "action": "set CertificateChange",
+      "to": "UserNotification"
+    },
+    {
+      "from": "CertificateChange",
+      "event": "user authorizes new certificate",
+      "action": "add to Keyring",
+      "to": "SessionSecured"
+    },
+    {
+      "from": "CertificateChange",
+      "event": "user denies new certificate",
+      "action": "set SessionNotSecured true",
+      "to": "UAC"
+    },
+    {
+      "from": "Registered",
+      "event": "receive REGISTER",
+      "action": "reply 200 OK",
+      "to": "SessionSetup"
+    },
+    {
+      "from": "SessionSetup",
+      "event": "send INVITE",
+      "action": "reply 100 Trying",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "send INVITE",
+      "action": "reply 100 Trying",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "send INVITE",
+      "action": "reply 180 Ringing",
+      "to": "Ringing"
+    },
+    {
+      "from": "Ringing",
+      "event": "send INVITE",
+      "action": "reply 200 OK",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "send ACK",
+      "action": "log session established",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "send BYE",
+      "action": "reply 200 OK",
+      "to": "Terminated"
+    },
+    {
+      "from": "WaitingForResponse",
+      "event": "receive INVITE",
+      "action": "send 100",
+      "to": "ProvisionalResponseReceived"
+    },
+    {
+      "from": "ProvisionalResponseReceived",
+      "event": "receive 2xx",
+      "action": "set CallEstablished true",
+      "to": "CallEstablished"
+    },
+    {
+      "from": "ProvisionalResponseReceived",
+      "event": "receive 487",
+      "action": "set CallTerminated true",
+      "to": "CallTerminated"
+    },
+    {
+      "from": "WaitingForResponse",
+      "event": "send CANCEL",
+      "action": "set CANCELSent true",
+      "to": "CANCELSent"
+    },
+    {
+      "from": "CANCELSent",
+      "event": "receive 2xx",
+      "action": "send BYE",
+      "to": "BYESent"
+    },
+    {
+      "from": "CallEstablished",
+      "event": "receive ACK",
+      "action": "set CallTerminated true",
+      "to": "CallTerminated"
+    },
+    {
+      "from": "WaitingForResponse",
+      "event": "receive 503",
+      "action": "send next request",
+      "to": "WaitingForResponse"
+    },
+    {
+      "from": "WaitingForResponse",
+      "event": "receive 491",
+      "action": "set RequestPending true",
+      "to": "RequestPending"
+    },
+    {
+      "from": "RequestPending",
+      "event": "timeout 5s",
+      "action": "log failure",
+      "to": "WaitingForResponse"
+    }
+  ]
+}
