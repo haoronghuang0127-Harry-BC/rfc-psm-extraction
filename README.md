@@ -97,7 +97,7 @@ Default: `qwen3.5:9b`
 ### Profile
 - `default`: Use the default settings of the selected model.
 - `P0`: Basic settings.
-- `P1`: Usa a larger context and output limit.
+- `P1`: Use a larger context and output limit.
 - `P2`: Use a small amount of randomness to test result stability.
 - `P3`: Enable thinking mode.
 - `P4-low`: Use low reasoning for GPT-OSS models.
@@ -108,7 +108,7 @@ Default: `qwen3.5:9b`
 ### Connection
 - `local`: Use local Ollama.
 - `remote`: Use the remote Ollama server defined in `.env`.
-- `auto`: Try local Ollama first. If it connection fails, try the remote Ollama server.
+- `auto`: Try local Ollama first. If the local connection fails, try the remote Ollama server.
 
 Default: `auto`
 
@@ -132,6 +132,12 @@ Use `--max-sections all` to process all selected sections.
 Run a quick test:
 ```powershell
 python -m method_1_section_selection.run_llm_extraction --protocol POP3 --max-sections 1
+```
+
+Run a complete experiment:
+
+```powershell
+python -m method_1_section_selection.run_llm_extraction --protocol POP3 --scoring-method keyword_density --input-version hybrid_high --model qwen3.5:9b --profile P0 --connection auto --output-format F0 --seed 42 --max-sections all
 ```
 
 Default: `1`
