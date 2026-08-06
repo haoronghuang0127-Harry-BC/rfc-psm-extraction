@@ -1,1 +1,8 @@
 python-dotenv
+# PSMBench
+numpy
+pandas
+matplotlib
+seaborn
+sentence-transformers
+tiktoken

@@ -4,15 +4,17 @@ from pathlib import Path
 
 from config.output_formats import OutputFormatName
 from config.paths import METHOD_1_OUTPUT_DIR
-from config.protocol_files import get_all_protocol_files
+from config.protocol.protocol_util import get_all_protocol_files
 
 from method_1_section_selection.prompt.generate_section_prompt import build_section_prompt
 from method_1_section_selection.prompt.prompt_types import InputVersion, PromptRecord, PromptSummary
-from method_1_section_selection.selection.rfc_segment_io import load_rfc_segments
-from method_1_section_selection.selection.section_features import RfcSegment, get_rfc_segment_values
 from method_1_section_selection.selection.selection_rules import ScoringMethod
 
-from util.text_statistics import count_words
+from rfc.rfc_io import load_rfc_segments
+from rfc.rfc_service import get_rfc_segment_values
+from rfc.rfc_types import RfcSegment
+
+from utils.text_statistics import count_words
 
 
 # save the prompt as a json file

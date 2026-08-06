@@ -6,8 +6,8 @@ from config.output_formats import OutputFormatName
 from method_1_section_selection.llm_experiment.experiment_error import build_failed_model_result
 from method_1_section_selection.llm_experiment.experiment_types import ModelCallResult, ParseStatus
 
-from util.llm_output_parser import parse_json_from_response
-from util.ollama_client import call_ollama_generate
+from utils.llm_output_parser import parse_json_from_response
+from utils.ollama_client import call_ollama_generate
 
 # check the json if complete
 def _is_json_cutoff(ollama_response: dict[str, object]) -> bool:

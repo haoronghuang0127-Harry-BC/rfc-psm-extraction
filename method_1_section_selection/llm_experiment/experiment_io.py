@@ -10,6 +10,8 @@ from method_1_section_selection.llm_experiment.experiment_types import SectionRu
 from method_1_section_selection.prompt.prompt_types import InputVersion, PromptRecord
 from method_1_section_selection.selection.selection_rules import ScoringMethod
 
+from utils.files_util import check_file_exists
+
 
 # Load generated prompts from a JSON file.
 def load_prompts(file_path: Path) -> list[PromptRecord]:
@@ -61,8 +63,7 @@ def get_prompt_file(protocol: str, scoring_method: ScoringMethod, input_version:
 
     prompt_file: Path = METHOD_1_OUTPUT_DIR / protocol / scoring_method.value / "prompts" / f"{input_version.value}_prompts.json"
 
-    if not prompt_file.exists():
-        raise FileNotFoundError(f"Prompt file not found: {prompt_file}")
+    check_file_exists(file_path=prompt_file, erros_message=f"Prompt file not found: {prompt_file}")
 
     return prompt_file
 

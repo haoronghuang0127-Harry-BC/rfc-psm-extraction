@@ -12,7 +12,7 @@ from method_1_section_selection.llm_experiment.merge_psm_service import build_me
 from method_1_section_selection.prompt.prompt_types import PromptRecord
 from method_1_section_selection.llm_experiment.merge_psm_service import merge_partial_outputs
 
-from util.text_statistics import count_words
+from utils.text_statistics import count_words
      
 # send section prompt to ollama
 def send_section_prompt(prompt: PromptRecord, prompt_text: str, model_config: ModelConfig, model_profile: ModelProfile, connection: OllamaConnection, output_format: OutputFormat) -> SectionRunResult:

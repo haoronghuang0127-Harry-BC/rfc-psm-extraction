@@ -1,14 +1,11 @@
 from typing import TypedDict
 
 from method_1_section_selection.selection.selection_rules import KEYWORD_WEIGHTS, TITLE_BONUS
-from util.text_statistics import count_keyword, count_words
 
-# Structure of RFC segment from PSMBench
-class RfcSegment(TypedDict, total=False):
-    section_number: str
-    section_name: str
-    tag: str
-    content: str
+from rfc.rfc_service import get_rfc_segment_values
+from rfc.rfc_types import RfcSegment
+
+from utils.text_statistics import count_keyword, count_words
 
 # The features extracted from a RFC section
 class SectionFeatures(TypedDict):
@@ -59,16 +56,6 @@ def _get_matched_title(section_name: str) -> list[str]:
 
 
     return matched_titles
-
-# get value in RfcSegment
-def get_rfc_segment_values(segment: RfcSegment) -> tuple[str, str, str, str]:
-    # get RfcSegment values
-    section_number: str = segment.get("section_number", "")
-    section_name: str = segment.get("section_name", "")
-    tag: str = segment.get("tag", "")
-    content: str = segment.get("content", "")
-
-    return section_number, section_name, tag, content
 
 # extract all features from rfc sections
 def extract_section_features(segment: RfcSegment, source_index: int) -> SectionFeatures:

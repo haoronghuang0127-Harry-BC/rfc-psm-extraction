@@ -5,7 +5,7 @@ from config.ollama_settings import OllamaConnection
 
 from method_1_section_selection.llm_experiment.experiment_types import ExperimentEnvironment, ExperimentSummary, ParseStatus, SectionRunResult
 
-from util.ollama_client import get_ollama_running_models
+from utils.ollama_client import get_ollama_running_models
 
 
 

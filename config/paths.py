@@ -22,3 +22,15 @@ METHOD_1_DIR: Final[Path] = PROJECT_FOLDER_DIR / "method_1_section_selection"
 
 # The output folder of Method 1.
 METHOD_1_OUTPUT_DIR: Final[Path] = METHOD_1_DIR / "outputs"
+
+
+
+
+"""
+Method2
+"""
+# The Method 2 root folder.
+METHOD_2_DIR: Final[Path] = PROJECT_FOLDER_DIR / "method_2_long_section_splitting"
+
+# The output folder of Method 2.
+METHOD_2_OUTPUT_DIR: Final[Path] = METHOD_2_DIR / "outputs"

@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from method_1_section_selection.selection.section_features import RfcSegment
+from rfc.rfc_types import RfcSegment
 
 # Load all RFC sections from one PSMBench JSON file.
 def load_rfc_segments(file_path: Path) -> list[RfcSegment]:

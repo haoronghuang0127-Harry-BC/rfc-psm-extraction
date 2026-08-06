@@ -9,7 +9,7 @@ from config.models.model_names import ModelName
 from config.models.model_types import ProfileName
 from config.ollama_settings import ConnectionMode
 from config.output_formats import OutputFormatName
-from config.protocol_files import get_all_protocol_files
+from config.protocol.protocol_util import get_all_protocol_files
 
 from ..prompt.prompt_types import InputVersion
 from ..selection.selection_rules import ScoringMethod

@@ -11,7 +11,7 @@ from method_1_section_selection.llm_experiment.experiment_types import ModelCall
 from method_1_section_selection.prompt.generate_merge_prompt import build_merge_prompt
 
 # set the context more bigger
-MERGE_NUM_PREDICT: Final[int] = 8192
+MERGE_NUM_PREDICT: Final[int] = 32768
 # set the ratio for the context (80%)
 MERGE_CONTEXT_USE_RATIO: Final[float] = 0.80
 MERGE_MAX_TIMES: Final[int] = 2

@@ -1,13 +1,14 @@
 from pathlib import Path
 
-from config.protocol_files import get_all_protocol_files
+from config.protocol.protocol_util import get_all_protocol_files
 
-from method_1_section_selection.selection.rfc_segment_io import load_rfc_segments
 from method_1_section_selection.selection.section_features import RfcSegment, SectionFeatures, extract_section_features
 from method_1_section_selection.selection.section_scoring import ScoredSection, score_section
 from method_1_section_selection.selection.section_selector import RankedSection, SectionSelectionResult, select_sections
 from method_1_section_selection.selection.selection_output import save_selection_result
 from method_1_section_selection.selection.selection_rules import ScoringMethod
+
+from rfc.rfc_io import load_rfc_segments
 
 
 

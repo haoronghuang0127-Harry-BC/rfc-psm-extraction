@@ -11,7 +11,7 @@ from enum import StrEnum
 
 from config.paths import PROJECT_FOLDER_DIR
 
-from util.ollama_client import can_connect_to_ollama
+from utils.ollama_client import can_connect_to_ollama
 
 load_dotenv(dotenv_path=PROJECT_FOLDER_DIR / ".env")
 

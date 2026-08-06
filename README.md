@@ -6,11 +6,14 @@ This project selects useful sections from RFC documents before sending them to a
 
 This project uses PSMBench data and runs local LLMs with Ollama.
 
-## Main Folders
+## Project Structure
 
+- `config/`: protocol, model, profile, output-format, Ollama, and path configuration.
+- `rfc/`: rfc types, roadling and related functions.
+- `utils/`: shared helper functions.
 - `method_1_section_selection/`: section selection, prompt generation, and LLM experiments.
-- `config/`: protocol paths, model names, and experiment settings.
-- `util/`: shared helper functions.
+- `method_2_long_section_splitting/`: experimental long-section splitting method; **currently under development.**
+- `evaluation/`: PSM validation, PSMBench-based evaluation, and CSV summary generation.
 - `PSMBench/`: third-party benchmark data and code.
 
 ## Setup
@@ -29,16 +32,31 @@ Copy `.env.example` to `.env`, and then set the local or remote Ollama URL.
 
 Run all commands from the project root folder.
 
-Select RFC sections:
+### Method 1 section_selection
+
+#### 1.Select RFC sections:
 
 ```powershell
 python -m method_1_section_selection.hybrid_section_selection
 ```
 
-Generate LLM prompts:
+#### 2.Generate LLM prompts:
 
 ```powershell
 python -m method_1_section_selection.generate_llm_prompts
+```
+
+#### 3.Run LLM extration experiment 
+
+Run a quick test:
+```powershell
+python -m method_1_section_selection.run_llm_extraction --protocol POP3 --max-sections 1
+```
+
+Run a complete experiment:
+
+```powershell
+python -m method_1_section_selection.run_llm_extraction --protocol POP3 --scoring-method keyword_density --input-version hybrid_high --model qwen3.5:9b --profile P0 --connection auto --output-format F0 --seed 42 --max-sections all
 ```
 
 Show the LLM experiment command line options:
@@ -46,7 +64,6 @@ Show the LLM experiment command line options:
 ```powershell
 python -m method_1_section_selection.run_llm_extraction --help
 ```
-
 The program supports these options:
 - `--protocol`: Select a protocol, such as `POP3` or `TCP`.
 - `--scoring-method`: Select a method for scoring RFC sections.
@@ -58,6 +75,13 @@ The program supports these options:
 - `--seed`: Set the random seed.
 - `--max-sections`: Select how many RFC sections are processed.
 
+#### 4.Evaluate completed Method 1 experiments
+```powershell
+python -m method_1_section_selection.run_evaluation
+```
+
+
+## Experiment Configuration
 ### Protocol
 Available protocols:
 `BGP`, `DCCP`, `DHCP`, `FTP`, `IMAP`, `MQTT`, `NNTP`, `POP3`, `PPP`, `PPTP`, `RTSP`, `SIP`, `SMTP`, and `TCP`.
@@ -129,18 +153,8 @@ Use `--max-sections 1` for a quick test.
 
 Use `--max-sections all` to process all selected sections.
 
-Run a quick test:
-```powershell
-python -m method_1_section_selection.run_llm_extraction --protocol POP3 --max-sections 1
-```
-
-Run a complete experiment:
-
-```powershell
-python -m method_1_section_selection.run_llm_extraction --protocol POP3 --scoring-method keyword_density --input-version hybrid_high --model qwen3.5:9b --profile P0 --connection auto --output-format F0 --seed 42 --max-sections all
-```
-
 Default: `1`
+
 
 
 ## Data Storage Directory

@@ -13,7 +13,7 @@ _MODEL_PROFILES: dict[ProfileName, ModelProfile] = {
         "description": "Strict baseline",
         "options": {
             "num_ctx": 65536,
-            "num_predict": 4096,
+            "num_predict": 16384,
             "temperature": 0.0,
             "top_p": 0.9,
             "top_k": 40,
@@ -27,7 +27,7 @@ _MODEL_PROFILES: dict[ProfileName, ModelProfile] = {
         "description": "Long context",
         "options": {
             "num_ctx": 131072,
-            "num_predict": 8192,
+            "num_predict": 32768,
             "temperature": 0.0,
             "top_p": 0.9,
             "top_k": 40,
@@ -40,8 +40,8 @@ _MODEL_PROFILES: dict[ProfileName, ModelProfile] = {
     ProfileName.P2: {
         "description": "Sampling and stability",
         "options": {
-            "num_ctx": 65536,
-            "num_predict": 4096,
+            "num_ctx": 131072,
+            "num_predict": 32768,
             "temperature": 0.2,
             "top_p": 0.9,
             "top_k": 40,
@@ -55,7 +55,7 @@ _MODEL_PROFILES: dict[ProfileName, ModelProfile] = {
         "description": "Thinking enabled",
         "options": {
             "num_ctx": 131072,
-            "num_predict": 8192,
+            "num_predict": 32768,
             "temperature": 0.0,
             "top_p": 0.9,
             "top_k": 40,
@@ -69,7 +69,7 @@ _MODEL_PROFILES: dict[ProfileName, ModelProfile] = {
         "description": "GPT-OSS low reasoning",
         "options": {
             "num_ctx": 131072,
-            "num_predict": 8192,
+            "num_predict": 32768,
             "temperature": 0.0,
             "seed": 42,
         },
@@ -80,7 +80,7 @@ _MODEL_PROFILES: dict[ProfileName, ModelProfile] = {
         "description": "GPT-OSS medium reasoning",
         "options": {
             "num_ctx": 131072,
-            "num_predict": 8192,
+            "num_predict": 32768,
             "temperature": 0.0,
             "seed": 42,
         },

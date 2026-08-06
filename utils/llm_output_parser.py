@@ -25,6 +25,7 @@ def extract_direct_json_content(response: str) -> str | None:
 
     json_text: str = response.strip()
 
+    # delete the markdown situation to get the json
     if json_text.startswith("```"):
         first_line_end: int = json_text.find("\n")
 
