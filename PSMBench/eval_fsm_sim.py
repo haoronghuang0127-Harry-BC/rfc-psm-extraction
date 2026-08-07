@@ -317,6 +317,9 @@ if __name__ == "__main__":
     summary_df['Model'] = summary_df['Model'].replace(model_name_mapping)
     print("All Matches:\n", all_matches)
     print("summary_df:\n", summary_df)
+
+    
+
     import pandas as pd
 
     '''The following is to get the LaTeX table for each protocol'''
@@ -372,9 +375,20 @@ if __name__ == "__main__":
     
     # print("Model performance summary generated successfully.\n", latex_code)
     
+    """save the state mathcing """
+    summary_df.to_csv("states_match_results.csv", index=False)
+    print("State results saved to: states_match_results.csv")
+
+
     '''start the trasistion matching'''
+    # complete tranistion
     transition_matches_df = batch_evaluate_transitions_combined(protocols=protocols, 
                                                                 models=models, fsm_dir="fsm", if_partial=False)
     transition_matches_df.to_csv("transitions_match_results_whole.csv", index=False)
-    print("transitio match results:", transition_matches_df)
-    
+    print("Complete transition match results:", transition_matches_df)
+
+    # partial transition 
+    partial_transition_df = batch_evaluate_transitions_combined(protocols=protocols,
+                                                                models=models, fsm_dir="fsm", if_partial=True)
+    partial_transition_df.to_csv("transitions_match_results_partial.csv", index=False)
+    print("Partial transition match results:", partial_transition_df)
