@@ -12,7 +12,11 @@ CONFIG_FOLDER: Final[Path] = CURRENT_FILE.parent
 PROJECT_FOLDER_DIR: Final[Path] = CONFIG_FOLDER.parent
 
 # PSMBench Project Path
-PSMBENCH_DIR: Final[Path] = PROJECT_FOLDER_DIR / "PSMBench" 
+PSMBENCH_DIR: Final[Path] = PROJECT_FOLDER_DIR / "RFC_PSM_Benchmark-main" 
+# PSMBench Evaluation OutputPath
+PSMBENCH_OUTPUT_DIR: Final[Path] = PROJECT_FOLDER_DIR / "PSMBench_evaluation_results"
+# PSMBench fsm Path
+PSMBENCH_FSM_DIR: Final[Path] = PSMBENCH_DIR / "fsm"
 
 """
 Method1
