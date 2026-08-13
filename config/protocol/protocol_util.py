@@ -2,6 +2,10 @@ from collections.abc import Mapping
 from pathlib import Path
 
 from config.protocol.protocol_files import GROUND_TRUTH_FILES, PROTOCOL_FILES
+
+from rfc.rfc_io import load_rfc_segments
+from rfc.rfc_types import RfcSegment
+
 from utils.files_util import check_file_exists
 
 
@@ -52,6 +56,22 @@ def get_protocol_file(protocol: str) -> Path:
 
 def get_all_protocol_files() -> dict[str, Path]:
     return _get_all_protocol_file(PROTOCOL_FILES)
+
+
+def get_all_protocol() -> dict[str, list[RfcSegment]]:
+
+    # get all the protocol files path
+    protocol_files_path: dict[str, Path] = get_all_protocol_files()
+
+    # init the dict result
+    rfc_segments_dict: dict[str, list[RfcSegment]] = {}
+
+    for protocol, file_path in protocol_files_path.items():
+        segments: list[RfcSegment] = load_rfc_segments(file_path=file_path)
+        rfc_segments_dict[protocol] = segments
+
+    return rfc_segments_dict
+
 
 
 
