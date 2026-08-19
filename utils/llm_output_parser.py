@@ -1,6 +1,30 @@
 import json
 import re
 
+# remove the model output with Markdown JSON code blocks (```json) or using json tag (<json>)
+def _strip_json_wrappers(text: str) -> str:
+
+    json_text: str = text.strip()
+
+    while json_text:
+        previous_text: str = json_text
+
+        # remove the started markdown json code blocks
+        json_text = re.sub(r"^\s*```(?:json)?\s*", "", json_text, flags=re.IGNORECASE)
+        # remove the ended markdown json code blocks
+        json_text = re.sub(r"\s*```\s*$", "", json_text)
+        # remove started json tag
+        json_text = re.sub(r"^\s*<json>\s*", "", json_text, flags=re.IGNORECASE)
+        # remove ended json tag
+        json_text = re.sub(r"\s*</json>\s*$", "", json_text, flags=re.IGNORECASE)
+        json_text = json_text.strip()
+
+        # after change the string if same break the loop
+        if json_text == previous_text:
+            break
+
+    return json_text
+
 # Extract the content inside <json>...</json>.
 def extract_json_content(response: str) -> str | None:
 
@@ -9,7 +33,8 @@ def extract_json_content(response: str) -> str | None:
     if match is None:
         return None
 
-    json_text: str = match.group(1).strip()
+    # using the new json judge
+    json_text: str = _strip_json_wrappers(match.group(1))
 
     if not json_text:
         return None
@@ -23,19 +48,7 @@ def extract_json_content(response: str) -> str | None:
 # Extract direct JSON text returned by F1 or F2.
 def extract_direct_json_content(response: str) -> str | None:
 
-    json_text: str = response.strip()
-
-    # delete the markdown situation to get the json
-    if json_text.startswith("```"):
-        first_line_end: int = json_text.find("\n")
-
-        if first_line_end != -1:
-            json_text = json_text[first_line_end + 1:]
-
-        if json_text.endswith("```"):
-            json_text = json_text[:-3]
-
-        json_text = json_text.strip()
+    json_text: str = _strip_json_wrappers(response)
 
     if not json_text:
         return None

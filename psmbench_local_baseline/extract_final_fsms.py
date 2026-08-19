@@ -30,13 +30,19 @@ def extract_final_fsms() -> None:
         # load the combination response file
         combination_response: dict[str, object] = load_json_file(file_path=response_file_path, data_type=dict[str, object])
 
-        response_value: str = combination_response.get("response")
+        response_value: object = combination_response.get("response")
 
-        # parse the JSON inside <json>...</json>.
-        parsed_output: object | None = parse_json_from_response(response=response_value, allow_direct_json=False)
+        parsed_output: object | None = None
+        if isinstance(response_value, str):
+            # accept the requested <json>...</json> tag form as well as direct json
+            # and Markdown jsob code blocks returned by some local models.
+            parsed_output = parse_json_from_response(response=response_value, allow_direct_json=True)
 
-        # store the parsed output as the final FSM.
-        final_fsm: dict[str, object] = parsed_output
+        # save parsed json object and invalid or truncated responses remain null.
+        if isinstance(parsed_output, dict):
+            final_fsm = parsed_output
+        else:
+            final_fsm = None
 
         # get the final FSM output path.
         final_fsm_file_path: Path = _get_final_fsm_file_path(response_file_path=response_file_path)
