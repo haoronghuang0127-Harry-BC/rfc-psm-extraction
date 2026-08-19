@@ -30,7 +30,16 @@ PSMBENCH_LOCAL_BASELINE_PROMPTS_DIR: Final[Path] = PSMBENCH_LOCAL_BASELINE_OUTPU
 PSMBENCH_LOCAL_BASELINE_EXTRACTION_PROMPTS: Final[Path] = PSMBENCH_LOCAL_BASELINE_PROMPTS_DIR / "extraction_prompts.json"
 # PSMBench local baseline responses directory
 PSMBENCH_LOCAL_BASELINE_RESPONSES_DIR: Final[Path] = PSMBENCH_LOCAL_BASELINE_OUTPUT_DIR / "responses"
-
+# PSMBench local baseline original responses directory
+PSMBENCH_LOCAL_BASELINE_ORIGINAL_RESPONSES_DIR: Final[Path] = PSMBENCH_LOCAL_BASELINE_RESPONSES_DIR / "original"
+# PSMBench local baseline partial FSM responses directory.
+PSMBENCH_LOCAL_BASELINE_PARTIAL_FSMS_DIR: Final[Path] = PSMBENCH_LOCAL_BASELINE_RESPONSES_DIR / "partial_fsms"
+# PSMBench local baseline combination prompts file.
+PSMBENCH_LOCAL_BASELINE_COMBINATION_PROMPTS: Final[Path] = PSMBENCH_LOCAL_BASELINE_PROMPTS_DIR / "combination_prompts.json"
+# PSMBench local baseline combination response directory.
+PSMBENCH_LOCAL_BASELINE_COMBINATION_RESPONSE_DIR: Final[Path] = PSMBENCH_LOCAL_BASELINE_RESPONSES_DIR / "combination_response"
+# PSMBench local baseline final FSM directory.
+PSMBENCH_LOCAL_BASELINE_FINAL_FSMS_DIR: Final[Path] = PSMBENCH_LOCAL_BASELINE_OUTPUT_DIR / "final_fsms"
 
 
 

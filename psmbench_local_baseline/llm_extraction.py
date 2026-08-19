@@ -5,13 +5,13 @@ from config.models.model_profiles import ModelProfile, get_model_profile
 from config.models.model_registry import get_all_model_configs, get_model_config
 from config.models.model_types import ModelConfig, ProfileName
 from config.ollama_settings import ConnectionMode, OllamaConnection, get_ollama_connection
-from config.paths import PSMBENCH_LOCAL_BASELINE_EXTRACTION_PROMPTS, PSMBENCH_LOCAL_BASELINE_RESPONSES_DIR
+from config.paths import PSMBENCH_LOCAL_BASELINE_EXTRACTION_PROMPTS, PSMBENCH_LOCAL_BASELINE_ORIGINAL_RESPONSES_DIR
 
 from psmbench_local_baseline.command_line import read_command_line_to_value
 from psmbench_local_baseline.types import Arguments
+from psmbench_local_baseline.util import get_ollama_response
 
 from utils.files_util import load_json_file, save_json_file
-from utils.ollama_client import call_ollama_generate
 
 
 def _get_extraction_prompts_dict_by_files() ->  dict[str, list[str]]:
@@ -66,7 +66,7 @@ def _get_extraction_response_file_path(protocol: str, model_name: str, profile_n
 
     file_name: str = f"{protocol}_{model_name}{thinking}_extraction_responses.json"
 
-    file_path: Path = PSMBENCH_LOCAL_BASELINE_RESPONSES_DIR / "original" / file_name
+    file_path: Path = PSMBENCH_LOCAL_BASELINE_ORIGINAL_RESPONSES_DIR / file_name
 
     return file_path
 
@@ -79,29 +79,6 @@ def _get_selected_profile_name(model_config: ModelConfig, thinking: bool) -> Pro
         return ProfileName.QWEN_THINK
 
     raise ValueError("Thinking can only be enabled for qwen3.5:9b and qwen3.5:27b.")
-
-def _get_ollama_response(prompt: str, connection: OllamaConnection, model_config: ModelConfig, model_profile: ModelProfile) -> dict[str, object]:
-    # get the ollama url
-    url: str = connection["ollama_url"]
-    # get the using model
-    model: str = model_config["name"].value
-    # get the options
-    options: dict[str, int | float] = model_profile["options"]
-    # get request_timeout_seconds
-    request_timeout_seconds: int = connection["request_timeout_seconds"]
-    # get if uisng think model
-    think: bool | None = model_profile["think"]
-    # set the output format
-    output_format = None
-    # get the header
-    headers: dict[str, str] = connection["extra_headers"]
-
-    # get the ollama response
-    response: dict[str, object] = call_ollama_generate(ollama_url=url, model=model, prompt=prompt, options=options,
-                                                       request_timeout_seconds=request_timeout_seconds, think=think,
-                                                       output_format=output_format, extra_headers=headers)
-
-    return response
 
 def _extraction_psm(extraction_prompts_dict: dict[str, list[str]], arguments: Arguments, model_config_list: list[ModelConfig]) -> None:
     # get the ollama connection
@@ -133,7 +110,7 @@ def _extraction_psm(extraction_prompts_dict: dict[str, list[str]], arguments: Ar
             for index, prompt in enumerate(prompts, start=1):
                 print(f"{protocol}: {index}/{prompts_num}")
     
-                ollama_response: dict[str, object] = _get_ollama_response(prompt=prompt, connection=connection, model_config=model_config,
+                ollama_response: dict[str, object] = get_ollama_response(prompt=prompt, connection=connection, model_config=model_config,
                                                                             model_profile=model_profile)
 
                 # copy the response
