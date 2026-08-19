@@ -10,11 +10,9 @@ MODEL_CONFIG: ModelConfig = {
     "name": ModelName.QWEN3_5_9B,
     "size_group": ModelSize.SMALL,
     "advertised_context": 262144,
-    "default_profile": ProfileName.P0,
+    "default_profile": ProfileName.QWEN_NO_THINK,
     "supported_profiles": [
-        ProfileName.P0,
-        ProfileName.P1,
-        ProfileName.P2,
-        ProfileName.P3,
+        ProfileName.QWEN_NO_THINK,
+        ProfileName.QWEN_THINK
     ]
 }

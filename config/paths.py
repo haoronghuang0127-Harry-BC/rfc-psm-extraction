@@ -24,8 +24,16 @@ PSMBENCH_FSM_DIR: Final[Path] = PSMBENCH_DIR / "fsm"
 PSMBENCH_LOCAL_BASELINE_DIR: Final[Path] = PROJECT_FOLDER_DIR / "psmbench_local_baseline"
 # PSMBench loacl baseline output path
 PSMBENCH_LOCAL_BASELINE_OUTPUT_DIR: Final[Path] = PSMBENCH_LOCAL_BASELINE_DIR / "outputs"
+# PSMBench local baseline extraction prompts directory
+PSMBENCH_LOCAL_BASELINE_PROMPTS_DIR: Final[Path] = PSMBENCH_LOCAL_BASELINE_OUTPUT_DIR / "prompts"
 # PSMBench local baseline extraction prompts file
-PSMBENCH_LOCAL_BASELINE_EXTRACTION_PROMPTS: Final[Path] = PSMBENCH_LOCAL_BASELINE_OUTPUT_DIR / "extraction_prompts.json"
+PSMBENCH_LOCAL_BASELINE_EXTRACTION_PROMPTS: Final[Path] = PSMBENCH_LOCAL_BASELINE_PROMPTS_DIR / "extraction_prompts.json"
+# PSMBench local baseline responses directory
+PSMBENCH_LOCAL_BASELINE_RESPONSES_DIR: Final[Path] = PSMBENCH_LOCAL_BASELINE_OUTPUT_DIR / "responses"
+
+
+
+
 
 """
 Method1

@@ -10,10 +10,8 @@ MODEL_CONFIG: ModelConfig = {
     "name": ModelName.GEMMA3_12B,
     "size_group": ModelSize.SMALL,
     "advertised_context": 131072,
-    "default_profile": ProfileName.P0,
+    "default_profile": ProfileName.GEMMA_MISTRAL_NO_THINK,
     "supported_profiles": [
-        ProfileName.P0,
-        ProfileName.P1,
-        ProfileName.P2,
+        ProfileName.GEMMA_MISTRAL_NO_THINK
     ],
 }

@@ -6,3 +6,5 @@
 
 smoke_test_logs/
 method_1_section_selection/outputs/
+psmbench_local_baseline/outputs/
+run_logs/

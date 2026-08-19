@@ -7,17 +7,13 @@ from .model_names import ModelName
 class ModelSize(StrEnum):
     SMALL = "small"
     MEDIUM = "medium"
-    LARGE = "large"
-    EXTRA_LARGE = "extra_large"
 
 # Parameter profile names
 class ProfileName(StrEnum):
-    P0 = "P0"
-    P1 = "P1"
-    P2 = "P2"
-    P3 = "P3"
-    P4_LOW = "P4-low"
-    P4_MEDIUM = "P4-medium"
+    QWEN_NO_THINK = "qwen-no-think"
+    QWEN_THINK = "qwen-think"
+    GEMMA_MISTRAL_NO_THINK = "gemma-mistral-no-think"
+    QWQ_REASONING  = "qwq-reasoning"
 
 # Store the configuration of one Ollama model.
 class ModelConfig(TypedDict):

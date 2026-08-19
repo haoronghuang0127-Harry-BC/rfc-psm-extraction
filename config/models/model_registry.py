@@ -1,45 +1,22 @@
-from .model_types import ModelConfig, ModelSize
-from .model_names import ModelName
+from config.models.model_names import ModelName
+from config.models.model_types import ModelConfig,ModelSize
 
-from .small.qwen3_5_9b import MODEL_CONFIG as QWEN3_5_9B
-from .small.ministral_3_8b import MODEL_CONFIG as MINISTRAL_3_8B
-from .small.llama3_1_8b import MODEL_CONFIG as LLAMA3_1_8B
-from .small.gemma3_12b import MODEL_CONFIG as GEMMA3_12B
-from .small.deepseek_r1_8b import MODEL_CONFIG as DEEPSEEK_R1_8B
+from config.models.medium.gemma3_27b import MODEL_CONFIG as GEMMA3_27B
+from config.models.medium.mistral_small3_1_24b import MODEL_CONFIG as MISTRAL_SMALL3_1_24B
+from config.models.medium.qwen3_5_27b import MODEL_CONFIG as QWEN3_5_27B
+from config.models.medium.qwq_32b import MODEL_CONFIG as QWQ_32B
 
-from .medium.qwen3_5_27b import MODEL_CONFIG as QWEN3_5_27B
-from .medium.qwen3_5_35b import MODEL_CONFIG as QWEN3_5_35B
-from .medium.mistral_small3_2_24b import MODEL_CONFIG as MISTRAL_SMALL3_2_24B
-from .medium.gemma3_27b import MODEL_CONFIG as GEMMA3_27B
-from .medium.deepseek_r1_32b import MODEL_CONFIG as DEEPSEEK_R1_32B
-from .medium.gpt_oss_20b import MODEL_CONFIG as GPT_OSS_20B
-
-from .large.llama3_3_70b import MODEL_CONFIG as LLAMA3_3_70B
-from .large.deepseek_r1_70b import MODEL_CONFIG as DEEPSEEK_R1_70B
-from .large.qwen3_next_80b import MODEL_CONFIG as QWEN3_NEXT_80B
-
-from .extra_large.gpt_oss_120b import MODEL_CONFIG as GPT_OSS_120B
-from .extra_large.qwen3_5_122b import MODEL_CONFIG as QWEN3_5_122B
-
+from config.models.small.gemma3_12b import MODEL_CONFIG as GEMMA3_12B
+from config.models.small.qwen3_5_9b import MODEL_CONFIG as QWEN3_5_9B
 
 # Store all available model configurations.
 ALL_MODEL_CONFIGS: tuple[ModelConfig, ...] = (
     QWEN3_5_9B,
-    MINISTRAL_3_8B,
-    LLAMA3_1_8B,
-    GEMMA3_12B,
-    DEEPSEEK_R1_8B,
     QWEN3_5_27B,
-    QWEN3_5_35B,
-    MISTRAL_SMALL3_2_24B,
+    GEMMA3_12B,
     GEMMA3_27B,
-    DEEPSEEK_R1_32B,
-    GPT_OSS_20B,
-    LLAMA3_3_70B,
-    DEEPSEEK_R1_70B,
-    QWEN3_NEXT_80B,
-    GPT_OSS_120B,
-    QWEN3_5_122B,
+    MISTRAL_SMALL3_1_24B,
+    QWQ_32B,
 )
 
 # Store model configurations using model names as keys.
