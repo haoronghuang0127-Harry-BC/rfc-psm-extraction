@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 from typing import Final
 
-from config.paths import PSMBENCH_DIR, PSMBENCH_OUTPUT_DIR
+from config.paths import PSMBENCH_DIR, PSMBENCH_ORIGINAL_EVALUATION_OUTPUT_DIR
 
 # make sure Python find the PSMBENCH_DIR
 sys.path.insert(0, str(PSMBENCH_DIR))
@@ -13,9 +13,9 @@ os.chdir(PSMBENCH_DIR)
 import eval_fsm_sim as evaluator
 
 # set the output file Path
-STATE_OUTPUT_FILE: Final[Path] = PSMBENCH_OUTPUT_DIR / "states_match_results.csv"
-WHOLE_OUTPUT_FILE: Final[Path] = PSMBENCH_OUTPUT_DIR / "transitions_match_results_whole.csv"
-PARTIAL_OUTPUT_FILE: Final[Path] =  PSMBENCH_OUTPUT_DIR / "transitions_match_results_partial.csv"
+STATE_OUTPUT_FILE: Final[Path] = PSMBENCH_ORIGINAL_EVALUATION_OUTPUT_DIR / "states_match_results.csv"
+WHOLE_OUTPUT_FILE: Final[Path] = PSMBENCH_ORIGINAL_EVALUATION_OUTPUT_DIR / "transitions_match_results_whole.csv"
+PARTIAL_OUTPUT_FILE: Final[Path] =  PSMBENCH_ORIGINAL_EVALUATION_OUTPUT_DIR / "transitions_match_results_partial.csv"
 
 def main() -> None:
     #batch_evaluate_fsm_similarity()
@@ -35,7 +35,7 @@ def main() -> None:
     model_name_mapping["gemma3_27b"] = "Gemma3"
 
     # create the output dir
-    PSMBENCH_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    PSMBENCH_ORIGINAL_EVALUATION_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
     # 1. state evaluation
     all_matches, summary_df = evaluator.match_all_states(models, protocols, fsm_dir="fsm", threshold=0.5)

@@ -1,0 +1,124 @@
+{
+  "states": [
+    "Idle",
+    "ControlConnectionEstablished",
+    "SessionEstablished",
+    "SessionTerminated",
+    "ControlConnectionCleared"
+  ],
+  "initial_state": "Idle",
+  "final_states": [
+    "Idle",
+    "SessionTerminated"
+  ],
+  "transitions": [
+    {
+      "from": "Idle",
+      "event": "receive Start-Control-Connection-Request",
+      "action": "send Start-Control-Connection-Reply",
+      "to": "ControlConnectionEstablished"
+    },
+    {
+      "from": "Idle",
+      "event": "send Start-Control-Connection-Request",
+      "action": "receive Start-Control-Connection-Reply",
+      "to": "ControlConnectionEstablished"
+    },
+    {
+      "from": "Idle",
+      "event": "receive Incoming-Call-Request",
+      "action": "send Incoming-Call-Reply",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "Idle",
+      "event": "receive Outgoing-Call-Request",
+      "action": "send Outgoing-Call-Reply",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "Idle",
+      "event": "receive Incoming-Call-Connected",
+      "action": "send Incoming-Call-Reply",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "ControlConnectionEstablished",
+      "event": "receive Outgoing-Call-Request",
+      "action": "send Outgoing-Call-Reply",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "ControlConnectionEstablished",
+      "event": "receive Incoming-Call-Request",
+      "action": "send Incoming-Call-Reply",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "ControlConnectionEstablished",
+      "event": "receive Incoming-Call-Connected",
+      "action": "send Incoming-Call-Reply",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "ControlConnectionEstablished",
+      "event": "receive Stop-Control-Connection-Request",
+      "action": "send Stop-Control-Connection-Reply",
+      "to": "Idle"
+    },
+    {
+      "from": "ControlConnectionEstablished",
+      "event": "timeout keep-alive",
+      "action": "send Echo-Request",
+      "to": "ControlConnectionEstablished"
+    },
+    {
+      "from": "ControlConnectionEstablished",
+      "event": "receive Echo-Reply",
+      "action": "log keep-alive success",
+      "to": "ControlConnectionEstablished"
+    },
+    {
+      "from": "ControlConnectionEstablished",
+      "event": "receive WAN-Error-Notify",
+      "action": "log error",
+      "to": "ControlConnectionEstablished"
+    },
+    {
+      "from": "ControlConnectionEstablished",
+      "event": "receive Set-Link-Info",
+      "action": "update session parameters",
+      "to": "ControlConnectionEstablished"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive Call-Clear-Request",
+      "action": "send Call-Disconnect-Notify",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive Call-Disconnect-Notify",
+      "action": "send Call-Clear-Request",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive Incoming-Call-Connected",
+      "action": "send Incoming-Call-Reply",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "ControlConnectionEstablished",
+      "event": "receive Stop-Control-Connection-Request",
+      "action": "send Stop-Control-Connection-Reply",
+      "to": "ControlConnectionCleared"
+    },
+    {
+      "from": "ControlConnectionCleared",
+      "event": "receive Start-Control-Connection-Request",
+      "action": "send Start-Control-Connection-Reply",
+      "to": "ControlConnectionEstablished"
+    }
+  ]
+}

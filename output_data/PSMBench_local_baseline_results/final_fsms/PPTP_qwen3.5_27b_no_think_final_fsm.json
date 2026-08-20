@@ -1,0 +1,255 @@
+{
+  "states": [
+    "Idle",
+    "ControlConnectionEstablished",
+    "AwaitingStartReply",
+    "AwaitingStopReply",
+    "AwaitingEchoReply",
+    "OutgoingCallInitiated",
+    "OutgoingCallConnected",
+    "IncomingCallRequested",
+    "IncomingCallAccepted",
+    "IncomingCallConnected",
+    "CallCleared",
+    "WaitConnect",
+    "WaitDisconnect",
+    "TransmittingData",
+    "WindowFull",
+    "WindowReduced",
+    "WindowIncreased"
+  ],
+  "initial_state": "Idle",
+  "final_states": [
+    "CallCleared"
+  ],
+  "transitions": [
+    {
+      "from": "Idle",
+      "event": "send Start-Control-Connection-Request",
+      "action": "open TCP connection",
+      "to": "AwaitingStartReply"
+    },
+    {
+      "from": "AwaitingStartReply",
+      "event": "receive Start-Control-Connection-Reply VersionOK",
+      "action": "set connection active",
+      "to": "ControlConnectionEstablished"
+    },
+    {
+      "from": "AwaitingStartReply",
+      "event": "receive Start-Control-Connection-Reply VersionNotOK",
+      "action": "send Stop-Control-Connection-Request",
+      "to": "AwaitingStopReply"
+    },
+    {
+      "from": "Idle",
+      "event": "receive Start-Control-Connection-Request VersionOK",
+      "action": "send Start-Control-Connection-Reply",
+      "to": "ControlConnectionEstablished"
+    },
+    {
+      "from": "Idle",
+      "event": "receive Start-Control-Connection-Request VersionNotOK",
+      "action": "send Start-Control-Connection-Reply Error",
+      "to": "Idle"
+    },
+    {
+      "from": "ControlConnectionEstablished",
+      "event": "send Stop-Control-Connection-Request",
+      "action": "wait for reply",
+      "to": "AwaitingStopReply"
+    },
+    {
+      "from": "AwaitingStopReply",
+      "event": "receive Stop-Control-Connection-Reply",
+      "action": "close TCP connection",
+      "to": "Idle"
+    },
+    {
+      "from": "ControlConnectionEstablished",
+      "event": "cond local terminate",
+      "action": "send Stop-Control-Connection-Request",
+      "to": "AwaitingStopReply"
+    },
+    {
+      "from": "ControlConnectionEstablished",
+      "event": "receive Stop-Control-Connection-Request",
+      "action": "send Stop-Control-Connection-Reply",
+      "to": "Idle"
+    },
+    {
+      "from": "ControlConnectionEstablished",
+      "event": "send Echo-Request",
+      "action": "wait for reply",
+      "to": "AwaitingEchoReply"
+    },
+    {
+      "from": "AwaitingEchoReply",
+      "event": "receive Echo-Reply",
+      "action": "keep connection alive",
+      "to": "ControlConnectionEstablished"
+    },
+    {
+      "from": "ControlConnectionEstablished",
+      "event": "send Outgoing-Call-Request",
+      "action": "wait for reply",
+      "to": "OutgoingCallInitiated"
+    },
+    {
+      "from": "OutgoingCallInitiated",
+      "event": "receive Outgoing-Call-Reply NoError",
+      "action": "set call connected",
+      "to": "OutgoingCallConnected"
+    },
+    {
+      "from": "OutgoingCallInitiated",
+      "event": "receive Outgoing-Call-Reply Error",
+      "action": "abort call",
+      "to": "Idle"
+    },
+    {
+      "from": "ControlConnectionEstablished",
+      "event": "send Incoming-Call-Request",
+      "action": "wait for reply",
+      "to": "IncomingCallRequested"
+    },
+    {
+      "from": "IncomingCallRequested",
+      "event": "receive Incoming-Call-Reply Accepting",
+      "action": "accept call",
+      "to": "IncomingCallAccepted"
+    },
+    {
+      "from": "IncomingCallRequested",
+      "event": "receive Incoming-Call-Reply NotAccepting",
+      "action": "abort call",
+      "to": "Idle"
+    },
+    {
+      "from": "IncomingCallAccepted",
+      "event": "send Incoming-Call-Connected",
+      "action": "set call connected",
+      "to": "IncomingCallConnected"
+    },
+    {
+      "from": "OutgoingCallConnected",
+      "event": "receive Call-Clear-Request",
+      "action": "send Call-Disconnect-Notify",
+      "to": "CallCleared"
+    },
+    {
+      "from": "IncomingCallConnected",
+      "event": "receive Call-Clear-Request",
+      "action": "send Call-Disconnect-Notify",
+      "to": "CallCleared"
+    },
+    {
+      "from": "ControlConnectionEstablished",
+      "event": "cond incoming call ring",
+      "action": "send Incoming-Call-Request",
+      "to": "IncomingCallRequested"
+    },
+    {
+      "from": "Idle",
+      "event": "receive Incoming-Call-Request Acceptable",
+      "action": "send Incoming-Call-Reply OK",
+      "to": "WaitConnect"
+    },
+    {
+      "from": "Idle",
+      "event": "receive Incoming-Call-Request NotAcceptable",
+      "action": "send Incoming-Call-Reply Error",
+      "to": "Idle"
+    },
+    {
+      "from": "WaitConnect",
+      "event": "receive Incoming-Call-Connect",
+      "action": "establish session",
+      "to": "ControlConnectionEstablished"
+    },
+    {
+      "from": "WaitConnect",
+      "event": "receive Call-Disconnect-Notify",
+      "action": "abort session",
+      "to": "Idle"
+    },
+    {
+      "from": "ControlConnectionEstablished",
+      "event": "cond call dropped or clear request",
+      "action": "send Call-Disconnect-Notify",
+      "to": "Idle"
+    },
+    {
+      "from": "ControlConnectionEstablished",
+      "event": "receive Outgoing-Call-Request NoError",
+      "action": "dial call",
+      "to": "OutgoingCallInitiated"
+    },
+    {
+      "from": "ControlConnectionEstablished",
+      "event": "receive Outgoing-Call-Request Error",
+      "action": "send Outgoing-Call-Reply Error",
+      "to": "Idle"
+    },
+    {
+      "from": "OutgoingCallInitiated",
+      "event": "cond call incomplete or timeout",
+      "action": "send Outgoing-Call-Reply Error",
+      "to": "Idle"
+    },
+    {
+      "from": "OutgoingCallInitiated",
+      "event": "receive TelcoAnswer",
+      "action": "send Outgoing-Call-Reply Success",
+      "to": "ControlConnectionEstablished"
+    },
+    {
+      "from": "ControlConnectionEstablished",
+      "event": "cond local terminate",
+      "action": "send Call-Clear-Request",
+      "to": "WaitDisconnect"
+    },
+    {
+      "from": "WaitDisconnect",
+      "event": "receive Call-Disconnect-Notify",
+      "action": "close session",
+      "to": "Idle"
+    },
+    {
+      "from": "ControlConnectionEstablished",
+      "event": "receive Call-Disconnect-Notify",
+      "action": "terminate session",
+      "to": "Idle"
+    },
+    {
+      "from": "TransmittingData",
+      "event": "cond packets_awaiting_ack_equal_window_size",
+      "action": "stop sending packets",
+      "to": "WindowFull"
+    },
+    {
+      "from": "WindowFull",
+      "event": "receive acknowledgment",
+      "action": "set window size up by one",
+      "to": "TransmittingData"
+    },
+    {
+      "from": "TransmittingData",
+      "event": "timeout packet",
+      "action": "set window size to half",
+      "to": "WindowReduced"
+    },
+    {
+      "from": "WindowReduced",
+      "event": "receive acknowledgment",
+      "action": "set window size up by one",
+      "to": "TransmittingData"
+    },
+    {
+      "from": "TransmittingData",
+      "event": "cond window_size_reaches_maximum",
+      "action": "stop increasing window",
+      "to": "WindowIncreased"
+    }
+  ]
+}

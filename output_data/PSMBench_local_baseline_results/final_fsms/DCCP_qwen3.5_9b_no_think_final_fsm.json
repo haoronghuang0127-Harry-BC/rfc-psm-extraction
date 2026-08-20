@@ -1,0 +1,117 @@
+{
+  "states": [
+    "CLOSED",
+    "REQUEST",
+    "LISTEN",
+    "RESPOND",
+    "PARTOPEN",
+    "OPEN",
+    "CLOSEREQ",
+    "CLOSING",
+    "TIMEWAIT",
+    "UNSTABLE"
+  ],
+  "initial_state": "CLOSED",
+  "final_states": [
+    "CLOSED",
+    "UNSTABLE"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "send DCCP-Request",
+      "action": "set REQUEST",
+      "to": "REQUEST"
+    },
+    {
+      "from": "LISTEN",
+      "event": "receive DCCP-Request",
+      "action": "set RESPOND",
+      "to": "RESPOND"
+    },
+    {
+      "from": "REQUEST",
+      "event": "receive DCCP-Response",
+      "action": "set PARTOPEN",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "receive DCCP-Ack",
+      "action": "set OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "receive DCCP-Data",
+      "action": "set OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "receive DCCP-DataAck",
+      "action": "set OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "receive DCCP-CloseReq",
+      "action": "set CLOSEREQ",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "send DCCP-Close",
+      "action": "set CLOSING",
+      "to": "CLOSING"
+    },
+    {
+      "from": "OPEN",
+      "event": "send DCCP-Close",
+      "action": "set CLOSEREQ",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "CLOSING",
+      "event": "receive DCCP-Reset",
+      "action": "set TIMEWAIT",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "send DCCP-Reset",
+      "action": "set CLOSED",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "timeout 2MSL",
+      "action": "set CLOSED",
+      "to": "CLOSED"
+    },
+    {
+      "from": "STABLE",
+      "event": "receive Change R",
+      "action": "send Confirm L",
+      "to": "CHANGING"
+    },
+    {
+      "from": "CHANGING",
+      "event": "receive Confirm R",
+      "action": "set value new",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "receive empty Confirm R",
+      "action": "revert old value",
+      "to": "STABLE"
+    },
+    {
+      "from": "UNSTABLE",
+      "event": "receive Confirm/Change R",
+      "action": "ignore option",
+      "to": "UNSTABLE"
+    }
+  ]
+}

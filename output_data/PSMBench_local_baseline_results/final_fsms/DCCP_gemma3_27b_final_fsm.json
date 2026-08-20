@@ -1,0 +1,362 @@
+{
+  "states": [
+    "Closed",
+    "Listen",
+    "Request",
+    "Respond",
+    "Partopen",
+    "Open",
+    "Closereq",
+    "Closing",
+    "Timewait",
+    "Stable",
+    "Changing",
+    "Unstable",
+    "AcceptingPackets",
+    "RefusingPackets",
+    "Quiescent",
+    "Bidirectional",
+    "Unidirectional",
+    "Acknowledging",
+    "ECN_Capable",
+    "ECN_Incapable",
+    "Idle",
+    "ReceivingData",
+    "CompressingBuffer",
+    "DroppingPackets"
+  ],
+  "initial_state": "Closed",
+  "final_states": [
+    "Timewait",
+    "Unstable",
+    "RefusingPackets",
+    "DroppingPackets",
+    "ECN_Incapable"
+  ],
+  "transitions": [
+    {
+      "from": "Closed",
+      "event": "send DCCP-Request",
+      "action": "set state",
+      "to": "Request"
+    },
+    {
+      "from": "Listen",
+      "event": "receive DCCP-Request",
+      "action": "set state",
+      "to": "Respond"
+    },
+    {
+      "from": "Request",
+      "event": "receive DCCP-Response",
+      "action": "set state",
+      "to": "Partopen"
+    },
+    {
+      "from": "Respond",
+      "event": "receive DCCP-Ack",
+      "action": "set state",
+      "to": "Open"
+    },
+    {
+      "from": "Partopen",
+      "event": "receive DCCP-Ack",
+      "action": "set state",
+      "to": "Open"
+    },
+    {
+      "from": "Partopen",
+      "event": "receive DCCP-DataAck",
+      "action": "set state",
+      "to": "Open"
+    },
+    {
+      "from": "Open",
+      "event": "receive DCCP-Data",
+      "action": "send DCCP-Ack",
+      "to": "Open"
+    },
+    {
+      "from": "Open",
+      "event": "receive DCCP-Ack",
+      "action": "send DCCP-Data",
+      "to": "Open"
+    },
+    {
+      "from": "Open",
+      "event": "receive DCCP-DataAck",
+      "action": "send DCCP-Data",
+      "to": "Open"
+    },
+    {
+      "from": "Open",
+      "event": "receive DCCP-CloseReq",
+      "action": "set state",
+      "to": "Closereq"
+    },
+    {
+      "from": "Closereq",
+      "event": "send DCCP-Close",
+      "action": "set state",
+      "to": "Closing"
+    },
+    {
+      "from": "Closing",
+      "event": "receive DCCP-Reset",
+      "action": "set state",
+      "to": "Timewait"
+    },
+    {
+      "from": "Timewait",
+      "event": "timeout 2MSL",
+      "action": "set state",
+      "to": "Closed"
+    },
+    {
+      "from": "Stable",
+      "event": "receive Change R",
+      "action": "calculate new value",
+      "to": "Changing"
+    },
+    {
+      "from": "Stable",
+      "event": "app/protocol evt : snd Change L",
+      "action": "snd Change L",
+      "to": "Changing"
+    },
+    {
+      "from": "Changing",
+      "event": "receive Confirm R",
+      "action": "set F.state := Stable",
+      "to": "Stable"
+    },
+    {
+      "from": "Changing",
+      "event": "receive Change R",
+      "action": "calculate new value",
+      "to": "Changing"
+    },
+    {
+      "from": "Changing",
+      "event": "pref list changes",
+      "action": "set F.state := Unstable",
+      "to": "Unstable"
+    },
+    {
+      "from": "Unstable",
+      "event": "app/protocol evt : snd Change L",
+      "action": "snd Change L",
+      "to": "Changing"
+    },
+    {
+      "from": "Stable",
+      "event": "receive Change R",
+      "action": "calculate new value",
+      "to": "Changing"
+    },
+    {
+      "from": "Closed",
+      "event": "receive DCCP-Request",
+      "action": "send DCCP-Reset",
+      "to": "Closed"
+    },
+    {
+      "from": "Closed",
+      "event": "receive DCCP-Data",
+      "action": "send DCCP-Sync",
+      "to": "Closed"
+    },
+    {
+      "from": "Request",
+      "event": "receive DCCP-Sync",
+      "action": "send DCCP-Reset",
+      "to": "Request"
+    },
+    {
+      "from": "Open",
+      "event": "receive sequence-invalid DCCP-Sync",
+      "action": "ignore",
+      "to": "Open"
+    },
+    {
+      "from": "Open",
+      "event": "receive sequence-invalid DCCP-SyncAck",
+      "action": "ignore",
+      "to": "Open"
+    },
+    {
+      "from": "Open",
+      "event": "receive sequence-invalid packet",
+      "action": "send DCCP-Sync",
+      "to": "Open"
+    },
+    {
+      "from": "Listen",
+      "event": "receive DCCP-Request",
+      "action": "send DCCP-Reset",
+      "to": "Listen"
+    },
+    {
+      "from": "Initial",
+      "event": "receive Change R(Minimum Checksum Coverage, 1)",
+      "action": "set MinimumCsCov 1",
+      "to": "AcceptingPackets"
+    },
+    {
+      "from": "Initial",
+      "event": "receive Change R(Minimum Checksum Coverage, 0)",
+      "action": "set MinimumCsCov 0",
+      "to": "AcceptingPackets"
+    },
+    {
+      "from": "AcceptingPackets",
+      "event": "receive packet with unacceptable CsCov",
+      "action": "report Data Dropped 0",
+      "to": "AcceptingPackets"
+    },
+    {
+      "from": "AcceptingPackets",
+      "event": "receive Change R(Minimum Checksum Coverage, value > 0)",
+      "action": "set MinimumCsCov value",
+      "to": "AcceptingPackets"
+    },
+    {
+      "from": "Initial",
+      "event": "receive Change R(Check Data Checksum, 1)",
+      "action": "reset connection",
+      "to": "RefusingPackets"
+    },
+    {
+      "from": "Initial",
+      "event": "receive Change R(Check Data Checksum, 0)",
+      "action": "set CheckDataChecksum 0",
+      "to": "AcceptingPackets"
+    },
+    {
+      "from": "Bidirectional",
+      "event": "receive DCCP_Data",
+      "action": "set ack_pattern bidirectional",
+      "to": "Bidirectional"
+    },
+    {
+      "from": "Bidirectional",
+      "event": "receive DCCP_DataAck",
+      "action": "set ack_pattern bidirectional",
+      "to": "Bidirectional"
+    },
+    {
+      "from": "Bidirectional",
+      "event": "cond quiescence_detected",
+      "action": "set ack_pattern unidirectional",
+      "to": "Unidirectional"
+    },
+    {
+      "from": "Unidirectional",
+      "event": "receive DCCP_Data",
+      "action": "set ack_pattern bidirectional",
+      "to": "Bidirectional"
+    },
+    {
+      "from": "Unidirectional",
+      "event": "receive DCCP_DataAck",
+      "action": "set ack_pattern bidirectional",
+      "to": "Bidirectional"
+    },
+    {
+      "from": "Quiescent",
+      "event": "receive DCCP_Data",
+      "action": "set ack_pattern bidirectional",
+      "to": "Bidirectional"
+    },
+    {
+      "from": "Quiescent",
+      "event": "receive DCCP_DataAck",
+      "action": "set ack_pattern bidirectional",
+      "to": "Bidirectional"
+    },
+    {
+      "from": "Bidirectional",
+      "event": "send DCCP_DataAck",
+      "action": "free ack_state",
+      "to": "Bidirectional"
+    },
+    {
+      "from": "Unidirectional",
+      "event": "send DCCP_DataAck",
+      "action": "free ack_state",
+      "to": "Unidirectional"
+    },
+    {
+      "from": "ECN_Capable",
+      "event": "receive Change L(ECN Incapable, 1)",
+      "action": "set ECN_Incapable true",
+      "to": "ECN_Incapable"
+    },
+    {
+      "from": "ECN_Incapable",
+      "event": "receive Confirm R(ECN Incapable, 1)",
+      "action": "log confirm",
+      "to": "ECN_Incapable"
+    },
+    {
+      "from": "ECN_Capable",
+      "event": "send Mandatory Change L(ECN Incapable, 1)",
+      "action": "send option",
+      "to": "ECN_Incapable"
+    },
+    {
+      "from": "Idle",
+      "event": "receive packet with Sequence Number > buf_ackno",
+      "action": "update buf_head, buf_ackno, buf_nonce",
+      "to": "ReceivingData"
+    },
+    {
+      "from": "ReceivingData",
+      "event": "receive packet with Sequence Number > buf_ackno and state equals state at head",
+      "action": "increment run length",
+      "to": "ReceivingData"
+    },
+    {
+      "from": "ReceivingData",
+      "event": "receive packet with Sequence Number > buf_ackno and sequence number not expected",
+      "action": "enter intervening packets as State 3",
+      "to": "ReceivingData"
+    },
+    {
+      "from": "ReceivingData",
+      "event": "buffer overflow",
+      "action": "compress buffer or transfer to larger buffer",
+      "to": "ReceivingData"
+    },
+    {
+      "from": "ReceivingData",
+      "event": "buffer overflow",
+      "action": "drop all received packets",
+      "to": "DroppingPackets"
+    },
+    {
+      "from": "ReceivingData",
+      "event": "receive packet with Sequence Number <= buf_ackno",
+      "action": "scan table for byte corresponding to S",
+      "to": "ReceivingData"
+    },
+    {
+      "from": "ReceivingData",
+      "event": "receive packet with Sequence Number <= buf_ackno and previously lost",
+      "action": "change byte's state",
+      "to": "ReceivingData"
+    },
+    {
+      "from": "ReceivingData",
+      "event": "receive packet with Sequence Number <= buf_ackno and not lost",
+      "action": "ignore packet",
+      "to": "ReceivingData"
+    },
+    {
+      "from": "DroppingPackets",
+      "event": "buffer shrinks",
+      "action": "return to Idle",
+      "to": "Idle"
+    }
+  ]
+}

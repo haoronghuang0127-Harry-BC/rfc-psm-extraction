@@ -1,0 +1,622 @@
+{
+  "states": [
+    "Initial",
+    "Handshaking",
+    "MailTransaction",
+    "MessageTransfer",
+    "ConnectionShutdown",
+    "SessionInitiated",
+    "ClientIdentified",
+    "ForwardingMail",
+    "VerifyingMailbox",
+    "ExpandingMailingList",
+    "RelayingMail",
+    "GatewayingMail",
+    "SessionTerminated",
+    "CommandReceived",
+    "DataTransfer",
+    "TransactionComplete",
+    "SessionClosed",
+    "InitialLookup",
+    "MXRecordFound",
+    "CNAMERecordFound",
+    "NoMXRecords",
+    "AddressResolution",
+    "DeliveryAttempt",
+    "QueueMessage",
+    "ReportError",
+    "FinalDelivery",
+    "AwaitingCommand",
+    "ProcessingCommand",
+    "SendingReply",
+    "HandlingVrfy",
+    "HandlingExpn",
+    "HandlingRcpt",
+    "HandlingMail",
+    "HandlingEHLO",
+    "HandlingHELO",
+    "HandlingData",
+    "HandlingRelay",
+    "HandlingAttack",
+    "HandlingRejection",
+    "EHLOReceived",
+    "MailFromReceived",
+    "RcptToReceived",
+    "DataTransferInProgress",
+    "Aborted",
+    "Relaying",
+    "Verifying"
+  ],
+  "initial_state": "Initial",
+  "final_states": [
+    "FinalDelivery",
+    "SessionTerminated",
+    "SessionClosed"
+  ],
+  "transitions": [
+    {
+      "from": "Initial",
+      "event": "receive CONNECT",
+      "action": "set InitialHandshake",
+      "to": "Handshaking"
+    },
+    {
+      "from": "Handshaking",
+      "event": "send 220",
+      "action": "reply 220",
+      "to": "Handshaking"
+    },
+    {
+      "from": "Handshaking",
+      "event": "receive EHLO",
+      "action": "reply 250",
+      "to": "MailTransaction"
+    },
+    {
+      "from": "Handshaking",
+      "event": "receive HELO",
+      "action": "reply 250",
+      "to": "MailTransaction"
+    },
+    {
+      "from": "MailTransaction",
+      "event": "receive MAIL",
+      "action": "reply 250",
+      "to": "MailTransaction"
+    },
+    {
+      "from": "MailTransaction",
+      "event": "receive RCPT",
+      "action": "reply 250",
+      "to": "MailTransaction"
+    },
+    {
+      "from": "MailTransaction",
+      "event": "receive DATA",
+      "action": "reply 354",
+      "to": "MessageTransfer"
+    },
+    {
+      "from": "MessageTransfer",
+      "event": "receive END_OF_DATA",
+      "action": "reply 250",
+      "to": "MailTransaction"
+    },
+    {
+      "from": "MailTransaction",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "ConnectionShutdown"
+    },
+    {
+      "from": "ConnectionShutdown",
+      "event": "send 221",
+      "action": "close connection",
+      "to": "Initial"
+    },
+    {
+      "from": "SessionInitiated",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "SessionInitiated",
+      "event": "receive EHLO",
+      "action": "reply 250",
+      "to": "ClientIdentified"
+    },
+    {
+      "from": "SessionInitiated",
+      "event": "receive HELO",
+      "action": "reply 250",
+      "to": "ClientIdentified"
+    },
+    {
+      "from": "ClientIdentified",
+      "event": "receive MAIL",
+      "action": "reply 250",
+      "to": "MailTransaction"
+    },
+    {
+      "from": "MailTransaction",
+      "event": "receive RCPT",
+      "action": "reply 250",
+      "to": "MailTransaction"
+    },
+    {
+      "from": "MailTransaction",
+      "event": "receive DATA",
+      "action": "reply 354",
+      "to": "MailTransaction"
+    },
+    {
+      "from": "MailTransaction",
+      "event": "receive end of mail data",
+      "action": "reply 250",
+      "to": "ForwardingMail"
+    },
+    {
+      "from": "ForwardingMail",
+      "event": "receive VRFY",
+      "action": "reply 250",
+      "to": "VerifyingMailbox"
+    },
+    {
+      "from": "ForwardingMail",
+      "event": "receive EXPN",
+      "action": "reply 250",
+      "to": "ExpandingMailingList"
+    },
+    {
+      "from": "VerifyingMailbox",
+      "event": "receive VRFY",
+      "action": "reply 553",
+      "to": "VerifyingMailbox"
+    },
+    {
+      "from": "ExpandingMailingList",
+      "event": "receive EXPN",
+      "action": "reply 550",
+      "to": "ExpandingMailingList"
+    },
+    {
+      "from": "ForwardingMail",
+      "event": "receive RCPT",
+      "action": "reply 550",
+      "to": "RelayingMail"
+    },
+    {
+      "from": "RelayingMail",
+      "event": "receive MAIL",
+      "action": "reply 550",
+      "to": "GatewayingMail"
+    },
+    {
+      "from": "GatewayingMail",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "Initial",
+      "event": "receive EHLO",
+      "action": "reply 250",
+      "to": "CommandReceived"
+    },
+    {
+      "from": "Initial",
+      "event": "receive HELO",
+      "action": "reply 250",
+      "to": "CommandReceived"
+    },
+    {
+      "from": "CommandReceived",
+      "event": "receive MAIL",
+      "action": "reply 250",
+      "to": "MailTransaction"
+    },
+    {
+      "from": "MailTransaction",
+      "event": "receive RCPT",
+      "action": "reply 250",
+      "to": "MailTransaction"
+    },
+    {
+      "from": "MailTransaction",
+      "event": "receive DATA",
+      "action": "reply 354",
+      "to": "DataTransfer"
+    },
+    {
+      "from": "DataTransfer",
+      "event": "receive <CRLF>.<CRLF>",
+      "action": "reply 250",
+      "to": "TransactionComplete"
+    },
+    {
+      "from": "CommandReceived",
+      "event": "receive RSET",
+      "action": "reply 250",
+      "to": "Initial"
+    },
+    {
+      "from": "CommandReceived",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "SessionClosed"
+    },
+    {
+      "from": "MailTransaction",
+      "event": "receive RSET",
+      "action": "reply 250",
+      "to": "Initial"
+    },
+    {
+      "from": "DataTransfer",
+      "event": "receive RSET",
+      "action": "reply 250",
+      "to": "Initial"
+    },
+    {
+      "from": "TransactionComplete",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "SessionClosed"
+    },
+    {
+      "from": "TransactionComplete",
+      "event": "receive RSET",
+      "action": "reply 250",
+      "to": "Initial"
+    },
+    {
+      "from": "InitialLookup",
+      "event": "receive domain name",
+      "action": "lookup MX record",
+      "to": "MXRecordFound"
+    },
+    {
+      "from": "InitialLookup",
+      "event": "receive CNAME record",
+      "action": "process CNAME record",
+      "to": "CNAMERecordFound"
+    },
+    {
+      "from": "InitialLookup",
+      "event": "receive non-existent domain error",
+      "action": "report error",
+      "to": "ReportError"
+    },
+    {
+      "from": "InitialLookup",
+      "event": "receive temporary error",
+      "action": "queue message",
+      "to": "QueueMessage"
+    },
+    {
+      "from": "MXRecordFound",
+      "event": "receive empty list of MXs",
+      "action": "treat as implicit MX",
+      "to": "AddressResolution"
+    },
+    {
+      "from": "MXRecordFound",
+      "event": "receive usable MX records",
+      "action": "resolve addresses",
+      "to": "AddressResolution"
+    },
+    {
+      "from": "MXRecordFound",
+      "event": "receive unusable MX records",
+      "action": "report error",
+      "to": "ReportError"
+    },
+    {
+      "from": "CNAMERecordFound",
+      "event": "process resulting name",
+      "action": "retry lookup",
+      "to": "InitialLookup"
+    },
+    {
+      "from": "AddressResolution",
+      "event": "receive list of addresses",
+      "action": "attempt delivery",
+      "to": "DeliveryAttempt"
+    },
+    {
+      "from": "DeliveryAttempt",
+      "event": "receive successful delivery",
+      "action": "stop retrying",
+      "to": "FinalDelivery"
+    },
+    {
+      "from": "DeliveryAttempt",
+      "event": "receive failure",
+      "action": "retry next address",
+      "to": "DeliveryAttempt"
+    },
+    {
+      "from": "QueueMessage",
+      "event": "timeout retry period",
+      "action": "retry lookup",
+      "to": "InitialLookup"
+    },
+    {
+      "from": "ReportError",
+      "event": "receive error condition",
+      "action": "return undeliverable",
+      "to": "FinalDelivery"
+    },
+    {
+      "from": "RelayMessage",
+      "event": "receive message for relay",
+      "action": "sort MX records",
+      "to": "RelayMessage"
+    },
+    {
+      "from": "RelayMessage",
+      "event": "receive matching record",
+      "action": "discard higher-preference records",
+      "to": "RelayMessage"
+    },
+    {
+      "from": "RelayMessage",
+      "event": "receive no remaining records",
+      "action": "return undeliverable",
+      "to": "FinalDelivery"
+    },
+    {
+      "from": "Initial",
+      "event": "receive EHLO",
+      "action": "reply 250",
+      "to": "HandlingEHLO"
+    },
+    {
+      "from": "Initial",
+      "event": "receive HELO",
+      "action": "reply 250",
+      "to": "HandlingHELO"
+    },
+    {
+      "from": "HandlingEHLO",
+      "event": "receive MAIL",
+      "action": "reply 250",
+      "to": "HandlingMail"
+    },
+    {
+      "from": "HandlingHELO",
+      "event": "receive MAIL",
+      "action": "reply 250",
+      "to": "HandlingMail"
+    },
+    {
+      "from": "HandlingMail",
+      "event": "receive RCPT",
+      "action": "reply 250",
+      "to": "HandlingRcpt"
+    },
+    {
+      "from": "HandlingRcpt",
+      "event": "receive DATA",
+      "action": "reply 354",
+      "to": "HandlingData"
+    },
+    {
+      "from": "HandlingData",
+      "event": "send 250",
+      "action": "reply 250",
+      "to": "SendingReply"
+    },
+    {
+      "from": "HandlingData",
+      "event": "send 550",
+      "action": "reply 550",
+      "to": "SendingReply"
+    },
+    {
+      "from": "HandlingData",
+      "event": "send 251",
+      "action": "reply 251",
+      "to": "SendingReply"
+    },
+    {
+      "from": "HandlingData",
+      "event": "send 551",
+      "action": "reply 551",
+      "to": "SendingReply"
+    },
+    {
+      "from": "HandlingData",
+      "event": "send 252",
+      "action": "reply 252",
+      "to": "SendingReply"
+    },
+    {
+      "from": "HandlingData",
+      "event": "send 554",
+      "action": "reply 554",
+      "to": "SendingReply"
+    },
+    {
+      "from": "HandlingRcpt",
+      "event": "receive VRFY",
+      "action": "reply 252",
+      "to": "HandlingVrfy"
+    },
+    {
+      "from": "HandlingRcpt",
+      "event": "receive EXPN",
+      "action": "reply 252",
+      "to": "HandlingExpn"
+    },
+    {
+      "from": "HandlingVrfy",
+      "event": "send 250",
+      "action": "reply 250",
+      "to": "SendingReply"
+    },
+    {
+      "from": "HandlingVrfy",
+      "event": "send 550",
+      "action": "reply 550",
+      "to": "SendingReply"
+    },
+    {
+      "from": "HandlingExpn",
+      "event": "send 250",
+      "action": "reply 250",
+      "to": "SendingReply"
+    },
+    {
+      "from": "HandlingExpn",
+      "event": "send 550",
+      "action": "reply 550",
+      "to": "SendingReply"
+    },
+    {
+      "from": "HandlingRcpt",
+      "event": "receive RCPT",
+      "action": "reply 250",
+      "to": "HandlingRcpt"
+    },
+    {
+      "from": "HandlingRcpt",
+      "event": "receive RCPT",
+      "action": "reply 550",
+      "to": "HandlingAttack"
+    },
+    {
+      "from": "HandlingAttack",
+      "event": "cond many invalid RCPT",
+      "action": "close connection",
+      "to": "Initial"
+    },
+    {
+      "from": "HandlingMail",
+      "event": "receive MAIL",
+      "action": "reply 550",
+      "to": "HandlingRejection"
+    },
+    {
+      "from": "HandlingRcpt",
+      "event": "receive RCPT",
+      "action": "reply 550",
+      "to": "HandlingRejection"
+    },
+    {
+      "from": "HandlingEHLO",
+      "event": "receive EHLO",
+      "action": "reply 550",
+      "to": "HandlingRejection"
+    },
+    {
+      "from": "HandlingHELO",
+      "event": "receive HELO",
+      "action": "reply 550",
+      "to": "HandlingRejection"
+    },
+    {
+      "from": "HandlingData",
+      "event": "receive DATA",
+      "action": "reply 554",
+      "to": "HandlingRejection"
+    },
+    {
+      "from": "Initial",
+      "event": "receive EHLO",
+      "action": "reply 250",
+      "to": "EHLOReceived"
+    },
+    {
+      "from": "EHLOReceived",
+      "event": "receive MAIL FROM",
+      "action": "reply 250",
+      "to": "MailFromReceived"
+    },
+    {
+      "from": "MailFromReceived",
+      "event": "receive RCPT TO",
+      "action": "reply 250",
+      "to": "RcptToReceived"
+    },
+    {
+      "from": "MailFromReceived",
+      "event": "receive RCPT TO",
+      "action": "reply 550",
+      "to": "RcptToReceived"
+    },
+    {
+      "from": "RcptToReceived",
+      "event": "receive DATA",
+      "action": "reply 354",
+      "to": "DataTransferInProgress"
+    },
+    {
+      "from": "DataTransferInProgress",
+      "event": "receive .",
+      "action": "reply 250",
+      "to": "TransactionComplete"
+    },
+    {
+      "from": "RcptToReceived",
+      "event": "receive RSET",
+      "action": "reply 250",
+      "to": "Aborted"
+    },
+    {
+      "from": "EHLOReceived",
+      "event": "receive VRFY",
+      "action": "reply 250",
+      "to": "Verifying"
+    },
+    {
+      "from": "Verifying",
+      "event": "receive MAIL FROM",
+      "action": "reply 250",
+      "to": "MailFromReceived"
+    },
+    {
+      "from": "TransactionComplete",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "Initial"
+    },
+    {
+      "from": "Aborted",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "receive EHLO",
+      "action": "reply 250",
+      "to": "Relaying"
+    },
+    {
+      "from": "Relaying",
+      "event": "receive MAIL FROM",
+      "action": "reply 250",
+      "to": "MailFromReceived"
+    },
+    {
+      "from": "Relaying",
+      "event": "receive RCPT TO",
+      "action": "reply 250",
+      "to": "RcptToReceived"
+    },
+    {
+      "from": "Relaying",
+      "event": "receive DATA",
+      "action": "reply 354",
+      "to": "DataTransferInProgress"
+    },
+    {
+      "from": "DataTransferInProgress",
+      "event": "receive .",
+      "action": "reply 250",
+      "to": "TransactionComplete"
+    }
+  ]
+}

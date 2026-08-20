@@ -1,0 +1,551 @@
+{
+  "states": [
+    "Idle",
+    "Connect",
+    "Active",
+    "OpenSent",
+    "OpenConfirm",
+    "Established",
+    "NegotiatingVersion",
+    "AdjRibInLocked",
+    "LocRibLocked",
+    "Phase1",
+    "Phase2",
+    "Phase3",
+    "Authentication"
+  ],
+  "initial_state": "Idle",
+  "final_states": [
+    "Idle"
+  ],
+  "transitions": [
+    {
+      "from": "Idle",
+      "event": "ManualStart",
+      "action": "set ConnectRetryCounter to zero",
+      "to": "Connect"
+    },
+    {
+      "from": "Idle",
+      "event": "AutomaticStart",
+      "action": "set ConnectRetryCounter to zero",
+      "to": "Connect"
+    },
+    {
+      "from": "Idle",
+      "event": "ManualStop",
+      "action": "log error",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "AutomaticStop",
+      "action": "log error",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "ManualStart_with_PassiveTcpEstablishment",
+      "action": "set ConnectRetryCounter to zero",
+      "to": "Active"
+    },
+    {
+      "from": "Idle",
+      "event": "AutomaticStart_with_PassiveTcpEstablishment",
+      "action": "set ConnectRetryCounter to zero",
+      "to": "Active"
+    },
+    {
+      "from": "Connect",
+      "event": "ManualStop",
+      "action": "release resources",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "ConnectRetryTimer_Expires",
+      "action": "restart ConnectRetryTimer",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "DelayOpenTimer_Expires",
+      "action": "send OPEN message",
+      "to": "OpenSent"
+    },
+    {
+      "from": "Connect",
+      "event": "TcpConnection_Valid",
+      "action": "process TCP connection",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "Tcp_CR_Invalid",
+      "action": "reject TCP connection",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "TcpConnectionConfirmed",
+      "action": "check DelayOpen",
+      "to": "OpenSent"
+    },
+    {
+      "from": "Connect",
+      "event": "TcpConnectionFails",
+      "action": "restart ConnectRetryTimer",
+      "to": "Active"
+    },
+    {
+      "from": "Active",
+      "event": "ManualStop",
+      "action": "send NOTIFICATION",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "AutomaticStop",
+      "action": "send NOTIFICATION",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "ConnectRetryTimer_Expires",
+      "action": "restart ConnectRetryTimer",
+      "to": "Connect"
+    },
+    {
+      "from": "Active",
+      "event": "DelayOpenTimer_Expires",
+      "action": "send OPEN message",
+      "to": "OpenSent"
+    },
+    {
+      "from": "Active",
+      "event": "TcpConnection_Valid",
+      "action": "process TCP connection",
+      "to": "Active"
+    },
+    {
+      "from": "Active",
+      "event": "Tcp_CR_Invalid",
+      "action": "reject TCP connection",
+      "to": "Active"
+    },
+    {
+      "from": "Active",
+      "event": "TcpConnectionFails",
+      "action": "restart ConnectRetryTimer",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "ManualStop",
+      "action": "send NOTIFICATION",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "AutomaticStop",
+      "action": "send NOTIFICATION",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "HoldTimer_Expires",
+      "action": "send NOTIFICATION",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "KeepaliveTimer_Expires",
+      "action": "send KEEPALIVE message",
+      "to": "OpenSent"
+    },
+    {
+      "from": "OpenSent",
+      "event": "TcpConnection_Valid",
+      "action": "process TCP connection",
+      "to": "OpenSent"
+    },
+    {
+      "from": "OpenSent",
+      "event": "Tcp_CR_Invalid",
+      "action": "ignore connection",
+      "to": "OpenSent"
+    },
+    {
+      "from": "OpenSent",
+      "event": "TcpConnectionFails",
+      "action": "restart ConnectRetryTimer",
+      "to": "Active"
+    },
+    {
+      "from": "OpenSent",
+      "event": "BGPOpen",
+      "action": "process OPEN message",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenSent",
+      "event": "BGPOpenMsgErr",
+      "action": "send NOTIFICATION",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "OpenCollisionDump",
+      "action": "send NOTIFICATION",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "NotifMsgVerErr",
+      "action": "release resources",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "ManualStop",
+      "action": "send NOTIFICATION",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "AutomaticStop",
+      "action": "send NOTIFICATION",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "HoldTimer_Expires",
+      "action": "send NOTIFICATION",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "KeepaliveTimer_Expires",
+      "action": "send KEEPALIVE message",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "TcpConnection_Valid",
+      "action": "track connection",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "Tcp_CR_Invalid",
+      "action": "ignore connection",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "TcpConnectionFails",
+      "action": "release resources",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "BGPOpen",
+      "action": "process OPEN message",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "NotifMsgVerErr",
+      "action": "release resources",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "KEEPALIVE",
+      "action": "restart HoldTimer",
+      "to": "Established"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "UpdateMsg",
+      "action": "process message",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "ManualStop",
+      "action": "send NOTIFICATION",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "AutomaticStop",
+      "action": "send NOTIFICATION",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "HoldTimer_Expires",
+      "action": "send NOTIFICATION",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "KeepaliveTimer_Expires",
+      "action": "send KEEPALIVE message",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "TcpConnection_Valid",
+      "action": "track connection",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "Tcp_CR_Invalid",
+      "action": "ignore connection",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "TcpConnectionFails",
+      "action": "release resources",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "BGPOpen",
+      "action": "process OPEN message",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "UpdateMsg",
+      "action": "process message",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "receive UPDATE message",
+      "action": "check validity",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "receive UPDATE message",
+      "action": "remove routes from Adj-RIB-In",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "receive UPDATE message",
+      "action": "update Adj-RIB-In",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "receive UPDATE message",
+      "action": "run Decision Process",
+      "to": "Phase1"
+    },
+    {
+      "from": "Phase1",
+      "event": "receive new route",
+      "action": "lock Adj-RIB-In",
+      "to": "AdjRibInLocked"
+    },
+    {
+      "from": "AdjRibInLocked",
+      "event": "calculate degree of preference",
+      "action": "unlock Adj-RIB-In",
+      "to": "Phase2"
+    },
+    {
+      "from": "Phase2",
+      "event": "complete Phase 1",
+      "action": "lock Adj-RIBs-In",
+      "to": "LocRibLocked"
+    },
+    {
+      "from": "LocRibLocked",
+      "event": "select best route",
+      "action": "install route in Loc-RIB",
+      "to": "Phase3"
+    },
+    {
+      "from": "LocRibLocked",
+      "event": "NEXT_HOP unresolvable",
+      "action": "exclude route",
+      "to": "Phase3"
+    },
+    {
+      "from": "LocRibLocked",
+      "event": "AS_PATH contains loop",
+      "action": "exclude route",
+      "to": "Phase3"
+    },
+    {
+      "from": "Phase3",
+      "event": "complete Phase 2",
+      "action": "disseminate routes",
+      "to": "Phase3"
+    },
+    {
+      "from": "Phase3",
+      "event": "Loc-RIB modified",
+      "action": "update Adj-RIBs-Out",
+      "to": "Phase3"
+    },
+    {
+      "from": "Idle",
+      "event": "receive OPEN",
+      "action": "reply OPEN",
+      "to": "Authentication"
+    },
+    {
+      "from": "Authentication",
+      "event": "receive UPDATE",
+      "action": "reply UPDATE",
+      "to": "Established"
+    },
+    {
+      "from": "InitialState",
+      "event": "send OpenMessage",
+      "action": "send highestVersion",
+      "to": "NegotiatingVersion"
+    },
+    {
+      "from": "NegotiatingVersion",
+      "event": "receive NotificationMessage",
+      "action": "reply UnsupportedVersion",
+      "to": "NegotiatingVersion"
+    },
+    {
+      "from": "NegotiatingVersion",
+      "event": "cond CommonVersionFound",
+      "action": "set highestCommonVersion",
+      "to": "Established"
+    },
+    {
+      "from": "Idle",
+      "event": "receive OPEN",
+      "action": "send NOTIFICATION",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "receive OPEN",
+      "action": "send NOTIFICATION",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "receive OPEN",
+      "action": "send NOTIFICATION",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "receive OPEN",
+      "action": "close connection",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "receive OPEN",
+      "action": "close connection",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "timeout HoldTime",
+      "action": "send NOTIFICATION",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "timeout HoldTime",
+      "action": "send NOTIFICATION",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "timeout HoldTime",
+      "action": "send NOTIFICATION",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "timeout HoldTime",
+      "action": "send NOTIFICATION",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "timeout HoldTime",
+      "action": "send NOTIFICATION",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "receive NOTIFICATION",
+      "action": "log error",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "receive NOTIFICATION",
+      "action": "log error",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "receive NOTIFICATION",
+      "action": "log error",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "receive NOTIFICATION",
+      "action": "log error",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "receive NOTIFICATION",
+      "action": "log error",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "cond fatal_error",
+      "action": "send NOTIFICATION",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "cond fatal_error",
+      "action": "send NOTIFICATION",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "cond fatal_error",
+      "action": "send NOTIFICATION",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "cond fatal_error",
+      "action": "send NOTIFICATION",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "cond fatal_error",
+      "action": "send NOTIFICATION",
+      "to": "Idle"
+    }
+  ]
+}

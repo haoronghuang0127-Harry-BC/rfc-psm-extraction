@@ -1,0 +1,241 @@
+{
+  "states": [
+    "Closed",
+    "Listen",
+    "Request",
+    "Respond",
+    "PartOpen",
+    "Open",
+    "CloserEq",
+    "Closing",
+    "TimeWait",
+    "Unsynchronized",
+    "Synchronized",
+    "Stable",
+    "Changing",
+    "Unstable",
+    "ECNCapable",
+    "ECNIncapable",
+    "WaitingForConfirmation"
+  ],
+  "initial_state": "Closed",
+  "final_states": [],
+  "transitions": [
+    {
+      "from": "Closed",
+      "event": "send DCCP-Request",
+      "action": "initiate connection",
+      "to": "Request"
+    },
+    {
+      "from": "Closed",
+      "event": "passive open",
+      "action": "listen on port",
+      "to": "Listen"
+    },
+    {
+      "from": "Listen",
+      "event": "receive DCCP-Request",
+      "action": "send DCCP-Response",
+      "to": "Respond"
+    },
+    {
+      "from": "Listen",
+      "event": "receive invalid packet",
+      "action": "send DCCP-Reset No Connection",
+      "to": "Closed"
+    },
+    {
+      "from": "Request",
+      "event": "receive DCCP-Response",
+      "action": "send DCCP-Ack or DCCP-DataAck",
+      "to": "PartOpen"
+    },
+    {
+      "from": "Request",
+      "event": "timeout no response",
+      "action": "send DCCP-Reset Aborted",
+      "to": "Closed"
+    },
+    {
+      "from": "PartOpen",
+      "event": "receive DCCP-Data or Ack",
+      "action": "enter data transfer",
+      "to": "Open"
+    },
+    {
+      "from": "PartOpen",
+      "event": "timeout 4MSL",
+      "action": "send DCCP-Reset Aborted",
+      "to": "Closed"
+    },
+    {
+      "from": "Respond",
+      "event": "receive DCCP-Ack or DCCP-DataAck",
+      "action": "enter data transfer",
+      "to": "Open"
+    },
+    {
+      "from": "Respond",
+      "event": "timeout 4MSL",
+      "action": "send DCCP-Reset Aborted",
+      "to": "Closed"
+    },
+    {
+      "from": "Open",
+      "event": "send DCCP-CloseReq",
+      "action": "request close",
+      "to": "CloserEq"
+    },
+    {
+      "from": "Open",
+      "event": "send DCCP-Close",
+      "action": "close connection",
+      "to": "Closing"
+    },
+    {
+      "from": "Open",
+      "event": "receive CloseReq",
+      "action": "send DCCP-Close",
+      "to": "Closing"
+    },
+    {
+      "from": "Open",
+      "event": "receive Close",
+      "action": "send DCCP-Reset Closed",
+      "to": "Closed"
+    },
+    {
+      "from": "Open",
+      "event": "receive Reset",
+      "action": "hold state",
+      "to": "TimeWait"
+    },
+    {
+      "from": "CloserEq",
+      "event": "receive DCCP-Close",
+      "action": "send DCCP-Reset",
+      "to": "Closed"
+    },
+    {
+      "from": "Closing",
+      "event": "receive DCCP-Reset",
+      "action": "hold state for 2MSL",
+      "to": "TimeWait"
+    },
+    {
+      "from": "TimeWait",
+      "event": "timeout 2MSL",
+      "action": "clear connection state",
+      "to": "Closed"
+    },
+    {
+      "from": "Unsynchronized",
+      "event": "receive sequence-invalid DCCP-Sync",
+      "action": "ignore packet",
+      "to": "Unsynchronized"
+    },
+    {
+      "from": "Unsynchronized",
+      "event": "receive sequence-invalid DCCP-SyncAck",
+      "action": "ignore packet",
+      "to": "Unsynchronized"
+    },
+    {
+      "from": "Unsynchronized",
+      "event": "receive sequence-invalid DCCP-Reset",
+      "action": "send DCCP-Sync",
+      "to": "Unsynchronized"
+    },
+    {
+      "from": "Unsynchronized",
+      "event": "receive sequence-invalid other packet",
+      "action": "send DCCP-Sync",
+      "to": "Unsynchronized"
+    },
+    {
+      "from": "Unsynchronized",
+      "event": "receive sequence-valid DCCP-Sync",
+      "action": "update GSR and send DCCP-SyncAck",
+      "to": "Synchronized"
+    },
+    {
+      "from": "Unsynchronized",
+      "event": "receive sequence-valid DCCP-Sync in REQUEST state",
+      "action": "send DCCP-Reset",
+      "to": "Unsynchronized"
+    },
+    {
+      "from": "Stable",
+      "event": "receive Change R",
+      "action": "send Confirm L",
+      "to": "Stable"
+    },
+    {
+      "from": "Stable",
+      "event": "send Change L",
+      "action": "set state CHANGING",
+      "to": "Changing"
+    },
+    {
+      "from": "Changing",
+      "event": "receive Confirm R",
+      "action": "set value new",
+      "to": "Stable"
+    },
+    {
+      "from": "Changing",
+      "event": "receive empty Confirm R",
+      "action": "revert to old value",
+      "to": "Stable"
+    },
+    {
+      "from": "Changing",
+      "event": "cond preference list changes",
+      "action": "set state UNSTABLE",
+      "to": "Unstable"
+    },
+    {
+      "from": "Unstable",
+      "event": "send Change L",
+      "action": "set state CHANGING",
+      "to": "Changing"
+    },
+    {
+      "from": "Changing",
+      "event": "receive Change R",
+      "action": "send Confirm L",
+      "to": "Stable"
+    },
+    {
+      "from": "ECNCapable",
+      "event": "cond cannot_read_ECN_bits",
+      "action": "send Change_L(ECN_Incapable_1)",
+      "to": "WaitingForConfirmation"
+    },
+    {
+      "from": "WaitingForConfirmation",
+      "event": "receive Confirm_R(ECN_Incapable_1)",
+      "action": "set ECN_incapable_mode",
+      "to": "ECNIncapable"
+    },
+    {
+      "from": "WaitingForConfirmation",
+      "event": "receive data_packet",
+      "action": "send Data_Dropped_option",
+      "to": "WaitingForConfirmation"
+    },
+    {
+      "from": "ECNCapable",
+      "event": "cond ECN_Nonce_Echo_mismatch",
+      "action": "respond_as_congestion_marked",
+      "to": "ECNCapable"
+    },
+    {
+      "from": "ECNCapable",
+      "event": "cond verified_aggression",
+      "action": "reset connection_Aggression_Penalty",
+      "to": "ECNIncapable"
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "states": [
+    "Closed",
+    "Listen",
+    "SynSent",
+    "SynReceived",
+    "Established",
+    "FinWait1",
+    "FinWait2",
+    "CloseWait",
+    "Closing",
+    "LastAck",
+    "TimeWait"
+  ],
+  "initial_state": "Closed",
+  "final_states": [
+    "Closed",
+    "TimeWait"
+  ],
+  "transitions": [
+    {
+      "from": "Closed",
+      "event": "receive OPEN",
+      "action": "create TCB",
+      "to": "Listen"
+    },
+    {
+      "from": "Listen",
+      "event": "receive SYN",
+      "action": "set RCV.NXT",
+      "to": "SynReceived"
+    },
+    {
+      "from": "SynSent",
+      "event": "receive ACK",
+      "action": "set SND.UNA",
+      "to": "Established"
+    },
+    {
+      "from": "SynReceived",
+      "event": "receive SYN",
+      "action": "set RCV.NXT",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "receive FIN",
+      "action": "signal user",
+      "to": "CloseWait"
+    },
+    {
+      "from": "FinWait1",
+      "event": "receive ACK",
+      "action": "enter FinWait2",
+      "to": "FinWait2"
+    },
+    {
+      "from": "FinWait2",
+      "event": "receive ACK",
+      "action": "enter TimeWait",
+      "to": "TimeWait"
+    },
+    {
+      "from": "CloseWait",
+      "event": "receive FIN",
+      "action": "send FIN",
+      "to": "LastAck"
+    },
+    {
+      "from": "Closing",
+      "event": "receive ACK",
+      "action": "enter TimeWait",
+      "to": "TimeWait"
+    },
+    {
+      "from": "LastAck",
+      "event": "receive ACK",
+      "action": "delete TCB",
+      "to": "Closed"
+    },
+    {
+      "from": "TimeWait",
+      "event": "timeout 2MSL",
+      "action": "delete TCB",
+      "to": "Closed"
+    },
+    {
+      "from": "Closed",
+      "event": "receive SEGMENT",
+      "action": "send RST",
+      "to": "Closed"
+    },
+    {
+      "from": "Listen",
+      "event": "receive RST",
+      "action": "ignore",
+      "to": "Listen"
+    },
+    {
+      "from": "SynSent",
+      "event": "receive RST",
+      "action": "signal error",
+      "to": "Closed"
+    },
+    {
+      "from": "SynReceived",
+      "event": "receive RST",
+      "action": "signal error",
+      "to": "Closed"
+    },
+    {
+      "from": "Established",
+      "event": "receive RST",
+      "action": "signal error",
+      "to": "Closed"
+    }
+  ]
+}

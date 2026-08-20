@@ -1,0 +1,204 @@
+{
+  "states": [
+    "ConnectionEstablished",
+    "Unauthenticated",
+    "TLSNegotiation",
+    "Authenticated",
+    "SelectedMailbox",
+    "CommandProcessing",
+    "AwaitingContinuation",
+    "LoggingOut"
+  ],
+  "initial_state": "ConnectionEstablished",
+  "final_states": [
+    "LoggingOut"
+  ],
+  "transitions": [
+    {
+      "from": "ConnectionEstablished",
+      "event": "receive server greeting",
+      "action": "send untagged response",
+      "to": "Unauthenticated"
+    },
+    {
+      "from": "ConnectionEstablished",
+      "event": "receive PREAUTH greeting",
+      "action": "enter state",
+      "to": "Authenticated"
+    },
+    {
+      "from": "ConnectionEstablished",
+      "event": "receive BYE greeting",
+      "action": "enter state",
+      "to": "LoggingOut"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "receive STARTTLS",
+      "action": "reply OK Proceed with TLS",
+      "to": "TLSNegotiation"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "receive LOGIN or AUTHENTICATE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "receive LOGOUT",
+      "action": "send BYE and OK",
+      "to": "LoggingOut"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "cond server shutdown or connection closed",
+      "action": "close connection",
+      "to": "LoggingOut"
+    },
+    {
+      "from": "TLSNegotiation",
+      "event": "receive AUTHENTICATE SCRAM-SHA-256",
+      "action": "send challenge and verify response",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive ENABLE IMAP4rev2",
+      "action": "reply ENABLED IMAP4rev2",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive SELECT or EXAMINE",
+      "action": "reply OK and FLAGS EXISTS",
+      "to": "SelectedMailbox"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive CLOSE or UNSELECT",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "cond failed SELECT or EXAMINE",
+      "action": "reply NO or BAD",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive command with literal",
+      "action": "send continuation request",
+      "to": "AwaitingContinuation"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive LOGOUT",
+      "action": "send BYE and OK",
+      "to": "LoggingOut"
+    },
+    {
+      "from": "Authenticated",
+      "event": "cond server shutdown or connection closed",
+      "action": "close connection",
+      "to": "LoggingOut"
+    },
+    {
+      "from": "Authenticated",
+      "event": "timeout 30min_no_activity",
+      "action": "close session",
+      "to": "Unauthenticated"
+    },
+    {
+      "from": "SelectedMailbox",
+      "event": "cond new messages detected",
+      "action": "send EXISTS response",
+      "to": "SelectedMailbox"
+    },
+    {
+      "from": "SelectedMailbox",
+      "event": "cond message expunged",
+      "action": "send EXPUNGE response",
+      "to": "SelectedMailbox"
+    },
+    {
+      "from": "SelectedMailbox",
+      "event": "receive SELECT or EXAMINE new mailbox",
+      "action": "reply CLOSED and OK",
+      "to": "SelectedMailbox"
+    },
+    {
+      "from": "SelectedMailbox",
+      "event": "receive CLOSE or UNSELECT",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "SelectedMailbox",
+      "event": "cond unsolicited CLOSED response",
+      "action": "send CLOSED",
+      "to": "Authenticated"
+    },
+    {
+      "from": "SelectedMailbox",
+      "event": "receive FETCH or STORE command",
+      "action": "process command and reply",
+      "to": "SelectedMailbox"
+    },
+    {
+      "from": "SelectedMailbox",
+      "event": "receive LOGOUT",
+      "action": "send BYE and OK",
+      "to": "LoggingOut"
+    },
+    {
+      "from": "SelectedMailbox",
+      "event": "cond server shutdown or connection closed",
+      "action": "close connection",
+      "to": "LoggingOut"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive client command",
+      "action": "parse command and arguments",
+      "to": "CommandProcessing"
+    },
+    {
+      "from": "SelectedMailbox",
+      "event": "receive client command",
+      "action": "parse command and arguments",
+      "to": "CommandProcessing"
+    },
+    {
+      "from": "CommandProcessing",
+      "event": "cond continuation required",
+      "action": "send command continuation request",
+      "to": "AwaitingContinuation"
+    },
+    {
+      "from": "CommandProcessing",
+      "event": "cond command complete",
+      "action": "send tagged completion response",
+      "to": "Authenticated"
+    },
+    {
+      "from": "AwaitingContinuation",
+      "event": "receive command continuation",
+      "action": "collect remaining octets",
+      "to": "CommandProcessing"
+    },
+    {
+      "from": "AwaitingContinuation",
+      "event": "receive literal data",
+      "action": "process command",
+      "to": "Authenticated"
+    },
+    {
+      "from": "LoggingOut",
+      "event": "cond connection closed",
+      "action": "close connection",
+      "to": "LoggingOut"
+    }
+  ]
+}

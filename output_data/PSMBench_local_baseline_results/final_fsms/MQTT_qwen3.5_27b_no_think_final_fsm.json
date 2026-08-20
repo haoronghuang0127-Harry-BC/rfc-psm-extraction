@@ -1,0 +1,167 @@
+{
+  "states": [
+    "ConnectionSetup",
+    "TokenUploadPending",
+    "AwaitingBrokerChallenge",
+    "AwaitingClientResponse",
+    "Authenticated",
+    "Unauthorized",
+    "BrokerReceivingPublish",
+    "BrokerForwardingPublish",
+    "BrokerReceivingSubscribe",
+    "TokenExpired",
+    "Reauthenticating",
+    "Disconnected"
+  ],
+  "initial_state": "ConnectionSetup",
+  "final_states": [
+    "Unauthorized",
+    "Disconnected"
+  ],
+  "transitions": [
+    {
+      "from": "ConnectionSetup",
+      "event": "receive CONNECT with token only",
+      "action": "send AUTH 0x18 with RS nonce",
+      "to": "AwaitingClientResponse"
+    },
+    {
+      "from": "ConnectionSetup",
+      "event": "receive CONNECT with invalid token",
+      "action": "reply CONNACK 0x87",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "ConnectionSetup",
+      "event": "receive CONNECT with PoP TLS exporter",
+      "action": "validate token and signature",
+      "to": "Authenticated"
+    },
+    {
+      "from": "AwaitingClientResponse",
+      "event": "receive AUTH with Client nonce and signature",
+      "action": "validate signature and token",
+      "to": "Authenticated"
+    },
+    {
+      "from": "AwaitingClientResponse",
+      "event": "cond invalid signature or token",
+      "action": "reply CONNACK 0x87",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Authenticated",
+      "event": "send CONNACK 0x00",
+      "action": "set Session Present flag",
+      "to": "ConnectionSetup"
+    },
+    {
+      "from": "TokenUploadPending",
+      "event": "receive PUBLISH to authz-info",
+      "action": "store token in key store",
+      "to": "ConnectionSetup"
+    },
+    {
+      "from": "TokenUploadPending",
+      "event": "cond invalid token payload",
+      "action": "send DISCONNECT 0x99",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "BrokerReceivingPublish",
+      "event": "receive PUBLISH QoS >= 1",
+      "action": "send PUBACK or PUBREC 0x87",
+      "to": "BrokerReceivingPublish"
+    },
+    {
+      "from": "BrokerReceivingPublish",
+      "event": "receive PUBLISH QoS 0",
+      "action": "send DISCONNECT 0x87",
+      "to": "BrokerReceivingPublish"
+    },
+    {
+      "from": "BrokerReceivingPublish",
+      "event": "cond unauthorized hide topic",
+      "action": "send error 0x80",
+      "to": "BrokerReceivingPublish"
+    },
+    {
+      "from": "BrokerForwardingPublish",
+      "event": "cond subscriber unauthorized",
+      "action": "send DISCONNECT 0x87",
+      "to": "BrokerForwardingPublish"
+    },
+    {
+      "from": "BrokerReceivingSubscribe",
+      "event": "receive SUBSCRIBE unauthorized",
+      "action": "send SUBACK 0x87",
+      "to": "BrokerReceivingSubscribe"
+    },
+    {
+      "from": "BrokerReceivingSubscribe",
+      "event": "cond unauthorized hide topic",
+      "action": "send SUBACK 0x80",
+      "to": "BrokerReceivingSubscribe"
+    },
+    {
+      "from": "Authenticated",
+      "event": "cond token_expired",
+      "action": "send PUBACK SUBACK DISCONNECT NotAuthorized",
+      "to": "TokenExpired"
+    },
+    {
+      "from": "TokenExpired",
+      "event": "receive AUTH Reauthentication",
+      "action": "send DISCONNECT NotAuthorized",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive AUTH Reauthentication",
+      "action": "set token_updated",
+      "to": "Reauthenticating"
+    },
+    {
+      "from": "Reauthenticating",
+      "event": "cond reauth_failed",
+      "action": "send DISCONNECT NotAuthorized",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Disconnected",
+      "event": "receive CONNECT without token",
+      "action": "disconnect client",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Disconnected",
+      "event": "receive CONNECT with invalid token",
+      "action": "disconnect client",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Disconnected",
+      "event": "receive CONNECT with valid token",
+      "action": "send CONNACK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive PUBLISH unauthorized",
+      "action": "disconnect client",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive SUBSCRIBE unauthorized",
+      "action": "send SUBACK 0x80",
+      "to": "BrokerReceivingSubscribe"
+    },
+    {
+      "from": "Authenticated",
+      "event": "cond token expired during publish",
+      "action": "disconnect client",
+      "to": "Disconnected"
+    }
+  ]
+}

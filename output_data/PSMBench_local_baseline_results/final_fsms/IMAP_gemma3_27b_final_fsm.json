@@ -1,0 +1,344 @@
+{
+  "states": [
+    "Initial",
+    "Authenticated",
+    "Selected",
+    "ProcessingCommand",
+    "AwaitingOctets",
+    "CommandComplete",
+    "Idle",
+    "Closing",
+    "AmbiguousCommand",
+    "WaitingForContinuation",
+    "Logout",
+    "StartTLSNegotiation",
+    "FetchingData",
+    "FlagsUpdated",
+    "IMAP4rev2Enabled"
+  ],
+  "initial_state": "Initial",
+  "final_states": [
+    "Logout",
+    "Closing"
+  ],
+  "transitions": [
+    {
+      "from": "Initial",
+      "event": "receive connection",
+      "action": "send greeting",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Initial",
+      "event": "receive LOGIN",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Initial",
+      "event": "receive AUTHENTICATE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Initial",
+      "event": "receive STARTTLS",
+      "action": "reply OK",
+      "to": "StartTLSNegotiation"
+    },
+    {
+      "from": "Initial",
+      "event": "receive PREAUTH",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive LOGIN",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive AUTHENTICATE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive STARTTLS",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive ENABLE",
+      "action": "reply ENABLED",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive SELECT",
+      "action": "reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive EXAMINE",
+      "action": "reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive APPEND",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive CREATE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive DELETE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive RENAME",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive NAMESPACE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive LIST",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive STATUS",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive SUBSCRIBE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive UNSUBSCRIBE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive IDLE",
+      "action": "reply OK",
+      "to": "Idle"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive LOGOUT",
+      "action": "reply OK",
+      "to": "Logout"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive COMMAND",
+      "action": "parse command",
+      "to": "ProcessingCommand"
+    },
+    {
+      "from": "Selected",
+      "event": "receive CLOSE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "receive UNSELECT",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "receive EXPUNGE",
+      "action": "reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "receive COPY",
+      "action": "reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "receive MOVE",
+      "action": "reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "receive FETCH",
+      "action": "reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "receive STORE",
+      "action": "reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "receive SEARCH",
+      "action": "reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "receive UID",
+      "action": "reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "receive LOGOUT",
+      "action": "reply OK",
+      "to": "Logout"
+    },
+    {
+      "from": "Idle",
+      "event": "receive DONE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "ProcessingCommand",
+      "event": "command requires octets",
+      "action": "send continuation request",
+      "to": "AwaitingOctets"
+    },
+    {
+      "from": "ProcessingCommand",
+      "event": "command complete",
+      "action": "send completion response",
+      "to": "CommandComplete"
+    },
+    {
+      "from": "AwaitingOctets",
+      "event": "receive octets",
+      "action": "collect octets",
+      "to": "ProcessingCommand"
+    },
+    {
+      "from": "AwaitingOctets",
+      "event": "receive error",
+      "action": "reply bad response",
+      "to": "CommandComplete"
+    },
+    {
+      "from": "CommandComplete",
+      "event": "receive command",
+      "action": "parse command",
+      "to": "ProcessingCommand"
+    },
+    {
+      "from": "CommandComplete",
+      "event": "send untagged response",
+      "action": "send response",
+      "to": "Authenticated"
+    },
+    {
+      "from": "ProcessingCommand",
+      "event": "send OK",
+      "action": "reset",
+      "to": "Authenticated"
+    },
+    {
+      "from": "ProcessingCommand",
+      "event": "send NO",
+      "action": "reset",
+      "to": "Authenticated"
+    },
+    {
+      "from": "ProcessingCommand",
+      "event": "send BAD",
+      "action": "reset",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Closing",
+      "event": "timeout 5s",
+      "action": "close connection",
+      "to": "Initial"
+    },
+    {
+      "from": "Closing",
+      "event": "send BYE",
+      "action": "close connection",
+      "to": "Closing"
+    },
+    {
+      "from": "StartTLSNegotiation",
+      "event": "receive AUTHENTICATE",
+      "action": "reply +",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive CAPABILITY",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive NOOP",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive LOGOUT",
+      "action": "reply OK",
+      "to": "Closing"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive BYE",
+      "action": "close connection",
+      "to": "Closing"
+    },
+    {
+      "from": "Idle",
+      "event": "receive UNTAGGED_RESPONSE",
+      "action": "reply OK",
+      "to": "Idle"
+    },
+    {
+      "from": "ProcessingCommand",
+      "event": "receive UNTAGGED_EXPUNGE",
+      "action": "reply OK",
+      "to": "ProcessingCommand"
+    },
+    {
+      "from": "FetchingData",
+      "event": "receive store",
+      "action": "reply *",
+      "to": "FlagsUpdated"
+    }
+  ]
+}

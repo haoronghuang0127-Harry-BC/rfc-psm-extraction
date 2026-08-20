@@ -1,0 +1,413 @@
+{
+  "states": [
+    "Idle",
+    "Connect",
+    "Active",
+    "OpenSent",
+    "OpenConfirm",
+    "Established",
+    "DecisionProcessPhase1",
+    "DecisionProcessPhase2",
+    "DecisionProcessPhase3"
+  ],
+  "initial_state": "Idle",
+  "final_states": [],
+  "transitions": [
+    {
+      "from": "Idle",
+      "event": "receive ManualStart",
+      "action": "init resources and start timer",
+      "to": "Connect"
+    },
+    {
+      "from": "Idle",
+      "event": "receive AutomaticStart",
+      "action": "init resources and start timer",
+      "to": "Connect"
+    },
+    {
+      "from": "Idle",
+      "event": "receive ManualStart_with_PassiveTcpEstablishment",
+      "action": "init resources and listen",
+      "to": "Active"
+    },
+    {
+      "from": "Idle",
+      "event": "receive AutomaticStart_with_PassiveTcpEstablishment",
+      "action": "init resources and listen",
+      "to": "Active"
+    },
+    {
+      "from": "Connect",
+      "event": "receive ManualStop",
+      "action": "drop connection and release resources",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "timeout ConnectRetryTimer",
+      "action": "restart timer and initiate TCP",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "timeout DelayOpenTimer",
+      "action": "send OPEN message",
+      "to": "OpenSent"
+    },
+    {
+      "from": "Connect",
+      "event": "receive TcpConnection_Valid",
+      "action": "process connection flags",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "receive Tcp_CR_Invalid",
+      "action": "reject TCP connection",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "receive TcpConnectionConfirmed with DelayOpen",
+      "action": "start DelayOpenTimer",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "receive TcpConnectionConfirmed without DelayOpen",
+      "action": "send OPEN message",
+      "to": "OpenSent"
+    },
+    {
+      "from": "Connect",
+      "event": "receive TcpConnectionFails with DelayOpenTimer",
+      "action": "restart ConnectRetryTimer",
+      "to": "Active"
+    },
+    {
+      "from": "Connect",
+      "event": "receive TcpConnectionFails without DelayOpenTimer",
+      "action": "drop connection and release resources",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "receive BGPOpen with DelayOpenTimer",
+      "action": "send OPEN and KEEPALIVE",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "Connect",
+      "event": "receive BGPHeaderErr or BGPOpenMsgErr",
+      "action": "send NOTIFICATION and drop connection",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "receive NotifMsgVerErr with DelayOpenTimer",
+      "action": "drop connection and release resources",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "receive NotifMsgVerErr without DelayOpenTimer",
+      "action": "increment counter and drop connection",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "receive other events",
+      "action": "drop connection and release resources",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "receive ManualStop",
+      "action": "send NOTIFICATION and drop connection",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "timeout ConnectRetryTimer",
+      "action": "restart timer and initiate TCP",
+      "to": "Connect"
+    },
+    {
+      "from": "Active",
+      "event": "timeout DelayOpenTimer",
+      "action": "send OPEN message",
+      "to": "OpenSent"
+    },
+    {
+      "from": "Active",
+      "event": "receive TcpConnection_Valid",
+      "action": "process connection flags",
+      "to": "Active"
+    },
+    {
+      "from": "Active",
+      "event": "receive Tcp_CR_Invalid",
+      "action": "reject TCP connection",
+      "to": "Active"
+    },
+    {
+      "from": "Active",
+      "event": "receive TcpConnectionConfirmed with DelayOpen",
+      "action": "start DelayOpenTimer",
+      "to": "Active"
+    },
+    {
+      "from": "Active",
+      "event": "receive TcpConnectionConfirmed without DelayOpen",
+      "action": "send OPEN message",
+      "to": "OpenSent"
+    },
+    {
+      "from": "Active",
+      "event": "receive TcpConnectionFails",
+      "action": "restart timer and drop connection",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "receive BGPOpen with DelayOpenTimer",
+      "action": "send OPEN and KEEPALIVE",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "Active",
+      "event": "receive BGPHeaderErr or BGPOpenMsgErr",
+      "action": "send NOTIFICATION and drop connection",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "receive NotifMsgVerErr with DelayOpenTimer",
+      "action": "drop connection and release resources",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "receive NotifMsgVerErr without DelayOpenTimer",
+      "action": "increment counter and drop connection",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "receive other events",
+      "action": "drop connection and release resources",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "receive ManualStop",
+      "action": "send NOTIFICATION and drop connection",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "receive AutomaticStop",
+      "action": "send NOTIFICATION and drop connection",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "timeout HoldTimer",
+      "action": "send NOTIFICATION and drop connection",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "receive TcpConnectionFails",
+      "action": "restart ConnectRetryTimer",
+      "to": "Active"
+    },
+    {
+      "from": "OpenSent",
+      "event": "receive BGPOpen",
+      "action": "send KEEPALIVE and set timers",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenSent",
+      "event": "receive BGPHeaderErr or BGPOpenMsgErr",
+      "action": "send NOTIFICATION and drop connection",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "receive OpenCollisionDump",
+      "action": "send NOTIFICATION and drop connection",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "receive NotifMsgVerErr",
+      "action": "drop connection and release resources",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "receive other events",
+      "action": "send NOTIFICATION FSM Error",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "receive ManualStop",
+      "action": "send NOTIFICATION and drop connection",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "receive AutomaticStop",
+      "action": "send NOTIFICATION and drop connection",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "timeout HoldTimer",
+      "action": "send NOTIFICATION and drop connection",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "timeout KeepaliveTimer",
+      "action": "send KEEPALIVE message",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "receive TcpConnectionFails or NotifMsg",
+      "action": "drop connection and release resources",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "receive NotifMsgVerErr",
+      "action": "drop connection and release resources",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "receive BGPOpen with collision",
+      "action": "send NOTIFICATION and drop connection",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "receive BGPHeaderErr or BGPOpenMsgErr",
+      "action": "send NOTIFICATION and drop connection",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "receive OpenCollisionDump",
+      "action": "send NOTIFICATION and drop connection",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "receive KeepAliveMsg",
+      "action": "restart HoldTimer",
+      "to": "Established"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "receive other events",
+      "action": "send NOTIFICATION FSM Error",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "receive ManualStop",
+      "action": "send NOTIFICATION and delete routes",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "receive AutomaticStop",
+      "action": "send NOTIFICATION and delete routes",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "timeout HoldTimer",
+      "action": "send NOTIFICATION and drop connection",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "timeout KeepaliveTimer",
+      "action": "send KEEPALIVE message",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "receive BGPOpen with collision",
+      "action": "send NOTIFICATION and delete routes",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "receive NotifMsg or TcpConnectionFails",
+      "action": "delete routes and drop connection",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "receive KeepAliveMsg",
+      "action": "restart HoldTimer",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "receive UpdateMsg",
+      "action": "process message and restart timer",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "receive UpdateMsgErr",
+      "action": "send NOTIFICATION and delete routes",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "receive other events",
+      "action": "send NOTIFICATION FSM Error",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "receive UPDATE message",
+      "action": "check field validity",
+      "to": "DecisionProcessPhase1"
+    },
+    {
+      "from": "Established",
+      "event": "receive UPDATE message",
+      "action": "update Adj-RIB-In",
+      "to": "DecisionProcessPhase1"
+    },
+    {
+      "from": "DecisionProcessPhase1",
+      "event": "cond phase 1 complete",
+      "action": "invoke Phase 2",
+      "to": "DecisionProcessPhase2"
+    },
+    {
+      "from": "DecisionProcessPhase2",
+      "event": "cond phase 2 complete",
+      "action": "install route in Loc-RIB",
+      "to": "DecisionProcessPhase3"
+    },
+    {
+      "from": "DecisionProcessPhase3",
+      "event": "cond Adj-RIBs-Out updated",
+      "action": "run Update-Send process",
+      "to": "Established"
+    }
+  ]
+}

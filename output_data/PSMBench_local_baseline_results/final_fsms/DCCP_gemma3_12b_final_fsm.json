@@ -1,0 +1,121 @@
+{
+  "states": [
+    "CLOSED",
+    "LISTEN",
+    "REQUEST",
+    "RESPOND",
+    "PARTOPEN",
+    "OPEN",
+    "CLOSEREQ",
+    "CLOSING",
+    "TIMEWAIT",
+    "STABLE",
+    "CHANGING",
+    "UNSTABLE",
+    "ECNCapable",
+    "ECNIncapable"
+  ],
+  "initial_state": "CLOSED",
+  "final_states": [
+    "CLOSED",
+    "TIMEWAIT"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "receive Request",
+      "action": "reply Response",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "receive Request",
+      "action": "reply Response",
+      "to": "RESPOND"
+    },
+    {
+      "from": "REQUEST",
+      "event": "receive Response",
+      "action": "reply Ack",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "receive Response",
+      "action": "reply Ack",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "receive Ack",
+      "action": "reply OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "cond close_request",
+      "action": "reply CloseReq",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "OPEN",
+      "event": "receive Close",
+      "action": "reply Reset",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "receive Close",
+      "action": "reply Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "receive Reset",
+      "action": "reply CLOSED",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "timeout 2MSL",
+      "action": "reply CLOSED",
+      "to": "CLOSED"
+    },
+    {
+      "from": "STABLE",
+      "event": "receive Change R",
+      "action": "calc new value, send Confirm L",
+      "to": "STABLE"
+    },
+    {
+      "from": "STABLE",
+      "event": "receive Confirm R",
+      "action": "accept value",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "receive Confirm R",
+      "action": "set F.value, set F.state",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "receive Change R",
+      "action": "calc new value, send Confirm L",
+      "to": "STABLE"
+    },
+    {
+      "from": "UNSTABLE",
+      "event": "receive Change R",
+      "action": "calc new value, send Confirm L",
+      "to": "STABLE"
+    },
+    {
+      "from": "UNSTABLE",
+      "event": "receive Confirm R",
+      "action": "set F.value, set F.state",
+      "to": "STABLE"
+    }
+  ]
+}

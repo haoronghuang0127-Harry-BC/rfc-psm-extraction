@@ -1,0 +1,351 @@
+{
+  "states": [
+    "ControlConnectionOpen",
+    "AwaitingCommand",
+    "SendingReply",
+    "DataConnectionSetup",
+    "DataTransferInProgress",
+    "AwaitingDataConnection",
+    "Reinitializing",
+    "LoggingOut",
+    "ConnectionEstablishment",
+    "Login",
+    "Logout",
+    "TransferParameters",
+    "FileActionCommands",
+    "InformationalCommands",
+    "MiscellaneousCommands",
+    "Begin",
+    "WaitingForReply",
+    "Success",
+    "Failure",
+    "Error",
+    "AwaitingPassword",
+    "AwaitingAccount",
+    "Authenticated",
+    "DataConnectionEstablished",
+    "Transferring",
+    "Terminating",
+    "HeaderProcessing",
+    "DataReception",
+    "FdbReception",
+    "CreatingDirectory",
+    "RemovingDirectory",
+    "PrintingWorkingDirectory",
+    "ChangingToParentDirectory",
+    "SendingDirectoryName"
+  ],
+  "initial_state": "ControlConnectionOpen",
+  "final_states": [
+    "Terminating",
+    "Logout"
+  ],
+  "transitions": [
+    {
+      "from": "ControlConnectionOpen",
+      "event": "receive USER",
+      "action": "reply 331",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive PASSWORD",
+      "action": "reply 332",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive ACCOUNT",
+      "action": "reply 332",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive CWD",
+      "action": "reply 250",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive CDUP",
+      "action": "reply 250",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive SMNT",
+      "action": "reply 250",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive REIN",
+      "action": "reply 220",
+      "to": "Reinitializing"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "LoggingOut"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive PORT",
+      "action": "reply 200",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive PASV",
+      "action": "reply 227",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive TYPE",
+      "action": "reply 200",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive STRU",
+      "action": "reply 200",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive MODE",
+      "action": "reply 200",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive RETR",
+      "action": "send data connection setup",
+      "to": "DataConnectionSetup"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive STOR",
+      "action": "send data connection setup",
+      "to": "DataConnectionSetup"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive STOU",
+      "action": "send data connection setup",
+      "to": "DataConnectionSetup"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive APPE",
+      "action": "send data connection setup",
+      "to": "DataConnectionSetup"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive ALLO",
+      "action": "reply 200",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive REST",
+      "action": "reply 200",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive RNFR",
+      "action": "reply 200",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive RNTO",
+      "action": "reply 200",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive ABOR",
+      "action": "reply 226",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive DELE",
+      "action": "reply 250",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive RMD",
+      "action": "reply 250",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive MKD",
+      "action": "reply 250",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive PWD",
+      "action": "reply 250",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive LIST",
+      "action": "send data connection setup",
+      "to": "DataConnectionSetup"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive NLST",
+      "action": "send data connection setup",
+      "to": "DataConnectionSetup"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive SITE",
+      "action": "reply 200",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive SYST",
+      "action": "reply 215",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive STAT",
+      "action": "reply 250",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive HELP",
+      "action": "reply 214",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive NOOP",
+      "action": "reply 200",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "ConnectionEstablishment",
+      "event": "receive Connect",
+      "action": "reply 120",
+      "to": "Login"
+    },
+    {
+      "from": "ConnectionEstablishment",
+      "event": "receive Connect",
+      "action": "reply 421",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "receive USER",
+      "action": "reply 230",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "receive PASS",
+      "action": "reply 230",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "receive ACCT",
+      "action": "reply 230",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "receive CWD",
+      "action": "reply 250",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "receive CDUP",
+      "action": "reply 200",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "receive SMNT",
+      "action": "reply 202",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "receive REIN",
+      "action": "reply 120",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "Logout"
+    },
+    {
+      "from": "Begin",
+      "event": "receive COMMAND",
+      "action": "reply CODE",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive CMD",
+      "action": "reply CODE",
+      "to": "Success"
+    },
+    {
+      "from": "AwaitingUsername",
+      "event": "receive USER",
+      "action": "reply 331",
+      "to": "AwaitingPassword"
+    },
+    {
+      "from": "AwaitingPassword",
+      "event": "receive PASS",
+      "action": "reply 230",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive RETR",
+      "action": "reply 150",
+      "to": "DataConnectionEstablished"
+    },
+    {
+      "from": "DataConnectionEstablished",
+      "event": "send 226",
+      "action": "reply 226",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive TYPE",
+      "action": "reply 200",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive QUIT",
+      "action": "close connections",
+      "to": "Terminating"
+    }
+  ]
+}

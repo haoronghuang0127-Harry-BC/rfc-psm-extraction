@@ -1,0 +1,122 @@
+{
+  "states": [
+    "Authorization",
+    "Transaction",
+    "Update",
+    "AwaitingPassword"
+  ],
+  "initial_state": "Authorization",
+  "final_states": [
+    "Update"
+  ],
+  "transitions": [
+    {
+      "from": "Authorization",
+      "event": "receive AUTHENTICATION",
+      "action": "reply CODE",
+      "to": "Transaction"
+    },
+    {
+      "from": "Authorization",
+      "event": "receive USER",
+      "action": "reply 220",
+      "to": "AwaitingPassword"
+    },
+    {
+      "from": "AwaitingPassword",
+      "event": "receive PASS",
+      "action": "reply 230",
+      "to": "Authorization"
+    },
+    {
+      "from": "Authorization",
+      "event": "receive APOP",
+      "action": "reply 230",
+      "to": "Transaction"
+    },
+    {
+      "from": "Authorization",
+      "event": "cond authentication_success",
+      "action": "send positive_status",
+      "to": "Transaction"
+    },
+    {
+      "from": "Authorization",
+      "event": "cond maildrop_failure",
+      "action": "reply negative_status",
+      "to": "Authorization"
+    },
+    {
+      "from": "Authorization",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "Authorization"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive COMMAND",
+      "action": "reply CODE",
+      "to": "Transaction"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive STAT",
+      "action": "reply 230",
+      "to": "Transaction"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive LIST",
+      "action": "reply 230",
+      "to": "Transaction"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive RETR",
+      "action": "reply 230",
+      "to": "Transaction"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive DELE",
+      "action": "reply 230",
+      "to": "Transaction"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive NOOP",
+      "action": "reply 230",
+      "to": "Transaction"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive RSET",
+      "action": "reply 230",
+      "to": "Transaction"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive QUIT",
+      "action": "send",
+      "to": "Update"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive TOP",
+      "action": "reply 230",
+      "to": "Transaction"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive UIDL",
+      "action": "reply 230",
+      "to": "Transaction"
+    },
+    {
+      "from": "Update",
+      "event": "timeout 10m",
+      "action": "close connection",
+      "to": "Authorization"
+    }
+  ]
+}

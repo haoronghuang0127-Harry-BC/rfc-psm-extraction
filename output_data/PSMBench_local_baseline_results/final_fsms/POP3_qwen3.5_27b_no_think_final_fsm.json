@@ -1,0 +1,126 @@
+{
+  "states": [
+    "WaitingForConnection",
+    "Authorization",
+    "Transaction",
+    "Update"
+  ],
+  "initial_state": "WaitingForConnection",
+  "final_states": [],
+  "transitions": [
+    {
+      "from": "WaitingForConnection",
+      "event": "receive connection",
+      "action": "send +OK ready",
+      "to": "Authorization"
+    },
+    {
+      "from": "Authorization",
+      "event": "receive USER",
+      "action": "reply +OK or -ERR",
+      "to": "Authorization"
+    },
+    {
+      "from": "Authorization",
+      "event": "receive PASS",
+      "action": "reply +OK maildrop locked",
+      "to": "Transaction"
+    },
+    {
+      "from": "Authorization",
+      "event": "receive PASS",
+      "action": "reply -ERR invalid password",
+      "to": "Authorization"
+    },
+    {
+      "from": "Authorization",
+      "event": "receive APOP",
+      "action": "reply +OK maildrop locked",
+      "to": "Transaction"
+    },
+    {
+      "from": "Authorization",
+      "event": "receive APOP",
+      "action": "reply -ERR permission denied",
+      "to": "Authorization"
+    },
+    {
+      "from": "Authorization",
+      "event": "receive QUIT",
+      "action": "reply +OK and close connection",
+      "to": "Authorization"
+    },
+    {
+      "from": "Authorization",
+      "event": "timeout inactivity",
+      "action": "close TCP connection",
+      "to": "Authorization"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive STAT",
+      "action": "reply +OK count size",
+      "to": "Transaction"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive LIST",
+      "action": "send message list",
+      "to": "Transaction"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive RETR msg",
+      "action": "send message content",
+      "to": "Transaction"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive DELE msg",
+      "action": "reply +OK deleted",
+      "to": "Transaction"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive NOOP",
+      "action": "reply +OK",
+      "to": "Transaction"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive RSET",
+      "action": "reply +OK",
+      "to": "Transaction"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive TOP",
+      "action": "send top of message",
+      "to": "Transaction"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive UIDL",
+      "action": "send unique-id listing",
+      "to": "Transaction"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive QUIT",
+      "action": "reply +OK signing off",
+      "to": "Update"
+    },
+    {
+      "from": "Transaction",
+      "event": "timeout inactivity",
+      "action": "close TCP connection",
+      "to": "Transaction"
+    },
+    {
+      "from": "Update",
+      "event": "cond operation complete",
+      "action": "reply +OK or -ERR",
+      "to": "WaitingForConnection"
+    }
+  ]
+}

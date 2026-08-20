@@ -1,0 +1,321 @@
+{
+  "states": [
+    "Idle",
+    "Established",
+    "TearingDown",
+    "Initial",
+    "ContinueReceived",
+    "Success",
+    "Redirected",
+    "ClientError",
+    "ServerError",
+    "ProcessingRequest",
+    "Error",
+    "Completed",
+    "Init",
+    "Ready",
+    "Play",
+    "Processing",
+    "SendingResponse",
+    "SecureChannel",
+    "CertificateApproval",
+    "ConnectionFailed",
+    "Describing",
+    "SetupSent",
+    "Paused",
+    "TeardownSent"
+  ],
+  "initial_state": "Initial",
+  "final_states": [
+    "TearingDown",
+    "ClientError",
+    "ServerError",
+    "Completed",
+    "ConnectionFailed",
+    "TeardownSent"
+  ],
+  "transitions": [
+    {
+      "from": "Idle",
+      "event": "receive SETUP",
+      "action": "reply 200",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "receive TEARDOWN",
+      "action": "reply 200",
+      "to": "TearingDown"
+    },
+    {
+      "from": "Established",
+      "event": "timeout session",
+      "action": "reply 404",
+      "to": "Idle"
+    },
+    {
+      "from": "Initial",
+      "event": "receive COMMAND",
+      "action": "reply 100",
+      "to": "ContinueReceived"
+    },
+    {
+      "from": "Initial",
+      "event": "receive COMMAND",
+      "action": "reply 200",
+      "to": "Success"
+    },
+    {
+      "from": "Initial",
+      "event": "receive COMMAND",
+      "action": "reply 301",
+      "to": "Redirected"
+    },
+    {
+      "from": "Initial",
+      "event": "receive COMMAND",
+      "action": "reply 302",
+      "to": "Redirected"
+    },
+    {
+      "from": "Initial",
+      "event": "receive COMMAND",
+      "action": "reply 400",
+      "to": "ClientError"
+    },
+    {
+      "from": "Initial",
+      "event": "receive COMMAND",
+      "action": "reply 500",
+      "to": "ServerError"
+    },
+    {
+      "from": "Initial",
+      "event": "receive OPTIONS",
+      "action": "reply 200",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "receive METHOD",
+      "action": "reply 501",
+      "to": "Error"
+    },
+    {
+      "from": "Initial",
+      "event": "receive METHOD",
+      "action": "reply 405",
+      "to": "Error"
+    },
+    {
+      "from": "Initial",
+      "event": "receive SETUP",
+      "action": "set require_check true",
+      "to": "ProcessingRequest"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond feature_not_supported",
+      "action": "reply 551",
+      "to": "Error"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond feature_supported",
+      "action": "reply 200",
+      "to": "Initial"
+    },
+    {
+      "from": "Error",
+      "event": "receive RESET",
+      "action": "reply 200",
+      "to": "Initial"
+    },
+    {
+      "from": "Idle",
+      "event": "receive request",
+      "action": "set processing",
+      "to": "ProcessingRequest"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond request_processed",
+      "action": "reply response",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "receive request",
+      "action": "set processing",
+      "to": "ProcessingRequest"
+    },
+    {
+      "from": "Init",
+      "event": "receive SETUP",
+      "action": "reply 200",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "receive PLAY",
+      "action": "reply 200",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "receive PLAY",
+      "action": "reply 200",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "receive PAUSE",
+      "action": "reply 200",
+      "to": "Ready"
+    },
+    {
+      "from": "Init",
+      "event": "receive SETUP",
+      "action": "reply 200",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "receive SETUP",
+      "action": "reply 200",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "receive SETUP",
+      "action": "reply 200",
+      "to": "Play"
+    },
+    {
+      "from": "Init",
+      "event": "receive TEARDOWN",
+      "action": "reply 200",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "receive TEARDOWN",
+      "action": "reply 200",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "receive TEARDOWN",
+      "action": "reply 200",
+      "to": "Init"
+    },
+    {
+      "from": "InsecureChannel",
+      "event": "receive rtsp request",
+      "action": "reply 301 redirect",
+      "to": "SecureChannel"
+    },
+    {
+      "from": "InsecureChannel",
+      "event": "receive rtsps request",
+      "action": "set secure channel",
+      "to": "SecureChannel"
+    },
+    {
+      "from": "SecureChannel",
+      "event": "receive request with Accept-Credentials User",
+      "action": "set certificate approval",
+      "to": "CertificateApproval"
+    },
+    {
+      "from": "CertificateApproval",
+      "event": "receive 470 Connection Authorization Required",
+      "action": "send Connection-Credentials",
+      "to": "CertificateApproval"
+    },
+    {
+      "from": "CertificateApproval",
+      "event": "receive 407 Proxy Authentication Required",
+      "action": "send Connection-Credentials",
+      "to": "CertificateApproval"
+    },
+    {
+      "from": "CertificateApproval",
+      "event": "receive request with Accept-Credentials User and hash",
+      "action": "set secure connection",
+      "to": "SecureChannel"
+    },
+    {
+      "from": "SecureChannel",
+      "event": "receive request with rtsps URI",
+      "action": "set tls for next hop",
+      "to": "SecureChannel"
+    },
+    {
+      "from": "SecureChannel",
+      "event": "fail to establish TLS connection",
+      "action": "reply 472",
+      "to": "ConnectionFailed"
+    },
+    {
+      "from": "Initial",
+      "event": "receive DESCRIBE",
+      "action": "reply 200",
+      "to": "Describing"
+    },
+    {
+      "from": "Describing",
+      "event": "receive SETUP",
+      "action": "reply 200",
+      "to": "SetupSent"
+    },
+    {
+      "from": "SetupSent",
+      "event": "receive PLAY",
+      "action": "reply 200",
+      "to": "Playing"
+    },
+    {
+      "from": "Playing",
+      "event": "receive PAUSE",
+      "action": "reply 200",
+      "to": "Paused"
+    },
+    {
+      "from": "Paused",
+      "event": "receive PLAY",
+      "action": "reply 200",
+      "to": "Playing"
+    },
+    {
+      "from": "Playing",
+      "event": "receive TEARDOWN",
+      "action": "reply 200",
+      "to": "TeardownSent"
+    },
+    {
+      "from": "Paused",
+      "event": "receive TEARDOWN",
+      "action": "reply 200",
+      "to": "TeardownSent"
+    },
+    {
+      "from": "SetupSent",
+      "event": "receive TEARDOWN",
+      "action": "reply 200",
+      "to": "TeardownSent"
+    },
+    {
+      "from": "Initial",
+      "event": "receive OPTIONS",
+      "action": "reply 200",
+      "to": "Initial"
+    },
+    {
+      "from": "PlayState",
+      "event": "receive Play",
+      "action": "replace request",
+      "to": "PlayState"
+    }
+  ]
+}

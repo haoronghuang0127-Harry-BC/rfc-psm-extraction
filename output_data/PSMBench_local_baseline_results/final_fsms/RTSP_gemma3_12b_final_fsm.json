@@ -1,0 +1,284 @@
+{
+  "states": [
+    "Idle",
+    "Requesting",
+    "Processing",
+    "Overload",
+    "SessionEstablishment",
+    "MediaDeliveryControl",
+    "SessionParameterManipulations",
+    "MediaDelivery",
+    "SessionMaintenance",
+    "SessionTermination",
+    "OnDemand",
+    "DynamicOnDemand",
+    "Live",
+    "LiveWithRecording",
+    "ReceivingRequest",
+    "SendingResponse",
+    "Init",
+    "Ready",
+    "Play",
+    "Client",
+    "Server",
+    "Proxy",
+    "AwaitingPassword",
+    "ConnectionAuthorizationRequired",
+    "ProxyAuthenticationRequired",
+    "Idle",
+    "SendingRTP",
+    "SendingRTCP",
+    "Receiving",
+    "Established",
+    "PlayState",
+    "RTSP1_0",
+    "RTSP2_0",
+    "AwaitingVersion",
+    "SetupReceived",
+    "Paused",
+    "Redirecting"
+  ],
+  "initial_state": "Idle",
+  "final_states": [
+    "SessionTermination",
+    "Overload",
+    "Established",
+    "PlayState"
+  ],
+  "transitions": [
+    {
+      "from": "Idle",
+      "event": "receive request",
+      "action": "set Requesting",
+      "to": "Requesting"
+    },
+    {
+      "from": "Requesting",
+      "event": "timeout 5s",
+      "action": "reply 503",
+      "to": "Overload"
+    },
+    {
+      "from": "Requesting",
+      "event": "cond processing_complete",
+      "action": "reply response",
+      "to": "Idle"
+    },
+    {
+      "from": "Overload",
+      "event": "timeout Retry-After",
+      "action": "set Requesting",
+      "to": "Requesting"
+    },
+    {
+      "from": "Idle",
+      "event": "receive 503",
+      "action": "wait Retry-After",
+      "to": "Overload"
+    },
+    {
+      "from": "SessionEstablishment",
+      "event": "receive SETUP",
+      "action": "reply Session",
+      "to": "MediaDeliveryControl"
+    },
+    {
+      "from": "MediaDeliveryControl",
+      "event": "receive PLAY",
+      "action": "reply PLAY_NOTIFY",
+      "to": "MediaDelivery"
+    },
+    {
+      "from": "MediaDeliveryControl",
+      "event": "receive PAUSE",
+      "action": "reply PLAY_NOTIFY",
+      "to": "SessionMaintenance"
+    },
+    {
+      "from": "MediaDelivery",
+      "event": "receive PLAY_NOTIFY",
+      "action": "reply PLAY_NOTIFY",
+      "to": "MediaDeliveryControl"
+    },
+    {
+      "from": "SessionMaintenance",
+      "event": "receive TEARDOWN",
+      "action": "reply TEARDOWN",
+      "to": "SessionTermination"
+    },
+    {
+      "from": "SessionTermination",
+      "event": "receive REDIRECT",
+      "action": "reply REDIRECT",
+      "to": "SessionEstablishment"
+    },
+    {
+      "from": "ReceivingRequest",
+      "event": "receive request",
+      "action": "reply CODE",
+      "to": "ProcessingRequest"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond request_understood",
+      "action": "reply CODE",
+      "to": "SendingResponse"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond request_unrecognized",
+      "action": "reply CODE",
+      "to": "SendingResponse"
+    },
+    {
+      "from": "Init",
+      "event": "receive SETUP",
+      "action": "reply 200",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "receive PLAY",
+      "action": "reply 200",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "receive PAUSE",
+      "action": "reply 200",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "receive SETUP",
+      "action": "reply 200",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "receive SETUP",
+      "action": "reply 200",
+      "to": "Play"
+    },
+    {
+      "from": "Init",
+      "event": "receive TEARDOWN",
+      "action": "reply 200",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "receive TEARDOWN",
+      "action": "reply 200",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "receive TEARDOWN",
+      "action": "reply 200",
+      "to": "Init"
+    },
+    {
+      "from": "Idle",
+      "event": "receive SETUP",
+      "action": "reply 200",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "receive PLAY",
+      "action": "reply 200",
+      "to": "SendingRTP"
+    },
+    {
+      "from": "SendingRTP",
+      "event": "cond RTP_channel_available",
+      "action": "send RTP_packet",
+      "to": "SendingRTP"
+    },
+    {
+      "from": "SendingRTP",
+      "event": "cond RTCP_channel_available",
+      "action": "send RTCP_packet",
+      "to": "SendingRTCP"
+    },
+    {
+      "from": "SendingRTCP",
+      "event": "cond RTP_channel_available",
+      "action": "send RTP_packet",
+      "to": "SendingRTP"
+    },
+    {
+      "from": "Idle",
+      "event": "receive SETUP",
+      "action": "reply 100",
+      "to": "Receiving"
+    },
+    {
+      "from": "Receiving",
+      "event": "receive DESCRIBE",
+      "action": "reply 100",
+      "to": "Receiving"
+    },
+    {
+      "from": "Receiving",
+      "event": "receive PLAY",
+      "action": "reply 100",
+      "to": "Receiving"
+    },
+    {
+      "from": "Receiving",
+      "event": "receive PAUSE",
+      "action": "reply 100",
+      "to": "Receiving"
+    },
+    {
+      "from": "Receiving",
+      "event": "receive TEARDOWN",
+      "action": "reply 200",
+      "to": "Idle"
+    },
+    {
+      "from": "Receiving",
+      "event": "receive REDIRECT",
+      "action": "reply 302",
+      "to": "Idle"
+    },
+    {
+      "from": "PlayState",
+      "event": "receive PLAY_NOTIFY",
+      "action": "send PLAY_NOTIFY",
+      "to": "PlayState"
+    },
+    {
+      "from": "Setup",
+      "event": "receive SETUP",
+      "action": "reply 200",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "AwaitingVersion",
+      "event": "receive OPTIONS",
+      "action": "reply 200",
+      "to": "RTSP2_0"
+    },
+    {
+      "from": "AwaitingVersion",
+      "event": "receive OPTIONS",
+      "action": "reply 505",
+      "to": "RTSP1_0"
+    },
+    {
+      "from": "RTSP2_0",
+      "event": "receive PLAY",
+      "action": "replace request",
+      "to": "PlayState"
+    },
+    {
+      "from": "RTSP1_0",
+      "event": "receive PLAY",
+      "action": "queue request",
+      "to": "PlayState"
+    }
+  ]
+}

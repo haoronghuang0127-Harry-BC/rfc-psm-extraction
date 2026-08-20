@@ -1,0 +1,208 @@
+{
+  "states": [
+    "Idle",
+    "Connect",
+    "Active",
+    "OpenSent",
+    "OpenConfirm",
+    "Established"
+  ],
+  "initial_state": "Idle",
+  "final_states": [
+    "Idle"
+  ],
+  "transitions": [
+    {
+      "from": "Idle",
+      "event": "ManualStart",
+      "action": "set ConnectRetryCounter to zero",
+      "to": "Connect"
+    },
+    {
+      "from": "Idle",
+      "event": "AutomaticStart",
+      "action": "set AllowAutomaticStart to TRUE",
+      "to": "Connect"
+    },
+    {
+      "from": "Idle",
+      "event": "ManualStart_with_PassiveTcpEstablishment",
+      "action": "set PassiveTcpEstablishment to TRUE",
+      "to": "Active"
+    },
+    {
+      "from": "Idle",
+      "event": "AutomaticStart_with_PassiveTcpEstablishment",
+      "action": "set AllowAutomaticStart to TRUE, PassiveTcpEstablishment to TRUE",
+      "to": "Active"
+    },
+    {
+      "from": "Idle",
+      "event": "AutomaticStart_with_DampPeerOscillations",
+      "action": "set AllowAutomaticStart to TRUE, DampPeerOscillations to TRUE",
+      "to": "Connect"
+    },
+    {
+      "from": "Idle",
+      "event": "AutomaticStart_with_DampPeerOscillations_and_PassiveTcpEstablishment",
+      "action": "set AllowAutomaticStart to TRUE, DampPeerOscillations to TRUE, PassiveTcpEstablishment to TRUE",
+      "to": "Active"
+    },
+    {
+      "from": "Connect",
+      "event": "ManualStop",
+      "action": "drop TCP connection, release resources",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "ConnectRetryTimer_Expires",
+      "action": "drop TCP connection, restart ConnectRetryTimer",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "DelayOpenTimer_Expires",
+      "action": "send OPEN message, set HoldTimer",
+      "to": "OpenSent"
+    },
+    {
+      "from": "Connect",
+      "event": "TcpConnection_Valid",
+      "action": "process TCP connection",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "Tcp_CR_Invalid",
+      "action": "reject TCP connection",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "TcpConnectionConfirmed",
+      "action": "complete BGP initialization, send OPEN message",
+      "to": "OpenSent"
+    },
+    {
+      "from": "Active",
+      "event": "ManualStop",
+      "action": "drop TCP connection, release resources",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "ConnectRetryTimer_Expires",
+      "action": "restart ConnectRetryTimer, initiate TCP connection",
+      "to": "Connect"
+    },
+    {
+      "from": "Active",
+      "event": "DelayOpenTimer_Expires",
+      "action": "complete BGP initialization, send OPEN message",
+      "to": "OpenSent"
+    },
+    {
+      "from": "Active",
+      "event": "TcpConnection_Valid",
+      "action": "track TCP connection",
+      "to": "Active"
+    },
+    {
+      "from": "Active",
+      "event": "Tcp_CR_Invalid",
+      "action": "reject TCP connection",
+      "to": "Active"
+    },
+    {
+      "from": "Active",
+      "event": "TcpConnectionFails",
+      "action": "restart ConnectRetryTimer, drop TCP connection",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "ManualStop",
+      "action": "send NOTIFICATION with Cease, release resources",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "AutomaticStop",
+      "action": "send NOTIFICATION with Cease, release resources",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "HoldTimer_Expires",
+      "action": "send NOTIFICATION with error code, release resources",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "TcpConnection_Valid",
+      "action": "track TCP connection",
+      "to": "OpenSent"
+    },
+    {
+      "from": "OpenSent",
+      "event": "TcpConnectionConfirmed",
+      "action": "complete BGP initialization, send OPEN message",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenSent",
+      "event": "OPEN",
+      "action": "reset DelayOpenTimer, set ConnectRetryTimer to zero",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "KeepaliveTimer_Expires",
+      "action": "send KEEPALIVE message, restart KeepaliveTimer",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "KEEPALIVE",
+      "action": "restart HoldTimer",
+      "to": "Established"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "receive OPEN",
+      "action": "compare BGP Identifier",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "receive OPEN",
+      "action": "close existing connection",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "receive OPEN",
+      "action": "close new connection",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "Active",
+      "event": "receive OPEN",
+      "action": "close new connection",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "Connect",
+      "event": "receive OPEN",
+      "action": "close new connection",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "Idle",
+      "event": "receive OPEN",
+      "action": "close new connection",
+      "to": "OpenConfirm"
+    }
+  ]
+}

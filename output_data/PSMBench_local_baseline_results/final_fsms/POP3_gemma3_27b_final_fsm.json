@@ -1,0 +1,188 @@
+{
+  "states": [
+    "WaitForConnection",
+    "AwaitingAuthentication",
+    "Authenticated",
+    "Transaction",
+    "Update",
+    "QuitState",
+    "ListingMessages",
+    "RetrievingMessage",
+    "DeletingMessage"
+  ],
+  "initial_state": "WaitForConnection",
+  "final_states": [
+    "Update",
+    "QuitState"
+  ],
+  "transitions": [
+    {
+      "from": "WaitForConnection",
+      "event": "receive open connection",
+      "action": "reply +OK server ready",
+      "to": "AwaitingAuthentication"
+    },
+    {
+      "from": "AwaitingAuthentication",
+      "event": "receive APOP",
+      "action": "reply +OK user maildrop",
+      "to": "Authenticated"
+    },
+    {
+      "from": "AwaitingAuthentication",
+      "event": "receive USER",
+      "action": "reply 230",
+      "to": "AwaitingAuthentication"
+    },
+    {
+      "from": "AwaitingAuthentication",
+      "event": "receive PASS",
+      "action": "reply 230",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive STAT",
+      "action": "reply +OK message count",
+      "to": "ListingMessages"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive LIST",
+      "action": "reply +OK message count",
+      "to": "ListingMessages"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive RETR",
+      "action": "reply +OK message size",
+      "to": "RetrievingMessage"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive DELE",
+      "action": "reply +OK message deleted",
+      "to": "DeletingMessage"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive RSET",
+      "action": "reply +OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive TOP",
+      "action": "reply +OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive UIDL",
+      "action": "reply +OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive NOOP",
+      "action": "reply +OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive QUIT",
+      "action": "reply +OK signing off",
+      "to": "QuitState"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive QUIT",
+      "action": "reply +OK",
+      "to": "Update"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive anyCommand",
+      "action": "reply +OK",
+      "to": "Transaction"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive invalidCommand",
+      "action": "reply -ERR",
+      "to": "Transaction"
+    },
+    {
+      "from": "ListingMessages",
+      "event": "send message size",
+      "action": "reply message size",
+      "to": "ListingMessages"
+    },
+    {
+      "from": "ListingMessages",
+      "event": "receive RETR",
+      "action": "reply +OK message size",
+      "to": "RetrievingMessage"
+    },
+    {
+      "from": "RetrievingMessage",
+      "event": "send message content",
+      "action": "reply message content",
+      "to": "DeletingMessage"
+    },
+    {
+      "from": "DeletingMessage",
+      "event": "receive DELE",
+      "action": "reply +OK message deleted",
+      "to": "Authenticated"
+    },
+    {
+      "from": "SigningOff",
+      "event": "receive close connection",
+      "action": "reply signing off",
+      "to": "WaitForConnection"
+    },
+    {
+      "from": "Update",
+      "event": "timeout inactivity",
+      "action": "close connection",
+      "to": "Update"
+    },
+    {
+      "from": "Authorization",
+      "event": "receive USER",
+      "action": "reply +OK",
+      "to": "Authorization"
+    },
+    {
+      "from": "Authorization",
+      "event": "receive PASS",
+      "action": "reply +OK",
+      "to": "Transaction"
+    },
+    {
+      "from": "Authorization",
+      "event": "receive QUIT",
+      "action": "reply +OK",
+      "to": "Authorization"
+    },
+    {
+      "from": "Authorization",
+      "event": "receive invalidCommand",
+      "action": "reply -ERR",
+      "to": "Authorization"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive invalidCommand",
+      "action": "reply -ERR",
+      "to": "Transaction"
+    },
+    {
+      "from": "Authorization",
+      "event": "receive APOP",
+      "action": "reply +OK",
+      "to": "Transaction"
+    }
+  ]
+}

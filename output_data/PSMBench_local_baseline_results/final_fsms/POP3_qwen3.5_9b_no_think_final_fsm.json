@@ -1,0 +1,104 @@
+{
+  "states": [
+    "INIT",
+    "AUTHORIZATION",
+    "TRANSACTION",
+    "UPDATE"
+  ],
+  "initial_state": "INIT",
+  "final_states": [
+    "UPDATE"
+  ],
+  "transitions": [
+    {
+      "from": "INIT",
+      "event": "receive GREETING",
+      "action": "set state AUTHORIZATION",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "receive USER",
+      "action": "reply +OK",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "receive PASS",
+      "action": "verify password and reply +OK or -ERR",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "receive APOP",
+      "action": "verify digest and reply +OK or -ERR",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "receive QUIT",
+      "action": "reply +OK and close",
+      "to": "UPDATE"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "receive TOP",
+      "action": "send headers and body lines",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "receive UIDL",
+      "action": "send unique-id listing",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "receive STAT",
+      "action": "reply +OK",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "receive LIST",
+      "action": "reply +OK",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "receive RETR",
+      "action": "reply +OK",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "receive DELE",
+      "action": "reply +OK",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "receive NOOP",
+      "action": "reply +OK",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "receive RSET",
+      "action": "reset state to AUTHORIZATION",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "receive QUIT",
+      "action": "reply +OK and close",
+      "to": "UPDATE"
+    },
+    {
+      "from": "UPDATE",
+      "event": "timeout 10min",
+      "action": "close connection",
+      "to": "UPDATE"
+    }
+  ]
+}

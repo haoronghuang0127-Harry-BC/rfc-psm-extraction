@@ -1,0 +1,101 @@
+{
+  "states": [
+    "idle",
+    "wait_ctl_reply",
+    "established",
+    "wait_stop_reply",
+    "control_connection_established",
+    "session_established",
+    "tunnel_established"
+  ],
+  "initial_state": "idle",
+  "final_states": [
+    "idle"
+  ],
+  "transitions": [
+    {
+      "from": "idle",
+      "event": "TCP Open Indication",
+      "action": "send Start Control Connection Request",
+      "to": "wait_ctl_reply"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "receive Start Ctl Connection Reply",
+      "action": "check version",
+      "to": "established"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "receive Start Ctl Connection Reply",
+      "action": "send Stop Control Connection Request",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "established",
+      "event": "receive Stop Control Connection Request",
+      "action": "send Stop Control Connection Reply",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "wait_stop_reply",
+      "event": "receive Stop Control Connection Reply",
+      "action": "close TCP",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "receive Start Control Connection Request",
+      "action": "send Start Control Connection Reply",
+      "to": "established"
+    },
+    {
+      "from": "idle",
+      "event": "receive Start Control Connection Request",
+      "action": "close TCP",
+      "to": "idle"
+    },
+    {
+      "from": "established",
+      "event": "receive Stop Control Connection Request",
+      "action": "send Stop Control Connection Reply",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "control_connection_established",
+      "event": "receive Start-Control-Connection-Request",
+      "action": "reply Start-Control-Connection-Reply",
+      "to": "control_connection_established"
+    },
+    {
+      "from": "control_connection_established",
+      "event": "receive Outgoing-Call-Request",
+      "action": "reply Outgoing-Call-Reply",
+      "to": "session_established"
+    },
+    {
+      "from": "control_connection_established",
+      "event": "receive Incoming-Call-Request",
+      "action": "reply Incoming-Call-Reply",
+      "to": "session_established"
+    },
+    {
+      "from": "session_established",
+      "event": "receive Set-Link-Info",
+      "action": "set link_info",
+      "to": "session_established"
+    },
+    {
+      "from": "session_established",
+      "event": "receive Call-Clear-Request",
+      "action": "reply Call-Disconnect-Notify",
+      "to": "control_connection_established"
+    },
+    {
+      "from": "control_connection_established",
+      "event": "timeout keep-alive",
+      "action": "send Echo-Request",
+      "to": "control_connection_established"
+    }
+  ]
+}

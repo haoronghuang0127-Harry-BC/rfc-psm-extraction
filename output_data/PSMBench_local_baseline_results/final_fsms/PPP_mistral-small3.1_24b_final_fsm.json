@@ -1,0 +1,477 @@
+{
+  "states": [
+    "Dead",
+    "Establish",
+    "Network",
+    "Authenticate",
+    "Terminate",
+    "Initial",
+    "Starting",
+    "Closed",
+    "Stopped",
+    "Closing",
+    "Stopping",
+    "ReqSent",
+    "AckRcvd",
+    "AckSent",
+    "Opened"
+  ],
+  "initial_state": "Initial",
+  "final_states": [
+    "Dead",
+    "Closed",
+    "Stopped"
+  ],
+  "transitions": [
+    {
+      "from": "Dead",
+      "event": "receive UP",
+      "action": "open Establish",
+      "to": "Establish"
+    },
+    {
+      "from": "Establish",
+      "event": "receive SUCCESS",
+      "action": "open Authenticate",
+      "to": "Authenticate"
+    },
+    {
+      "from": "Establish",
+      "event": "receive FAIL",
+      "action": "close Terminate",
+      "to": "Terminate"
+    },
+    {
+      "from": "Authenticate",
+      "event": "receive SUCCESS",
+      "action": "open Network",
+      "to": "Network"
+    },
+    {
+      "from": "Authenticate",
+      "event": "receive FAIL",
+      "action": "close Terminate",
+      "to": "Terminate"
+    },
+    {
+      "from": "Network",
+      "event": "receive FAIL",
+      "action": "close Terminate",
+      "to": "Terminate"
+    },
+    {
+      "from": "Terminate",
+      "event": "receive DOWN",
+      "action": "close Dead",
+      "to": "Dead"
+    },
+    {
+      "from": "Initial",
+      "event": "receive Open",
+      "action": "set ThisLayerStarted",
+      "to": "Starting"
+    },
+    {
+      "from": "Initial",
+      "event": "receive Close",
+      "action": "set ThisLayerFinished",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "receive Up",
+      "action": "set ThisLayerUp",
+      "to": "Closed"
+    },
+    {
+      "from": "Starting",
+      "event": "receive Up",
+      "action": "set InitializeRestartCount, send ConfigureRequest",
+      "to": "ReqSent"
+    },
+    {
+      "from": "Starting",
+      "event": "receive Close",
+      "action": "set ThisLayerFinished",
+      "to": "Initial"
+    },
+    {
+      "from": "Closed",
+      "event": "receive Down",
+      "action": "set ThisLayerStarted",
+      "to": "Starting"
+    },
+    {
+      "from": "Closed",
+      "event": "receive ConfigureRequest",
+      "action": "send TerminateAck",
+      "to": "Closed"
+    },
+    {
+      "from": "Closed",
+      "event": "receive Configure-Request",
+      "action": "reply Configure-Ack",
+      "to": "Opened"
+    },
+    {
+      "from": "Closed",
+      "event": "receive Configure-Request",
+      "action": "reply Configure-Nak",
+      "to": "Closed"
+    },
+    {
+      "from": "Closed",
+      "event": "receive Configure-Request",
+      "action": "reply Configure-Reject",
+      "to": "Closed"
+    },
+    {
+      "from": "Closed",
+      "event": "receive Terminate-Request",
+      "action": "reply Terminate-Ack",
+      "to": "Closed"
+    },
+    {
+      "from": "Closed",
+      "event": "receive Open",
+      "action": "set InitializeRestartCount, send ConfigureRequest",
+      "to": "ReqSent"
+    },
+    {
+      "from": "Closed",
+      "event": "receive Close",
+      "action": "set ThisLayerFinished",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "receive Down",
+      "action": "set ThisLayerStarted",
+      "to": "Starting"
+    },
+    {
+      "from": "Stopped",
+      "event": "receive ConfigureRequest",
+      "action": "send ConfigureAck",
+      "to": "Stopped"
+    },
+    {
+      "from": "Stopped",
+      "event": "receive OtherPackets",
+      "action": "send TerminateAck",
+      "to": "Stopped"
+    },
+    {
+      "from": "Stopped",
+      "event": "receive Open",
+      "action": "set InitializeRestartCount, send ConfigureRequest",
+      "to": "ReqSent"
+    },
+    {
+      "from": "Stopped",
+      "event": "receive Close",
+      "action": "set ThisLayerFinished",
+      "to": "Stopped"
+    },
+    {
+      "from": "Stopped",
+      "event": "receive Terminate-Ack",
+      "action": "close connection",
+      "to": "Closed"
+    },
+    {
+      "from": "Closing",
+      "event": "receive TerminateAck",
+      "action": "set ThisLayerFinished",
+      "to": "Closed"
+    },
+    {
+      "from": "Closing",
+      "event": "timeout Restart",
+      "action": "send TerminateRequest",
+      "to": "Closing"
+    },
+    {
+      "from": "Closing",
+      "event": "receive Close",
+      "action": "set ThisLayerFinished",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopping",
+      "event": "receive TerminateAck",
+      "action": "set ThisLayerFinished",
+      "to": "Stopped"
+    },
+    {
+      "from": "Stopping",
+      "event": "timeout Restart",
+      "action": "send TerminateRequest",
+      "to": "Stopping"
+    },
+    {
+      "from": "Stopping",
+      "event": "receive Close",
+      "action": "set ThisLayerFinished",
+      "to": "Stopped"
+    },
+    {
+      "from": "ReqSent",
+      "event": "receive ConfigureAck",
+      "action": "set ThisLayerUp",
+      "to": "Opened"
+    },
+    {
+      "from": "ReqSent",
+      "event": "timeout Restart",
+      "action": "send ConfigureRequest",
+      "to": "ReqSent"
+    },
+    {
+      "from": "ReqSent",
+      "event": "receive ConfigureRequest",
+      "action": "send ConfigureAck",
+      "to": "AckSent"
+    },
+    {
+      "from": "ReqSent",
+      "event": "receive ConfigureNak",
+      "action": "send ConfigureRequest",
+      "to": "ReqSent"
+    },
+    {
+      "from": "ReqSent",
+      "event": "receive Close",
+      "action": "set InitializeRestartCount, send TerminateRequest",
+      "to": "Closing"
+    },
+    {
+      "from": "ReqSent",
+      "event": "receive TerminateRequest",
+      "action": "send TerminateAck",
+      "to": "ReqSent"
+    },
+    {
+      "from": "ReqSent",
+      "event": "receive TerminateAck",
+      "action": "set ThisLayerFinished",
+      "to": "Stopped"
+    },
+    {
+      "from": "ReqSent",
+      "event": "receive UnknownCode",
+      "action": "send CodeReject",
+      "to": "ReqSent"
+    },
+    {
+      "from": "ReqSent",
+      "event": "receive CodeReject",
+      "action": "set ThisLayerFinished",
+      "to": "Stopped"
+    },
+    {
+      "from": "ReqSent",
+      "event": "receive EchoRequest",
+      "action": "send EchoReply",
+      "to": "ReqSent"
+    },
+    {
+      "from": "AckRcvd",
+      "event": "receive ConfigureAck",
+      "action": "set ThisLayerUp",
+      "to": "Opened"
+    },
+    {
+      "from": "AckRcvd",
+      "event": "timeout Restart",
+      "action": "send ConfigureRequest",
+      "to": "ReqSent"
+    },
+    {
+      "from": "AckRcvd",
+      "event": "receive ConfigureRequest",
+      "action": "send ConfigureAck",
+      "to": "AckSent"
+    },
+    {
+      "from": "AckRcvd",
+      "event": "receive ConfigureNak",
+      "action": "send ConfigureRequest",
+      "to": "ReqSent"
+    },
+    {
+      "from": "AckRcvd",
+      "event": "receive Close",
+      "action": "set InitializeRestartCount, send TerminateRequest",
+      "to": "Closing"
+    },
+    {
+      "from": "AckRcvd",
+      "event": "receive TerminateRequest",
+      "action": "send TerminateAck",
+      "to": "AckRcvd"
+    },
+    {
+      "from": "AckRcvd",
+      "event": "receive TerminateAck",
+      "action": "set ThisLayerFinished",
+      "to": "Stopped"
+    },
+    {
+      "from": "AckRcvd",
+      "event": "receive UnknownCode",
+      "action": "send CodeReject",
+      "to": "AckRcvd"
+    },
+    {
+      "from": "AckRcvd",
+      "event": "receive CodeReject",
+      "action": "set ThisLayerFinished",
+      "to": "Stopped"
+    },
+    {
+      "from": "AckRcvd",
+      "event": "receive EchoRequest",
+      "action": "send EchoReply",
+      "to": "AckRcvd"
+    },
+    {
+      "from": "AckSent",
+      "event": "receive ConfigureAck",
+      "action": "set ThisLayerUp",
+      "to": "Opened"
+    },
+    {
+      "from": "AckSent",
+      "event": "timeout Restart",
+      "action": "send ConfigureRequest",
+      "to": "ReqSent"
+    },
+    {
+      "from": "AckSent",
+      "event": "receive ConfigureRequest",
+      "action": "send ConfigureAck",
+      "to": "AckSent"
+    },
+    {
+      "from": "AckSent",
+      "event": "receive ConfigureNak",
+      "action": "send ConfigureRequest",
+      "to": "ReqSent"
+    },
+    {
+      "from": "AckSent",
+      "event": "receive Close",
+      "action": "set InitializeRestartCount, send TerminateRequest",
+      "to": "Closing"
+    },
+    {
+      "from": "AckSent",
+      "event": "receive TerminateRequest",
+      "action": "send TerminateAck",
+      "to": "AckSent"
+    },
+    {
+      "from": "AckSent",
+      "event": "receive TerminateAck",
+      "action": "set ThisLayerFinished",
+      "to": "Stopped"
+    },
+    {
+      "from": "AckSent",
+      "event": "receive UnknownCode",
+      "action": "send CodeReject",
+      "to": "AckSent"
+    },
+    {
+      "from": "AckSent",
+      "event": "receive CodeReject",
+      "action": "set ThisLayerFinished",
+      "to": "Stopped"
+    },
+    {
+      "from": "AckSent",
+      "event": "receive EchoRequest",
+      "action": "send EchoReply",
+      "to": "AckSent"
+    },
+    {
+      "from": "Opened",
+      "event": "receive Down",
+      "action": "set ThisLayerDown",
+      "to": "Starting"
+    },
+    {
+      "from": "Opened",
+      "event": "receive Open",
+      "action": "set ThisLayerDown, set ThisLayerUp",
+      "to": "Opened"
+    },
+    {
+      "from": "Opened",
+      "event": "receive Close",
+      "action": "set ThisLayerDown, set InitializeRestartCount, send TerminateRequest",
+      "to": "Closing"
+    },
+    {
+      "from": "Opened",
+      "event": "receive TerminateRequest",
+      "action": "send TerminateAck",
+      "to": "Opened"
+    },
+    {
+      "from": "Opened",
+      "event": "receive TerminateAck",
+      "action": "set ThisLayerFinished",
+      "to": "Stopped"
+    },
+    {
+      "from": "Opened",
+      "event": "receive UnknownCode",
+      "action": "send CodeReject",
+      "to": "Opened"
+    },
+    {
+      "from": "Opened",
+      "event": "receive CodeReject",
+      "action": "set ThisLayerFinished",
+      "to": "Stopped"
+    },
+    {
+      "from": "Opened",
+      "event": "receive EchoRequest",
+      "action": "send EchoReply",
+      "to": "Opened"
+    },
+    {
+      "from": "Opened",
+      "event": "receive Terminate-Request",
+      "action": "reply Terminate-Ack",
+      "to": "Closed"
+    },
+    {
+      "from": "Opened",
+      "event": "receive Echo-Request",
+      "action": "reply Echo-Reply",
+      "to": "Opened"
+    },
+    {
+      "from": "Opened",
+      "event": "receive Discard-Request",
+      "action": "discard packet",
+      "to": "Opened"
+    },
+    {
+      "from": "Opened",
+      "event": "receive Protocol-Reject",
+      "action": "stop sending packets",
+      "to": "Opened"
+    },
+    {
+      "from": "Opened",
+      "event": "receive Code-Reject",
+      "action": "report problem",
+      "to": "Closed"
+    }
+  ]
+}

@@ -1,0 +1,318 @@
+{
+  "states": [
+    "Connected",
+    "AwaitingCommand",
+    "ReceivingData",
+    "SendingResponse",
+    "ErrorState",
+    "NotAuthenticated",
+    "Authenticated",
+    "Selected",
+    "Logout",
+    "AnyState",
+    "MailboxSelected",
+    "CommandContinuation",
+    "Initial",
+    "Enabled",
+    "Selecting",
+    "Fetching",
+    "Storing",
+    "LoggingOut"
+  ],
+  "initial_state": "Connected",
+  "final_states": [
+    "Logout",
+    "ErrorState",
+    "Initial"
+  ],
+  "transitions": [
+    {
+      "from": "Connected",
+      "event": "receive initial_greeting",
+      "action": "reply initial_greeting",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive COMMAND",
+      "action": "parse COMMAND",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive command_continuation_request",
+      "action": "reply command_continuation_request",
+      "to": "ReceivingData"
+    },
+    {
+      "from": "ReceivingData",
+      "event": "receive command_data",
+      "action": "collect command_data",
+      "to": "ReceivingData"
+    },
+    {
+      "from": "ReceivingData",
+      "event": "receive command_completion",
+      "action": "process command",
+      "to": "SendingResponse"
+    },
+    {
+      "from": "SendingResponse",
+      "event": "send server_response",
+      "action": "reply server_response",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive invalid_command",
+      "action": "reply BAD",
+      "to": "ErrorState"
+    },
+    {
+      "from": "ErrorState",
+      "event": "receive new_command",
+      "action": "reset connection",
+      "to": "Connected"
+    },
+    {
+      "from": "NotAuthenticated",
+      "event": "receive greeting",
+      "action": "reply ok",
+      "to": "NotAuthenticated"
+    },
+    {
+      "from": "NotAuthenticated",
+      "event": "receive LOGIN",
+      "action": "reply ok",
+      "to": "Authenticated"
+    },
+    {
+      "from": "NotAuthenticated",
+      "event": "receive AUTHENTICATE",
+      "action": "reply ok",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive SELECT",
+      "action": "reply ok",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive EXAMINE",
+      "action": "reply ok",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "receive CLOSE",
+      "action": "reply ok",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "receive UNSELECT",
+      "action": "reply ok",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive LOGOUT",
+      "action": "reply ok",
+      "to": "Logout"
+    },
+    {
+      "from": "Selected",
+      "event": "receive LOGOUT",
+      "action": "reply ok",
+      "to": "Logout"
+    },
+    {
+      "from": "Logout",
+      "event": "send BYE",
+      "action": "send bye",
+      "to": "Logout"
+    },
+    {
+      "from": "Logout",
+      "event": "send OK",
+      "action": "send ok",
+      "to": "Logout"
+    },
+    {
+      "from": "AnyState",
+      "event": "receive CAPABILITY",
+      "action": "reply OK",
+      "to": "AnyState"
+    },
+    {
+      "from": "AnyState",
+      "event": "receive NOOP",
+      "action": "reply OK",
+      "to": "AnyState"
+    },
+    {
+      "from": "AnyState",
+      "event": "receive LOGOUT",
+      "action": "reply OK",
+      "to": "AnyState"
+    },
+    {
+      "from": "NotAuthenticated",
+      "event": "receive AUTHENTICATE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "NotAuthenticated",
+      "event": "receive LOGIN",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive SELECT",
+      "action": "reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive EXAMINE",
+      "action": "reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "receive CLOSE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "receive UNSELECT",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Initial",
+      "event": "receive STARTTLS",
+      "action": "reply 200",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive AUTHENTICATE",
+      "action": "reply 230",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive ENABLE",
+      "action": "reply 200",
+      "to": "Enabled"
+    },
+    {
+      "from": "Enabled",
+      "event": "receive SELECT",
+      "action": "reply 202",
+      "to": "Selecting"
+    },
+    {
+      "from": "Selecting",
+      "event": "receive FETCH",
+      "action": "reply 201",
+      "to": "Fetching"
+    },
+    {
+      "from": "Fetching",
+      "event": "receive STORE",
+      "action": "reply 201",
+      "to": "Storing"
+    },
+    {
+      "from": "Storing",
+      "event": "receive LOGOUT",
+      "action": "reply 200",
+      "to": "LoggingOut"
+    },
+    {
+      "from": "LoggingOut",
+      "event": "send BYE",
+      "action": "reply 200",
+      "to": "Initial"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive LOGIN",
+      "action": "reply AUTHENTICATION_RESULT",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive AUTHENTICATE",
+      "action": "reply COMMAND_CONTINUATION",
+      "to": "CommandContinuation"
+    },
+    {
+      "from": "CommandContinuation",
+      "event": "receive COMMAND_TEXT",
+      "action": "reply OK",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive SELECT",
+      "action": "reply STATUS",
+      "to": "MailboxSelected"
+    },
+    {
+      "from": "MailboxSelected",
+      "event": "receive NOOP",
+      "action": "reply EXISTS",
+      "to": "MailboxSelected"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive CAPABILITY",
+      "action": "reply CAPABILITY_LIST",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive NAMESPACE",
+      "action": "reply NAMESPACE_RESPONSE",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive STATUS",
+      "action": "reply STATUS_RESPONSE",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive SEARCH",
+      "action": "reply ESEARCH_RESPONSE",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive EXPUNGE",
+      "action": "reply EXPUNGE_RESPONSE",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive FETCH",
+      "action": "reply FETCH_RESPONSE",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive BYE",
+      "action": "reply BYE_RESPONSE",
+      "to": "Connected"
+    }
+  ]
+}

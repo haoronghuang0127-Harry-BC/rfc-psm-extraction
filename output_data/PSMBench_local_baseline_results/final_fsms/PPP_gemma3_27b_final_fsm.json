@@ -1,0 +1,497 @@
+{
+  "states": [
+    "Dead",
+    "Establishment",
+    "Opened",
+    "Authenticate",
+    "NetworkLayerProtocol",
+    "Closing",
+    "Initial",
+    "Starting",
+    "Closed",
+    "Stopped",
+    "Stopping",
+    "ReqSent",
+    "AckRcvd",
+    "AckSent",
+    "AwaitingRequest",
+    "SendingReject",
+    "ConfigRequestSent",
+    "ConfigNakSent",
+    "ConfigAckReceived",
+    "MagicNumberCollision",
+    "LoopDetected"
+  ],
+  "initial_state": "Initial",
+  "final_states": [
+    "Dead",
+    "Closed",
+    "Stopped",
+    "SendingReject",
+    "LoopDetected"
+  ],
+  "transitions": [
+    {
+      "from": "Dead",
+      "event": "receive Up",
+      "action": "set lcp_initial",
+      "to": "Establishment"
+    },
+    {
+      "from": "Establishment",
+      "event": "receive ConfigureRequest",
+      "action": "set establishment",
+      "to": "Establishment"
+    },
+    {
+      "from": "Establishment",
+      "event": "receive ConfigureAck",
+      "action": "set opened",
+      "to": "Opened"
+    },
+    {
+      "from": "Opened",
+      "event": "receive ConfigureRequest",
+      "action": "set establishment",
+      "to": "Establishment"
+    },
+    {
+      "from": "Opened",
+      "event": "receive AuthenticationRequest",
+      "action": "set authenticate",
+      "to": "Authenticate"
+    },
+    {
+      "from": "Authenticate",
+      "event": "receive AuthenticationComplete",
+      "action": "set networkLayerProtocol",
+      "to": "NetworkLayerProtocol"
+    },
+    {
+      "from": "Authenticate",
+      "event": "receive AuthenticationFailure",
+      "action": "set termination",
+      "to": "Closing"
+    },
+    {
+      "from": "NetworkLayerProtocol",
+      "event": "receive ConfigureRequest",
+      "action": "set establishment",
+      "to": "Establishment"
+    },
+    {
+      "from": "NetworkLayerProtocol",
+      "event": "receive AuthenticationRequest",
+      "action": "set authenticate",
+      "to": "Authenticate"
+    },
+    {
+      "from": "Closing",
+      "event": "receive TerminateRequest",
+      "action": "set closing",
+      "to": "Closing"
+    },
+    {
+      "from": "Closing",
+      "event": "receive TerminateAck",
+      "action": "set dead",
+      "to": "Dead"
+    },
+    {
+      "from": "Initial",
+      "event": "Up",
+      "action": "irc,scr",
+      "to": "Starting"
+    },
+    {
+      "from": "Initial",
+      "event": "Down",
+      "action": "tld",
+      "to": "Closed"
+    },
+    {
+      "from": "Initial",
+      "event": "Open",
+      "action": "tls",
+      "to": "Starting"
+    },
+    {
+      "from": "Initial",
+      "event": "Close",
+      "action": "tlf",
+      "to": "Initial"
+    },
+    {
+      "from": "Starting",
+      "event": "Down",
+      "action": "tls",
+      "to": "Closed"
+    },
+    {
+      "from": "Starting",
+      "event": "Open",
+      "action": "tls",
+      "to": "Starting"
+    },
+    {
+      "from": "Starting",
+      "event": "Close",
+      "action": "tlf",
+      "to": "Initial"
+    },
+    {
+      "from": "Closed",
+      "event": "Up",
+      "action": "tlu",
+      "to": "Starting"
+    },
+    {
+      "from": "Closed",
+      "event": "Down",
+      "action": "tld",
+      "to": "Closed"
+    },
+    {
+      "from": "Closed",
+      "event": "Open",
+      "action": "tls",
+      "to": "Starting"
+    },
+    {
+      "from": "Closed",
+      "event": "Close",
+      "action": "tlf",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "Up",
+      "action": "tlu",
+      "to": "Starting"
+    },
+    {
+      "from": "Stopped",
+      "event": "Down",
+      "action": "tld",
+      "to": "Stopped"
+    },
+    {
+      "from": "Stopped",
+      "event": "Open",
+      "action": "tls",
+      "to": "Starting"
+    },
+    {
+      "from": "Stopped",
+      "event": "Close",
+      "action": "tlf",
+      "to": "Stopped"
+    },
+    {
+      "from": "Closing",
+      "event": "Up",
+      "action": "str",
+      "to": "Closing"
+    },
+    {
+      "from": "Closing",
+      "event": "Down",
+      "action": "tld",
+      "to": "Closing"
+    },
+    {
+      "from": "Closing",
+      "event": "Open",
+      "action": "str",
+      "to": "Closing"
+    },
+    {
+      "from": "Closing",
+      "event": "Close",
+      "action": "tlf",
+      "to": "Closed"
+    },
+    {
+      "from": "Closing",
+      "event": "TO+",
+      "action": "str",
+      "to": "Closing"
+    },
+    {
+      "from": "Closing",
+      "event": "TO-",
+      "action": "tlf",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopping",
+      "event": "Up",
+      "action": "str",
+      "to": "Stopping"
+    },
+    {
+      "from": "Stopping",
+      "event": "Down",
+      "action": "tld",
+      "to": "Stopping"
+    },
+    {
+      "from": "Stopping",
+      "event": "Open",
+      "action": "str",
+      "to": "Stopping"
+    },
+    {
+      "from": "Stopping",
+      "event": "Close",
+      "action": "tlf",
+      "to": "Stopped"
+    },
+    {
+      "from": "Stopping",
+      "event": "TO+",
+      "action": "str",
+      "to": "Stopping"
+    },
+    {
+      "from": "Stopping",
+      "event": "TO-",
+      "action": "tlf",
+      "to": "Stopped"
+    },
+    {
+      "from": "ReqSent",
+      "event": "Up",
+      "action": "scr",
+      "to": "ReqSent"
+    },
+    {
+      "from": "ReqSent",
+      "event": "Down",
+      "action": "tld",
+      "to": "Stopped"
+    },
+    {
+      "from": "ReqSent",
+      "event": "Open",
+      "action": "scr",
+      "to": "ReqSent"
+    },
+    {
+      "from": "ReqSent",
+      "event": "Close",
+      "action": "irc,str",
+      "to": "Closing"
+    },
+    {
+      "from": "ReqSent",
+      "event": "TO+",
+      "action": "scr",
+      "to": "ReqSent"
+    },
+    {
+      "from": "ReqSent",
+      "event": "TO-",
+      "action": "tlf",
+      "to": "Stopped"
+    },
+    {
+      "from": "AckRcvd",
+      "event": "Up",
+      "action": "tlu",
+      "to": "AckRcvd"
+    },
+    {
+      "from": "AckRcvd",
+      "event": "Down",
+      "action": "tld",
+      "to": "Stopped"
+    },
+    {
+      "from": "AckRcvd",
+      "event": "Open",
+      "action": "scr",
+      "to": "AckRcvd"
+    },
+    {
+      "from": "AckRcvd",
+      "event": "Close",
+      "action": "irc,str",
+      "to": "Closing"
+    },
+    {
+      "from": "AckRcvd",
+      "event": "TO+",
+      "action": "scr",
+      "to": "AckRcvd"
+    },
+    {
+      "from": "AckRcvd",
+      "event": "TO-",
+      "action": "tlf",
+      "to": "Stopped"
+    },
+    {
+      "from": "AckSent",
+      "event": "Up",
+      "action": "tlu",
+      "to": "AckSent"
+    },
+    {
+      "from": "AckSent",
+      "event": "Down",
+      "action": "tld",
+      "to": "Stopped"
+    },
+    {
+      "from": "AckSent",
+      "event": "Open",
+      "action": "scr",
+      "to": "AckSent"
+    },
+    {
+      "from": "AckSent",
+      "event": "Close",
+      "action": "irc,str",
+      "to": "Closing"
+    },
+    {
+      "from": "AckSent",
+      "event": "TO+",
+      "action": "scr",
+      "to": "AckSent"
+    },
+    {
+      "from": "AckSent",
+      "event": "TO-",
+      "action": "tlf",
+      "to": "Stopped"
+    },
+    {
+      "from": "Opened",
+      "event": "Up",
+      "action": "tlu",
+      "to": "Opened"
+    },
+    {
+      "from": "Opened",
+      "event": "Down",
+      "action": "tld",
+      "to": "Stopped"
+    },
+    {
+      "from": "Opened",
+      "event": "Open",
+      "action": "scr",
+      "to": "Opened"
+    },
+    {
+      "from": "Opened",
+      "event": "Close",
+      "action": "tlf",
+      "to": "Closed"
+    },
+    {
+      "from": "Closed",
+      "event": "receive ConfigureRequest",
+      "action": "reply ConfigureAck",
+      "to": "Opened"
+    },
+    {
+      "from": "Closed",
+      "event": "receive ConfigureRequest",
+      "action": "reply ConfigureNak",
+      "to": "AwaitingRequest"
+    },
+    {
+      "from": "Closed",
+      "event": "receive ConfigureRequest",
+      "action": "reply ConfigureReject",
+      "to": "SendingReject"
+    },
+    {
+      "from": "Opened",
+      "event": "receive TerminateRequest",
+      "action": "reply TerminateAck",
+      "to": "Closed"
+    },
+    {
+      "from": "Opened",
+      "event": "receive EchoRequest",
+      "action": "reply EchoReply",
+      "to": "Opened"
+    },
+    {
+      "from": "Opened",
+      "event": "receive ProtocolReject",
+      "action": "log error",
+      "to": "Closed"
+    },
+    {
+      "from": "AwaitingRequest",
+      "event": "receive ConfigureRequest",
+      "action": "reply ConfigureAck",
+      "to": "Opened"
+    },
+    {
+      "from": "AwaitingRequest",
+      "event": "receive ConfigureRequest",
+      "action": "reply ConfigureNak",
+      "to": "AwaitingRequest"
+    },
+    {
+      "from": "AwaitingRequest",
+      "event": "receive ConfigureRequest",
+      "action": "reply ConfigureReject",
+      "to": "SendingReject"
+    },
+    {
+      "from": "SendingReject",
+      "event": "receive ConfigureRequest",
+      "action": "reply ConfigureReject",
+      "to": "SendingReject"
+    },
+    {
+      "from": "Initial",
+      "event": "send Configure-Request",
+      "action": "send request",
+      "to": "ConfigRequestSent"
+    },
+    {
+      "from": "ConfigRequestSent",
+      "event": "receive Configure-Nak",
+      "action": "send Nak",
+      "to": "ConfigNakSent"
+    },
+    {
+      "from": "ConfigRequestSent",
+      "event": "receive Configure-Ack",
+      "action": "set acked",
+      "to": "ConfigAckReceived"
+    },
+    {
+      "from": "ConfigNakSent",
+      "event": "receive Configure-Request with same Magic-Number",
+      "action": "set collision",
+      "to": "MagicNumberCollision"
+    },
+    {
+      "from": "MagicNumberCollision",
+      "event": "send Configure-Nak with different Magic-Number",
+      "action": "send nak",
+      "to": "ConfigNakSent"
+    },
+    {
+      "from": "MagicNumberCollision",
+      "event": "receive Configure-Request with different Magic-Number",
+      "action": "set no collision",
+      "to": "ConfigAckReceived"
+    },
+    {
+      "from": "ConfigAckReceived",
+      "event": "receive Magic-Number matching negotiated Magic-Number",
+      "action": "set loop detected",
+      "to": "LoopDetected"
+    }
+  ]
+}

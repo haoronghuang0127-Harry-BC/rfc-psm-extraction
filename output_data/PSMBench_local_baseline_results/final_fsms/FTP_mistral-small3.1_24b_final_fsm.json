@@ -1,0 +1,2439 @@
+{
+  "states": [
+    "AwaitingConnection",
+    "Connected",
+    "AwaitingPassword",
+    "AwaitingAccountInfo",
+    "Authenticated",
+    "TransferParametersSet",
+    "TransferInProgress",
+    "TransferComplete",
+    "LoggedOut",
+    "DataConnectionOpen",
+    "DataConnectionClosed",
+    "ServiceReady",
+    "ServiceClosing",
+    "ServiceNotAvailable",
+    "FileActionPending",
+    "FileActionCompleted",
+    "FileActionNotTaken",
+    "FileActionAborted",
+    "AccountRequired",
+    "PasswordRequired",
+    "CommandNotImplemented",
+    "CommandImplemented",
+    "SyntaxError",
+    "BadSequence",
+    "InsufficientStorage",
+    "ExceededStorage",
+    "FileNameNotAllowed",
+    "FileUnavailable",
+    "PageTypeUnknown",
+    "LocalError",
+    "SystemStatus",
+    "DirectoryStatus",
+    "FileStatus",
+    "HelpMessage",
+    "SystemType",
+    "RestartMarker",
+    "PassiveMode",
+    "DataConnectionAlreadyOpen",
+    "DataConnectionOpenNoTransfer",
+    "ServiceReadyInMinutes",
+    "UserLoggedIn",
+    "UserNotLoggedIn",
+    "CommandOkay",
+    "CommandNotImplementedSuperfluous",
+    "ServiceClosingControlConnection",
+    "ServiceNotAvailableClosingControlConnection",
+    "Can'tOpenDataConnection",
+    "ConnectionClosedTransferAborted",
+    "ClosingDataConnection",
+    "EnteringPassiveMode",
+    "AwaitingDataTransferCommand",
+    "DataTransferModeSelected",
+    "DataTransferModeStream",
+    "DataTransferModeBlock",
+    "DataTransferModeCompressed",
+    "AwaitingCommand",
+    "ProcessingMKD",
+    "ProcessingRMD",
+    "ProcessingPWD",
+    "ProcessingCDUP",
+    "DirectoryCreated",
+    "DirectoryRemoved",
+    "DirectoryChanged",
+    "DirectoryExists",
+    "AccessDenied",
+    "InvalidCommand",
+    "WaitingForReply",
+    "Success",
+    "Failure",
+    "Error",
+    "Begin"
+  ],
+  "initial_state": "AwaitingConnection",
+  "final_states": [
+    "LoggedOut",
+    "DataConnectionClosed",
+    "ServiceClosing",
+    "ServiceNotAvailable",
+    "FileActionNotTaken",
+    "FileActionAborted",
+    "AccountRequired",
+    "PasswordRequired",
+    "CommandNotImplemented",
+    "SyntaxError",
+    "BadSequence",
+    "InsufficientStorage",
+    "ExceededStorage",
+    "FileNameNotAllowed",
+    "FileUnavailable",
+    "PageTypeUnknown",
+    "LocalError",
+    "SystemStatus",
+    "DirectoryStatus",
+    "FileStatus",
+    "HelpMessage",
+    "SystemType",
+    "RestartMarker",
+    "PassiveMode",
+    "DataConnectionAlreadyOpen",
+    "DataConnectionOpenNoTransfer",
+    "ServiceReadyInMinutes",
+    "UserNotLoggedIn",
+    "CommandNotImplementedSuperfluous",
+    "ServiceClosingControlConnection",
+    "ServiceNotAvailableClosingControlConnection",
+    "Can'tOpenDataConnection",
+    "ConnectionClosedTransferAborted",
+    "ClosingDataConnection",
+    "EnteringPassiveMode",
+    "DirectoryCreated",
+    "DirectoryRemoved",
+    "DirectoryChanged",
+    "DirectoryExists",
+    "AccessDenied",
+    "InvalidCommand",
+    "Failure",
+    "Error"
+  ],
+  "transitions": [
+    {
+      "from": "AwaitingConnection",
+      "event": "receive 220",
+      "action": "reply 220",
+      "to": "Connected"
+    },
+    {
+      "from": "AwaitingConnection",
+      "event": "receive 120",
+      "action": "reply 120",
+      "to": "Connected"
+    },
+    {
+      "from": "AwaitingConnection",
+      "event": "receive 421",
+      "action": "reply 421",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "Connected",
+      "event": "receive USER",
+      "action": "reply 331",
+      "to": "AwaitingPassword"
+    },
+    {
+      "from": "Connected",
+      "event": "receive USER",
+      "action": "reply 530",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "Connected",
+      "event": "receive USER",
+      "action": "reply 500",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "receive USER",
+      "action": "reply 501",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "receive USER",
+      "action": "reply 421",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "AwaitingPassword",
+      "event": "receive PASS",
+      "action": "reply 230",
+      "to": "Authenticated"
+    },
+    {
+      "from": "AwaitingPassword",
+      "event": "receive PASS",
+      "action": "reply 530",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "AwaitingPassword",
+      "event": "receive PASS",
+      "action": "reply 500",
+      "to": "Connected"
+    },
+    {
+      "from": "AwaitingPassword",
+      "event": "receive PASS",
+      "action": "reply 501",
+      "to": "Connected"
+    },
+    {
+      "from": "AwaitingPassword",
+      "event": "receive PASS",
+      "action": "reply 503",
+      "to": "Connected"
+    },
+    {
+      "from": "AwaitingPassword",
+      "event": "receive PASS",
+      "action": "reply 421",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "AwaitingPassword",
+      "event": "receive PASS",
+      "action": "reply 332",
+      "to": "AwaitingAccountInfo"
+    },
+    {
+      "from": "AwaitingAccountInfo",
+      "event": "receive ACCT",
+      "action": "reply 230",
+      "to": "Authenticated"
+    },
+    {
+      "from": "AwaitingAccountInfo",
+      "event": "receive ACCT",
+      "action": "reply 202",
+      "to": "Authenticated"
+    },
+    {
+      "from": "AwaitingAccountInfo",
+      "event": "receive ACCT",
+      "action": "reply 530",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "AwaitingAccountInfo",
+      "event": "receive ACCT",
+      "action": "reply 500",
+      "to": "Connected"
+    },
+    {
+      "from": "AwaitingAccountInfo",
+      "event": "receive ACCT",
+      "action": "reply 501",
+      "to": "Connected"
+    },
+    {
+      "from": "AwaitingAccountInfo",
+      "event": "receive ACCT",
+      "action": "reply 503",
+      "to": "Connected"
+    },
+    {
+      "from": "AwaitingAccountInfo",
+      "event": "receive ACCT",
+      "action": "reply 421",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive PORT",
+      "action": "reply 200",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive PORT",
+      "action": "reply 500",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive PORT",
+      "action": "reply 501",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive PORT",
+      "action": "reply 421",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive PORT",
+      "action": "reply 530",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive PASV",
+      "action": "reply 227",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive PASV",
+      "action": "reply 500",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive PASV",
+      "action": "reply 501",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive PASV",
+      "action": "reply 502",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive PASV",
+      "action": "reply 421",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive PASV",
+      "action": "reply 530",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive MODE",
+      "action": "reply 200",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive MODE",
+      "action": "reply 500",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive MODE",
+      "action": "reply 501",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive MODE",
+      "action": "reply 504",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive MODE",
+      "action": "reply 421",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive MODE",
+      "action": "reply 530",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive TYPE",
+      "action": "reply 200",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive TYPE",
+      "action": "reply 500",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive TYPE",
+      "action": "reply 501",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive TYPE",
+      "action": "reply 504",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive TYPE",
+      "action": "reply 421",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive TYPE",
+      "action": "reply 530",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive STRU",
+      "action": "reply 200",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive STRU",
+      "action": "reply 500",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive STRU",
+      "action": "reply 501",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive STRU",
+      "action": "reply 504",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive STRU",
+      "action": "reply 421",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive STRU",
+      "action": "reply 530",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RETR",
+      "action": "reply 125",
+      "to": "TransferInProgress"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RETR",
+      "action": "reply 150",
+      "to": "TransferInProgress"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RETR",
+      "action": "reply 110",
+      "to": "TransferInProgress"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RETR",
+      "action": "reply 226",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RETR",
+      "action": "reply 250",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RETR",
+      "action": "reply 425",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RETR",
+      "action": "reply 426",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RETR",
+      "action": "reply 451",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RETR",
+      "action": "reply 551",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RETR",
+      "action": "reply 552",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RETR",
+      "action": "reply 450",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RETR",
+      "action": "reply 550",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RETR",
+      "action": "reply 500",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RETR",
+      "action": "reply 501",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RETR",
+      "action": "reply 421",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RETR",
+      "action": "reply 530",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOR",
+      "action": "reply 125",
+      "to": "TransferInProgress"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOR",
+      "action": "reply 150",
+      "to": "TransferInProgress"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOR",
+      "action": "reply 110",
+      "to": "TransferInProgress"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOR",
+      "action": "reply 226",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOR",
+      "action": "reply 250",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOR",
+      "action": "reply 425",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOR",
+      "action": "reply 426",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOR",
+      "action": "reply 451",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOR",
+      "action": "reply 551",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOR",
+      "action": "reply 552",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOR",
+      "action": "reply 532",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOR",
+      "action": "reply 450",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOR",
+      "action": "reply 452",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOR",
+      "action": "reply 553",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOR",
+      "action": "reply 500",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOR",
+      "action": "reply 501",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOR",
+      "action": "reply 421",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOR",
+      "action": "reply 530",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOU",
+      "action": "reply 125",
+      "to": "TransferInProgress"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOU",
+      "action": "reply 150",
+      "to": "TransferInProgress"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOU",
+      "action": "reply 110",
+      "to": "TransferInProgress"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOU",
+      "action": "reply 226",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOU",
+      "action": "reply 250",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOU",
+      "action": "reply 425",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOU",
+      "action": "reply 426",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOU",
+      "action": "reply 451",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOU",
+      "action": "reply 551",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOU",
+      "action": "reply 552",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOU",
+      "action": "reply 532",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOU",
+      "action": "reply 450",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOU",
+      "action": "reply 452",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOU",
+      "action": "reply 553",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOU",
+      "action": "reply 500",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOU",
+      "action": "reply 501",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOU",
+      "action": "reply 421",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STOU",
+      "action": "reply 530",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive LIST",
+      "action": "reply 125",
+      "to": "TransferInProgress"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive LIST",
+      "action": "reply 150",
+      "to": "TransferInProgress"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive LIST",
+      "action": "reply 226",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive LIST",
+      "action": "reply 250",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive LIST",
+      "action": "reply 425",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive LIST",
+      "action": "reply 426",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive LIST",
+      "action": "reply 451",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive LIST",
+      "action": "reply 450",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive LIST",
+      "action": "reply 500",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive LIST",
+      "action": "reply 501",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive LIST",
+      "action": "reply 502",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive LIST",
+      "action": "reply 421",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive LIST",
+      "action": "reply 530",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive NLST",
+      "action": "reply 125",
+      "to": "TransferInProgress"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive NLST",
+      "action": "reply 150",
+      "to": "TransferInProgress"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive NLST",
+      "action": "reply 226",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive NLST",
+      "action": "reply 250",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive NLST",
+      "action": "reply 425",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive NLST",
+      "action": "reply 426",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive NLST",
+      "action": "reply 451",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive NLST",
+      "action": "reply 450",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive NLST",
+      "action": "reply 500",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive NLST",
+      "action": "reply 501",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive NLST",
+      "action": "reply 502",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive NLST",
+      "action": "reply 421",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive NLST",
+      "action": "reply 530",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive APPE",
+      "action": "reply 125",
+      "to": "TransferInProgress"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive APPE",
+      "action": "reply 150",
+      "to": "TransferInProgress"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive APPE",
+      "action": "reply 110",
+      "to": "TransferInProgress"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive APPE",
+      "action": "reply 226",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive APPE",
+      "action": "reply 250",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive APPE",
+      "action": "reply 425",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive APPE",
+      "action": "reply 426",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive APPE",
+      "action": "reply 451",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive APPE",
+      "action": "reply 551",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive APPE",
+      "action": "reply 552",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive APPE",
+      "action": "reply 532",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive APPE",
+      "action": "reply 450",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive APPE",
+      "action": "reply 550",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive APPE",
+      "action": "reply 452",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive APPE",
+      "action": "reply 553",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive APPE",
+      "action": "reply 500",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive APPE",
+      "action": "reply 501",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive APPE",
+      "action": "reply 502",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive APPE",
+      "action": "reply 421",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive APPE",
+      "action": "reply 530",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RNFR",
+      "action": "reply 450",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RNFR",
+      "action": "reply 550",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RNFR",
+      "action": "reply 500",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RNFR",
+      "action": "reply 501",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RNFR",
+      "action": "reply 502",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RNFR",
+      "action": "reply 421",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RNFR",
+      "action": "reply 530",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RNFR",
+      "action": "reply 350",
+      "to": "AwaitingRnto"
+    },
+    {
+      "from": "AwaitingRnto",
+      "event": "receive RNTO",
+      "action": "reply 250",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "AwaitingRnto",
+      "event": "receive RNTO",
+      "action": "reply 532",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "AwaitingRnto",
+      "event": "receive RNTO",
+      "action": "reply 553",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "AwaitingRnto",
+      "event": "receive RNTO",
+      "action": "reply 500",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "AwaitingRnto",
+      "event": "receive RNTO",
+      "action": "reply 501",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "AwaitingRnto",
+      "event": "receive RNTO",
+      "action": "reply 502",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "AwaitingRnto",
+      "event": "receive RNTO",
+      "action": "reply 503",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "AwaitingRnto",
+      "event": "receive RNTO",
+      "action": "reply 421",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "AwaitingRnto",
+      "event": "receive RNTO",
+      "action": "reply 530",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive DELE",
+      "action": "reply 250",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive DELE",
+      "action": "reply 450",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive DELE",
+      "action": "reply 550",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive DELE",
+      "action": "reply 500",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive DELE",
+      "action": "reply 501",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive DELE",
+      "action": "reply 502",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive DELE",
+      "action": "reply 421",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive DELE",
+      "action": "reply 530",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RMD",
+      "action": "reply 250",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RMD",
+      "action": "reply 500",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RMD",
+      "action": "reply 501",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RMD",
+      "action": "reply 502",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RMD",
+      "action": "reply 421",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RMD",
+      "action": "reply 530",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive RMD",
+      "action": "reply 550",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive MKD",
+      "action": "reply 257",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive MKD",
+      "action": "reply 500",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive MKD",
+      "action": "reply 501",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive MKD",
+      "action": "reply 502",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive MKD",
+      "action": "reply 421",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive MKD",
+      "action": "reply 530",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive MKD",
+      "action": "reply 550",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive PWD",
+      "action": "reply 257",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive PWD",
+      "action": "reply 500",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive PWD",
+      "action": "reply 501",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive PWD",
+      "action": "reply 502",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive PWD",
+      "action": "reply 421",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive PWD",
+      "action": "reply 550",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive ABOR",
+      "action": "reply 225",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive ABOR",
+      "action": "reply 226",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive ABOR",
+      "action": "reply 500",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive ABOR",
+      "action": "reply 501",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive ABOR",
+      "action": "reply 502",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive ABOR",
+      "action": "reply 421",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive SYST",
+      "action": "reply 215",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive SYST",
+      "action": "reply 500",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive SYST",
+      "action": "reply 501",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive SYST",
+      "action": "reply 502",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive SYST",
+      "action": "reply 421",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STAT",
+      "action": "reply 211",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STAT",
+      "action": "reply 212",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STAT",
+      "action": "reply 213",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STAT",
+      "action": "reply 450",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STAT",
+      "action": "reply 500",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STAT",
+      "action": "reply 501",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STAT",
+      "action": "reply 502",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STAT",
+      "action": "reply 421",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive STAT",
+      "action": "reply 530",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive HELP",
+      "action": "reply 211",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive HELP",
+      "action": "reply 214",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive HELP",
+      "action": "reply 500",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive HELP",
+      "action": "reply 501",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive HELP",
+      "action": "reply 502",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive HELP",
+      "action": "reply 421",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive SITE",
+      "action": "reply 200",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive SITE",
+      "action": "reply 202",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive SITE",
+      "action": "reply 500",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive SITE",
+      "action": "reply 501",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive SITE",
+      "action": "reply 530",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive NOOP",
+      "action": "reply 200",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive NOOP",
+      "action": "reply 500",
+      "to": "TransferParametersSet"
+    },
+    {
+      "from": "TransferParametersSet",
+      "event": "receive NOOP",
+      "action": "reply 421",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive QUIT",
+      "action": "reply 500",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive REIN",
+      "action": "reply 120",
+      "to": "AwaitingConnection"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive REIN",
+      "action": "reply 220",
+      "to": "Connected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive REIN",
+      "action": "reply 421",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive REIN",
+      "action": "reply 500",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive REIN",
+      "action": "reply 502",
+      "to": "Authenticated"
+    },
+    {
+      "from": "TransferComplete",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferComplete",
+      "event": "receive QUIT",
+      "action": "reply 500",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferComplete",
+      "event": "receive REIN",
+      "action": "reply 120",
+      "to": "AwaitingConnection"
+    },
+    {
+      "from": "TransferComplete",
+      "event": "receive REIN",
+      "action": "reply 220",
+      "to": "Connected"
+    },
+    {
+      "from": "TransferComplete",
+      "event": "receive REIN",
+      "action": "reply 421",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "TransferComplete",
+      "event": "receive REIN",
+      "action": "reply 500",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferComplete",
+      "event": "receive REIN",
+      "action": "reply 502",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "receive USER",
+      "action": "reply 331",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive PASS",
+      "action": "reply 230",
+      "to": "Authenticated"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive PASS",
+      "action": "reply 332",
+      "to": "AccountRequired"
+    },
+    {
+      "from": "AccountRequired",
+      "event": "receive ACCT",
+      "action": "reply 230",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "LoggedOut"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive ABOR",
+      "action": "reply 226",
+      "to": "DataConnectionClosed"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive ABOR",
+      "action": "reply 426",
+      "to": "DataConnectionClosed"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive PORT",
+      "action": "reply 200",
+      "to": "DataConnectionOpen"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive PASV",
+      "action": "reply 227",
+      "to": "DataConnectionOpen"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive TYPE",
+      "action": "reply 200",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive STRU",
+      "action": "reply 200",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive MODE",
+      "action": "reply 200",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive RETR",
+      "action": "reply 150",
+      "to": "TransferInProgress"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive STOR",
+      "action": "reply 150",
+      "to": "TransferInProgress"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive STOU",
+      "action": "reply 250",
+      "to": "FileActionCompleted"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive APPE",
+      "action": "reply 150",
+      "to": "TransferInProgress"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive ALLO",
+      "action": "reply 200",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive REST",
+      "action": "reply 110",
+      "to": "TransferInProgress"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive RNFR",
+      "action": "reply 350",
+      "to": "FileActionPending"
+    },
+    {
+      "from": "FileActionPending",
+      "event": "receive RNTO",
+      "action": "reply 250",
+      "to": "FileActionCompleted"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive DELE",
+      "action": "reply 250",
+      "to": "FileActionCompleted"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive RMD",
+      "action": "reply 250",
+      "to": "FileActionCompleted"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive MKD",
+      "action": "reply 257",
+      "to": "FileActionCompleted"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive PWD",
+      "action": "reply 257",
+      "to": "FileActionCompleted"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive LIST",
+      "action": "reply 150",
+      "to": "TransferInProgress"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive NLST",
+      "action": "reply 150",
+      "to": "TransferInProgress"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive SITE",
+      "action": "reply 200",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive SYST",
+      "action": "reply 215",
+      "to": "SystemType"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive STAT",
+      "action": "reply 211",
+      "to": "SystemStatus"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive HELP",
+      "action": "reply 214",
+      "to": "HelpMessage"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive NOOP",
+      "action": "reply 200",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "TransferInProgress",
+      "event": "send 226",
+      "action": "close data connection",
+      "to": "DataConnectionClosed"
+    },
+    {
+      "from": "TransferInProgress",
+      "event": "send 426",
+      "action": "close data connection",
+      "to": "DataConnectionClosed"
+    },
+    {
+      "from": "TransferInProgress",
+      "event": "send 225",
+      "action": "open data connection",
+      "to": "DataConnectionOpen"
+    },
+    {
+      "from": "TransferInProgress",
+      "event": "send 227",
+      "action": "enter passive mode",
+      "to": "DataConnectionOpen"
+    },
+    {
+      "from": "TransferInProgress",
+      "event": "send 125",
+      "action": "open data connection",
+      "to": "DataConnectionOpen"
+    },
+    {
+      "from": "TransferInProgress",
+      "event": "send 250",
+      "action": "complete file action",
+      "to": "FileActionCompleted"
+    },
+    {
+      "from": "TransferInProgress",
+      "event": "send 450",
+      "action": "file unavailable",
+      "to": "FileActionNotTaken"
+    },
+    {
+      "from": "TransferInProgress",
+      "event": "send 550",
+      "action": "file unavailable",
+      "to": "FileActionNotTaken"
+    },
+    {
+      "from": "TransferInProgress",
+      "event": "send 451",
+      "action": "local error",
+      "to": "FileActionAborted"
+    },
+    {
+      "from": "TransferInProgress",
+      "event": "send 551",
+      "action": "page type unknown",
+      "to": "FileActionAborted"
+    },
+    {
+      "from": "TransferInProgress",
+      "event": "send 452",
+      "action": "insufficient storage",
+      "to": "FileActionNotTaken"
+    },
+    {
+      "from": "TransferInProgress",
+      "event": "send 552",
+      "action": "exceeded storage",
+      "to": "FileActionNotTaken"
+    },
+    {
+      "from": "TransferInProgress",
+      "event": "send 553",
+      "action": "file name not allowed",
+      "to": "FileActionNotTaken"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 200",
+      "action": "command okay",
+      "to": "CommandOkay"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 202",
+      "action": "command not implemented",
+      "to": "CommandNotImplementedSuperfluous"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 500",
+      "action": "syntax error",
+      "to": "SyntaxError"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 501",
+      "action": "syntax error",
+      "to": "SyntaxError"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 502",
+      "action": "command not implemented",
+      "to": "CommandNotImplemented"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 503",
+      "action": "bad sequence",
+      "to": "BadSequence"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 504",
+      "action": "command not implemented for parameter",
+      "to": "CommandNotImplemented"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 530",
+      "action": "not logged in",
+      "to": "UserNotLoggedIn"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 532",
+      "action": "account required",
+      "to": "AccountRequired"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 211",
+      "action": "system status",
+      "to": "SystemStatus"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 212",
+      "action": "directory status",
+      "to": "DirectoryStatus"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 213",
+      "action": "file status",
+      "to": "FileStatus"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 214",
+      "action": "help message",
+      "to": "HelpMessage"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 215",
+      "action": "system type",
+      "to": "SystemType"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 120",
+      "action": "service ready in minutes",
+      "to": "ServiceReadyInMinutes"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 220",
+      "action": "service ready for new user",
+      "to": "ServiceReady"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 221",
+      "action": "service closing control connection",
+      "to": "ServiceClosing"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 421",
+      "action": "service not available",
+      "to": "ServiceNotAvailable"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 125",
+      "action": "data connection already open",
+      "to": "DataConnectionAlreadyOpen"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 225",
+      "action": "data connection open",
+      "to": "DataConnectionOpenNoTransfer"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 425",
+      "action": "can't open data connection",
+      "to": "DataConnectionClosed"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 226",
+      "action": "closing data connection",
+      "to": "DataConnectionClosed"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 426",
+      "action": "connection closed",
+      "to": "DataConnectionClosed"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 227",
+      "action": "entering passive mode",
+      "to": "EnteringPassiveMode"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 230",
+      "action": "user logged in",
+      "to": "UserLoggedIn"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 331",
+      "action": "password required",
+      "to": "PasswordRequired"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 332",
+      "action": "account required",
+      "to": "AccountRequired"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 350",
+      "action": "file action pending",
+      "to": "FileActionPending"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 450",
+      "action": "file action not taken",
+      "to": "FileActionNotTaken"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 550",
+      "action": "file action not taken",
+      "to": "FileActionNotTaken"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 451",
+      "action": "local error",
+      "to": "LocalError"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 551",
+      "action": "page type unknown",
+      "to": "PageTypeUnknown"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 452",
+      "action": "insufficient storage",
+      "to": "InsufficientStorage"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 552",
+      "action": "exceeded storage",
+      "to": "ExceededStorage"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "send 553",
+      "action": "file name not allowed",
+      "to": "FileNameNotAllowed"
+    },
+    {
+      "from": "Begin",
+      "event": "receive cmd",
+      "action": "send 1",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 2",
+      "action": "reply 2",
+      "to": "Success"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 4",
+      "action": "reply 4",
+      "to": "Failure"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 5",
+      "action": "reply 5",
+      "to": "Failure"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 1",
+      "action": "reply 1",
+      "to": "Error"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 3",
+      "action": "reply 3",
+      "to": "Error"
+    },
+    {
+      "from": "Begin",
+      "event": "receive RNFR",
+      "action": "send 1",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 1",
+      "action": "reply 1",
+      "to": "Error"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 2",
+      "action": "reply 2",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 3",
+      "action": "reply 3",
+      "to": "Error"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 4",
+      "action": "reply 4",
+      "to": "Failure"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 5",
+      "action": "reply 5",
+      "to": "Failure"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive RNTO",
+      "action": "send 1",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 1",
+      "action": "reply 1",
+      "to": "Error"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 3",
+      "action": "reply 3",
+      "to": "Success"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 4",
+      "action": "reply 4",
+      "to": "Failure"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 5",
+      "action": "reply 5",
+      "to": "Failure"
+    },
+    {
+      "from": "Begin",
+      "event": "receive REST",
+      "action": "send 1",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 1",
+      "action": "reply 1",
+      "to": "Error"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 2",
+      "action": "reply 2",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 3",
+      "action": "reply 3",
+      "to": "Success"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 4",
+      "action": "reply 4",
+      "to": "Failure"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 5",
+      "action": "reply 5",
+      "to": "Failure"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive cmd",
+      "action": "send 1",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 1",
+      "action": "reply 1",
+      "to": "Error"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 4",
+      "action": "reply 4",
+      "to": "Failure"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 5",
+      "action": "reply 5",
+      "to": "Failure"
+    },
+    {
+      "from": "Begin",
+      "event": "receive USER",
+      "action": "send 1",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 1",
+      "action": "reply 1",
+      "to": "Error"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 2",
+      "action": "reply 2",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 3",
+      "action": "reply 3",
+      "to": "Error"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 4",
+      "action": "reply 4",
+      "to": "Failure"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 5",
+      "action": "reply 5",
+      "to": "Failure"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive PASS",
+      "action": "send 1",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 1",
+      "action": "reply 1",
+      "to": "Error"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 2",
+      "action": "reply 2",
+      "to": "Success"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 3",
+      "action": "reply 3",
+      "to": "Error"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 4",
+      "action": "reply 4",
+      "to": "Failure"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 5",
+      "action": "reply 5",
+      "to": "Failure"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive ACCT",
+      "action": "send 1",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 1",
+      "action": "reply 1",
+      "to": "Error"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 3",
+      "action": "reply 3",
+      "to": "Success"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 4",
+      "action": "reply 4",
+      "to": "Failure"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "receive 5",
+      "action": "reply 5",
+      "to": "Failure"
+    },
+    {
+      "from": "Initial",
+      "event": "receive connect",
+      "action": "reply 220",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "receive USER",
+      "action": "reply 331",
+      "to": "AwaitingPassword"
+    },
+    {
+      "from": "AwaitingPassword",
+      "event": "receive PASS",
+      "action": "reply 230",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive RETR",
+      "action": "reply 150",
+      "to": "TransferInProgress"
+    },
+    {
+      "from": "TransferInProgress",
+      "event": "receive data",
+      "action": "reply 226",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive TYPE",
+      "action": "reply 200",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive STOR",
+      "action": "reply 550",
+      "to": "AccessDenied"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive QUIT",
+      "action": "close connections",
+      "to": "Terminated"
+    },
+    {
+      "from": "TransferComplete",
+      "event": "receive QUIT",
+      "action": "close connections",
+      "to": "Terminated"
+    },
+    {
+      "from": "AccessDenied",
+      "event": "receive QUIT",
+      "action": "close connections",
+      "to": "Terminated"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive MKD",
+      "action": "set ProcessingMKD",
+      "to": "ProcessingMKD"
+    },
+    {
+      "from": "ProcessingMKD",
+      "event": "cond directory created",
+      "action": "reply 257",
+      "to": "DirectoryCreated"
+    },
+    {
+      "from": "ProcessingMKD",
+      "event": "cond directory exists",
+      "action": "reply 521",
+      "to": "DirectoryExists"
+    },
+    {
+      "from": "ProcessingMKD",
+      "event": "cond access denied",
+      "action": "reply 521",
+      "to": "AccessDenied"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive RMD",
+      "action": "set ProcessingRMD",
+      "to": "ProcessingRMD"
+    },
+    {
+      "from": "ProcessingRMD",
+      "event": "cond directory removed",
+      "action": "reply 250",
+      "to": "DirectoryRemoved"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive PWD",
+      "action": "set ProcessingPWD",
+      "to": "ProcessingPWD"
+    },
+    {
+      "from": "ProcessingPWD",
+      "event": "cond directory changed",
+      "action": "reply 257",
+      "to": "DirectoryChanged"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive CDUP",
+      "action": "set ProcessingCDUP",
+      "to": "ProcessingCDUP"
+    },
+    {
+      "from": "ProcessingCDUP",
+      "event": "cond directory changed",
+      "action": "reply 250",
+      "to": "DirectoryChanged"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive invalid command",
+      "action": "reply 500",
+      "to": "InvalidCommand"
+    }
+  ]
+}

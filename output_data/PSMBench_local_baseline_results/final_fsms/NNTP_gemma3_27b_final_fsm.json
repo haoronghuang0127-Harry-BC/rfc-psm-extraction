@@ -1,0 +1,430 @@
+{
+  "states": [
+    "Initial",
+    "Connected",
+    "AwaitingCommand",
+    "Authenticated",
+    "DataTransfer",
+    "Closing",
+    "ReaderMode",
+    "TransitMode",
+    "ClosingConnection",
+    "Success",
+    "Failure",
+    "NoNewsgroup",
+    "InvalidArticleNumber",
+    "NoCurrentArticle",
+    "SendingHelp",
+    "SendingList",
+    "SendingNewgroups",
+    "SendingNewnews",
+    "ProcessingOver",
+    "ProcessingHdr",
+    "ProcessingListHeaders",
+    "EncryptedLink",
+    "PasswordAccepted",
+    "PostingArticle",
+    "TransferringArticle"
+  ],
+  "initial_state": "Initial",
+  "final_states": [
+    "Closing",
+    "ClosingConnection",
+    "Failure",
+    "NoNewsgroup",
+    "InvalidArticleNumber",
+    "NoCurrentArticle"
+  ],
+  "transitions": [
+    {
+      "from": "Initial",
+      "event": "receive connection",
+      "action": "send greeting",
+      "to": "Connected"
+    },
+    {
+      "from": "Initial",
+      "event": "receive InitialConnection",
+      "action": "reply 200",
+      "to": "InitialConnection"
+    },
+    {
+      "from": "Initial",
+      "event": "receive InitialConnection",
+      "action": "reply 201",
+      "to": "InitialConnection"
+    },
+    {
+      "from": "Initial",
+      "event": "receive InitialConnection",
+      "action": "reply 400",
+      "to": "ClosingConnection"
+    },
+    {
+      "from": "Initial",
+      "event": "receive InitialConnection",
+      "action": "reply 502",
+      "to": "ClosingConnection"
+    },
+    {
+      "from": "Initial",
+      "event": "receive CAPABILITIES",
+      "action": "reply 101",
+      "to": "InitialConnection"
+    },
+    {
+      "from": "Initial",
+      "event": "receive MODE READER",
+      "action": "reply 200",
+      "to": "InitialConnection"
+    },
+    {
+      "from": "Initial",
+      "event": "receive MODE READER",
+      "action": "reply 201",
+      "to": "InitialConnection"
+    },
+    {
+      "from": "Initial",
+      "event": "receive MODE READER",
+      "action": "reply 502",
+      "to": "ClosingConnection"
+    },
+    {
+      "from": "Initial",
+      "event": "receive POST",
+      "action": "reply 340",
+      "to": "AwaitingArticle"
+    },
+    {
+      "from": "Initial",
+      "event": "receive IHAVE",
+      "action": "reply 335",
+      "to": "TransferringArticle"
+    },
+    {
+      "from": "Initial",
+      "event": "receive ARTICLE",
+      "action": "reply 412",
+      "to": "NoNewsgroup"
+    },
+    {
+      "from": "Initial",
+      "event": "receive ARTICLE",
+      "action": "reply 423",
+      "to": "InvalidArticleNumber"
+    },
+    {
+      "from": "Initial",
+      "event": "receive ARTICLE",
+      "action": "reply 420",
+      "to": "NoCurrentArticle"
+    },
+    {
+      "from": "Initial",
+      "event": "receive DATE",
+      "action": "reply 111",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "Initial",
+      "event": "receive HELP",
+      "action": "reply 100",
+      "to": "SendingHelp"
+    },
+    {
+      "from": "Initial",
+      "event": "receive NEWGROUPS",
+      "action": "reply 231",
+      "to": "SendingNewgroups"
+    },
+    {
+      "from": "Initial",
+      "event": "receive NEWNEWS",
+      "action": "reply 230",
+      "to": "SendingNewnews"
+    },
+    {
+      "from": "Initial",
+      "event": "receive LIST",
+      "action": "reply 215",
+      "to": "SendingList"
+    },
+    {
+      "from": "Initial",
+      "event": "receive OVER",
+      "action": "reply 224",
+      "to": "ProcessingOver"
+    },
+    {
+      "from": "Initial",
+      "event": "receive HDR",
+      "action": "reply 225",
+      "to": "ProcessingHdr"
+    },
+    {
+      "from": "Initial",
+      "event": "receive LIST HEADERS",
+      "action": "reply 215",
+      "to": "ProcessingListHeaders"
+    },
+    {
+      "from": "Initial",
+      "event": "receive initial connection",
+      "action": "reply 200",
+      "to": "Connected"
+    },
+    {
+      "from": "Initial",
+      "event": "receive initial connection",
+      "action": "reply 201",
+      "to": "Connected"
+    },
+    {
+      "from": "Initial",
+      "event": "receive initial connection",
+      "action": "reply 400",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "receive initial connection",
+      "action": "reply 502",
+      "to": "Initial"
+    },
+    {
+      "from": "Connected",
+      "event": "receive command",
+      "action": "reply 500",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "receive command",
+      "action": "reply 290",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Connected",
+      "event": "receive MODE READER",
+      "action": "reply 200",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "Connected",
+      "event": "receive MODE READER",
+      "action": "reply 201",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive command",
+      "action": "reply 200",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive command",
+      "action": "reply 3xx",
+      "to": "DataTransfer"
+    },
+    {
+      "from": "Authenticated",
+      "event": "timeout inactivity",
+      "action": "close connection",
+      "to": "Closing"
+    },
+    {
+      "from": "DataTransfer",
+      "event": "receive data",
+      "action": "collect data",
+      "to": "DataTransfer"
+    },
+    {
+      "from": "DataTransfer",
+      "event": "receive termination",
+      "action": "process data",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Closing",
+      "event": "connection closed",
+      "action": "stop",
+      "to": "Initial"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive DATE",
+      "action": "reply 111",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive HELP",
+      "action": "reply 100",
+      "to": "SendingHelp"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive NEWGROUPS",
+      "action": "reply 231",
+      "to": "SendingNewgroups"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive NEWNEWS",
+      "action": "reply 230",
+      "to": "SendingNewnews"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive LIST",
+      "action": "reply 215",
+      "to": "SendingList"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive POST",
+      "action": "reply 340",
+      "to": "PostingArticle"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive IHAVE",
+      "action": "reply 335",
+      "to": "TransferringArticle"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive OVER",
+      "action": "reply 224",
+      "to": "ProcessingOver"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive HDR",
+      "action": "reply 225",
+      "to": "ProcessingHdr"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive LIST HEADERS",
+      "action": "reply 215",
+      "to": "ProcessingListHeaders"
+    },
+    {
+      "from": "SendingHelp",
+      "event": "send multi-line data",
+      "action": "reply .",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "SendingList",
+      "event": "send multi-line data",
+      "action": "reply .",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "SendingNewgroups",
+      "event": "send multi-line data",
+      "action": "reply .",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "SendingNewnews",
+      "event": "send multi-line data",
+      "action": "reply .",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "ProcessingOver",
+      "event": "receive message-id",
+      "action": "reply 430",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "ProcessingOver",
+      "event": "receive range",
+      "action": "reply 412",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "ProcessingOver",
+      "event": "receive empty range",
+      "action": "reply 423",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "ProcessingHdr",
+      "event": "receive message-id",
+      "action": "reply 430",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "ProcessingHdr",
+      "event": "receive range",
+      "action": "reply 412",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "ProcessingHdr",
+      "event": "receive empty range",
+      "action": "reply 423",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "ProcessingListHeaders",
+      "event": "receive MSGID",
+      "action": "reply 215",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "ProcessingListHeaders",
+      "event": "receive RANGE",
+      "action": "reply 215",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "PostingArticle",
+      "event": "receive article data",
+      "action": "reply 240",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "TransferringArticle",
+      "event": "receive article data",
+      "action": "reply 235",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingArticle",
+      "event": "receive article data",
+      "action": "reply 240",
+      "to": "Success"
+    },
+    {
+      "from": "AwaitingArticle",
+      "event": "receive article data",
+      "action": "reply 441",
+      "to": "Failure"
+    },
+    {
+      "from": "TransferringArticle",
+      "event": "receive article data",
+      "action": "reply 235",
+      "to": "Success"
+    },
+    {
+      "from": "TransferringArticle",
+      "event": "receive article data",
+      "action": "reply 436",
+      "to": "TransferringArticle"
+    },
+    {
+      "from": "TransferringArticle",
+      "event": "receive article data",
+      "action": "reply 437",
+      "to": "Failure"
+    }
+  ]
+}

@@ -1,0 +1,413 @@
+{
+  "states": [
+    "Closed",
+    "Listen",
+    "Request",
+    "Respond",
+    "PartOpen",
+    "Open",
+    "CloseReq",
+    "Closing",
+    "TimeWait",
+    "Stable",
+    "Changing",
+    "Unstable",
+    "Received",
+    "Acknowledged",
+    "DeliveredCorrupt",
+    "Dropped",
+    "Processed",
+    "PacketArrival",
+    "NewPackets",
+    "OldPackets",
+    "SendingAcknowledgements",
+    "ClearingState",
+    "ProcessingAcknowledgements"
+  ],
+  "initial_state": "Closed",
+  "final_states": [
+    "Closed",
+    "TimeWait",
+    "Processed"
+  ],
+  "transitions": [
+    {
+      "from": "Closed",
+      "event": "send DCCP-Request",
+      "action": "set Request",
+      "to": "Request"
+    },
+    {
+      "from": "Closed",
+      "event": "receive DCCP-Request",
+      "action": "send DCCP-Response",
+      "to": "Listen"
+    },
+    {
+      "from": "Closed",
+      "event": "receive DCCPRequest",
+      "action": "send DCCPResponse",
+      "to": "Open"
+    },
+    {
+      "from": "Closed",
+      "event": "receive DCCPData",
+      "action": "send DCCPSync",
+      "to": "Closed"
+    },
+    {
+      "from": "Closed",
+      "event": "receive DCCPReset",
+      "action": "send DCCPSync",
+      "to": "Closed"
+    },
+    {
+      "from": "Closed",
+      "event": "receive Request",
+      "action": "send Response",
+      "to": "Listen"
+    },
+    {
+      "from": "Closed",
+      "event": "timeout 2MSL",
+      "action": "set Closed",
+      "to": "Closed"
+    },
+    {
+      "from": "Closed",
+      "event": "timeout 4m",
+      "action": "set Closed",
+      "to": "Closed"
+    },
+    {
+      "from": "Listen",
+      "event": "receive DCCP-Request",
+      "action": "set Respond",
+      "to": "Respond"
+    },
+    {
+      "from": "Listen",
+      "event": "receive Request",
+      "action": "send Response",
+      "to": "Respond"
+    },
+    {
+      "from": "Request",
+      "event": "receive DCCP-Response",
+      "action": "set PartOpen",
+      "to": "PartOpen"
+    },
+    {
+      "from": "Request",
+      "event": "receive DCCP-Request",
+      "action": "send DCCPReset",
+      "to": "Closed"
+    },
+    {
+      "from": "Request",
+      "event": "receive DCCPData",
+      "action": "send DCCPSync",
+      "to": "Closed"
+    },
+    {
+      "from": "Request",
+      "event": "receive DCCPReset",
+      "action": "send DCCPSync",
+      "to": "Closed"
+    },
+    {
+      "from": "Request",
+      "event": "receive Response",
+      "action": "send Ack",
+      "to": "PartOpen"
+    },
+    {
+      "from": "Request",
+      "event": "timeout 3m",
+      "action": "send Reset",
+      "to": "Closed"
+    },
+    {
+      "from": "Respond",
+      "event": "send DCCP-Response",
+      "action": "set PartOpen",
+      "to": "PartOpen"
+    },
+    {
+      "from": "Respond",
+      "event": "send DCCP-Response",
+      "action": "set connection established",
+      "to": "DataTransfer"
+    },
+    {
+      "from": "Respond",
+      "event": "receive Ack",
+      "action": "set Open",
+      "to": "Open"
+    },
+    {
+      "from": "Respond",
+      "event": "timeout 8m",
+      "action": "send Reset",
+      "to": "Closed"
+    },
+    {
+      "from": "PartOpen",
+      "event": "send DCCP-Ack",
+      "action": "set Open",
+      "to": "Open"
+    },
+    {
+      "from": "PartOpen",
+      "event": "send DCCP-DataAck",
+      "action": "set Open",
+      "to": "Open"
+    },
+    {
+      "from": "PartOpen",
+      "event": "receive Data",
+      "action": "send Ack",
+      "to": "Open"
+    },
+    {
+      "from": "PartOpen",
+      "event": "timeout 8m",
+      "action": "send Reset",
+      "to": "Closed"
+    },
+    {
+      "from": "Open",
+      "event": "receive DCCP-Data",
+      "action": "send DCCPAck",
+      "to": "Open"
+    },
+    {
+      "from": "Open",
+      "event": "receive DCCP-CloseReq",
+      "action": "send DCCPClose",
+      "to": "Closed"
+    },
+    {
+      "from": "Open",
+      "event": "receive DCCPReset",
+      "action": "send DCCPSync",
+      "to": "Closed"
+    },
+    {
+      "from": "Open",
+      "event": "receive DCCP-CloseReq",
+      "action": "set CloseReq",
+      "to": "CloseReq"
+    },
+    {
+      "from": "Open",
+      "event": "receive DCCP-Close",
+      "action": "send DCCP-Reset",
+      "to": "Reset"
+    },
+    {
+      "from": "Open",
+      "event": "send DCCP-Close",
+      "action": "set Closing",
+      "to": "Closing"
+    },
+    {
+      "from": "Open",
+      "event": "send DCCP-CloseReq",
+      "action": "set CloseReq",
+      "to": "CloseReq"
+    },
+    {
+      "from": "CloseReq",
+      "event": "send DCCP-CloseReq",
+      "action": "wait for DCCP-Close",
+      "to": "Close"
+    },
+    {
+      "from": "CloseReq",
+      "event": "receive Close",
+      "action": "send Reset",
+      "to": "Closed"
+    },
+    {
+      "from": "Closing",
+      "event": "receive DCCP-Reset",
+      "action": "set TimeWait",
+      "to": "TimeWait"
+    },
+    {
+      "from": "Closing",
+      "event": "receive DCCP-Reset",
+      "action": "set Closed",
+      "to": "Closed"
+    },
+    {
+      "from": "TimeWait",
+      "event": "timeout 2MSL",
+      "action": "set Closed",
+      "to": "Closed"
+    },
+    {
+      "from": "TimeWait",
+      "event": "timeout 4m",
+      "action": "set Closed",
+      "to": "Closed"
+    },
+    {
+      "from": "Stable",
+      "event": "receive ChangeR",
+      "action": "calculate new value, send ConfirmL",
+      "to": "Changing"
+    },
+    {
+      "from": "Stable",
+      "event": "receive empty ConfirmR",
+      "action": "revert to old value",
+      "to": "Stable"
+    },
+    {
+      "from": "Stable",
+      "event": "send ChangeL",
+      "action": "send ChangeL",
+      "to": "Changing"
+    },
+    {
+      "from": "Changing",
+      "event": "receive ConfirmR",
+      "action": "set value",
+      "to": "Stable"
+    },
+    {
+      "from": "Changing",
+      "event": "receive empty ConfirmR",
+      "action": "revert to old value",
+      "to": "Changing"
+    },
+    {
+      "from": "Changing",
+      "event": "timeout",
+      "action": "send ChangeL",
+      "to": "Changing"
+    },
+    {
+      "from": "Changing",
+      "event": "cond preference list changes",
+      "action": "send ChangeL",
+      "to": "Unstable"
+    },
+    {
+      "from": "Changing",
+      "event": "receive ChangeR",
+      "action": "calculate new value, send ConfirmL",
+      "to": "Stable"
+    },
+    {
+      "from": "Unstable",
+      "event": "send ChangeL",
+      "action": "send ChangeL",
+      "to": "Changing"
+    },
+    {
+      "from": "Received",
+      "event": "receive DataChecksum",
+      "action": "set CheckDataChecksum true",
+      "to": "Acknowledged"
+    },
+    {
+      "from": "Received",
+      "event": "receive DataChecksum",
+      "action": "reply DataDropped DropCode3",
+      "to": "Dropped"
+    },
+    {
+      "from": "Received",
+      "event": "receive DataChecksum",
+      "action": "reply DataDropped DropCode7",
+      "to": "DeliveredCorrupt"
+    },
+    {
+      "from": "Received",
+      "event": "receive DataChecksum",
+      "action": "reply DataDropped DropCode0",
+      "to": "Processed"
+    },
+    {
+      "from": "PacketArrival",
+      "event": "receive NewPackets",
+      "action": "update buf_head, buf_ackno, buf_nonce",
+      "to": "NewPackets"
+    },
+    {
+      "from": "PacketArrival",
+      "event": "receive OldPackets",
+      "action": "scan table for byte corresponding to S",
+      "to": "OldPackets"
+    },
+    {
+      "from": "NewPackets",
+      "event": "packet state equals head state",
+      "action": "increment run length",
+      "to": "NewPackets"
+    },
+    {
+      "from": "NewPackets",
+      "event": "packet sequence number not equal to expected",
+      "action": "enter intervening packets as State 3",
+      "to": "NewPackets"
+    },
+    {
+      "from": "OldPackets",
+      "event": "packet S previously lost",
+      "action": "change byte's state",
+      "to": "OldPackets"
+    },
+    {
+      "from": "OldPackets",
+      "event": "packet S not marked as lost",
+      "action": "ignore packet",
+      "to": "OldPackets"
+    },
+    {
+      "from": "OldPackets",
+      "event": "packet S's buffer byte has non-zero run length",
+      "action": "reshuffle buffer",
+      "to": "OldPackets"
+    },
+    {
+      "from": "SendingAcknowledgements",
+      "event": "generate acknowledgement",
+      "action": "copy buffer contents into Ack Vector options",
+      "to": "SendingAcknowledgements"
+    },
+    {
+      "from": "SendingAcknowledgements",
+      "event": "acknowledgement fits in one Ack Vector",
+      "action": "set Nonce Echo to buf_nonce",
+      "to": "SendingAcknowledgements"
+    },
+    {
+      "from": "SendingAcknowledgements",
+      "event": "acknowledgement requires multiple Ack Vectors",
+      "action": "split Ack Vectors at previous acknowledgements",
+      "to": "SendingAcknowledgements"
+    },
+    {
+      "from": "ClearingState",
+      "event": "receive acknowledgement number",
+      "action": "update buf_tail, buf_nonce, ack_nonce",
+      "to": "ClearingState"
+    },
+    {
+      "from": "ProcessingAcknowledgements",
+      "event": "receive acknowledgement",
+      "action": "read off Ack Vector",
+      "to": "ProcessingAcknowledgements"
+    },
+    {
+      "from": "ProcessingAcknowledgements",
+      "event": "check ECN Nonce for correctness",
+      "action": "acknowledge HC-Receiver's acknowledgements",
+      "to": "ProcessingAcknowledgements"
+    }
+  ]
+}

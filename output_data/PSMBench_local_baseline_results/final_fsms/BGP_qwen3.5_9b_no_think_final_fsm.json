@@ -1,0 +1,316 @@
+{
+  "states": [
+    "Idle",
+    "Connect",
+    "Active",
+    "OpenSent",
+    "OpenConfirm",
+    "Established"
+  ],
+  "initial_state": "Idle",
+  "final_states": [
+    "Idle"
+  ],
+  "transitions": [
+    {
+      "from": "Idle",
+      "event": "cond start_connect",
+      "action": "send OPEN",
+      "to": "Connect"
+    },
+    {
+      "from": "Idle",
+      "event": "receive ManualStart",
+      "action": "initiate TCP connection",
+      "to": "Connect"
+    },
+    {
+      "from": "Idle",
+      "event": "receive AutomaticStart",
+      "action": "initiate TCP connection",
+      "to": "Connect"
+    },
+    {
+      "from": "Idle",
+      "event": "receive ManualStart_with_PassiveTcpEstablishment",
+      "action": "listen for connection",
+      "to": "Active"
+    },
+    {
+      "from": "Idle",
+      "event": "receive AutomaticStart_with_PassiveTcpEstablishment",
+      "action": "listen for connection",
+      "to": "Active"
+    },
+    {
+      "from": "Connect",
+      "event": "timeout connect_timeout",
+      "action": "go_active",
+      "to": "Active"
+    },
+    {
+      "from": "Connect",
+      "event": "receive OPEN",
+      "action": "send NOTIFICATION Cease",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "receive KEEPALIVE",
+      "action": "go_open_confirm",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "Connect",
+      "event": "timeout ConnectRetryTimer",
+      "action": "restart TCP connection",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "receive TcpConnection_Valid",
+      "action": "wait for OPEN message",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "receive Tcp_CR_Invalid",
+      "action": "reject connection",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "success TCP connection",
+      "action": "send OPEN message",
+      "to": "OpenSent"
+    },
+    {
+      "from": "Connect",
+      "event": "receive TcpConnectionFails",
+      "action": "restart TCP connection",
+      "to": "Active"
+    },
+    {
+      "from": "Connect",
+      "event": "receive OPEN message",
+      "action": "send KEEPALIVE message",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "Connect",
+      "event": "receive BGPHeaderErr",
+      "action": "send NOTIFICATION message",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "receive BGPOpenMsgErr",
+      "action": "send NOTIFICATION message",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "timeout active_timeout",
+      "action": "start_connect",
+      "to": "Connect"
+    },
+    {
+      "from": "Active",
+      "event": "receive OPEN",
+      "action": "send NOTIFICATION Cease",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "receive KEEPALIVE",
+      "action": "go_open_confirm",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "Active",
+      "event": "timeout ConnectRetryTimer",
+      "action": "initiate TCP connection",
+      "to": "Connect"
+    },
+    {
+      "from": "Active",
+      "event": "receive TcpConnection_Valid",
+      "action": "wait for OPEN message",
+      "to": "Active"
+    },
+    {
+      "from": "Active",
+      "event": "receive Tcp_CR_Invalid",
+      "action": "reject connection",
+      "to": "Active"
+    },
+    {
+      "from": "Active",
+      "event": "success TCP connection",
+      "action": "send OPEN message",
+      "to": "OpenSent"
+    },
+    {
+      "from": "Active",
+      "event": "receive TcpConnectionFails",
+      "action": "restart TCP connection",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "receive OPEN message",
+      "action": "send KEEPALIVE message",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "Active",
+      "event": "receive BGPHeaderErr",
+      "action": "send NOTIFICATION message",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "receive BGPOpenMsgErr",
+      "action": "send NOTIFICATION message",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "timeout open_sent_timeout",
+      "action": "go_active",
+      "to": "Active"
+    },
+    {
+      "from": "OpenSent",
+      "event": "receive KEEPALIVE",
+      "action": "go_established",
+      "to": "Established"
+    },
+    {
+      "from": "OpenSent",
+      "event": "timeout HoldTimer",
+      "action": "send NOTIFICATION message",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "receive TcpConnectionFails",
+      "action": "restart TCP connection",
+      "to": "Active"
+    },
+    {
+      "from": "OpenSent",
+      "event": "receive OPEN message",
+      "action": "send KEEPALIVE message",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenSent",
+      "event": "receive BGPHeaderErr",
+      "action": "send NOTIFICATION message",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "receive BGPOpenMsgErr",
+      "action": "send NOTIFICATION message",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "timeout open_confirm_timeout",
+      "action": "go_active",
+      "to": "Active"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "receive KEEPALIVE",
+      "action": "go_established",
+      "to": "Established"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "receive NOTIFICATION",
+      "action": "close_connection",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "timeout HoldTimer",
+      "action": "send NOTIFICATION message",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "receive TcpConnectionFails",
+      "action": "restart TCP connection",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "receive KeepAliveMsg",
+      "action": "restart HoldTimer",
+      "to": "Established"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "receive BGPHeaderErr",
+      "action": "send NOTIFICATION message",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "receive BGPOpenMsgErr",
+      "action": "send NOTIFICATION message",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "receive KEEPALIVE",
+      "action": "stay_established",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "receive NOTIFICATION",
+      "action": "close_connection",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "timeout HoldTimer",
+      "action": "send NOTIFICATION message",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "receive TcpConnectionFails",
+      "action": "drop connection",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "receive KeepAliveMsg",
+      "action": "restart HoldTimer",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "receive UpdateMsg",
+      "action": "process message",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "receive BGPHeaderErr",
+      "action": "send NOTIFICATION message",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "receive UpdateMsgErr",
+      "action": "send NOTIFICATION message",
+      "to": "Idle"
+    }
+  ]
+}

@@ -1,0 +1,208 @@
+{
+  "states": [
+    "WaitingForConnection",
+    "Connected",
+    "Authorization",
+    "Authenticated",
+    "Transaction",
+    "MessageListed",
+    "MessageRetrieved",
+    "MessageDeleted",
+    "Update",
+    "Closed",
+    "SessionEnded"
+  ],
+  "initial_state": "WaitingForConnection",
+  "final_states": [
+    "Closed",
+    "SessionEnded"
+  ],
+  "transitions": [
+    {
+      "from": "WaitingForConnection",
+      "event": "receive open connection",
+      "action": "reply +OK POP3 server ready",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "receive USER",
+      "action": "reply +OK",
+      "to": "Authorization"
+    },
+    {
+      "from": "Connected",
+      "event": "receive APOP",
+      "action": "reply +OK maildrop has 2 messages",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authorization",
+      "event": "receive USER",
+      "action": "reply +OK",
+      "to": "Authorization"
+    },
+    {
+      "from": "Authorization",
+      "event": "receive PASS",
+      "action": "reply +OK",
+      "to": "Transaction"
+    },
+    {
+      "from": "Authorization",
+      "event": "receive APOP",
+      "action": "reply +OK",
+      "to": "Transaction"
+    },
+    {
+      "from": "Authorization",
+      "event": "receive QUIT",
+      "action": "reply +OK",
+      "to": "Update"
+    },
+    {
+      "from": "Authorization",
+      "event": "receive QUIT",
+      "action": "close connection",
+      "to": "Authorization"
+    },
+    {
+      "from": "Authorization",
+      "event": "receive invalid command",
+      "action": "reply -ERR",
+      "to": "Authorization"
+    },
+    {
+      "from": "Authorization",
+      "event": "cond failed authentication",
+      "action": "reply -ERR",
+      "to": "Closed"
+    },
+    {
+      "from": "Authorization",
+      "event": "timeout 10m",
+      "action": "close connection",
+      "to": "Authorization"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive STAT",
+      "action": "reply +OK nn mm",
+      "to": "MessageListed"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive LIST",
+      "action": "reply +OK scan listing follows",
+      "to": "MessageListed"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive LIST [msg]",
+      "action": "reply +OK scan listing follows",
+      "to": "MessageListed"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive RETR msg",
+      "action": "reply +OK message follows",
+      "to": "MessageRetrieved"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive DELE msg",
+      "action": "reply +OK message deleted",
+      "to": "MessageDeleted"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive NOOP",
+      "action": "reply +OK",
+      "to": "Transaction"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive RSET",
+      "action": "reply +OK",
+      "to": "Transaction"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive QUIT",
+      "action": "reply +OK",
+      "to": "Update"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive QUIT",
+      "action": "reply -ERR",
+      "to": "Update"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive TOP",
+      "action": "reply +OK",
+      "to": "Transaction"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive UIDL",
+      "action": "reply +OK",
+      "to": "Transaction"
+    },
+    {
+      "from": "Update",
+      "event": "send goodbye",
+      "action": "close connection",
+      "to": "Authorization"
+    },
+    {
+      "from": "Update",
+      "event": "receive QUIT",
+      "action": "reply +OK",
+      "to": "Update"
+    },
+    {
+      "from": "MessageListed",
+      "event": "receive LIST",
+      "action": "reply +OK 2 messages",
+      "to": "MessageListed"
+    },
+    {
+      "from": "MessageListed",
+      "event": "receive RETR 1",
+      "action": "reply +OK 120 octets",
+      "to": "MessageRetrieved"
+    },
+    {
+      "from": "MessageRetrieved",
+      "event": "receive DELE 1",
+      "action": "reply +OK message 1 deleted",
+      "to": "MessageDeleted"
+    },
+    {
+      "from": "MessageDeleted",
+      "event": "receive RETR 2",
+      "action": "reply +OK 200 octets",
+      "to": "MessageRetrieved"
+    },
+    {
+      "from": "MessageRetrieved",
+      "event": "receive DELE 2",
+      "action": "reply +OK message 2 deleted",
+      "to": "MessageDeleted"
+    },
+    {
+      "from": "MessageDeleted",
+      "event": "receive QUIT",
+      "action": "reply +OK dewey POP3 server signing off",
+      "to": "SessionEnded"
+    },
+    {
+      "from": "SessionEnded",
+      "event": "receive close connection",
+      "action": "set WaitingForConnection",
+      "to": "WaitingForConnection"
+    }
+  ]
+}

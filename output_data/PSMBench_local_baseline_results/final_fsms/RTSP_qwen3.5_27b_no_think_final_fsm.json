@@ -1,0 +1,509 @@
+{
+  "states": [
+    "NoSession",
+    "SessionEstablished",
+    "MediaPlaying",
+    "MediaPaused",
+    "ConnectionEstablished",
+    "ProcessingRequest",
+    "WaitingForResponse",
+    "SessionActive",
+    "Overloaded",
+    "ConnectionClosed",
+    "FeatureSupported",
+    "FeatureNotSupported",
+    "ClientUnauthenticated",
+    "ServerAuthenticated",
+    "ProxyAuthRequired",
+    "ConnectionAuthorized",
+    "SecureConnectionEstablished",
+    "Terminated",
+    "AwaitingAcknowledgement",
+    "RetransmittingRequest",
+    "ServerRTSP20",
+    "ClientRTSP20"
+  ],
+  "initial_state": "NoSession",
+  "final_states": [
+    "ConnectionClosed",
+    "Terminated",
+    "FeatureNotSupported",
+    "SecureConnectionEstablished"
+  ],
+  "transitions": [
+    {
+      "from": "NoSession",
+      "event": "receive SETUP",
+      "action": "send SessionHeader",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive PLAY",
+      "action": "start media delivery",
+      "to": "MediaPlaying"
+    },
+    {
+      "from": "MediaPlaying",
+      "event": "receive PAUSE",
+      "action": "halt delivery",
+      "to": "MediaPaused"
+    },
+    {
+      "from": "MediaPaused",
+      "event": "receive PLAY",
+      "action": "resume delivery",
+      "to": "MediaPlaying"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive TEARDOWN",
+      "action": "terminate session",
+      "to": "NoSession"
+    },
+    {
+      "from": "MediaPlaying",
+      "event": "receive TEARDOWN",
+      "action": "terminate session",
+      "to": "NoSession"
+    },
+    {
+      "from": "MediaPaused",
+      "event": "receive TEARDOWN",
+      "action": "terminate session",
+      "to": "NoSession"
+    },
+    {
+      "from": "MediaPlaying",
+      "event": "cond content end",
+      "action": "send PLAY_NOTIFY",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "ConnectionEstablished",
+      "event": "receive RTSP Request",
+      "action": "send response",
+      "to": "ProcessingRequest"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "timeout 5s",
+      "action": "send 100 Continue",
+      "to": "ProcessingRequest"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond request complete",
+      "action": "send final response",
+      "to": "ConnectionEstablished"
+    },
+    {
+      "from": "ConnectionEstablished",
+      "event": "receive TEARDOWN",
+      "action": "wait 10s",
+      "to": "ConnectionClosed"
+    },
+    {
+      "from": "WaitingForResponse",
+      "event": "timeout 10s",
+      "action": "close TCP connection",
+      "to": "ConnectionClosed"
+    },
+    {
+      "from": "SessionActive",
+      "event": "timeout Session header",
+      "action": "terminate session state",
+      "to": "ConnectionClosed"
+    },
+    {
+      "from": "ConnectionEstablished",
+      "event": "cond insufficient resources",
+      "action": "reply 503 Service Unavailable",
+      "to": "Overloaded"
+    },
+    {
+      "from": "Overloaded",
+      "event": "timeout Retry-After",
+      "action": "accept new requests",
+      "to": "ConnectionEstablished"
+    },
+    {
+      "from": "NoSession",
+      "event": "receive Require header",
+      "action": "check feature support",
+      "to": "FeatureSupported"
+    },
+    {
+      "from": "NoSession",
+      "event": "receive Require header",
+      "action": "reply 551 Option Not Supported",
+      "to": "FeatureNotSupported"
+    },
+    {
+      "from": "NoSession",
+      "event": "receive Proxy-Require header",
+      "action": "check proxy feature support",
+      "to": "FeatureSupported"
+    },
+    {
+      "from": "NoSession",
+      "event": "receive Proxy-Require header",
+      "action": "reply 551 Option Not Supported",
+      "to": "FeatureNotSupported"
+    },
+    {
+      "from": "ClientUnauthenticated",
+      "event": "receive RTSP Request",
+      "action": "reply 401 or 407",
+      "to": "ServerAuthenticated"
+    },
+    {
+      "from": "ClientUnauthenticated",
+      "event": "receive Insecure URI",
+      "action": "reply 301 Redirect",
+      "to": "SecureConnectionEstablished"
+    },
+    {
+      "from": "ClientUnauthenticated",
+      "event": "receive Request via Proxy",
+      "action": "reply 470 or 407 with Connection-Credentials",
+      "to": "ProxyAuthRequired"
+    },
+    {
+      "from": "ProxyAuthRequired",
+      "event": "receive Request with Accept-Credentials Hash",
+      "action": "send Request to Next Hop",
+      "to": "ConnectionAuthorized"
+    },
+    {
+      "from": "ConnectionAuthorized",
+      "event": "cond TLS Handshake Success",
+      "action": "set Secure Connection Active",
+      "to": "SecureConnectionEstablished"
+    },
+    {
+      "from": "NoSession",
+      "event": "receive DESCRIBE",
+      "action": "reply 200 OK",
+      "to": "NoSession"
+    },
+    {
+      "from": "NoSession",
+      "event": "receive SETUP",
+      "action": "reply 200 OK with Session",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive PLAY",
+      "action": "reply 200 OK and start stream",
+      "to": "MediaPlaying"
+    },
+    {
+      "from": "MediaPlaying",
+      "event": "receive PAUSE",
+      "action": "reply 200 OK and stop stream",
+      "to": "MediaPaused"
+    },
+    {
+      "from": "MediaPaused",
+      "event": "receive PLAY",
+      "action": "reply 200 OK and resume stream",
+      "to": "MediaPlaying"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive TEARDOWN",
+      "action": "reply 200 OK and close session",
+      "to": "Terminated"
+    },
+    {
+      "from": "MediaPlaying",
+      "event": "receive TEARDOWN",
+      "action": "reply 200 OK and close session",
+      "to": "Terminated"
+    },
+    {
+      "from": "MediaPaused",
+      "event": "receive TEARDOWN",
+      "action": "reply 200 OK and close session",
+      "to": "Terminated"
+    },
+    {
+      "from": "NoSession",
+      "event": "receive DESCRIBE",
+      "action": "reply 3rr Redirect",
+      "to": "NoSession"
+    },
+    {
+      "from": "NoSession",
+      "event": "receive DESCRIBE",
+      "action": "reply 200 Session description",
+      "to": "NoSession"
+    },
+    {
+      "from": "NoSession",
+      "event": "receive OPTIONS",
+      "action": "reply 200 Reset session timeout timer",
+      "to": "NoSession"
+    },
+    {
+      "from": "NoSession",
+      "event": "receive OPTIONS",
+      "action": "reply 200",
+      "to": "NoSession"
+    },
+    {
+      "from": "NoSession",
+      "event": "receive SET_PARAMETER",
+      "action": "reply 200 change value of parameter",
+      "to": "NoSession"
+    },
+    {
+      "from": "NoSession",
+      "event": "receive GET_PARAMETER",
+      "action": "reply 200 return value of parameter",
+      "to": "NoSession"
+    },
+    {
+      "from": "NoSession",
+      "event": "receive SETUP",
+      "action": "set NRM=1 RP=0.0",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "NoSession",
+      "event": "receive SETUP",
+      "action": "reply 3rr Redirect",
+      "to": "NoSession"
+    },
+    {
+      "from": "NoSession",
+      "event": "send REDIRECT",
+      "action": "Terminate all SES",
+      "to": "NoSession"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive SETUP",
+      "action": "set NRM +=1",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive SETUP",
+      "action": "Change transport param",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive TEARDOWN",
+      "action": "set NRM = 0",
+      "to": "NoSession"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive TEARDOWN",
+      "action": "set NRM -= 1",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive PLAY",
+      "action": "Play from RP",
+      "to": "MediaPlaying"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive PLAY",
+      "action": "Play According to range",
+      "to": "MediaPlaying"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive PAUSE",
+      "action": "Return PP",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "send REDIRECT",
+      "action": "Set RedP",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "send REDIRECT",
+      "action": "Session is removed",
+      "to": "NoSession"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "timeout session",
+      "action": "Stop session",
+      "to": "NoSession"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "cond RedP reached",
+      "action": "TEARDOWN of session",
+      "to": "NoSession"
+    },
+    {
+      "from": "MediaPlaying",
+      "event": "receive PAUSE",
+      "action": "Set RP to present point",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "MediaPlaying",
+      "event": "cond End of media",
+      "action": "Set RP = End of media",
+      "to": "MediaPlaying"
+    },
+    {
+      "from": "MediaPlaying",
+      "event": "cond End of range",
+      "action": "Set RP = End of range",
+      "to": "MediaPlaying"
+    },
+    {
+      "from": "MediaPlaying",
+      "event": "receive PLAY",
+      "action": "Play from present point",
+      "to": "MediaPlaying"
+    },
+    {
+      "from": "MediaPlaying",
+      "event": "receive PLAY",
+      "action": "Play According to range",
+      "to": "MediaPlaying"
+    },
+    {
+      "from": "MediaPlaying",
+      "event": "send PLAY_NOTIFY",
+      "action": "reply 200",
+      "to": "MediaPlaying"
+    },
+    {
+      "from": "MediaPlaying",
+      "event": "receive SETUP",
+      "action": "reply 455",
+      "to": "MediaPlaying"
+    },
+    {
+      "from": "MediaPlaying",
+      "event": "receive SETUP",
+      "action": "Change transport param",
+      "to": "MediaPlaying"
+    },
+    {
+      "from": "MediaPlaying",
+      "event": "receive TEARDOWN",
+      "action": "No session hdr",
+      "to": "NoSession"
+    },
+    {
+      "from": "MediaPlaying",
+      "event": "receive TEARDOWN",
+      "action": "reply 455",
+      "to": "MediaPlaying"
+    },
+    {
+      "from": "MediaPlaying",
+      "event": "send REDIRECT",
+      "action": "Set RedP",
+      "to": "MediaPlaying"
+    },
+    {
+      "from": "MediaPlaying",
+      "event": "send REDIRECT",
+      "action": "Session is removed",
+      "to": "NoSession"
+    },
+    {
+      "from": "MediaPlaying",
+      "event": "cond RedP reached",
+      "action": "TEARDOWN of session",
+      "to": "NoSession"
+    },
+    {
+      "from": "MediaPlaying",
+      "event": "timeout session",
+      "action": "Stop Media playout",
+      "to": "NoSession"
+    },
+    {
+      "from": "NoSession",
+      "event": "receive SETUP",
+      "action": "reply 200 OK",
+      "to": "ConnectionEstablished"
+    },
+    {
+      "from": "NoSession",
+      "event": "receive PLAY",
+      "action": "reply 464 Data Transport Not Ready Yet",
+      "to": "NoSession"
+    },
+    {
+      "from": "ConnectionEstablished",
+      "event": "receive PLAY",
+      "action": "send RTP packets",
+      "to": "MediaPlaying"
+    },
+    {
+      "from": "MediaPlaying",
+      "event": "receive PAUSE",
+      "action": "stop media flow",
+      "to": "MediaPaused"
+    },
+    {
+      "from": "MediaPaused",
+      "event": "receive PLAY",
+      "action": "resume media flow",
+      "to": "MediaPlaying"
+    },
+    {
+      "from": "MediaPlaying",
+      "event": "receive TEARDOWN",
+      "action": "close TCP connections",
+      "to": "Terminated"
+    },
+    {
+      "from": "AwaitingAcknowledgement",
+      "event": "timeout RTT",
+      "action": "send retransmission",
+      "to": "RetransmittingRequest"
+    },
+    {
+      "from": "RetransmittingRequest",
+      "event": "receive acknowledgement",
+      "action": "stop retransmission",
+      "to": "AwaitingAcknowledgement"
+    },
+    {
+      "from": "ServerRTSP20",
+      "event": "receive RTSP/2.0 request",
+      "action": "reply RTSP/2.0 response",
+      "to": "ServerRTSP20"
+    },
+    {
+      "from": "ServerRTSP20",
+      "event": "receive RTSP/1.0 request",
+      "action": "reply 505 RTSP Version Not Supported",
+      "to": "ServerRTSP20"
+    },
+    {
+      "from": "ClientRTSP20",
+      "event": "send OPTIONS RTSP/2.0",
+      "action": "receive RTSP/1.0 or 505",
+      "to": "ClientRTSP20"
+    },
+    {
+      "from": "MediaPlaying",
+      "event": "receive PLAY request",
+      "action": "replace previous request immediately",
+      "to": "MediaPlaying"
+    }
+  ]
+}

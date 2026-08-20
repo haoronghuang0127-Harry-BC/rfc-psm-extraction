@@ -1,0 +1,429 @@
+{
+  "states": [
+    "ConnectionEstablished",
+    "ServiceAvailablePostingAllowed",
+    "ServiceAvailablePostingProhibited",
+    "ServiceTemporarilyUnavailable",
+    "ServicePermanentlyUnavailable",
+    "ReaderMode",
+    "SessionTerminated",
+    "NoNewsgroupSelected",
+    "NewsgroupSelected",
+    "CurrentArticleInvalid",
+    "CommandProcessing",
+    "WaitingForArticleData",
+    "TransferInProgress",
+    "UnencryptedConnection",
+    "EncryptedLinkEstablished"
+  ],
+  "initial_state": "ConnectionEstablished",
+  "final_states": [
+    "SessionTerminated",
+    "ServiceTemporarilyUnavailable",
+    "ServicePermanentlyUnavailable"
+  ],
+  "transitions": [
+    {
+      "from": "ConnectionEstablished",
+      "event": "send initial greeting",
+      "action": "reply 200",
+      "to": "ServiceAvailablePostingAllowed"
+    },
+    {
+      "from": "ConnectionEstablished",
+      "event": "send initial greeting",
+      "action": "reply 201",
+      "to": "ServiceAvailablePostingProhibited"
+    },
+    {
+      "from": "ConnectionEstablished",
+      "event": "send initial greeting",
+      "action": "reply 400",
+      "to": "ServiceTemporarilyUnavailable"
+    },
+    {
+      "from": "ConnectionEstablished",
+      "event": "send initial greeting",
+      "action": "reply 502",
+      "to": "ServicePermanentlyUnavailable"
+    },
+    {
+      "from": "ServiceTemporarilyUnavailable",
+      "event": "cond immediate close",
+      "action": "close connection",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "ServicePermanentlyUnavailable",
+      "event": "cond immediate close",
+      "action": "close connection",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "ServiceAvailablePostingAllowed",
+      "event": "receive CAPABILITIES",
+      "action": "reply 101",
+      "to": "ServiceAvailablePostingAllowed"
+    },
+    {
+      "from": "ServiceAvailablePostingProhibited",
+      "event": "receive CAPABILITIES",
+      "action": "reply 101",
+      "to": "ServiceAvailablePostingProhibited"
+    },
+    {
+      "from": "ServiceAvailablePostingAllowed",
+      "event": "receive MODE READER",
+      "action": "reply 200",
+      "to": "ReaderMode"
+    },
+    {
+      "from": "ServiceAvailablePostingProhibited",
+      "event": "receive MODE READER",
+      "action": "reply 201",
+      "to": "ReaderMode"
+    },
+    {
+      "from": "ServiceAvailablePostingAllowed",
+      "event": "receive QUIT",
+      "action": "reply 205",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "ServiceAvailablePostingProhibited",
+      "event": "receive QUIT",
+      "action": "reply 205",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "ReaderMode",
+      "event": "receive QUIT",
+      "action": "reply 205",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "ServiceAvailablePostingAllowed",
+      "event": "receive GROUP",
+      "action": "reply 211",
+      "to": "NewsgroupSelected"
+    },
+    {
+      "from": "ServiceAvailablePostingAllowed",
+      "event": "receive GROUP",
+      "action": "reply 411",
+      "to": "ServiceAvailablePostingAllowed"
+    },
+    {
+      "from": "ServiceAvailablePostingAllowed",
+      "event": "receive LISTGROUP",
+      "action": "reply 211",
+      "to": "NewsgroupSelected"
+    },
+    {
+      "from": "ServiceAvailablePostingAllowed",
+      "event": "receive LISTGROUP",
+      "action": "reply 411",
+      "to": "ServiceAvailablePostingAllowed"
+    },
+    {
+      "from": "ServiceAvailablePostingAllowed",
+      "event": "receive LISTGROUP",
+      "action": "reply 412",
+      "to": "ServiceAvailablePostingAllowed"
+    },
+    {
+      "from": "NewsgroupSelected",
+      "event": "receive NEXT",
+      "action": "reply 223",
+      "to": "CurrentArticleInvalid"
+    },
+    {
+      "from": "NewsgroupSelected",
+      "event": "receive NEXT",
+      "action": "reply 421",
+      "to": "NewsgroupSelected"
+    },
+    {
+      "from": "NewsgroupSelected",
+      "event": "receive LAST",
+      "action": "reply 223",
+      "to": "CurrentArticleInvalid"
+    },
+    {
+      "from": "NewsgroupSelected",
+      "event": "receive LAST",
+      "action": "reply 422",
+      "to": "NewsgroupSelected"
+    },
+    {
+      "from": "NewsgroupSelected",
+      "event": "receive ARTICLE",
+      "action": "reply 220",
+      "to": "CurrentArticleInvalid"
+    },
+    {
+      "from": "NewsgroupSelected",
+      "event": "receive HEAD",
+      "action": "reply 221",
+      "to": "CurrentArticleInvalid"
+    },
+    {
+      "from": "NewsgroupSelected",
+      "event": "receive BODY",
+      "action": "reply 222",
+      "to": "CurrentArticleInvalid"
+    },
+    {
+      "from": "NewsgroupSelected",
+      "event": "receive STAT",
+      "action": "reply 223",
+      "to": "CurrentArticleInvalid"
+    },
+    {
+      "from": "ServiceAvailablePostingAllowed",
+      "event": "receive POST",
+      "action": "reply 340",
+      "to": "WaitingForArticleData"
+    },
+    {
+      "from": "ServiceAvailablePostingAllowed",
+      "event": "receive POST",
+      "action": "reply 440",
+      "to": "ServiceAvailablePostingAllowed"
+    },
+    {
+      "from": "WaitingForArticleData",
+      "event": "receive article_data",
+      "action": "reply 240",
+      "to": "ServiceAvailablePostingAllowed"
+    },
+    {
+      "from": "WaitingForArticleData",
+      "event": "receive article_data",
+      "action": "reply 441",
+      "to": "ServiceAvailablePostingAllowed"
+    },
+    {
+      "from": "ServiceAvailablePostingAllowed",
+      "event": "receive IHAVE",
+      "action": "reply 335",
+      "to": "TransferInProgress"
+    },
+    {
+      "from": "ServiceAvailablePostingAllowed",
+      "event": "receive IHAVE",
+      "action": "reply 435",
+      "to": "ServiceAvailablePostingAllowed"
+    },
+    {
+      "from": "ServiceAvailablePostingAllowed",
+      "event": "receive IHAVE",
+      "action": "reply 436",
+      "to": "ServiceAvailablePostingAllowed"
+    },
+    {
+      "from": "TransferInProgress",
+      "event": "receive article_data",
+      "action": "reply 235",
+      "to": "ServiceAvailablePostingAllowed"
+    },
+    {
+      "from": "TransferInProgress",
+      "event": "receive article_data",
+      "action": "reply 436",
+      "to": "ServiceAvailablePostingAllowed"
+    },
+    {
+      "from": "TransferInProgress",
+      "event": "receive article_data",
+      "action": "reply 437",
+      "to": "ServiceAvailablePostingAllowed"
+    },
+    {
+      "from": "ServiceAvailablePostingAllowed",
+      "event": "receive DATE",
+      "action": "reply 111",
+      "to": "ServiceAvailablePostingAllowed"
+    },
+    {
+      "from": "ServiceAvailablePostingAllowed",
+      "event": "receive HELP",
+      "action": "reply 100",
+      "to": "ServiceAvailablePostingAllowed"
+    },
+    {
+      "from": "ServiceAvailablePostingAllowed",
+      "event": "receive NEWGROUPS",
+      "action": "reply 231",
+      "to": "ServiceAvailablePostingAllowed"
+    },
+    {
+      "from": "ServiceAvailablePostingAllowed",
+      "event": "receive NEWNEWS",
+      "action": "reply 230",
+      "to": "ServiceAvailablePostingAllowed"
+    },
+    {
+      "from": "ServiceAvailablePostingAllowed",
+      "event": "receive LIST",
+      "action": "reply 215",
+      "to": "ServiceAvailablePostingAllowed"
+    },
+    {
+      "from": "ServiceAvailablePostingAllowed",
+      "event": "receive LIST unrecognized_keyword",
+      "action": "reply 501",
+      "to": "ServiceAvailablePostingAllowed"
+    },
+    {
+      "from": "ServiceAvailablePostingAllowed",
+      "event": "receive LIST unsupported_keyword",
+      "action": "reply 503",
+      "to": "ServiceAvailablePostingAllowed"
+    },
+    {
+      "from": "NewsgroupSelected",
+      "event": "receive OVER message-id",
+      "action": "reply 224",
+      "to": "CommandProcessing"
+    },
+    {
+      "from": "NewsgroupSelected",
+      "event": "receive OVER message-id",
+      "action": "reply 430",
+      "to": "NewsgroupSelected"
+    },
+    {
+      "from": "NewsgroupSelected",
+      "event": "receive OVER range",
+      "action": "reply 224",
+      "to": "CommandProcessing"
+    },
+    {
+      "from": "NewsgroupSelected",
+      "event": "receive OVER range",
+      "action": "reply 423",
+      "to": "NewsgroupSelected"
+    },
+    {
+      "from": "NoNewsgroupSelected",
+      "event": "receive OVER range",
+      "action": "reply 412",
+      "to": "NoNewsgroupSelected"
+    },
+    {
+      "from": "NewsgroupSelected",
+      "event": "receive OVER",
+      "action": "reply 224",
+      "to": "CommandProcessing"
+    },
+    {
+      "from": "NoNewsgroupSelected",
+      "event": "receive OVER",
+      "action": "reply 412",
+      "to": "NoNewsgroupSelected"
+    },
+    {
+      "from": "CurrentArticleInvalid",
+      "event": "receive OVER",
+      "action": "reply 420",
+      "to": "CurrentArticleInvalid"
+    },
+    {
+      "from": "NewsgroupSelected",
+      "event": "receive LIST OVERVIEW.FMT",
+      "action": "reply 215",
+      "to": "CommandProcessing"
+    },
+    {
+      "from": "NewsgroupSelected",
+      "event": "receive HDR field message-id",
+      "action": "reply 225",
+      "to": "CommandProcessing"
+    },
+    {
+      "from": "NewsgroupSelected",
+      "event": "receive HDR field message-id",
+      "action": "reply 430",
+      "to": "NewsgroupSelected"
+    },
+    {
+      "from": "NewsgroupSelected",
+      "event": "receive HDR field range",
+      "action": "reply 225",
+      "to": "CommandProcessing"
+    },
+    {
+      "from": "NewsgroupSelected",
+      "event": "receive HDR field range",
+      "action": "reply 423",
+      "to": "NewsgroupSelected"
+    },
+    {
+      "from": "NoNewsgroupSelected",
+      "event": "receive HDR field range",
+      "action": "reply 412",
+      "to": "NoNewsgroupSelected"
+    },
+    {
+      "from": "NewsgroupSelected",
+      "event": "receive HDR field",
+      "action": "reply 225",
+      "to": "CommandProcessing"
+    },
+    {
+      "from": "NoNewsgroupSelected",
+      "event": "receive HDR field",
+      "action": "reply 412",
+      "to": "NoNewsgroupSelected"
+    },
+    {
+      "from": "CurrentArticleInvalid",
+      "event": "receive HDR field",
+      "action": "reply 420",
+      "to": "CurrentArticleInvalid"
+    },
+    {
+      "from": "NewsgroupSelected",
+      "event": "receive LIST HEADERS",
+      "action": "reply 215",
+      "to": "CommandProcessing"
+    },
+    {
+      "from": "ServiceAvailablePostingAllowed",
+      "event": "receive CAPABILITIES",
+      "action": "reply capability list without security extensions",
+      "to": "UnencryptedConnection"
+    },
+    {
+      "from": "UnencryptedConnection",
+      "event": "receive XENCRYPT",
+      "action": "negotiate encryption",
+      "to": "EncryptedLinkEstablished"
+    },
+    {
+      "from": "EncryptedLinkEstablished",
+      "event": "send 283 Encrypted link established",
+      "action": "reply encrypted status",
+      "to": "EncryptedLinkEstablished"
+    },
+    {
+      "from": "EncryptedLinkEstablished",
+      "event": "receive CAPABILITIES",
+      "action": "reply capability list with security extensions",
+      "to": "EncryptedLinkEstablished"
+    },
+    {
+      "from": "EncryptedLinkEstablished",
+      "event": "receive XSECRET",
+      "action": "reply 290 Password accepted",
+      "to": "EncryptedLinkEstablished"
+    },
+    {
+      "from": "UnencryptedConnection",
+      "event": "receive XSECRET",
+      "action": "reply 483 Only permitted on secure links",
+      "to": "UnencryptedConnection"
+    }
+  ]
+}

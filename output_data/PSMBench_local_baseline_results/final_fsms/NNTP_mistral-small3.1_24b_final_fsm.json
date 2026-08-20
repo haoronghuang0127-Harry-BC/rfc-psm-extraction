@@ -1,0 +1,845 @@
+{
+  "states": [
+    "InitialConnection",
+    "Authenticated",
+    "WaitingForCommand",
+    "CommandProcessing",
+    "SendingResponse",
+    "ConnectionClosed",
+    "ServiceAvailable",
+    "ServiceUnavailable",
+    "ServiceTemporarilyUnavailable",
+    "ServicePermanentlyUnavailable",
+    "ReaderMode",
+    "TransitMode",
+    "SessionEnded",
+    "Idle",
+    "GroupSelected",
+    "ArticleSelected",
+    "ArticleRetrieved",
+    "PostingAllowed",
+    "PostingProhibited",
+    "ArticleTransferAllowed",
+    "ArticleTransferProhibited",
+    "AwaitingDateCommand",
+    "AwaitingHelpCommand",
+    "AwaitingNewGroupsCommand",
+    "AwaitingNewNewsCommand",
+    "AwaitingListCommand",
+    "AwaitingCommand",
+    "ProcessingCommand",
+    "AwaitingContinuation",
+    "SendingMultiLineResponse",
+    "ConnectionClosing",
+    "HelpTextFollows",
+    "CapabilitiesListFollows",
+    "ServerDateAndTime",
+    "ArticleFollows",
+    "ArticleHeadersFollows",
+    "ArticleBodyFollows",
+    "ArticleExistsAndSelected",
+    "OverviewInformationFollows",
+    "HeadersFollow",
+    "ListOfNewArticlesFollows",
+    "ListOfNewNewsgroupsFollows",
+    "SendArticleToBeTransferred",
+    "SendArticleToBePosted",
+    "ArticleTransferredOk",
+    "ArticleReceivedOk",
+    "ArticleNotWanted",
+    "TransferNotPossible",
+    "TransferRejected",
+    "PostingNotPermitted",
+    "PostingFailed",
+    "CommandUnavailableUntilAuthenticated",
+    "CommandUnavailableUntilPrivacyArranged",
+    "UnknownCommand",
+    "SyntaxErrorInCommand",
+    "InternalFault",
+    "NoSuchNewsgroup",
+    "NoNewsgroupSelected",
+    "CurrentArticleInvalid",
+    "NoNextArticle",
+    "NoPreviousArticle",
+    "NoArticleInRange",
+    "NoArticleWithMessageId",
+    "WrongMode"
+  ],
+  "initial_state": "InitialConnection",
+  "final_states": [
+    "ConnectionClosed",
+    "SessionEnded",
+    "Idle",
+    "ConnectionClosing"
+  ],
+  "transitions": [
+    {
+      "from": "InitialConnection",
+      "event": "receive CONNECTION",
+      "action": "send greeting",
+      "to": "WaitingForCommand"
+    },
+    {
+      "from": "WaitingForCommand",
+      "event": "receive COMMAND",
+      "action": "process command",
+      "to": "CommandProcessing"
+    },
+    {
+      "from": "CommandProcessing",
+      "event": "cond command valid",
+      "action": "reply response code",
+      "to": "SendingResponse"
+    },
+    {
+      "from": "CommandProcessing",
+      "event": "cond command invalid",
+      "action": "reply error code",
+      "to": "SendingResponse"
+    },
+    {
+      "from": "SendingResponse",
+      "event": "send RESPONSE",
+      "action": "reset timer",
+      "to": "WaitingForCommand"
+    },
+    {
+      "from": "WaitingForCommand",
+      "event": "timeout 3m",
+      "action": "close connection",
+      "to": "ConnectionClosed"
+    },
+    {
+      "from": "WaitingForCommand",
+      "event": "receive AUTHENTICATION",
+      "action": "set authenticated true",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive COMMAND",
+      "action": "process command",
+      "to": "CommandProcessing"
+    },
+    {
+      "from": "InitialConnection",
+      "event": "receive connection",
+      "action": "reply 200",
+      "to": "ServiceAvailable"
+    },
+    {
+      "from": "InitialConnection",
+      "event": "receive connection",
+      "action": "reply 201",
+      "to": "ServiceAvailable"
+    },
+    {
+      "from": "InitialConnection",
+      "event": "receive connection",
+      "action": "reply 400",
+      "to": "ServiceTemporarilyUnavailable"
+    },
+    {
+      "from": "InitialConnection",
+      "event": "receive connection",
+      "action": "reply 502",
+      "to": "ServicePermanentlyUnavailable"
+    },
+    {
+      "from": "ServiceAvailable",
+      "event": "receive QUIT",
+      "action": "reply 205",
+      "to": "SessionEnded"
+    },
+    {
+      "from": "ServiceTemporarilyUnavailable",
+      "event": "send 400",
+      "action": "close connection",
+      "to": "SessionEnded"
+    },
+    {
+      "from": "ServicePermanentlyUnavailable",
+      "event": "send 502",
+      "action": "close connection",
+      "to": "SessionEnded"
+    },
+    {
+      "from": "ServiceAvailable",
+      "event": "receive MODE READER",
+      "action": "reply 200",
+      "to": "ReaderMode"
+    },
+    {
+      "from": "ServiceAvailable",
+      "event": "receive MODE READER",
+      "action": "reply 201",
+      "to": "ReaderMode"
+    },
+    {
+      "from": "ServiceAvailable",
+      "event": "receive MODE READER",
+      "action": "reply 502",
+      "to": "SessionEnded"
+    },
+    {
+      "from": "ReaderMode",
+      "event": "receive QUIT",
+      "action": "reply 205",
+      "to": "SessionEnded"
+    },
+    {
+      "from": "TransitMode",
+      "event": "receive MODE READER",
+      "action": "reply 502",
+      "to": "SessionEnded"
+    },
+    {
+      "from": "Idle",
+      "event": "receive GROUP",
+      "action": "reply 211",
+      "to": "GroupSelected"
+    },
+    {
+      "from": "Idle",
+      "event": "receive GROUP",
+      "action": "reply 411",
+      "to": "Idle"
+    },
+    {
+      "from": "GroupSelected",
+      "event": "receive LAST",
+      "action": "reply 223",
+      "to": "ArticleSelected"
+    },
+    {
+      "from": "GroupSelected",
+      "event": "receive LAST",
+      "action": "reply 412",
+      "to": "Idle"
+    },
+    {
+      "from": "GroupSelected",
+      "event": "receive LAST",
+      "action": "reply 420",
+      "to": "Idle"
+    },
+    {
+      "from": "GroupSelected",
+      "event": "receive LAST",
+      "action": "reply 422",
+      "to": "GroupSelected"
+    },
+    {
+      "from": "GroupSelected",
+      "event": "receive NEXT",
+      "action": "reply 223",
+      "to": "ArticleSelected"
+    },
+    {
+      "from": "GroupSelected",
+      "event": "receive NEXT",
+      "action": "reply 412",
+      "to": "Idle"
+    },
+    {
+      "from": "GroupSelected",
+      "event": "receive NEXT",
+      "action": "reply 420",
+      "to": "Idle"
+    },
+    {
+      "from": "GroupSelected",
+      "event": "receive NEXT",
+      "action": "reply 421",
+      "to": "GroupSelected"
+    },
+    {
+      "from": "GroupSelected",
+      "event": "receive ARTICLE",
+      "action": "reply 220",
+      "to": "ArticleRetrieved"
+    },
+    {
+      "from": "GroupSelected",
+      "event": "receive ARTICLE",
+      "action": "reply 412",
+      "to": "Idle"
+    },
+    {
+      "from": "GroupSelected",
+      "event": "receive ARTICLE",
+      "action": "reply 420",
+      "to": "Idle"
+    },
+    {
+      "from": "GroupSelected",
+      "event": "receive ARTICLE",
+      "action": "reply 423",
+      "to": "GroupSelected"
+    },
+    {
+      "from": "GroupSelected",
+      "event": "receive HEAD",
+      "action": "reply 221",
+      "to": "ArticleRetrieved"
+    },
+    {
+      "from": "GroupSelected",
+      "event": "receive HEAD",
+      "action": "reply 412",
+      "to": "Idle"
+    },
+    {
+      "from": "GroupSelected",
+      "event": "receive HEAD",
+      "action": "reply 420",
+      "to": "Idle"
+    },
+    {
+      "from": "GroupSelected",
+      "event": "receive HEAD",
+      "action": "reply 423",
+      "to": "GroupSelected"
+    },
+    {
+      "from": "GroupSelected",
+      "event": "receive BODY",
+      "action": "reply 222",
+      "to": "ArticleRetrieved"
+    },
+    {
+      "from": "GroupSelected",
+      "event": "receive BODY",
+      "action": "reply 412",
+      "to": "Idle"
+    },
+    {
+      "from": "GroupSelected",
+      "event": "receive BODY",
+      "action": "reply 420",
+      "to": "Idle"
+    },
+    {
+      "from": "GroupSelected",
+      "event": "receive BODY",
+      "action": "reply 423",
+      "to": "GroupSelected"
+    },
+    {
+      "from": "GroupSelected",
+      "event": "receive STAT",
+      "action": "reply 223",
+      "to": "ArticleSelected"
+    },
+    {
+      "from": "GroupSelected",
+      "event": "receive STAT",
+      "action": "reply 412",
+      "to": "Idle"
+    },
+    {
+      "from": "GroupSelected",
+      "event": "receive STAT",
+      "action": "reply 420",
+      "to": "Idle"
+    },
+    {
+      "from": "GroupSelected",
+      "event": "receive STAT",
+      "action": "reply 423",
+      "to": "GroupSelected"
+    },
+    {
+      "from": "Idle",
+      "event": "receive POST",
+      "action": "reply 340",
+      "to": "PostingAllowed"
+    },
+    {
+      "from": "Idle",
+      "event": "receive POST",
+      "action": "reply 440",
+      "to": "PostingProhibited"
+    },
+    {
+      "from": "PostingAllowed",
+      "event": "receive article",
+      "action": "reply 240",
+      "to": "Idle"
+    },
+    {
+      "from": "PostingAllowed",
+      "event": "receive article",
+      "action": "reply 441",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "receive IHAVE",
+      "action": "reply 335",
+      "to": "ArticleTransferAllowed"
+    },
+    {
+      "from": "Idle",
+      "event": "receive IHAVE",
+      "action": "reply 435",
+      "to": "ArticleTransferProhibited"
+    },
+    {
+      "from": "Idle",
+      "event": "receive IHAVE",
+      "action": "reply 436",
+      "to": "Idle"
+    },
+    {
+      "from": "ArticleTransferAllowed",
+      "event": "receive article",
+      "action": "reply 235",
+      "to": "Idle"
+    },
+    {
+      "from": "ArticleTransferAllowed",
+      "event": "receive article",
+      "action": "reply 436",
+      "to": "Idle"
+    },
+    {
+      "from": "ArticleTransferAllowed",
+      "event": "receive article",
+      "action": "reply 437",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "receive DATE",
+      "action": "reply 111",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "receive HELP",
+      "action": "reply 100",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "receive NEWGROUPS",
+      "action": "reply 231",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "receive NEWNEWS",
+      "action": "reply 230",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "receive LIST",
+      "action": "reply 215",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "receive LIST ACTIVE",
+      "action": "reply 215",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "receive LIST ACTIVE.TIMES",
+      "action": "reply 215",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "receive LIST DISTRIB.PATS",
+      "action": "reply 501",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "receive LIST NEWSGROUPS",
+      "action": "reply 215",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "receive LIST XTRA.DATA",
+      "action": "reply 503",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "receive LIST DISTRIB.PATS",
+      "action": "reply 501",
+      "to": "Idle"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive OVER",
+      "action": "set processing_over",
+      "to": "ProcessingCommand"
+    },
+    {
+      "from": "ProcessingCommand",
+      "event": "cond valid_message_id",
+      "action": "reply 224",
+      "to": "SendingResponse"
+    },
+    {
+      "from": "ProcessingCommand",
+      "event": "cond invalid_message_id",
+      "action": "reply 430",
+      "to": "Idle"
+    },
+    {
+      "from": "ProcessingCommand",
+      "event": "cond valid_range",
+      "action": "reply 224",
+      "to": "SendingResponse"
+    },
+    {
+      "from": "ProcessingCommand",
+      "event": "cond invalid_range",
+      "action": "reply 423",
+      "to": "Idle"
+    },
+    {
+      "from": "ProcessingCommand",
+      "event": "cond no_newsgroup_selected",
+      "action": "reply 412",
+      "to": "Idle"
+    },
+    {
+      "from": "ProcessingCommand",
+      "event": "cond invalid_current_article",
+      "action": "reply 420",
+      "to": "Idle"
+    },
+    {
+      "from": "SendingResponse",
+      "event": "send 224",
+      "action": "reset awaiting_command",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "Idle",
+      "event": "receive command",
+      "action": "set awaiting command",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive command",
+      "action": "process command",
+      "to": "ProcessingCommand"
+    },
+    {
+      "from": "ProcessingCommand",
+      "event": "send response",
+      "action": "reply response",
+      "to": "SendingResponse"
+    },
+    {
+      "from": "SendingResponse",
+      "event": "receive continuation",
+      "action": "set awaiting continuation",
+      "to": "AwaitingContinuation"
+    },
+    {
+      "from": "AwaitingContinuation",
+      "event": "send response",
+      "action": "reply continuation response",
+      "to": "SendingResponse"
+    },
+    {
+      "from": "SendingResponse",
+      "event": "send multi-line response",
+      "action": "reply multi-line response",
+      "to": "SendingMultiLineResponse"
+    },
+    {
+      "from": "SendingMultiLineResponse",
+      "event": "receive command",
+      "action": "set awaiting command",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "InitialConnection",
+      "event": "receive initial connection",
+      "action": "reply 200",
+      "to": "PostingAllowed"
+    },
+    {
+      "from": "InitialConnection",
+      "event": "receive initial connection",
+      "action": "reply 201",
+      "to": "PostingProhibited"
+    },
+    {
+      "from": "InitialConnection",
+      "event": "receive initial connection",
+      "action": "reply 400",
+      "to": "ConnectionClosing"
+    },
+    {
+      "from": "InitialConnection",
+      "event": "receive initial connection",
+      "action": "reply 502",
+      "to": "ServiceUnavailable"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive QUIT",
+      "action": "reply 205",
+      "to": "ConnectionClosing"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive HELP",
+      "action": "reply 100",
+      "to": "HelpTextFollows"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive CAPABILITIES",
+      "action": "reply 101",
+      "to": "CapabilitiesListFollows"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive DATE",
+      "action": "reply 111",
+      "to": "ServerDateAndTime"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive GROUP",
+      "action": "reply 211",
+      "to": "ArticleFollows"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive LISTGROUP",
+      "action": "reply 211",
+      "to": "ArticleNumbersFollow"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive LIST",
+      "action": "reply 215",
+      "to": "InformationFollows"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive ARTICLE",
+      "action": "reply 220",
+      "to": "ArticleFollows"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive HEAD",
+      "action": "reply 221",
+      "to": "ArticleHeadersFollows"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive BODY",
+      "action": "reply 222",
+      "to": "ArticleBodyFollows"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive LAST",
+      "action": "reply 223",
+      "to": "ArticleExistsAndSelected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive NEXT",
+      "action": "reply 223",
+      "to": "ArticleExistsAndSelected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive STAT",
+      "action": "reply 223",
+      "to": "ArticleExistsAndSelected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive OVER",
+      "action": "reply 224",
+      "to": "OverviewInformationFollows"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive HDR",
+      "action": "reply 225",
+      "to": "HeadersFollow"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive NEWNEWS",
+      "action": "reply 230",
+      "to": "ListOfNewArticlesFollows"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive NEWGROUPS",
+      "action": "reply 231",
+      "to": "ListOfNewNewsgroupsFollows"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive IHAVE",
+      "action": "reply 335",
+      "to": "SendArticleToBeTransferred"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive POST",
+      "action": "reply 340",
+      "to": "SendArticleToBePosted"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive IHAVE",
+      "action": "reply 235",
+      "to": "ArticleTransferredOk"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive POST",
+      "action": "reply 240",
+      "to": "ArticleReceivedOk"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive IHAVE",
+      "action": "reply 435",
+      "to": "ArticleNotWanted"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive IHAVE",
+      "action": "reply 436",
+      "to": "TransferNotPossible"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive IHAVE",
+      "action": "reply 437",
+      "to": "TransferRejected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive POST",
+      "action": "reply 440",
+      "to": "PostingNotPermitted"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive POST",
+      "action": "reply 441",
+      "to": "PostingFailed"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive command",
+      "action": "reply 480",
+      "to": "CommandUnavailableUntilAuthenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive command",
+      "action": "reply 483",
+      "to": "CommandUnavailableUntilPrivacyArranged"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive command",
+      "action": "reply 500",
+      "to": "UnknownCommand"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive command",
+      "action": "reply 501",
+      "to": "SyntaxErrorInCommand"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive command",
+      "action": "reply 502",
+      "to": "ServicePermanentlyUnavailable"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive command",
+      "action": "reply 503",
+      "to": "FeatureNotSupported"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive command",
+      "action": "reply 504",
+      "to": "ErrorInBase64Encoding"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive GROUP",
+      "action": "reply 411",
+      "to": "NoSuchNewsgroup"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive ARTICLE",
+      "action": "reply 412",
+      "to": "NoNewsgroupSelected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive ARTICLE",
+      "action": "reply 420",
+      "to": "CurrentArticleInvalid"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive NEXT",
+      "action": "reply 421",
+      "to": "NoNextArticle"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive LAST",
+      "action": "reply 422",
+      "to": "NoPreviousArticle"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive ARTICLE",
+      "action": "reply 423",
+      "to": "NoArticleInRange"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive ARTICLE",
+      "action": "reply 430",
+      "to": "NoArticleWithMessageId"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive command",
+      "action": "reply 401",
+      "to": "WrongMode"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive command",
+      "action": "reply 403",
+      "to": "InternalFault"
+    }
+  ]
+}

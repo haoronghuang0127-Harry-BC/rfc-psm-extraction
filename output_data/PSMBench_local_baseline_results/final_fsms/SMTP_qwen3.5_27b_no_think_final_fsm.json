@@ -1,0 +1,132 @@
+{
+  "states": [
+    "ConnectionEstablished",
+    "AwaitingClientInitiation",
+    "SessionEstablished",
+    "MailTransactionStart",
+    "RecipientsSpecified",
+    "DataTransferInProgress",
+    "TransactionComplete",
+    "SessionTerminated"
+  ],
+  "initial_state": "ConnectionEstablished",
+  "final_states": [
+    "SessionTerminated"
+  ],
+  "transitions": [
+    {
+      "from": "ConnectionEstablished",
+      "event": "send greeting",
+      "action": "reply 220 or 554",
+      "to": "AwaitingClientInitiation"
+    },
+    {
+      "from": "AwaitingClientInitiation",
+      "event": "receive EHLO",
+      "action": "reply extended response",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "AwaitingClientInitiation",
+      "event": "receive HELO",
+      "action": "reply standard response",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "AwaitingClientInitiation",
+      "event": "timeout waiting for command",
+      "action": "close connection",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive MAIL FROM",
+      "action": "reply 250 OK",
+      "to": "MailTransactionStart"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive VRFY",
+      "action": "reply 250 or 553",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive EXPN",
+      "action": "reply 250 multiline or 550",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive RSET",
+      "action": "reply 250 OK",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "MailTransactionStart",
+      "event": "receive RCPT TO",
+      "action": "reply 250 OK or 550",
+      "to": "RecipientsSpecified"
+    },
+    {
+      "from": "MailTransactionStart",
+      "event": "receive RSET",
+      "action": "reply 250 OK",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "MailTransactionStart",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "RecipientsSpecified",
+      "event": "receive DATA",
+      "action": "reply 354 Intermediate",
+      "to": "DataTransferInProgress"
+    },
+    {
+      "from": "RecipientsSpecified",
+      "event": "receive RSET",
+      "action": "reply 250 OK",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "RecipientsSpecified",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "DataTransferInProgress",
+      "event": "receive end of data indicator",
+      "action": "reply 250 OK",
+      "to": "TransactionComplete"
+    },
+    {
+      "from": "DataTransferInProgress",
+      "event": "receive RSET",
+      "action": "reply 250 OK",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "DataTransferInProgress",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "TransactionComplete",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "SessionTerminated"
+    }
+  ]
+}

@@ -1,0 +1,348 @@
+{
+  "states": [
+    "Disconnected",
+    "Connecting",
+    "Connected",
+    "Authenticating",
+    "Publishing",
+    "Subscribing",
+    "Initial",
+    "TokenRequestSent",
+    "TokenReceived",
+    "AuthInfoPublished",
+    "TlsHandshake",
+    "Authenticated",
+    "IntrospectionPending",
+    "Unauthorized",
+    "Idle",
+    "Authorizing",
+    "Authorized",
+    "Reauthenticating",
+    "RetainedMessageActive"
+  ],
+  "initial_state": "Disconnected",
+  "final_states": [
+    "Unauthorized",
+    "Disconnected"
+  ],
+  "transitions": [
+    {
+      "from": "Disconnected",
+      "event": "receive CONNECT",
+      "action": "reply CONNACK",
+      "to": "Connecting"
+    },
+    {
+      "from": "Connecting",
+      "event": "receive CONNACK",
+      "action": "set Connected true",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "receive AUTH",
+      "action": "reply PUBACK",
+      "to": "Authenticating"
+    },
+    {
+      "from": "Authenticating",
+      "event": "cond authentication_success",
+      "action": "set Authenticated true",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "receive PUBLISH",
+      "action": "reply PUBACK",
+      "to": "Publishing"
+    },
+    {
+      "from": "Connected",
+      "event": "receive SUBSCRIBE",
+      "action": "reply SUBACK",
+      "to": "Subscribing"
+    },
+    {
+      "from": "Connected",
+      "event": "receive DISCONNECT",
+      "action": "close connection",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Initial",
+      "event": "receive token request",
+      "action": "send access token request",
+      "to": "TokenRequestSent"
+    },
+    {
+      "from": "TokenRequestSent",
+      "event": "receive access token",
+      "action": "set token",
+      "to": "TokenReceived"
+    },
+    {
+      "from": "TokenReceived",
+      "event": "publish token to authz-info",
+      "action": "send token",
+      "to": "AuthInfoPublished"
+    },
+    {
+      "from": "AuthInfoPublished",
+      "event": "disconnect",
+      "action": "reset session",
+      "to": "TlsHandshake"
+    },
+    {
+      "from": "TlsHandshake",
+      "event": "receive connect packet with token",
+      "action": "validate token",
+      "to": "Authenticated"
+    },
+    {
+      "from": "TlsHandshake",
+      "event": "receive connect packet without token",
+      "action": "request token",
+      "to": "IntrospectionPending"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive publish/subscribe request",
+      "action": "authorize request",
+      "to": "Authenticated"
+    },
+    {
+      "from": "IntrospectionPending",
+      "event": "receive introspection response",
+      "action": "validate token",
+      "to": "Authenticated"
+    },
+    {
+      "from": "IntrospectionPending",
+      "event": "timeout",
+      "action": "reply unauthorized",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "TokenReceived",
+      "event": "receive connect packet with token",
+      "action": "validate token",
+      "to": "Authenticated"
+    },
+    {
+      "from": "TokenReceived",
+      "event": "receive connect packet without token",
+      "action": "request token",
+      "to": "IntrospectionPending"
+    },
+    {
+      "from": "AuthInfoPublished",
+      "event": "receive invalid token",
+      "action": "reply unauthorized",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "TlsHandshake",
+      "event": "receive invalid token",
+      "action": "reply unauthorized",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive unauthorized request",
+      "action": "reply unauthorized",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Idle",
+      "event": "receive PUBLISH",
+      "action": "set topic_name",
+      "to": "Publishing"
+    },
+    {
+      "from": "Publishing",
+      "event": "cond token_valid",
+      "action": "set scope",
+      "to": "Authorizing"
+    },
+    {
+      "from": "Authorizing",
+      "event": "cond scope_matches_topic",
+      "action": "reply PUBACK",
+      "to": "Authorized"
+    },
+    {
+      "from": "Authorizing",
+      "event": "cond scope_does_not_match_topic",
+      "action": "reply PUBACK 0x87",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Idle",
+      "event": "receive SUBSCRIBE",
+      "action": "set topic_filter",
+      "to": "Subscribing"
+    },
+    {
+      "from": "Subscribing",
+      "event": "cond token_valid",
+      "action": "set scope",
+      "to": "Authorizing"
+    },
+    {
+      "from": "Authorizing",
+      "event": "cond filter_subset_of_scope",
+      "action": "reply SUBACK",
+      "to": "Authorized"
+    },
+    {
+      "from": "Authorizing",
+      "event": "cond filter_not_subset_of_scope",
+      "action": "reply SUBACK 0x87",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Publishing",
+      "event": "cond qos_greater_than_0_and_authorization_failed",
+      "action": "reply PUBACK 0x87",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Publishing",
+      "event": "cond qos_0_and_authorization_failed",
+      "action": "send DISCONNECT 0x87",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Subscribing",
+      "event": "cond authorization_failed",
+      "action": "send DISCONNECT 0x87",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive PUBLISH",
+      "action": "check token",
+      "to": "NotAuthorized"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive SUBSCRIBE",
+      "action": "check token",
+      "to": "NotAuthorized"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive PINGREQ",
+      "action": "check token",
+      "to": "NotAuthorized"
+    },
+    {
+      "from": "NotAuthorized",
+      "event": "receive AUTH",
+      "action": "validate reauth",
+      "to": "Reauthenticating"
+    },
+    {
+      "from": "Reauthenticating",
+      "event": "cond proof_of_possession",
+      "action": "set Authenticated",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Reauthenticating",
+      "event": "cond no_proof_of_possession",
+      "action": "send DISCONNECT",
+      "to": "NotAuthorized"
+    },
+    {
+      "from": "NotAuthorized",
+      "event": "send DISCONNECT",
+      "action": "close connection",
+      "to": "NotAuthorized"
+    },
+    {
+      "from": "Connected",
+      "event": "receive DISCONNECT",
+      "action": "set SessionExpiryToZero",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "receive DISCONNECT",
+      "action": "store SessionState",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Disconnected",
+      "event": "receive PUBLISH with RETAIN",
+      "action": "store RetainedMessage",
+      "to": "RetainedMessageActive"
+    },
+    {
+      "from": "RetainedMessageActive",
+      "event": "cond tokenExpired",
+      "action": "discard RetainedMessage",
+      "to": "Disconnected"
+    },
+    {
+      "from": "RetainedMessageActive",
+      "event": "cond messageExpired",
+      "action": "discard RetainedMessage",
+      "to": "Disconnected"
+    },
+    {
+      "from": "RetainedMessageActive",
+      "event": "cond tokenAndMessageExpired",
+      "action": "discard RetainedMessage",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "receive networkError",
+      "action": "send WillMessage",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "receive protocolError",
+      "action": "send WillMessage",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Initial",
+      "event": "receive CONNECT without token",
+      "action": "reply 0x84",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "receive CONNECT with token",
+      "action": "set Authenticated true",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive PUBLISH authorization failure",
+      "action": "close connection",
+      "to": "Initial"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive SUBSCRIBE authorization failure",
+      "action": "reply 0x80",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive PUBLISH",
+      "action": "send ACK",
+      "to": "Publishing"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive SUBSCRIBE",
+      "action": "reply SUBACK",
+      "to": "Subscribing"
+    }
+  ]
+}

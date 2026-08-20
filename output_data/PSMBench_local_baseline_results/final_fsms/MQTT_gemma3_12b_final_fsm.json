@@ -1,0 +1,257 @@
+{
+  "states": [
+    "Connecting",
+    "Authenticated",
+    "Unauthorized",
+    "WaitingForToken",
+    "TokenValidated",
+    "Publishing",
+    "Subscribing",
+    "ReceivingPacket",
+    "Authorized",
+    "Responding",
+    "Disconnected",
+    "Reauthenticating",
+    "RetainedMessageProcessing"
+  ],
+  "initial_state": "Connecting",
+  "final_states": [
+    "Disconnected"
+  ],
+  "transitions": [
+    {
+      "from": "Connecting",
+      "event": "receive CONNECT",
+      "action": "reply 0x00",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Connecting",
+      "event": "receive CONNECT",
+      "action": "reply 0x87",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Connecting",
+      "event": "receive CONNECT",
+      "action": "reply 0x8C",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Connecting",
+      "event": "receive AUTH",
+      "action": "reply 0x18",
+      "to": "WaitingForToken"
+    },
+    {
+      "from": "WaitingForToken",
+      "event": "receive AUTH",
+      "action": "reply 0x18",
+      "to": "TokenValidated"
+    },
+    {
+      "from": "TokenValidated",
+      "event": "receive PUBLISH",
+      "action": "reply 0x87",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "TokenValidated",
+      "event": "receive SUBSCRIBE",
+      "action": "reply 0x87",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "ReceivingPacket",
+      "event": "receive PUBLISH",
+      "action": "check scope",
+      "to": "Authorized"
+    },
+    {
+      "from": "ReceivingPacket",
+      "event": "receive SUBSCRIBE",
+      "action": "check scope",
+      "to": "Authorized"
+    },
+    {
+      "from": "Authorized",
+      "event": "cond authorized",
+      "action": "publish message",
+      "to": "Responding"
+    },
+    {
+      "from": "Authorized",
+      "event": "cond not authorized",
+      "action": "reply 0x87",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Authorized",
+      "event": "receive PUBLISH",
+      "action": "send PUBACK/PUBREC 0x87",
+      "to": "Responding"
+    },
+    {
+      "from": "Authorized",
+      "event": "receive SUBSCRIBE",
+      "action": "send SUBACK 0x87",
+      "to": "Responding"
+    },
+    {
+      "from": "Unauthorized",
+      "event": "receive PUBLISH",
+      "action": "send DISCONNECT 0x87",
+      "to": "ReceivingPacket"
+    },
+    {
+      "from": "Unauthorized",
+      "event": "receive SUBSCRIBE",
+      "action": "send DISCONNECT 0x87",
+      "to": "ReceivingPacket"
+    },
+    {
+      "from": "Responding",
+      "event": "timeout",
+      "action": "close connection",
+      "to": "ReceivingPacket"
+    },
+    {
+      "from": "Connected",
+      "event": "receive CONNECT",
+      "action": "set authenticated true",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Connected",
+      "event": "receive PUBLISH",
+      "action": "reply Not_authorized",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "receive SUBSCRIBE",
+      "action": "reply Not_authorized",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "receive PINGREQ",
+      "action": "check token expiration",
+      "to": "Connected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive PUBLISH",
+      "action": "check token expiration",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive SUBSCRIBE",
+      "action": "check token expiration",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "timeout token_expiration",
+      "action": "reply Not_authorized",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive AUTH_Reauthentication",
+      "action": "start reauthentication",
+      "to": "Reauthenticating"
+    },
+    {
+      "from": "Reauthenticating",
+      "event": "receive AUTH_Reauthentication",
+      "action": "perform proof_of_possession",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Reauthenticating",
+      "event": "cond reauthentication_failed",
+      "action": "reply Not_Authorized",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Disconnected",
+      "event": "receive AUTH",
+      "action": "deny request",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "receive DISCONNECT",
+      "action": "reply 0",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Disconnected",
+      "event": "cond token_expired",
+      "action": "discard retained_message",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Disconnected",
+      "event": "cond message_expiry_reached",
+      "action": "discard retained_message",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "receive PUBLISH",
+      "action": "process_retain_flag",
+      "to": "RetainedMessageProcessing"
+    },
+    {
+      "from": "RetainedMessageProcessing",
+      "event": "cond token_valid",
+      "action": "publish retained_message",
+      "to": "Connected"
+    },
+    {
+      "from": "RetainedMessageProcessing",
+      "event": "cond token_expired",
+      "action": "discard retained_message",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "cond network_error",
+      "action": "send WillMessage",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "receive CONNECT",
+      "action": "reply CONNACK",
+      "to": "Authenticating"
+    },
+    {
+      "from": "Authenticating",
+      "event": "receive AUTH",
+      "action": "reply AUTH",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "receive PUBLISH",
+      "action": "reply PUBACK",
+      "to": "Publishing"
+    },
+    {
+      "from": "Connected",
+      "event": "receive SUBSCRIBE",
+      "action": "reply SUBACK",
+      "to": "Subscribing"
+    },
+    {
+      "from": "Connected",
+      "event": "receive DISCONNECT",
+      "action": "reply DISCONNECT",
+      "to": "Connected"
+    }
+  ]
+}

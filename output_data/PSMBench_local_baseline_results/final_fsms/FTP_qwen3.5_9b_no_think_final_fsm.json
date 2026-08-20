@@ -1,0 +1,58 @@
+{
+  "states": [
+    "Begin",
+    "WaitingForReply",
+    "Success",
+    "Failure",
+    "Error",
+    "End"
+  ],
+  "initial_state": "Begin",
+  "final_states": [
+    "End"
+  ],
+  "transitions": [
+    {
+      "from": "Begin",
+      "event": "receive cmd",
+      "action": "send wait",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "recv 2",
+      "action": "reply success",
+      "to": "Success"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "recv 4,5",
+      "action": "reply failure",
+      "to": "Failure"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "recv 1,3",
+      "action": "reply error",
+      "to": "Error"
+    },
+    {
+      "from": "Success",
+      "event": "timeout",
+      "action": "stop",
+      "to": "End"
+    },
+    {
+      "from": "Failure",
+      "event": "timeout",
+      "action": "stop",
+      "to": "End"
+    },
+    {
+      "from": "Error",
+      "event": "timeout",
+      "action": "stop",
+      "to": "End"
+    }
+  ]
+}

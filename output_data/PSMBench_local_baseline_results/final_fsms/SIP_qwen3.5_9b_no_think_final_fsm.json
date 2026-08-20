@@ -1,0 +1,149 @@
+{
+  "states": [
+    "InitialTransaction",
+    "OngoingTransaction",
+    "TerminatedTransaction",
+    "PendingTransaction",
+    "FinalResponseSent",
+    "Cancelled",
+    "EarlyDialog",
+    "ConfirmedDialog",
+    "Calling",
+    "Proceeding",
+    "Completed"
+  ],
+  "initial_state": "InitialTransaction",
+  "final_states": [
+    "TerminatedTransaction",
+    "Cancelled",
+    "Terminated"
+  ],
+  "transitions": [
+    {
+      "from": "InitialTransaction",
+      "event": "recv INVITE",
+      "action": "reply 500",
+      "to": "OngoingTransaction"
+    },
+    {
+      "from": "InitialTransaction",
+      "event": "recv INVITE",
+      "action": "reply 491",
+      "to": "TerminatedTransaction"
+    },
+    {
+      "from": "InitialTransaction",
+      "event": "timeout",
+      "action": "terminate",
+      "to": "TerminatedTransaction"
+    },
+    {
+      "from": "InitialTransaction",
+      "event": "recv 481",
+      "action": "terminate",
+      "to": "TerminatedTransaction"
+    },
+    {
+      "from": "InitialTransaction",
+      "event": "recv 408",
+      "action": "terminate",
+      "to": "TerminatedTransaction"
+    },
+    {
+      "from": "OngoingTransaction",
+      "event": "recv INVITE",
+      "action": "reply 500",
+      "to": "OngoingTransaction"
+    },
+    {
+      "from": "OngoingTransaction",
+      "event": "recv INVITE",
+      "action": "reply 491",
+      "to": "TerminatedTransaction"
+    },
+    {
+      "from": "OngoingTransaction",
+      "event": "timeout",
+      "action": "terminate",
+      "to": "TerminatedTransaction"
+    },
+    {
+      "from": "PendingTransaction",
+      "event": "receive CANCEL",
+      "action": "reply 487",
+      "to": "Cancelled"
+    },
+    {
+      "from": "PendingTransaction",
+      "event": "send FinalResponse",
+      "action": "set final_response_sent true",
+      "to": "FinalResponseSent"
+    },
+    {
+      "from": "FinalResponseSent",
+      "event": "receive CANCEL",
+      "action": "ignore request",
+      "to": "FinalResponseSent"
+    },
+    {
+      "from": "EarlyDialog",
+      "event": "receive 2xx",
+      "action": "set confirmed true",
+      "to": "ConfirmedDialog"
+    },
+    {
+      "from": "EarlyDialog",
+      "event": "receive non-2xx",
+      "action": "terminate dialog",
+      "to": "Terminated"
+    },
+    {
+      "from": "ConfirmedDialog",
+      "event": "timeout 64*T1",
+      "action": "terminate session",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "timeout Timer A",
+      "action": "send INVITE",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "timeout Timer B",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "receive 1xx",
+      "action": "pass to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Calling",
+      "event": "receive 300-699",
+      "action": "send ACK",
+      "to": "Completed"
+    },
+    {
+      "from": "Calling",
+      "event": "receive 2xx",
+      "action": "pass to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive 300-699",
+      "action": "send ACK",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "timeout Timer D",
+      "action": "destroy transaction",
+      "to": "Terminated"
+    }
+  ]
+}

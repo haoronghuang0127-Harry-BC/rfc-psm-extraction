@@ -1,0 +1,176 @@
+{
+  "states": [
+    "NotAuthenticated",
+    "Authenticated",
+    "Selected",
+    "Closed"
+  ],
+  "initial_state": "NotAuthenticated",
+  "final_states": [
+    "Closed"
+  ],
+  "transitions": [
+    {
+      "from": "NotAuthenticated",
+      "event": "receive STARTTLS",
+      "action": "reply OK",
+      "to": "NotAuthenticated"
+    },
+    {
+      "from": "NotAuthenticated",
+      "event": "receive AUTHENTICATE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "NotAuthenticated",
+      "event": "receive LOGIN",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive ENABLE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive SELECT",
+      "action": "send FLAGS, EXISTS, LIST, PERMANENTFLAGS, UIDNEXT, UIDVALIDITY, reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive EXAMINE",
+      "action": "send FLAGS, EXISTS, LIST, PERMANENTFLAGS, UIDNEXT, UIDVALIDITY, reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive NAMESPACE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive CREATE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive DELETE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive RENAME",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive SUBSCRIBE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive UNSUBSCRIBE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive LIST",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive STATUS",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive APPEND",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "receive CLOSE",
+      "action": "send EXPUNGE, reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "receive UNSELECT",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "receive EXPUNGE",
+      "action": "send EXPUNGE, reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "receive SEARCH",
+      "action": "reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "receive FETCH",
+      "action": "send FETCH, reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "receive STORE",
+      "action": "send FETCH, reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "receive COPY",
+      "action": "reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "receive MOVE",
+      "action": "send EXPUNGE, reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "receive UID",
+      "action": "reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "AnyState",
+      "event": "receive CAPABILITY",
+      "action": "reply OK",
+      "to": "AnyState"
+    },
+    {
+      "from": "AnyState",
+      "event": "receive NOOP",
+      "action": "reply OK",
+      "to": "AnyState"
+    },
+    {
+      "from": "AnyState",
+      "event": "receive LOGOUT",
+      "action": "send BYE, close connection",
+      "to": "Closed"
+    }
+  ]
+}

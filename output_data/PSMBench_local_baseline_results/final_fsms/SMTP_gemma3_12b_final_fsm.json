@@ -1,0 +1,241 @@
+{
+  "states": [
+    "ConnectionOpen",
+    "AwaitingGreeting",
+    "SessionInitiated",
+    "MailTransaction",
+    "AwaitingRCPT",
+    "DataTransfer",
+    "AwaitingQUIT",
+    "ConnectionEstablishment",
+    "AwaitingCommand",
+    "ProcessingData",
+    "SendingResponse",
+    "MailTransactionOpen",
+    "MailTransactionClosed",
+    "AcceptingMessage",
+    "NotificationDelivery",
+    "LoopDetection",
+    "CompensatingIrregularities",
+    "Idle",
+    "Authenticated",
+    "RejectingConnection"
+  ],
+  "initial_state": "ConnectionOpen",
+  "final_states": [
+    "ConnectionOpen",
+    "RejectingConnection"
+  ],
+  "transitions": [
+    {
+      "from": "ConnectionOpen",
+      "event": "receive connection",
+      "action": "reply 220",
+      "to": "AwaitingGreeting"
+    },
+    {
+      "from": "AwaitingGreeting",
+      "event": "receive EHLO",
+      "action": "reply 250",
+      "to": "SessionInitiated"
+    },
+    {
+      "from": "AwaitingGreeting",
+      "event": "receive HELO",
+      "action": "reply 250",
+      "to": "SessionInitiated"
+    },
+    {
+      "from": "SessionInitiated",
+      "event": "receive MAIL",
+      "action": "reply 250",
+      "to": "MailTransaction"
+    },
+    {
+      "from": "MailTransaction",
+      "event": "receive RCPT",
+      "action": "reply 250",
+      "to": "AwaitingRCPT"
+    },
+    {
+      "from": "AwaitingRCPT",
+      "event": "receive DATA",
+      "action": "reply 354",
+      "to": "DataTransfer"
+    },
+    {
+      "from": "DataTransfer",
+      "event": "receive end_of_data",
+      "action": "reply 250",
+      "to": "AwaitingQUIT"
+    },
+    {
+      "from": "AwaitingQUIT",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "ConnectionOpen"
+    },
+    {
+      "from": "AwaitingGreeting",
+      "event": "receive 554",
+      "action": "reply 554",
+      "to": "AwaitingQUIT"
+    },
+    {
+      "from": "ConnectionEstablishment",
+      "event": "receive 220",
+      "action": "reply Greeting",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive EHLO",
+      "action": "reply 250",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive HELO",
+      "action": "reply 250",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive MAIL",
+      "action": "reply 250",
+      "to": "MailTransactionOpen"
+    },
+    {
+      "from": "MailTransactionOpen",
+      "event": "receive RCPT",
+      "action": "reply 250",
+      "to": "MailTransactionOpen"
+    },
+    {
+      "from": "MailTransactionOpen",
+      "event": "receive DATA",
+      "action": "reply 354",
+      "to": "ProcessingData"
+    },
+    {
+      "from": "ProcessingData",
+      "event": "receive <CRLF>.<CRLF>",
+      "action": "reply 250",
+      "to": "MailTransactionClosed"
+    },
+    {
+      "from": "MailTransactionOpen",
+      "event": "receive RSET",
+      "action": "reply 250",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive NOOP",
+      "action": "reply 250",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "ConnectionEstablishment"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive VRFY",
+      "action": "reply 250",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive EXPN",
+      "action": "reply 250",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive HELP",
+      "action": "reply 214",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AcceptingMessage",
+      "event": "receive DATA",
+      "action": "reply 250",
+      "to": "AcceptingMessage"
+    },
+    {
+      "from": "AcceptingMessage",
+      "event": "cond delivery_failure",
+      "action": "send notification",
+      "to": "NotificationDelivery"
+    },
+    {
+      "from": "NotificationDelivery",
+      "event": "cond null_return_path",
+      "action": "stop",
+      "to": "NotificationDelivery"
+    },
+    {
+      "from": "AcceptingMessage",
+      "event": "cond loop_detected",
+      "action": "reject",
+      "to": "LoopDetection"
+    },
+    {
+      "from": "AcceptingMessage",
+      "event": "receive malformed_message",
+      "action": "attempt_repair",
+      "to": "CompensatingIrregularities"
+    },
+    {
+      "from": "Idle",
+      "event": "receive EHLO",
+      "action": "reply 250",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive MAIL",
+      "action": "reply 250",
+      "to": "ProcessingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive RCPT",
+      "action": "reply 250",
+      "to": "ProcessingCommand"
+    },
+    {
+      "from": "ProcessingCommand",
+      "event": "receive VRFY",
+      "action": "reply 252",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "ProcessingCommand",
+      "event": "receive EXPN",
+      "action": "reply 252",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "cond attack_detected",
+      "action": "close connection",
+      "to": "RejectingConnection"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive 251",
+      "action": "reply 251",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive 551",
+      "action": "reply 551",
+      "to": "AwaitingCommand"
+    }
+  ]
+}

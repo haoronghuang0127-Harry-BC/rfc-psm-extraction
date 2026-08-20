@@ -1,0 +1,305 @@
+{
+  "states": [
+    "Idle",
+    "Trying",
+    "Ringing",
+    "Ok",
+    "Acknowledged",
+    "Initial",
+    "SendingRequest",
+    "WaitingForReply",
+    "Cancelled",
+    "Completed",
+    "ProcessingRequest",
+    "SendingResponse",
+    "StatelessUAS",
+    "PendingTransaction",
+    "TransactionFound",
+    "NoTransactionFound",
+    "Processing",
+    "Error",
+    "BindingUpdate",
+    "ReceivingOptions",
+    "RespondingOk",
+    "RespondingBusy",
+    "EarlyDialog",
+    "ConfirmedDialog",
+    "TerminatedDialog",
+    "StatelessProxy",
+    "StatefulProxy",
+    "ValidatingRequest",
+    "RequestForwarding",
+    "ResponseProcessing",
+    "Calling",
+    "Proceeding",
+    "Successful",
+    "Redirection",
+    "RequestFailure",
+    "ServerFailure",
+    "GlobalFailure",
+    "Challenged",
+    "Authenticated",
+    "Forbidden",
+    "ReceivingRequest",
+    "ValidatingCertificate",
+    "CertificateValid",
+    "CertificateInvalid",
+    "SendingResponse",
+    "ProcessingBody",
+    "KeyExchange",
+    "Registered"
+  ],
+  "initial_state": "Idle",
+  "final_states": [
+    "Acknowledged",
+    "Completed",
+    "Error",
+    "TerminatedDialog",
+    "Terminated",
+    "Forbidden",
+    "Completed",
+    "Idle"
+  ],
+  "transitions": [
+    {
+      "from": "Idle",
+      "event": "receive INVITE",
+      "action": "reply 100 Trying",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "receive INVITE",
+      "action": "reply 100 Trying",
+      "to": "Ringing"
+    },
+    {
+      "from": "Ringing",
+      "event": "receive 180 Ringing",
+      "action": "reply 180 Ringing",
+      "to": "Ringing"
+    },
+    {
+      "from": "Ringing",
+      "event": "receive 200 OK",
+      "action": "reply 200 OK",
+      "to": "Ok"
+    },
+    {
+      "from": "Ok",
+      "event": "receive ACK",
+      "action": "reply ACK",
+      "to": "Acknowledged"
+    },
+    {
+      "from": "Ok",
+      "event": "receive BYE",
+      "action": "reply 200 OK",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "receive BYE",
+      "action": "reply 200 OK",
+      "to": "Idle"
+    },
+    {
+      "from": "Initial",
+      "event": "send INVITE",
+      "action": "create client transaction",
+      "to": "SendingRequest"
+    },
+    {
+      "from": "SendingRequest",
+      "event": "receive 200 OK",
+      "action": "reply ACK",
+      "to": "Completed"
+    },
+    {
+      "from": "SendingRequest",
+      "event": "receive 4xx/5xx/6xx",
+      "action": "reply error",
+      "to": "Completed"
+    },
+    {
+      "from": "SendingRequest",
+      "event": "timeout",
+      "action": "retransmit request",
+      "to": "SendingRequest"
+    },
+    {
+      "from": "SendingRequest",
+      "event": "send CANCEL",
+      "action": "create client transaction",
+      "to": "Cancelled"
+    },
+    {
+      "from": "Cancelled",
+      "event": "receive 200 OK",
+      "action": "reply ACK",
+      "to": "Completed"
+    },
+    {
+      "from": "Cancelled",
+      "event": "receive 4xx/5xx/6xx",
+      "action": "reply error",
+      "to": "Completed"
+    },
+    {
+      "from": "Idle",
+      "event": "receive request",
+      "action": "inspect method",
+      "to": "ProcessingRequest"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond method not supported",
+      "action": "reply 405",
+      "to": "Idle"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond request valid",
+      "action": "process request",
+      "to": "SendingResponse"
+    },
+    {
+      "from": "SendingResponse",
+      "event": "send response",
+      "action": "reset state",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "receive request",
+      "action": "process as stateless",
+      "to": "StatelessUAS"
+    },
+    {
+      "from": "StatelessUAS",
+      "event": "send response",
+      "action": "discard state",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "receive CANCEL",
+      "action": "set matching_transaction false",
+      "to": "PendingTransaction"
+    },
+    {
+      "from": "PendingTransaction",
+      "event": "cond transaction_matches",
+      "action": "set matching_transaction true",
+      "to": "TransactionFound"
+    },
+    {
+      "from": "PendingTransaction",
+      "event": "cond transaction_does_not_match",
+      "action": "reply 481",
+      "to": "NoTransactionFound"
+    },
+    {
+      "from": "TransactionFound",
+      "event": "cond final_response_sent",
+      "action": "reply 200",
+      "to": "Idle"
+    },
+    {
+      "from": "TransactionFound",
+      "event": "cond original_request_is_INVITE",
+      "action": "reply 487",
+      "to": "Idle"
+    },
+    {
+      "from": "TransactionFound",
+      "event": "cond original_request_not_INVITE",
+      "action": "reply 200",
+      "to": "Idle"
+    },
+    {
+      "from": "NoTransactionFound",
+      "event": "receive CANCEL",
+      "action": "reply 481",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "receive REGISTER",
+      "action": "set domain",
+      "to": "ProcessingRequest"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond invalid_domain",
+      "action": "reply 404",
+      "to": "Error"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond unauthorized",
+      "action": "reply 403",
+      "to": "Error"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond invalid_request",
+      "action": "reply 400",
+      "to": "Error"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond interval_too_brief",
+      "action": "reply 423",
+      "to": "Error"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "receive valid_request",
+      "action": "update_bindings",
+      "to": "BindingUpdate"
+    },
+    {
+      "from": "BindingUpdate",
+      "event": "cond binding_update_failed",
+      "action": "reply 500",
+      "to": "Error"
+    },
+    {
+      "from": "BindingUpdate",
+      "event": "cond binding_update_success",
+      "action": "reply 200",
+      "to": "Idle"
+    },
+    {
+      "from": "Error",
+      "event": "timeout",
+      "action": "reset",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "receive OPTIONS",
+      "action": "reply 200",
+      "to": "RespondingOk"
+    },
+    {
+      "from": "Idle",
+      "event": "receive OPTIONS",
+      "action": "reply 486",
+      "to": "RespondingBusy"
+    },
+    {
+      "from": "RespondingOk",
+      "event": "send 200",
+      "action": "set capabilities",
+      "to": "Idle"
+    },
+    {
+      "from": "RespondingBusy",
+      "event": "send 486",
+      "action": "log busy",
+      "to": "Idle"
+    }
+  ]
+}

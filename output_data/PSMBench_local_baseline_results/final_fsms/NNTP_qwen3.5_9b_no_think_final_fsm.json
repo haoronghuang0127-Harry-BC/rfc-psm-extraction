@@ -1,0 +1,68 @@
+{
+  "states": [
+    "InitialGreeting",
+    "ReaderMode",
+    "TransitOnly",
+    "Idle",
+    "AwaitingResponse",
+    "StreamingData"
+  ],
+  "initial_state": "InitialGreeting",
+  "final_states": [],
+  "transitions": [
+    {
+      "from": "InitialGreeting",
+      "event": "recv CAPABILITIES",
+      "action": "send 101",
+      "to": "InitialGreeting"
+    },
+    {
+      "from": "InitialGreeting",
+      "event": "recv MODE READER",
+      "action": "send 200",
+      "to": "ReaderMode"
+    },
+    {
+      "from": "InitialGreeting",
+      "event": "recv MODE READER",
+      "action": "send 502",
+      "to": "TransitOnly"
+    },
+    {
+      "from": "ReaderMode",
+      "event": "recv QUIT",
+      "action": "send 205",
+      "to": "InitialGreeting"
+    },
+    {
+      "from": "TransitOnly",
+      "event": "recv MODE READER",
+      "action": "send 502",
+      "to": "TransitOnly"
+    },
+    {
+      "from": "Idle",
+      "event": "receive COMMAND",
+      "action": "send RESPONSE",
+      "to": "AwaitingResponse"
+    },
+    {
+      "from": "AwaitingResponse",
+      "event": "cond response_3xx",
+      "action": "wait continuation",
+      "to": "StreamingData"
+    },
+    {
+      "from": "StreamingData",
+      "event": "receive ENCODED-ARTICLE",
+      "action": "collect data",
+      "to": "StreamingData"
+    },
+    {
+      "from": "StreamingData",
+      "event": "cond end_of_stream",
+      "action": "send RESPONSE",
+      "to": "Idle"
+    }
+  ]
+}

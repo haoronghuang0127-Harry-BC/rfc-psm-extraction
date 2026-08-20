@@ -1,0 +1,1127 @@
+{
+  "states": [
+    "Idle",
+    "CallInitiated",
+    "ProxyProcessing",
+    "Ringing",
+    "CallAnswered",
+    "MediaSessionActive",
+    "SessionTerminated",
+    "UACGeneratingRequest",
+    "UACSendingRequest",
+    "UACProcessingResponse",
+    "UASReceivingRequest",
+    "UASInspectingMethod",
+    "UASInspectingHeaders",
+    "UASProcessingContent",
+    "UASGeneratingResponse",
+    "ClientWaitingForProvisional",
+    "ClientReceivedProvisional",
+    "ClientReceivedFinal",
+    "ServerNoMatchingTransaction",
+    "ServerOriginalRequestPending",
+    "ServerOriginalRequestCompleted",
+    "RegistrarIdle",
+    "RequestReceived",
+    "DomainCheckFailed",
+    "RequireHeaderProcessed",
+    "AuthenticationPending",
+    "AuthorizationFailed",
+    "AddressOfRecordInvalid",
+    "ContactWildcardValidation",
+    "BindingUpdateProcessing",
+    "ExpirationIntervalRejected",
+    "BindingCommitFailed",
+    "RegistrationSuccess",
+    "UASReady",
+    "UASBusy",
+    "ProxyServer",
+    "DialogEstablished",
+    "NoDialog",
+    "EarlyDialog",
+    "ConfirmedDialog",
+    "UACInitiating",
+    "UACEarlyDialog",
+    "UACConfirmedDialog",
+    "UASTerminated",
+    "UASProcessing",
+    "UASProgress",
+    "UASRedirected",
+    "UASRejected",
+    "UASAccepted",
+    "ReInvitePending",
+    "SessionModified",
+    "DialogTerminated",
+    "SessionActive",
+    "ValidatingRequest",
+    "DeterminingTargets",
+    "ForwardingRequest",
+    "ProcessingResponse",
+    "TransactionTerminated",
+    "Calling",
+    "Proceeding",
+    "Completed",
+    "Terminated",
+    "Trying",
+    "Confirmed",
+    "Unauthenticated",
+    "Challenged",
+    "Authenticated",
+    "CertificateUnknown",
+    "CertificateVerified",
+    "KeyringUpdated",
+    "SessionSecured",
+    "SessionUnsecured",
+    "RequestRejected",
+    "RegistrationInitiated",
+    "Registered",
+    "SessionSetupInitiated",
+    "SessionEstablished",
+    "CallTerminated",
+    "TransactionPending"
+  ],
+  "initial_state": "Idle",
+  "final_states": [
+    "SessionTerminated",
+    "UASGeneratingResponse",
+    "ClientReceivedFinal",
+    "ServerOriginalRequestCompleted",
+    "AuthorizationFailed",
+    "DomainCheckFailed",
+    "ExpirationIntervalRejected",
+    "BindingCommitFailed",
+    "RegistrationSuccess",
+    "DialogTerminated",
+    "TransactionTerminated",
+    "Terminated",
+    "Confirmed",
+    "Authenticated",
+    "SessionSecured",
+    "SessionUnsecured",
+    "RequestRejected",
+    "CallTerminated",
+    "TransactionCompleted"
+  ],
+  "transitions": [
+    {
+      "from": "Idle",
+      "event": "send INVITE",
+      "action": "start call setup",
+      "to": "CallInitiated"
+    },
+    {
+      "from": "CallInitiated",
+      "event": "receive 100 Trying",
+      "action": "acknowledge receipt",
+      "to": "ProxyProcessing"
+    },
+    {
+      "from": "ProxyProcessing",
+      "event": "receive 180 Ringing",
+      "action": "alert user",
+      "to": "Ringing"
+    },
+    {
+      "from": "Ringing",
+      "event": "receive 200 OK",
+      "action": "confirm answer",
+      "to": "CallAnswered"
+    },
+    {
+      "from": "CallAnswered",
+      "event": "send ACK",
+      "action": "complete handshake",
+      "to": "MediaSessionActive"
+    },
+    {
+      "from": "MediaSessionActive",
+      "event": "receive BYE",
+      "action": "reply 200 OK",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "UACGeneratingRequest",
+      "event": "cond external_stimulus",
+      "action": "set request_headers",
+      "to": "UACSendingRequest"
+    },
+    {
+      "from": "UACSendingRequest",
+      "event": "send request",
+      "action": "wait_for_response",
+      "to": "UACProcessingResponse"
+    },
+    {
+      "from": "UACProcessingResponse",
+      "event": "receive 3xx_redirect",
+      "action": "generate_new_request",
+      "to": "UACSendingRequest"
+    },
+    {
+      "from": "UACProcessingResponse",
+      "event": "receive 401_unauthorized",
+      "action": "retry_with_credentials",
+      "to": "UACSendingRequest"
+    },
+    {
+      "from": "UACProcessingResponse",
+      "event": "receive 407_proxy_auth_required",
+      "action": "retry_with_credentials",
+      "to": "UACSendingRequest"
+    },
+    {
+      "from": "UACProcessingResponse",
+      "event": "receive 413_entity_too_large",
+      "action": "retry_smaller_body",
+      "to": "UACSendingRequest"
+    },
+    {
+      "from": "UACProcessingResponse",
+      "event": "receive 415_unsupported_media",
+      "action": "retry_supported_content",
+      "to": "UACSendingRequest"
+    },
+    {
+      "from": "UACProcessingResponse",
+      "event": "receive 416_unsupported_uri_scheme",
+      "action": "retry_sip_uri",
+      "to": "UACSendingRequest"
+    },
+    {
+      "from": "UACProcessingResponse",
+      "event": "receive 420_bad_extension",
+      "action": "retry_without_extensions",
+      "to": "UACSendingRequest"
+    },
+    {
+      "from": "UASReceivingRequest",
+      "event": "receive request",
+      "action": "authenticate_request",
+      "to": "UASInspectingMethod"
+    },
+    {
+      "from": "UASInspectingMethod",
+      "event": "cond method_not_supported",
+      "action": "reply 405_method_not_allowed",
+      "to": "UASGeneratingResponse"
+    },
+    {
+      "from": "UASInspectingMethod",
+      "event": "cond method_supported",
+      "action": "continue_processing",
+      "to": "UASInspectingHeaders"
+    },
+    {
+      "from": "UASInspectingHeaders",
+      "event": "cond unsupported_uri_scheme",
+      "action": "reply 416_unsupported_uri_scheme",
+      "to": "UASGeneratingResponse"
+    },
+    {
+      "from": "UASInspectingHeaders",
+      "event": "cond address_not_found",
+      "action": "reply 404_not_found",
+      "to": "UASGeneratingResponse"
+    },
+    {
+      "from": "UASInspectingHeaders",
+      "event": "cond merged_request_detected",
+      "action": "reply 482_loop_detected",
+      "to": "UASGeneratingResponse"
+    },
+    {
+      "from": "UASInspectingHeaders",
+      "event": "cond require_extension_not_supported",
+      "action": "reply 420_bad_extension",
+      "to": "UASGeneratingResponse"
+    },
+    {
+      "from": "UASInspectingHeaders",
+      "event": "cond headers_valid",
+      "action": "continue_processing",
+      "to": "UASProcessingContent"
+    },
+    {
+      "from": "UASProcessingContent",
+      "event": "cond unsupported_media_type",
+      "action": "reply 415_unsupported_media_type",
+      "to": "UASGeneratingResponse"
+    },
+    {
+      "from": "UASProcessingContent",
+      "event": "cond content_valid",
+      "action": "process_method_specific",
+      "to": "UASGeneratingResponse"
+    },
+    {
+      "from": "ClientWaitingForProvisional",
+      "event": "receive provisional_response",
+      "action": "transition to state",
+      "to": "ClientReceivedProvisional"
+    },
+    {
+      "from": "ClientReceivedProvisional",
+      "event": "cond decide_to_cancel",
+      "action": "send CANCEL request",
+      "to": "ClientReceivedProvisional"
+    },
+    {
+      "from": "ClientReceivedProvisional",
+      "event": "receive final_response",
+      "action": "transition to state",
+      "to": "ClientReceivedFinal"
+    },
+    {
+      "from": "ClientReceivedFinal",
+      "event": "cond decide_to_cancel",
+      "action": "do not send CANCEL",
+      "to": "ClientReceivedFinal"
+    },
+    {
+      "from": "ClientReceivedProvisional",
+      "event": "timeout 64*T1",
+      "action": "destroy client transaction",
+      "to": "ClientReceivedFinal"
+    },
+    {
+      "from": "ServerNoMatchingTransaction",
+      "event": "receive CANCEL request",
+      "action": "reply 481",
+      "to": "ServerNoMatchingTransaction"
+    },
+    {
+      "from": "ServerOriginalRequestCompleted",
+      "event": "receive CANCEL request",
+      "action": "reply 200 OK",
+      "to": "ServerOriginalRequestCompleted"
+    },
+    {
+      "from": "ServerOriginalRequestPending",
+      "event": "receive CANCEL request for INVITE",
+      "action": "reply 487 to original request",
+      "to": "ServerOriginalRequestCompleted"
+    },
+    {
+      "from": "ServerOriginalRequestPending",
+      "event": "receive CANCEL request",
+      "action": "reply 200 OK to CANCEL",
+      "to": "ServerOriginalRequestCompleted"
+    },
+    {
+      "from": "RegistrarIdle",
+      "event": "receive REGISTER request",
+      "action": "inspect Request-URI",
+      "to": "RequestReceived"
+    },
+    {
+      "from": "RequestReceived",
+      "event": "cond domain not supported",
+      "action": "forward to addressed domain",
+      "to": "DomainCheckFailed"
+    },
+    {
+      "from": "RequestReceived",
+      "event": "cond domain supported",
+      "action": "process Require header field",
+      "to": "RequireHeaderProcessed"
+    },
+    {
+      "from": "RequireHeaderProcessed",
+      "event": "cond authentication required",
+      "action": "authenticate UAC",
+      "to": "AuthenticationPending"
+    },
+    {
+      "from": "AuthenticationPending",
+      "event": "cond user not authorized",
+      "action": "reply 403 Forbidden",
+      "to": "AuthorizationFailed"
+    },
+    {
+      "from": "AuthenticationPending",
+      "event": "cond user authorized",
+      "action": "extract address-of-record from To header",
+      "to": "AddressOfRecordInvalid"
+    },
+    {
+      "from": "AddressOfRecordInvalid",
+      "event": "cond address invalid for domain",
+      "action": "reply 404 Not Found",
+      "to": "DomainCheckFailed"
+    },
+    {
+      "from": "AddressOfRecordInvalid",
+      "event": "cond address valid",
+      "action": "check Contact header field presence",
+      "to": "ContactWildcardValidation"
+    },
+    {
+      "from": "ContactWildcardValidation",
+      "event": "cond wildcard with invalid params",
+      "action": "reply 400 Invalid Request",
+      "to": "DomainCheckFailed"
+    },
+    {
+      "from": "ContactWildcardValidation",
+      "event": "cond valid Contact values",
+      "action": "process each contact address",
+      "to": "BindingUpdateProcessing"
+    },
+    {
+      "from": "BindingUpdateProcessing",
+      "event": "cond expiration too brief",
+      "action": "reply 423 Interval Too Brief",
+      "to": "ExpirationIntervalRejected"
+    },
+    {
+      "from": "BindingUpdateProcessing",
+      "event": "cond binding update fails",
+      "action": "reply 500 Server Error",
+      "to": "BindingCommitFailed"
+    },
+    {
+      "from": "BindingUpdateProcessing",
+      "event": "cond all updates succeed",
+      "action": "commit bindings and reply 200 OK",
+      "to": "RegistrationSuccess"
+    },
+    {
+      "from": "UASReady",
+      "event": "receive OPTIONS",
+      "action": "reply 200 OK",
+      "to": "UASReady"
+    },
+    {
+      "from": "UASBusy",
+      "event": "receive OPTIONS",
+      "action": "reply 486 Busy Here",
+      "to": "UASBusy"
+    },
+    {
+      "from": "ProxyServer",
+      "event": "receive OPTIONS",
+      "action": "reply 200 OK",
+      "to": "ProxyServer"
+    },
+    {
+      "from": "DialogEstablished",
+      "event": "receive OPTIONS",
+      "action": "reply 200 OK",
+      "to": "DialogEstablished"
+    },
+    {
+      "from": "NoDialog",
+      "event": "receive INVITE with provisional response",
+      "action": "set dialog state early",
+      "to": "EarlyDialog"
+    },
+    {
+      "from": "EarlyDialog",
+      "event": "receive 2xx final response",
+      "action": "set dialog state confirmed",
+      "to": "ConfirmedDialog"
+    },
+    {
+      "from": "EarlyDialog",
+      "event": "receive non-2xx final response",
+      "action": "terminate dialog",
+      "to": "NoDialog"
+    },
+    {
+      "from": "EarlyDialog",
+      "event": "timeout no response",
+      "action": "terminate dialog",
+      "to": "NoDialog"
+    },
+    {
+      "from": "ConfirmedDialog",
+      "event": "receive 481 or 408 response",
+      "action": "terminate dialog",
+      "to": "NoDialog"
+    },
+    {
+      "from": "ConfirmedDialog",
+      "event": "timeout no response",
+      "action": "terminate dialog",
+      "to": "NoDialog"
+    },
+    {
+      "from": "UACInitiating",
+      "event": "send INVITE",
+      "action": "wait for response",
+      "to": "UACEarlyDialog"
+    },
+    {
+      "from": "UACEarlyDialog",
+      "event": "receive 1xx",
+      "action": "maintain early dialog",
+      "to": "UACEarlyDialog"
+    },
+    {
+      "from": "UACEarlyDialog",
+      "event": "receive 3xx",
+      "action": "try new addresses",
+      "to": "UACInitiating"
+    },
+    {
+      "from": "UACEarlyDialog",
+      "event": "receive non-2xx final",
+      "action": "terminate early dialogs",
+      "to": "UASTerminated"
+    },
+    {
+      "from": "UACEarlyDialog",
+      "event": "receive 2xx",
+      "action": "create confirmed dialog",
+      "to": "UACConfirmedDialog"
+    },
+    {
+      "from": "UACConfirmedDialog",
+      "event": "send ACK",
+      "action": "complete transaction",
+      "to": "UACConfirmedDialog"
+    },
+    {
+      "from": "UACConfirmedDialog",
+      "event": "cond no session desired",
+      "action": "send BYE",
+      "to": "UASTerminated"
+    },
+    {
+      "from": "UASProcessing",
+      "event": "receive INVITE",
+      "action": "check Expires timer",
+      "to": "UASProgress"
+    },
+    {
+      "from": "UASProcessing",
+      "event": "timeout Expires",
+      "action": "reply 487",
+      "to": "UASRejected"
+    },
+    {
+      "from": "UASProgress",
+      "event": "send 1xx",
+      "action": "indicate progress",
+      "to": "UASProgress"
+    },
+    {
+      "from": "UASProgress",
+      "event": "cond redirect call",
+      "action": "reply 3xx",
+      "to": "UASRedirected"
+    },
+    {
+      "from": "UASProgress",
+      "event": "cond reject call",
+      "action": "reply non-2xx",
+      "to": "UASRejected"
+    },
+    {
+      "from": "UASProgress",
+      "event": "cond accept call",
+      "action": "reply 2xx",
+      "to": "UASAccepted"
+    },
+    {
+      "from": "UASAccepted",
+      "event": "receive ACK",
+      "action": "stop retransmissions",
+      "to": "UASAccepted"
+    },
+    {
+      "from": "UASAccepted",
+      "event": "timeout 64*T1",
+      "action": "send BYE",
+      "to": "UASTerminated"
+    },
+    {
+      "from": "DialogEstablished",
+      "event": "send re-INVITE",
+      "action": "set session parameters",
+      "to": "ReInvitePending"
+    },
+    {
+      "from": "ReInvitePending",
+      "event": "receive 2xx response",
+      "action": "update session description",
+      "to": "SessionModified"
+    },
+    {
+      "from": "ReInvitePending",
+      "event": "receive non-2xx final response",
+      "action": "keep session unchanged",
+      "to": "DialogEstablished"
+    },
+    {
+      "from": "ReInvitePending",
+      "event": "receive 481 or 408 or timeout",
+      "action": "terminate dialog",
+      "to": "DialogTerminated"
+    },
+    {
+      "from": "ReInvitePending",
+      "event": "receive 491 response",
+      "action": "start retry timer T",
+      "to": "ReInvitePending"
+    },
+    {
+      "from": "ReInvitePending",
+      "event": "timeout T fires",
+      "action": "send re-INVITE again",
+      "to": "ReInvitePending"
+    },
+    {
+      "from": "DialogEstablished",
+      "event": "receive second INVITE during first",
+      "action": "reply 500 with Retry-After",
+      "to": "DialogEstablished"
+    },
+    {
+      "from": "DialogEstablished",
+      "event": "receive INVITE while sending INVITE",
+      "action": "reply 491 Request Pending",
+      "to": "DialogEstablished"
+    },
+    {
+      "from": "ReInvitePending",
+      "event": "receive re-INVITE with changed description",
+      "action": "adjust session parameters",
+      "to": "SessionModified"
+    },
+    {
+      "from": "ReInvitePending",
+      "event": "receive re-INVITE with unacceptable description",
+      "action": "reply 488 Not Acceptable Here",
+      "to": "DialogEstablished"
+    },
+    {
+      "from": "SessionModified",
+      "event": "send 2xx without receiving ACK",
+      "action": "send BYE to terminate",
+      "to": "DialogTerminated"
+    },
+    {
+      "from": "SessionActive",
+      "event": "send BYE",
+      "action": "stop media",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "SessionActive",
+      "event": "receive 481",
+      "action": "terminate session and dialog",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "SessionActive",
+      "event": "receive 408",
+      "action": "terminate session and dialog",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "SessionActive",
+      "event": "timeout BYE",
+      "action": "terminate session and dialog",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "DialogConfirmed",
+      "event": "receive BYE",
+      "action": "stop media",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "DialogConfirmed",
+      "event": "receive BYE",
+      "action": "reply 2xx",
+      "to": "DialogTerminated"
+    },
+    {
+      "from": "DialogEarly",
+      "event": "receive CANCEL",
+      "action": "send 487",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "DialogConfirmed",
+      "event": "receive pending request",
+      "action": "reply 487",
+      "to": "DialogTerminated"
+    },
+    {
+      "from": "RequestReceived",
+      "event": "receive SIP request",
+      "action": "validate syntax and headers",
+      "to": "ValidatingRequest"
+    },
+    {
+      "from": "ValidatingRequest",
+      "event": "cond validation failed",
+      "action": "reply error code",
+      "to": "TransactionTerminated"
+    },
+    {
+      "from": "ValidatingRequest",
+      "event": "cond validation passed",
+      "action": "determine target set",
+      "to": "DeterminingTargets"
+    },
+    {
+      "from": "DeterminingTargets",
+      "event": "cond no targets found",
+      "action": "reply 480 Temporarily Unavailable",
+      "to": "TransactionTerminated"
+    },
+    {
+      "from": "DeterminingTargets",
+      "event": "cond targets found",
+      "action": "forward request to target",
+      "to": "ForwardingRequest"
+    },
+    {
+      "from": "ForwardingRequest",
+      "event": "receive provisional response",
+      "action": "reset timer C",
+      "to": "ProcessingResponse"
+    },
+    {
+      "from": "ForwardingRequest",
+      "event": "receive final response",
+      "action": "add to response context",
+      "to": "ProcessingResponse"
+    },
+    {
+      "from": "ProcessingResponse",
+      "event": "cond immediate forward required",
+      "action": "send response upstream",
+      "to": "ProcessingResponse"
+    },
+    {
+      "from": "ProcessingResponse",
+      "event": "cond all transactions terminated",
+      "action": "choose best final response",
+      "to": "TransactionTerminated"
+    },
+    {
+      "from": "ForwardingRequest",
+      "event": "timeout timer C",
+      "action": "generate CANCEL or 408",
+      "to": "TransactionTerminated"
+    },
+    {
+      "from": "Calling",
+      "event": "receive INVITE from TU",
+      "action": "send INVITE",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "timeout Timer A",
+      "action": "retransmit INVITE",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "receive 1xx response",
+      "action": "pass response to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Calling",
+      "event": "receive 300-699 response",
+      "action": "send ACK and pass response to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Calling",
+      "event": "timeout Timer B",
+      "action": "inform TU of timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive 1xx response",
+      "action": "pass response to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive 300-699 response",
+      "action": "send ACK and pass response to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive 2xx response",
+      "action": "pass response to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "timeout Timer B",
+      "action": "inform TU of timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "receive retransmitted final response",
+      "action": "retransmit ACK",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "timeout Timer D",
+      "action": "destroy transaction",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "receive request from TU",
+      "action": "send request",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "timeout Timer E",
+      "action": "retransmit request",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "receive 1xx response",
+      "action": "pass response to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "receive 200-699 response",
+      "action": "pass response to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Trying",
+      "event": "timeout Timer F",
+      "action": "inform TU of timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "timeout Timer E",
+      "action": "retransmit request",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive 1xx response",
+      "action": "pass response to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive 200-699 response",
+      "action": "pass response to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "timeout Timer F",
+      "action": "inform TU of timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "receive retransmitted final response",
+      "action": "buffer response",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "timeout Timer K",
+      "action": "destroy transaction",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive INVITE request",
+      "action": "send 100 Trying and pass to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive 101-199 from TU",
+      "action": "send response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive retransmitted INVITE",
+      "action": "retransmit last provisional response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive 2xx from TU",
+      "action": "send response",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive 300-699 from TU",
+      "action": "send response and set Timer G",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "timeout Timer G",
+      "action": "retransmit response",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "receive retransmitted INVITE",
+      "action": "retransmit response",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "receive ACK",
+      "action": "stop retransmissions",
+      "to": "Confirmed"
+    },
+    {
+      "from": "Completed",
+      "event": "timeout Timer H",
+      "action": "inform TU of failure",
+      "to": "Terminated"
+    },
+    {
+      "from": "Confirmed",
+      "event": "receive ACK",
+      "action": "absorb ACK",
+      "to": "Confirmed"
+    },
+    {
+      "from": "Confirmed",
+      "event": "timeout Timer I",
+      "action": "destroy transaction",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "receive request from TU",
+      "action": "pass to TU",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "receive 1xx from TU",
+      "action": "send response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "receive 200-699 from TU",
+      "action": "send response",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive 1xx from TU",
+      "action": "send response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive retransmitted request",
+      "action": "retransmit last provisional response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive 200-699 from TU",
+      "action": "send response and set Timer J",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "receive retransmitted request",
+      "action": "retransmit final response",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "timeout Timer J",
+      "action": "destroy transaction",
+      "to": "Terminated"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "receive request without credentials",
+      "action": "reply 401 Unauthorized",
+      "to": "Challenged"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "receive request without proxy credentials",
+      "action": "reply 407 Proxy Authentication Required",
+      "to": "Challenged"
+    },
+    {
+      "from": "Challenged",
+      "event": "receive request with valid credentials",
+      "action": "set authenticated true",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Challenged",
+      "event": "receive request with invalid credentials",
+      "action": "reply 401 Unauthorized",
+      "to": "Challenged"
+    },
+    {
+      "from": "Challenged",
+      "event": "receive request with invalid credentials",
+      "action": "reply 403 Forbidden",
+      "to": "Unauthenticated"
+    },
+    {
+      "from": "Idle",
+      "event": "receive S/MIME request with certificate",
+      "action": "validate certificate against root CAs",
+      "to": "CertificateUnknown"
+    },
+    {
+      "from": "CertificateUnknown",
+      "event": "cond certificate self-signed or untrusted",
+      "action": "notify user and request permission",
+      "to": "Idle"
+    },
+    {
+      "from": "CertificateUnknown",
+      "event": "cond user authorizes certificate",
+      "action": "add certificate to keyring",
+      "to": "KeyringUpdated"
+    },
+    {
+      "from": "CertificateUnknown",
+      "event": "cond certificate verified and subject matches From header",
+      "action": "add certificate to keyring",
+      "to": "KeyringUpdated"
+    },
+    {
+      "from": "Idle",
+      "event": "receive S/MIME request with unknown public key for encryption",
+      "action": "reply 493 Undecipherable",
+      "to": "RequestRejected"
+    },
+    {
+      "from": "Idle",
+      "event": "receive S/MIME body with required handling parameter unsupported",
+      "action": "reply 415 Unsupported Media Type",
+      "to": "RequestRejected"
+    },
+    {
+      "from": "Idle",
+      "event": "receive tunneled message/sip with integrity violation",
+      "action": "notify user of discrepancy",
+      "to": "CertificateUnknown"
+    },
+    {
+      "from": "CertificateVerified",
+      "event": "cond certificate in keyring matches new request",
+      "action": "process signaling securely",
+      "to": "SessionSecured"
+    },
+    {
+      "from": "CertificateVerified",
+      "event": "cond certificate in keyring differs from new request",
+      "action": "notify user of potential security breach",
+      "to": "CertificateUnknown"
+    },
+    {
+      "from": "Idle",
+      "event": "receive unsecured body when S/MIME expected",
+      "action": "notify user session could not be secured",
+      "to": "SessionUnsecured"
+    },
+    {
+      "from": "RegistrationInitiated",
+      "event": "receive REGISTER",
+      "action": "reply 200 OK",
+      "to": "Registered"
+    },
+    {
+      "from": "SessionSetupInitiated",
+      "event": "receive INVITE",
+      "action": "send 100 Trying",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "receive INVITE",
+      "action": "send 180 Ringing",
+      "to": "Ringing"
+    },
+    {
+      "from": "Ringing",
+      "event": "receive INVITE",
+      "action": "reply 200 OK",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive ACK",
+      "action": "log session active",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive BYE",
+      "action": "reply 200 OK",
+      "to": "CallTerminated"
+    },
+    {
+      "from": "CallInitiated",
+      "event": "send CANCEL",
+      "action": "terminate call",
+      "to": "TransactionCompleted"
+    },
+    {
+      "from": "CallInitiated",
+      "event": "receive 2xx",
+      "action": "send BYE",
+      "to": "TransactionCompleted"
+    },
+    {
+      "from": "TransactionPending",
+      "event": "receive CANCEL",
+      "action": "reply 487",
+      "to": "TransactionCompleted"
+    },
+    {
+      "from": "TransactionPending",
+      "event": "receive BYE",
+      "action": "reply to INVITE",
+      "to": "TransactionCompleted"
+    },
+    {
+      "from": "CallInitiated",
+      "event": "cond provisional response received",
+      "action": "allow CANCEL",
+      "to": "TransactionPending"
+    },
+    {
+      "from": "CallAnswered",
+      "event": "receive ACK",
+      "action": "allow BYE",
+      "to": "CallInitiated"
+    },
+    {
+      "from": "TransactionPending",
+      "event": "receive 6xx",
+      "action": "send CANCEL pending branches",
+      "to": "TransactionCompleted"
+    }
+  ]
+}

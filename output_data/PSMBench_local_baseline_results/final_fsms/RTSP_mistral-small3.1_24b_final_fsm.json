@@ -1,0 +1,718 @@
+{
+  "states": [
+    "Idle",
+    "SetupRequestSent",
+    "SetupResponseReceived",
+    "MediaStreaming",
+    "Paused",
+    "TeardownSent",
+    "SessionCreated",
+    "SessionActive",
+    "SessionTimedOut",
+    "SessionRemoved",
+    "ProcessingRequest",
+    "SendingResponse",
+    "HandlingInformationalResponse",
+    "HandlingSuccessResponse",
+    "HandlingRedirectionResponse",
+    "HandlingClientErrorResponse",
+    "HandlingServerErrorResponse",
+    "PersistentConnection",
+    "TransientConnection",
+    "ConnectionClosed",
+    "WaitingForResponse",
+    "Overloaded",
+    "SessionTimeout",
+    "RequestReceived",
+    "RequestProcessing",
+    "RequestCompleted",
+    "SessionEstablished",
+    "SessionTerminated",
+    "Redirecting",
+    "ErrorHandling",
+    "Initial",
+    "Ready",
+    "Play",
+    "TLSHandshake",
+    "TLSConnected",
+    "ProxyAuthentication",
+    "ProxyConnected",
+    "SecureConnection",
+    "ConnectionEstablished",
+    "ConnectionFailed",
+    "SessionSetup",
+    "MediaSetup",
+    "Rtsp1_0",
+    "Rtsp2_0",
+    "Rtsp1_0Server",
+    "Rtsp2_0Server",
+    "Unauthenticated",
+    "Authenticated"
+  ],
+  "initial_state": "Idle",
+  "final_states": [
+    "SessionTimedOut",
+    "SessionRemoved",
+    "ConnectionClosed",
+    "SessionTerminated",
+    "ConnectionFailed",
+    "TeardownSent",
+    "Idle"
+  ],
+  "transitions": [
+    {
+      "from": "Idle",
+      "event": "receive SETUP",
+      "action": "reply 200 OK",
+      "to": "SessionActive"
+    },
+    {
+      "from": "Idle",
+      "event": "receive SETUP",
+      "action": "set PersistentConnection true",
+      "to": "PersistentConnection"
+    },
+    {
+      "from": "Idle",
+      "event": "receive SETUP",
+      "action": "set TransientConnection true",
+      "to": "TransientConnection"
+    },
+    {
+      "from": "Idle",
+      "event": "receive request",
+      "action": "set processingRequest true",
+      "to": "ProcessingRequest"
+    },
+    {
+      "from": "Idle",
+      "event": "receive request",
+      "action": "set RequestReceived true",
+      "to": "RequestReceived"
+    },
+    {
+      "from": "Idle",
+      "event": "receive SETUP",
+      "action": "send 200 OK",
+      "to": "SetupRequestSent"
+    },
+    {
+      "from": "Idle",
+      "event": "receive SETUP",
+      "action": "reply 200",
+      "to": "SessionSetup"
+    },
+    {
+      "from": "Idle",
+      "event": "receive DESCRIBE",
+      "action": "reply 200 OK",
+      "to": "SessionSetup"
+    },
+    {
+      "from": "Idle",
+      "event": "receive 401",
+      "action": "reply Authorization",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Idle",
+      "event": "receive 407",
+      "action": "reply Proxy-Authorization",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Idle",
+      "event": "receive 301",
+      "action": "set rtsps scheme",
+      "to": "TLSHandshake"
+    },
+    {
+      "from": "Idle",
+      "event": "timeout 5s",
+      "action": "reset state",
+      "to": "Initial"
+    },
+    {
+      "from": "SessionCreated",
+      "event": "receive SETUP",
+      "action": "reply 200 OK",
+      "to": "SessionActive"
+    },
+    {
+      "from": "SessionActive",
+      "event": "timeout 30s",
+      "action": "close session",
+      "to": "SessionTimedOut"
+    },
+    {
+      "from": "SessionActive",
+      "event": "receive TEARDOWN",
+      "action": "reply 200 OK",
+      "to": "SessionRemoved"
+    },
+    {
+      "from": "SessionActive",
+      "event": "receive PLAY",
+      "action": "reply 200",
+      "to": "SessionActive"
+    },
+    {
+      "from": "SessionActive",
+      "event": "receive PAUSE",
+      "action": "reply 200",
+      "to": "SessionActive"
+    },
+    {
+      "from": "SessionActive",
+      "event": "receive TEARDOWN",
+      "action": "reply 200",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "SessionActive",
+      "event": "timeout 60s",
+      "action": "reply 454",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "SessionActive",
+      "event": "receive SETUP",
+      "action": "reply 200",
+      "to": "SessionActive"
+    },
+    {
+      "from": "SessionActive",
+      "event": "timeout SessionTimeout",
+      "action": "close connection",
+      "to": "ConnectionClosed"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond informationalResponse",
+      "action": "reply 100",
+      "to": "HandlingInformationalResponse"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond successResponse",
+      "action": "reply 200",
+      "to": "HandlingSuccessResponse"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond redirectionResponse",
+      "action": "reply 301",
+      "to": "HandlingRedirectionResponse"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond clientErrorResponse",
+      "action": "reply 400",
+      "to": "HandlingClientErrorResponse"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond serverErrorResponse",
+      "action": "reply 500",
+      "to": "HandlingServerErrorResponse"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond valid request",
+      "action": "set RequestProcessing true",
+      "to": "RequestProcessing"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond request completed",
+      "action": "reply 200",
+      "to": "RequestCompleted"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond redirection needed",
+      "action": "reply 302",
+      "to": "Redirecting"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond session established",
+      "action": "set SessionEstablished true",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond error occurred",
+      "action": "reply 500",
+      "to": "ErrorHandling"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "send response",
+      "action": "set PersistentConnection true",
+      "to": "PersistentConnection"
+    },
+    {
+      "from": "HandlingInformationalResponse",
+      "event": "send 100",
+      "action": "set sendingResponse true",
+      "to": "SendingResponse"
+    },
+    {
+      "from": "HandlingSuccessResponse",
+      "event": "send 200",
+      "action": "set sendingResponse true",
+      "to": "SendingResponse"
+    },
+    {
+      "from": "HandlingRedirectionResponse",
+      "event": "send 301",
+      "action": "set sendingResponse true",
+      "to": "SendingResponse"
+    },
+    {
+      "from": "HandlingClientErrorResponse",
+      "event": "send 400",
+      "action": "set sendingResponse true",
+      "to": "SendingResponse"
+    },
+    {
+      "from": "HandlingServerErrorResponse",
+      "event": "send 500",
+      "action": "set sendingResponse true",
+      "to": "SendingResponse"
+    },
+    {
+      "from": "SendingResponse",
+      "event": "send response",
+      "action": "set idle true",
+      "to": "Idle"
+    },
+    {
+      "from": "PersistentConnection",
+      "event": "receive SETUP",
+      "action": "reply 200",
+      "to": "PersistentConnection"
+    },
+    {
+      "from": "PersistentConnection",
+      "event": "receive TEARDOWN",
+      "action": "reply 200",
+      "to": "Idle"
+    },
+    {
+      "from": "PersistentConnection",
+      "event": "timeout 10s",
+      "action": "close connection",
+      "to": "ConnectionClosed"
+    },
+    {
+      "from": "PersistentConnection",
+      "event": "receive request",
+      "action": "set WaitingForResponse true",
+      "to": "WaitingForResponse"
+    },
+    {
+      "from": "PersistentConnection",
+      "event": "cond overload",
+      "action": "reply 503",
+      "to": "Overloaded"
+    },
+    {
+      "from": "PersistentConnection",
+      "event": "receive SETUP",
+      "action": "reply 200",
+      "to": "PersistentConnection"
+    },
+    {
+      "from": "TransientConnection",
+      "event": "receive TEARDOWN",
+      "action": "reply 200",
+      "to": "Idle"
+    },
+    {
+      "from": "TransientConnection",
+      "event": "timeout 10s",
+      "action": "close connection",
+      "to": "ConnectionClosed"
+    },
+    {
+      "from": "WaitingForResponse",
+      "event": "timeout 10s",
+      "action": "close connection",
+      "to": "ConnectionClosed"
+    },
+    {
+      "from": "WaitingForResponse",
+      "event": "receive response",
+      "action": "set ProcessingRequest true",
+      "to": "ProcessingRequest"
+    },
+    {
+      "from": "Overloaded",
+      "event": "timeout Retry-After",
+      "action": "set PersistentConnection true",
+      "to": "PersistentConnection"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive teardown request",
+      "action": "set SessionTerminated true",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "SessionTerminated",
+      "event": "cond session terminated",
+      "action": "reply 200",
+      "to": "Idle"
+    },
+    {
+      "from": "Redirecting",
+      "event": "receive redirect request",
+      "action": "reply 302",
+      "to": "RequestReceived"
+    },
+    {
+      "from": "ErrorHandling",
+      "event": "cond error resolved",
+      "action": "reply 200",
+      "to": "Idle"
+    },
+    {
+      "from": "RequestReceived",
+      "event": "cond invalid request",
+      "action": "reply 400",
+      "to": "ErrorHandling"
+    },
+    {
+      "from": "SetupRequestSent",
+      "event": "receive SETUP response",
+      "action": "set media_streaming true",
+      "to": "SetupResponseReceived"
+    },
+    {
+      "from": "SetupResponseReceived",
+      "event": "receive PLAY",
+      "action": "start media streaming",
+      "to": "MediaStreaming"
+    },
+    {
+      "from": "MediaStreaming",
+      "event": "receive PAUSE",
+      "action": "pause media streaming",
+      "to": "Paused"
+    },
+    {
+      "from": "Paused",
+      "event": "receive PLAY",
+      "action": "resume media streaming",
+      "to": "MediaStreaming"
+    },
+    {
+      "from": "MediaStreaming",
+      "event": "receive TEARDOWN",
+      "action": "stop media streaming",
+      "to": "TeardownSent"
+    },
+    {
+      "from": "TeardownSent",
+      "event": "send TEARDOWN response",
+      "action": "close connection",
+      "to": "Idle"
+    },
+    {
+      "from": "SessionSetup",
+      "event": "receive SETUP",
+      "action": "reply 200 OK",
+      "to": "MediaSetup"
+    },
+    {
+      "from": "MediaSetup",
+      "event": "receive PLAY",
+      "action": "reply 200 OK",
+      "to": "Playing"
+    },
+    {
+      "from": "MediaSetup",
+      "event": "receive SETUP",
+      "action": "reply 200 OK",
+      "to": "MediaSetup"
+    },
+    {
+      "from": "Playing",
+      "event": "receive PAUSE",
+      "action": "reply 200 OK",
+      "to": "Paused"
+    },
+    {
+      "from": "Paused",
+      "event": "receive PLAY",
+      "action": "reply 200 OK",
+      "to": "Playing"
+    },
+    {
+      "from": "Playing",
+      "event": "receive TEARDOWN",
+      "action": "reply 200 OK",
+      "to": "Teardown"
+    },
+    {
+      "from": "Paused",
+      "event": "receive TEARDOWN",
+      "action": "reply 200 OK",
+      "to": "Teardown"
+    },
+    {
+      "from": "Teardown",
+      "event": "send 200",
+      "action": "close connection",
+      "to": "Idle"
+    },
+    {
+      "from": "Initial",
+      "event": "receive SETUP",
+      "action": "reply 200, set NRM=1, set RP=0.0",
+      "to": "Ready"
+    },
+    {
+      "from": "Initial",
+      "event": "receive SETUP",
+      "action": "reply 3rr Redirect",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "receive S->C: REDIRECT",
+      "action": "reply terminate all SES",
+      "to": "Initial"
+    },
+    {
+      "from": "Ready",
+      "event": "receive SETUP",
+      "action": "reply set NRM +=1",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "receive SETUP",
+      "action": "reply change transport param",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "receive TEARDOWN",
+      "action": "reply no session hdr, set NRM=0",
+      "to": "Initial"
+    },
+    {
+      "from": "Ready",
+      "event": "receive TEARDOWN",
+      "action": "reply session hdr, set NRM -=1",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "receive PLAY",
+      "action": "reply play from RP",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "receive PLAY",
+      "action": "reply according to range",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "receive PAUSE",
+      "action": "reply return PP",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "receive SC:REDIRECT",
+      "action": "reply set RedP",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "receive SC:REDIRECT",
+      "action": "reply session is removed",
+      "to": "Initial"
+    },
+    {
+      "from": "Ready",
+      "event": "timeout",
+      "action": "reply",
+      "to": "Initial"
+    },
+    {
+      "from": "Ready",
+      "event": "receive RedP",
+      "action": "reply TEARDOWN of session",
+      "to": "Initial"
+    },
+    {
+      "from": "Play",
+      "event": "receive PAUSE",
+      "action": "reply set RP to present point",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "receive End of media",
+      "action": "reply set RP = End of media",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "receive End of range",
+      "action": "reply set RP = End of range",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "receive PLAY",
+      "action": "reply play from present point",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "receive PLAY",
+      "action": "reply according to range",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "receive SC:PLAY_NOTIFY",
+      "action": "reply 200",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "receive SETUP",
+      "action": "reply 455",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "receive SETUP",
+      "action": "reply change transport param",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "receive TEARDOWN",
+      "action": "reply no session hdr",
+      "to": "Initial"
+    },
+    {
+      "from": "Play",
+      "event": "receive TEARDOWN",
+      "action": "reply no session hdr, set NRM=0",
+      "to": "Initial"
+    },
+    {
+      "from": "Play",
+      "event": "receive TEARDOWN",
+      "action": "reply 455",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "receive SC:REDIRECT",
+      "action": "reply set RedP",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "receive SC:REDIRECT",
+      "action": "reply session is removed",
+      "to": "Initial"
+    },
+    {
+      "from": "Play",
+      "event": "receive RedP",
+      "action": "reply TEARDOWN of session",
+      "to": "Initial"
+    },
+    {
+      "from": "Play",
+      "event": "timeout",
+      "action": "reply stop media playout",
+      "to": "Initial"
+    },
+    {
+      "from": "TLSHandshake",
+      "event": "send TLS handshake",
+      "action": "set TLS session",
+      "to": "TLSConnected"
+    },
+    {
+      "from": "TLSConnected",
+      "event": "receive 472",
+      "action": "log failure",
+      "to": "ConnectionFailed"
+    },
+    {
+      "from": "TLSConnected",
+      "event": "receive 470",
+      "action": "reply Connection-Credentials",
+      "to": "ProxyAuthentication"
+    },
+    {
+      "from": "TLSConnected",
+      "event": "receive 407",
+      "action": "reply Proxy-Authorization",
+      "to": "ProxyAuthentication"
+    },
+    {
+      "from": "ProxyAuthentication",
+      "event": "send Accept-Credentials",
+      "action": "set proxy credentials",
+      "to": "ProxyConnected"
+    },
+    {
+      "from": "ProxyConnected",
+      "event": "send RTSP request",
+      "action": "set secure connection",
+      "to": "SecureConnection"
+    },
+    {
+      "from": "SecureConnection",
+      "event": "send RTSP request",
+      "action": "set connection established",
+      "to": "ConnectionEstablished"
+    },
+    {
+      "from": "TLSConnected",
+      "event": "receive 471",
+      "action": "log failure",
+      "to": "ConnectionFailed"
+    },
+    {
+      "from": "Rtsp1_0Server",
+      "event": "receive RTSP/1.0 request",
+      "action": "reply 505",
+      "to": "Rtsp2_0Server"
+    },
+    {
+      "from": "Rtsp1_0Server",
+      "event": "receive RTSP/1.0 request",
+      "action": "reply RTSP/1.0",
+      "to": "Rtsp1_0"
+    },
+    {
+      "from": "Rtsp2_0Server",
+      "event": "receive RTSP/2.0 request",
+      "action": "reply RTSP/2.0",
+      "to": "Rtsp2_0"
+    },
+    {
+      "from": "PlayState",
+      "event": "receive PLAY",
+      "action": "replace previous PLAY",
+      "to": "PlayState"
+    }
+  ]
+}

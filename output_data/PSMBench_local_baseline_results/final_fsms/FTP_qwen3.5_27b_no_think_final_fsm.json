@@ -1,0 +1,233 @@
+{
+  "states": [
+    "ConnectionEstablished",
+    "ExpectedDelay",
+    "AwaitingInput",
+    "LoginRequired",
+    "PasswordRequired",
+    "AccountRequired",
+    "Authenticated",
+    "TransferPending",
+    "DataTransferInProgress",
+    "TransferCompleted",
+    "DirectoryCreated",
+    "DirectoryRemoved",
+    "ParentDirectoryChanged",
+    "ErrorConflict",
+    "ConnectionClosed"
+  ],
+  "initial_state": "ConnectionEstablished",
+  "final_states": [
+    "ConnectionClosed",
+    "DirectoryCreated",
+    "DirectoryRemoved",
+    "ParentDirectoryChanged",
+    "ErrorConflict"
+  ],
+  "transitions": [
+    {
+      "from": "ConnectionEstablished",
+      "event": "send 120",
+      "action": "reply expected delay",
+      "to": "ExpectedDelay"
+    },
+    {
+      "from": "ExpectedDelay",
+      "event": "send 220",
+      "action": "reply awaiting input",
+      "to": "AwaitingInput"
+    },
+    {
+      "from": "ConnectionEstablished",
+      "event": "send 220",
+      "action": "reply awaiting input",
+      "to": "AwaitingInput"
+    },
+    {
+      "from": "ConnectionEstablished",
+      "event": "send 421",
+      "action": "reply service not available",
+      "to": "ConnectionClosed"
+    },
+    {
+      "from": "AwaitingInput",
+      "event": "receive USER",
+      "action": "reply 230",
+      "to": "Authenticated"
+    },
+    {
+      "from": "AwaitingInput",
+      "event": "receive USER",
+      "action": "reply 530",
+      "to": "LoginRequired"
+    },
+    {
+      "from": "AwaitingInput",
+      "event": "receive USER",
+      "action": "reply 331",
+      "to": "PasswordRequired"
+    },
+    {
+      "from": "AwaitingInput",
+      "event": "receive USER",
+      "action": "reply 332",
+      "to": "AccountRequired"
+    },
+    {
+      "from": "PasswordRequired",
+      "event": "receive PASS",
+      "action": "reply 230",
+      "to": "Authenticated"
+    },
+    {
+      "from": "PasswordRequired",
+      "event": "receive PASS",
+      "action": "reply 530",
+      "to": "LoginRequired"
+    },
+    {
+      "from": "AccountRequired",
+      "event": "receive ACCT",
+      "action": "reply 230",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive REIN",
+      "action": "reply 120",
+      "to": "ExpectedDelay"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive REIN",
+      "action": "reply 220",
+      "to": "AwaitingInput"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "ConnectionClosed"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive STOR",
+      "action": "reply 150",
+      "to": "TransferPending"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive RETR",
+      "action": "reply 150",
+      "to": "TransferPending"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive LIST",
+      "action": "reply 150",
+      "to": "TransferPending"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive RNFR",
+      "action": "reply 350",
+      "to": "TransferPending"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive TYPE I",
+      "action": "reply 200",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive STOR invalid",
+      "action": "reply 550",
+      "to": "Authenticated"
+    },
+    {
+      "from": "TransferPending",
+      "event": "send data connection",
+      "action": "open data channel",
+      "to": "DataTransferInProgress"
+    },
+    {
+      "from": "TransferPending",
+      "event": "receive RNTO",
+      "action": "reply 250",
+      "to": "Authenticated"
+    },
+    {
+      "from": "DataTransferInProgress",
+      "event": "cond transfer complete",
+      "action": "reply 226",
+      "to": "TransferCompleted"
+    },
+    {
+      "from": "DataTransferInProgress",
+      "event": "cond error occurred",
+      "action": "reply 451",
+      "to": "TransferCompleted"
+    },
+    {
+      "from": "DataTransferInProgress",
+      "event": "receive ABOR",
+      "action": "close data connection",
+      "to": "Authenticated"
+    },
+    {
+      "from": "DataTransferInProgress",
+      "event": "cond port specification changed",
+      "action": "close data connection",
+      "to": "Authenticated"
+    },
+    {
+      "from": "DataTransferInProgress",
+      "event": "cond control connection closed",
+      "action": "close data connection",
+      "to": "ConnectionClosed"
+    },
+    {
+      "from": "DataTransferInProgress",
+      "event": "cond irrecoverable error",
+      "action": "close data connection",
+      "to": "Authenticated"
+    },
+    {
+      "from": "TransferCompleted",
+      "event": "close data connection",
+      "action": "close data channel",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive MKD pathname",
+      "action": "reply 257 directory-name",
+      "to": "DirectoryCreated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive MKD existing-pathname",
+      "action": "reply 521 access-denied",
+      "to": "ErrorConflict"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive RMD pathname",
+      "action": "reply success-code",
+      "to": "DirectoryRemoved"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive PWD",
+      "action": "reply 257 current-directory",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive CDUP",
+      "action": "reply success-code",
+      "to": "ParentDirectoryChanged"
+    }
+  ]
+}

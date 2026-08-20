@@ -1,0 +1,353 @@
+{
+  "states": [
+    "Initial",
+    "AwaitingUsername",
+    "AwaitingPassword",
+    "Authenticated",
+    "TransferInProgress",
+    "TransferComplete",
+    "Aborted",
+    "ErrorState",
+    "PassiveMode",
+    "ConnectionEstablishment",
+    "Login",
+    "TransferParameters",
+    "FileAction",
+    "Informational",
+    "Miscellaneous",
+    "DataTransfer",
+    "EndOfFile"
+  ],
+  "initial_state": "Initial",
+  "final_states": [
+    "Aborted",
+    "ErrorState",
+    "TransferComplete"
+  ],
+  "transitions": [
+    {
+      "from": "Initial",
+      "event": "receive ftp",
+      "action": "reply 220",
+      "to": "AwaitingUsername"
+    },
+    {
+      "from": "Initial",
+      "event": "receive RNFR",
+      "action": "reply 2",
+      "to": "AwaitingUsername"
+    },
+    {
+      "from": "Initial",
+      "event": "receive REST",
+      "action": "reply 2",
+      "to": "AwaitingUsername"
+    },
+    {
+      "from": "Initial",
+      "event": "receive USER",
+      "action": "reply 2",
+      "to": "AwaitingUsername"
+    },
+    {
+      "from": "AwaitingUsername",
+      "event": "receive USER",
+      "action": "reply 331",
+      "to": "AwaitingPassword"
+    },
+    {
+      "from": "AwaitingPassword",
+      "event": "receive PASS",
+      "action": "reply 230",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive RETR",
+      "action": "reply 150",
+      "to": "TransferInProgress"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive STOR",
+      "action": "reply 150",
+      "to": "TransferInProgress"
+    },
+    {
+      "from": "TransferInProgress",
+      "event": "receive data",
+      "action": "reply 226",
+      "to": "TransferComplete"
+    },
+    {
+      "from": "TransferInProgress",
+      "event": "receive completion",
+      "action": "reply 226",
+      "to": "Authenticated"
+    },
+    {
+      "from": "TransferInProgress",
+      "event": "receive ABOR",
+      "action": "reply 426",
+      "to": "Aborted"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive TYPE",
+      "action": "reply 200",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive QUIT",
+      "action": "close connections",
+      "to": "Initial"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive STOR",
+      "action": "reply 550",
+      "to": "Aborted"
+    },
+    {
+      "from": "Aborted",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "Initial"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive REIN",
+      "action": "reset state",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive DELE",
+      "action": "reply 550",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive MKD",
+      "action": "reply 257",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive PWD",
+      "action": "reply 213",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive LIST",
+      "action": "reply 213",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Initial",
+      "event": "receive STOR",
+      "action": "open data connection",
+      "to": "DataTransfer"
+    },
+    {
+      "from": "Initial",
+      "event": "receive RETR",
+      "action": "open data connection",
+      "to": "DataTransfer"
+    },
+    {
+      "from": "DataTransfer",
+      "event": "receive EOR",
+      "action": "record end of record",
+      "to": "DataTransfer"
+    },
+    {
+      "from": "DataTransfer",
+      "event": "receive EOF",
+      "action": "close data connection",
+      "to": "EndOfFile"
+    },
+    {
+      "from": "DataTransfer",
+      "event": "receive ABORT",
+      "action": "close data connection",
+      "to": "ErrorState"
+    },
+    {
+      "from": "DataTransfer",
+      "event": "timeout",
+      "action": "close data connection",
+      "to": "ErrorState"
+    },
+    {
+      "from": "DataTransfer",
+      "event": "cond irrecoverable error",
+      "action": "close data connection",
+      "to": "ErrorState"
+    },
+    {
+      "from": "EndOfFile",
+      "event": "receive next command",
+      "action": "reset state",
+      "to": "Initial"
+    },
+    {
+      "from": "ErrorState",
+      "event": "receive next command",
+      "action": "reset state",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "receive 120",
+      "action": "reply 220",
+      "to": "ConnectionEstablishment"
+    },
+    {
+      "from": "ConnectionEstablishment",
+      "event": "receive 220",
+      "action": "reply 220",
+      "to": "ConnectionEstablishment"
+    },
+    {
+      "from": "ConnectionEstablishment",
+      "event": "receive 421",
+      "action": "reply 421",
+      "to": "ConnectionEstablishment"
+    },
+    {
+      "from": "Login",
+      "event": "receive USER",
+      "action": "reply 230",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "receive USER",
+      "action": "reply 530",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "receive USER",
+      "action": "reply 500",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "receive PASS",
+      "action": "reply 230",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "receive PASS",
+      "action": "reply 202",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "receive ACCT",
+      "action": "reply 230",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "receive CWD",
+      "action": "reply 250",
+      "to": "FileAction"
+    },
+    {
+      "from": "Login",
+      "event": "receive CDUP",
+      "action": "reply 200",
+      "to": "FileAction"
+    },
+    {
+      "from": "TransferParameters",
+      "event": "receive PORT",
+      "action": "reply 200",
+      "to": "TransferParameters"
+    },
+    {
+      "from": "TransferParameters",
+      "event": "receive PASV",
+      "action": "reply 227",
+      "to": "TransferParameters"
+    },
+    {
+      "from": "TransferParameters",
+      "event": "receive MODE",
+      "action": "reply 200",
+      "to": "TransferParameters"
+    },
+    {
+      "from": "TransferParameters",
+      "event": "receive TYPE",
+      "action": "reply 200",
+      "to": "TransferParameters"
+    },
+    {
+      "from": "TransferParameters",
+      "event": "receive STRU",
+      "action": "reply 200",
+      "to": "TransferParameters"
+    },
+    {
+      "from": "FileAction",
+      "event": "receive ALLO",
+      "action": "reply 200",
+      "to": "FileAction"
+    },
+    {
+      "from": "FileAction",
+      "event": "receive RETR",
+      "action": "reply 125",
+      "to": "FileAction"
+    },
+    {
+      "from": "FileAction",
+      "event": "receive STOR",
+      "action": "reply 125",
+      "to": "FileAction"
+    },
+    {
+      "from": "FileAction",
+      "event": "receive APPE",
+      "action": "reply 125",
+      "to": "FileAction"
+    },
+    {
+      "from": "Informational",
+      "event": "receive SYST",
+      "action": "reply 215",
+      "to": "Informational"
+    },
+    {
+      "from": "Informational",
+      "event": "receive STAT",
+      "action": "reply 211",
+      "to": "Informational"
+    },
+    {
+      "from": "Miscellaneous",
+      "event": "receive NOOP",
+      "action": "reply 200",
+      "to": "Miscellaneous"
+    },
+    {
+      "from": "AwaitingCommand",
+      "event": "receive PASS",
+      "action": "reply 332",
+      "to": "AwaitingCommand"
+    },
+    {
+      "from": "LoggedIn",
+      "event": "receive PASV",
+      "action": "reply 227",
+      "to": "PassiveMode"
+    }
+  ]
+}

@@ -1,0 +1,188 @@
+{
+  "states": [
+    "LinkDead",
+    "LinkEstablishment",
+    "Authentication",
+    "NetworkLayerProtocol",
+    "LinkTermination",
+    "Initial",
+    "Starting",
+    "Closed",
+    "Stopped",
+    "Closing",
+    "Stopping",
+    "ReqSent",
+    "AckRcvd",
+    "AckSent",
+    "Opened"
+  ],
+  "initial_state": "Initial",
+  "final_states": [
+    "LinkDead",
+    "Closed"
+  ],
+  "transitions": [
+    {
+      "from": "LinkDead",
+      "event": "receive Up",
+      "action": "open LinkEstablishment",
+      "to": "LinkEstablishment"
+    },
+    {
+      "from": "LinkEstablishment",
+      "event": "receive Configure-Ack",
+      "action": "open Authentication",
+      "to": "Authentication"
+    },
+    {
+      "from": "Authentication",
+      "event": "cond authentication_complete",
+      "action": "open NetworkLayerProtocol",
+      "to": "NetworkLayerProtocol"
+    },
+    {
+      "from": "NetworkLayerProtocol",
+      "event": "receive Configure-Request",
+      "action": "reset LinkEstablishment",
+      "to": "LinkEstablishment"
+    },
+    {
+      "from": "NetworkLayerProtocol",
+      "event": "cond link_termination_required",
+      "action": "open LinkTermination",
+      "to": "LinkTermination"
+    },
+    {
+      "from": "LinkTermination",
+      "event": "receive Terminate-Ack",
+      "action": "close LinkDead",
+      "to": "LinkDead"
+    },
+    {
+      "from": "Authentication",
+      "event": "cond authentication_failed",
+      "action": "open LinkTermination",
+      "to": "LinkTermination"
+    },
+    {
+      "from": "Initial",
+      "event": "Up",
+      "action": "open LinkEstablishment",
+      "to": "LinkEstablishment"
+    },
+    {
+      "from": "Initial",
+      "event": "Down",
+      "action": "close LinkDead",
+      "to": "LinkDead"
+    },
+    {
+      "from": "Initial",
+      "event": "Open",
+      "action": "open LinkEstablishment",
+      "to": "LinkEstablishment"
+    },
+    {
+      "from": "Starting",
+      "event": "Up",
+      "action": "open LinkEstablishment",
+      "to": "LinkEstablishment"
+    },
+    {
+      "from": "Starting",
+      "event": "Down",
+      "action": "close LinkDead",
+      "to": "LinkDead"
+    },
+    {
+      "from": "Starting",
+      "event": "Open",
+      "action": "open LinkEstablishment",
+      "to": "LinkEstablishment"
+    },
+    {
+      "from": "Closed",
+      "event": "Up",
+      "action": "open LinkEstablishment",
+      "to": "LinkEstablishment"
+    },
+    {
+      "from": "Closed",
+      "event": "Down",
+      "action": "close LinkDead",
+      "to": "LinkDead"
+    },
+    {
+      "from": "Closed",
+      "event": "Open",
+      "action": "open LinkEstablishment",
+      "to": "LinkEstablishment"
+    },
+    {
+      "from": "Stopped",
+      "event": "Up",
+      "action": "open LinkEstablishment",
+      "to": "LinkEstablishment"
+    },
+    {
+      "from": "Stopped",
+      "event": "Down",
+      "action": "close LinkDead",
+      "to": "LinkDead"
+    },
+    {
+      "from": "Stopped",
+      "event": "Open",
+      "action": "open LinkEstablishment",
+      "to": "LinkEstablishment"
+    },
+    {
+      "from": "Closing",
+      "event": "timeout",
+      "action": "close LinkDead",
+      "to": "LinkDead"
+    },
+    {
+      "from": "Stopping",
+      "event": "timeout",
+      "action": "close LinkDead",
+      "to": "LinkDead"
+    },
+    {
+      "from": "Opened",
+      "event": "receive Terminate-Request",
+      "action": "reply Terminate-Ack",
+      "to": "Stopped"
+    },
+    {
+      "from": "Stopped",
+      "event": "receive Terminate-Request",
+      "action": "reply Terminate-Ack",
+      "to": "Closed"
+    },
+    {
+      "from": "Opened",
+      "event": "receive Echo-Request",
+      "action": "reply Echo-Reply",
+      "to": "Opened"
+    },
+    {
+      "from": "Opened",
+      "event": "receive Protocol-Reject",
+      "action": "stop sending packets",
+      "to": "Opened"
+    },
+    {
+      "from": "Opened",
+      "event": "receive Discard-Request",
+      "action": "discard request",
+      "to": "Opened"
+    },
+    {
+      "from": "Stopped",
+      "event": "receive Code-Reject",
+      "action": "report problem",
+      "to": "Closed"
+    }
+  ]
+}

@@ -1,0 +1,438 @@
+{
+  "states": [
+    "Disconnected",
+    "Connected",
+    "Authenticated",
+    "Unauthenticated",
+    "Subscribed",
+    "Unsubscribed",
+    "Publishing",
+    "Subscribing",
+    "WaitingForReply",
+    "SessionActive",
+    "SessionInactive",
+    "ClientTokenRequest",
+    "ClientConnectionRequest",
+    "ClientAuthenticating",
+    "ClientAuthenticated",
+    "ClientReconnecting",
+    "BrokerTokenValidation",
+    "BrokerConnectionResponse",
+    "AwaitingPublish",
+    "Authorized",
+    "Unauthorized",
+    "AwaitingSubscribe",
+    "SendingDisconnect",
+    "TokenValid",
+    "TokenExpired",
+    "Reauthenticating",
+    "ReauthenticationFailed",
+    "ReauthenticationSucceeded",
+    "SessionConnected",
+    "SessionDisconnected",
+    "MessageExpired",
+    "WillMessageSent",
+    "Initial",
+    "TokenValidated",
+    "TokenInvalid",
+    "SessionResumed",
+    "SessionNew",
+    "SessionPresent",
+    "SessionNotPresent"
+  ],
+  "initial_state": "Disconnected",
+  "final_states": [
+    "Disconnected",
+    "Unauthorized",
+    "ReauthenticationFailed",
+    "TokenExpired",
+    "MessageExpired",
+    "SessionDisconnected"
+  ],
+  "transitions": [
+    {
+      "from": "Disconnected",
+      "event": "receive CONNECT",
+      "action": "send CONNACK",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "receive AUTH",
+      "action": "send AUTH",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Connected",
+      "event": "receive AUTH",
+      "action": "send AUTH",
+      "to": "Unauthenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive SUBSCRIBE",
+      "action": "send SUBACK",
+      "to": "Subscribed"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive SUBSCRIBE",
+      "action": "send SUBACK",
+      "to": "Unsubscribed"
+    },
+    {
+      "from": "Subscribed",
+      "event": "receive PUBLISH",
+      "action": "send PUBACK",
+      "to": "Publishing"
+    },
+    {
+      "from": "Subscribed",
+      "event": "receive PUBLISH",
+      "action": "send PUBREC",
+      "to": "Publishing"
+    },
+    {
+      "from": "Publishing",
+      "event": "send PUBLISH",
+      "action": "send PUBACK",
+      "to": "Subscribed"
+    },
+    {
+      "from": "Publishing",
+      "event": "send PUBLISH",
+      "action": "send PUBREC",
+      "to": "Subscribed"
+    },
+    {
+      "from": "Connected",
+      "event": "receive PINGREQ",
+      "action": "send PINGRESP",
+      "to": "SessionActive"
+    },
+    {
+      "from": "SessionActive",
+      "event": "timeout KeepAlive",
+      "action": "send PINGRESP",
+      "to": "SessionInactive"
+    },
+    {
+      "from": "SessionActive",
+      "event": "receive DISCONNECT",
+      "action": "send DISCONNECT",
+      "to": "Disconnected"
+    },
+    {
+      "from": "SessionInactive",
+      "event": "receive DISCONNECT",
+      "action": "send DISCONNECT",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "receive DISCONNECT",
+      "action": "send DISCONNECT",
+      "to": "Disconnected"
+    },
+    {
+      "from": "ClientTokenRequest",
+      "event": "receive token request",
+      "action": "send access token",
+      "to": "ClientConnectionRequest"
+    },
+    {
+      "from": "ClientConnectionRequest",
+      "event": "receive connection request",
+      "action": "send connection response",
+      "to": "ClientAuthenticating"
+    },
+    {
+      "from": "ClientAuthenticating",
+      "event": "receive token",
+      "action": "validate token",
+      "to": "BrokerTokenValidation"
+    },
+    {
+      "from": "BrokerTokenValidation",
+      "event": "cond valid token",
+      "action": "reply success",
+      "to": "ClientAuthenticated"
+    },
+    {
+      "from": "BrokerTokenValidation",
+      "event": "cond invalid token",
+      "action": "reply not authorized",
+      "to": "Disconnected"
+    },
+    {
+      "from": "ClientAuthenticated",
+      "event": "receive reconnect request",
+      "action": "validate token",
+      "to": "ClientReconnecting"
+    },
+    {
+      "from": "ClientReconnecting",
+      "event": "cond valid token",
+      "action": "reply success",
+      "to": "ClientAuthenticated"
+    },
+    {
+      "from": "ClientReconnecting",
+      "event": "cond invalid token",
+      "action": "reply not authorized",
+      "to": "Disconnected"
+    },
+    {
+      "from": "ClientAuthenticated",
+      "event": "send disconnect",
+      "action": "close connection",
+      "to": "Disconnected"
+    },
+    {
+      "from": "ClientConnectionRequest",
+      "event": "receive tokenless connection request",
+      "action": "trigger AS discovery",
+      "to": "Disconnected"
+    },
+    {
+      "from": "AwaitingPublish",
+      "event": "receive PUBLISH",
+      "action": "set authorized true",
+      "to": "Authorized"
+    },
+    {
+      "from": "AwaitingPublish",
+      "event": "receive PUBLISH",
+      "action": "reply 0x87",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "AwaitingPublish",
+      "event": "receive PUBLISH",
+      "action": "send DISCONNECT 0x87",
+      "to": "SendingDisconnect"
+    },
+    {
+      "from": "AwaitingPublish",
+      "event": "receive PUBLISH",
+      "action": "reply 0x80",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "AwaitingSubscribe",
+      "event": "receive SUBSCRIBE",
+      "action": "send SUBACK 0x87",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "AwaitingSubscribe",
+      "event": "receive SUBSCRIBE",
+      "action": "send SUBACK 0x80",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "TokenValid",
+      "event": "receive CONNECT",
+      "action": "check token expiration",
+      "to": "TokenValid"
+    },
+    {
+      "from": "TokenValid",
+      "event": "receive PUBLISH",
+      "action": "check token expiration",
+      "to": "TokenValid"
+    },
+    {
+      "from": "TokenValid",
+      "event": "receive SUBSCRIBE",
+      "action": "check token expiration",
+      "to": "TokenValid"
+    },
+    {
+      "from": "TokenValid",
+      "event": "receive PINGREQ",
+      "action": "check token expiration",
+      "to": "TokenValid"
+    },
+    {
+      "from": "TokenValid",
+      "event": "cond token expired",
+      "action": "send PUBACK Not authorized",
+      "to": "TokenExpired"
+    },
+    {
+      "from": "TokenValid",
+      "event": "cond token expired",
+      "action": "send SUBACK Not authorized",
+      "to": "TokenExpired"
+    },
+    {
+      "from": "TokenValid",
+      "event": "cond token expired",
+      "action": "send DISCONNECT Not authorized",
+      "to": "Disconnected"
+    },
+    {
+      "from": "TokenExpired",
+      "event": "receive AUTH Reauthentication",
+      "action": "set Authentication Method ace",
+      "to": "Reauthenticating"
+    },
+    {
+      "from": "Reauthenticating",
+      "event": "cond reauthentication fails",
+      "action": "send DISCONNECT Not Authorized",
+      "to": "ReauthenticationFailed"
+    },
+    {
+      "from": "Reauthenticating",
+      "event": "cond reauthentication succeeds",
+      "action": "set token valid",
+      "to": "ReauthenticationSucceeded"
+    },
+    {
+      "from": "ReauthenticationSucceeded",
+      "event": "receive CONNECT",
+      "action": "check token expiration",
+      "to": "TokenValid"
+    },
+    {
+      "from": "ReauthenticationSucceeded",
+      "event": "receive PUBLISH",
+      "action": "check token expiration",
+      "to": "TokenValid"
+    },
+    {
+      "from": "ReauthenticationSucceeded",
+      "event": "receive SUBSCRIBE",
+      "action": "check token expiration",
+      "to": "TokenValid"
+    },
+    {
+      "from": "ReauthenticationSucceeded",
+      "event": "receive PINGREQ",
+      "action": "check token expiration",
+      "to": "TokenValid"
+    },
+    {
+      "from": "SessionConnected",
+      "event": "receive DISCONNECT",
+      "action": "set SessionExpiryInterval",
+      "to": "SessionDisconnected"
+    },
+    {
+      "from": "SessionDisconnected",
+      "event": "cond SessionExpiryInterval 0",
+      "action": "discard SessionState",
+      "to": "SessionDisconnected"
+    },
+    {
+      "from": "SessionDisconnected",
+      "event": "cond SessionExpiryInterval > 0",
+      "action": "store SessionState",
+      "to": "SessionDisconnected"
+    },
+    {
+      "from": "SessionDisconnected",
+      "event": "receive PUBLISH with RETAIN",
+      "action": "store RetainedMessage",
+      "to": "SessionDisconnected"
+    },
+    {
+      "from": "SessionDisconnected",
+      "event": "timeout TokenExpiry",
+      "action": "discard RetainedMessage",
+      "to": "TokenExpired"
+    },
+    {
+      "from": "SessionDisconnected",
+      "event": "timeout MessageExpiryInterval",
+      "action": "discard RetainedMessage",
+      "to": "MessageExpired"
+    },
+    {
+      "from": "SessionConnected",
+      "event": "receive DISCONNECT",
+      "action": "send WillMessage",
+      "to": "WillMessageSent"
+    },
+    {
+      "from": "Initial",
+      "event": "receive CONNECT",
+      "action": "set authenticated false",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "cond valid token",
+      "action": "set authenticated true",
+      "to": "TokenValidated"
+    },
+    {
+      "from": "Connected",
+      "event": "cond invalid token",
+      "action": "send CONNACK 0x84",
+      "to": "Disconnected"
+    },
+    {
+      "from": "TokenValidated",
+      "event": "cond clean flag set",
+      "action": "set session new",
+      "to": "SessionNew"
+    },
+    {
+      "from": "TokenValidated",
+      "event": "cond clean flag not set",
+      "action": "set session resumed",
+      "to": "SessionResumed"
+    },
+    {
+      "from": "SessionResumed",
+      "event": "send CONNACK",
+      "action": "set session present true",
+      "to": "SessionPresent"
+    },
+    {
+      "from": "SessionNew",
+      "event": "send CONNACK",
+      "action": "set session present false",
+      "to": "SessionNotPresent"
+    },
+    {
+      "from": "SessionPresent",
+      "event": "receive PUBLISH",
+      "action": "send PUBACK",
+      "to": "SessionPresent"
+    },
+    {
+      "from": "SessionPresent",
+      "event": "receive SUBSCRIBE",
+      "action": "send SUBACK 0x80",
+      "to": "Disconnected"
+    },
+    {
+      "from": "SessionPresent",
+      "event": "cond token expired",
+      "action": "send DISCONNECT",
+      "to": "Disconnected"
+    },
+    {
+      "from": "SessionNotPresent",
+      "event": "receive PUBLISH",
+      "action": "send PUBACK",
+      "to": "SessionNotPresent"
+    },
+    {
+      "from": "SessionNotPresent",
+      "event": "receive SUBSCRIBE",
+      "action": "send SUBACK 0x80",
+      "to": "Disconnected"
+    },
+    {
+      "from": "SessionNotPresent",
+      "event": "cond token expired",
+      "action": "send DISCONNECT",
+      "to": "Disconnected"
+    }
+  ]
+}

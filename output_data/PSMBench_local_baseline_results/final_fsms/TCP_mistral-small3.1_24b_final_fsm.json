@@ -1,0 +1,213 @@
+{
+  "states": [
+    "Closed",
+    "Listen",
+    "SynSent",
+    "SynReceived",
+    "Established",
+    "FinWait1",
+    "FinWait2",
+    "CloseWait",
+    "Closing",
+    "LastAck",
+    "TimeWait"
+  ],
+  "initial_state": "Closed",
+  "final_states": [
+    "Closed"
+  ],
+  "transitions": [
+    {
+      "from": "Closed",
+      "event": "receive OPEN",
+      "action": "set local connection name",
+      "to": "Listen"
+    },
+    {
+      "from": "Closed",
+      "event": "receive OPEN",
+      "action": "send SYN",
+      "to": "SynSent"
+    },
+    {
+      "from": "Closed",
+      "event": "receive SEGMENT",
+      "action": "send RST",
+      "to": "Closed"
+    },
+    {
+      "from": "Listen",
+      "event": "receive OPEN",
+      "action": "set local connection name",
+      "to": "Listen"
+    },
+    {
+      "from": "Listen",
+      "event": "receive SYN",
+      "action": "send SYN ACK",
+      "to": "SynReceived"
+    },
+    {
+      "from": "Listen",
+      "event": "receive RST",
+      "action": "ignore",
+      "to": "Listen"
+    },
+    {
+      "from": "Listen",
+      "event": "receive ACK",
+      "action": "send RST",
+      "to": "Listen"
+    },
+    {
+      "from": "SynSent",
+      "event": "receive SYN ACK",
+      "action": "send ACK",
+      "to": "Established"
+    },
+    {
+      "from": "SynSent",
+      "event": "receive RST",
+      "action": "reply error connection refused",
+      "to": "Closed"
+    },
+    {
+      "from": "SynSent",
+      "event": "timeout 3 minutes",
+      "action": "send SYN",
+      "to": "SynSent"
+    },
+    {
+      "from": "SynReceived",
+      "event": "receive ACK",
+      "action": "send ACK",
+      "to": "Established"
+    },
+    {
+      "from": "SynReceived",
+      "event": "receive RST",
+      "action": "reply error connection refused",
+      "to": "Closed"
+    },
+    {
+      "from": "SynReceived",
+      "event": "receive SYN",
+      "action": "send RST",
+      "to": "Listen"
+    },
+    {
+      "from": "Established",
+      "event": "receive FIN",
+      "action": "send ACK",
+      "to": "CloseWait"
+    },
+    {
+      "from": "Established",
+      "event": "receive RST",
+      "action": "reply error connection reset",
+      "to": "Closed"
+    },
+    {
+      "from": "Established",
+      "event": "receive SEGMENT",
+      "action": "send ACK",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "send CLOSE",
+      "action": "send FIN",
+      "to": "FinWait1"
+    },
+    {
+      "from": "FinWait1",
+      "event": "receive ACK",
+      "action": "send FIN",
+      "to": "FinWait2"
+    },
+    {
+      "from": "FinWait1",
+      "event": "receive FIN",
+      "action": "send ACK",
+      "to": "TimeWait"
+    },
+    {
+      "from": "FinWait1",
+      "event": "receive RST",
+      "action": "reply error connection reset",
+      "to": "Closed"
+    },
+    {
+      "from": "FinWait2",
+      "event": "receive FIN",
+      "action": "send ACK",
+      "to": "TimeWait"
+    },
+    {
+      "from": "FinWait2",
+      "event": "receive RST",
+      "action": "reply error connection reset",
+      "to": "Closed"
+    },
+    {
+      "from": "CloseWait",
+      "event": "send CLOSE",
+      "action": "send FIN",
+      "to": "LastAck"
+    },
+    {
+      "from": "CloseWait",
+      "event": "receive FIN",
+      "action": "send ACK",
+      "to": "Closing"
+    },
+    {
+      "from": "CloseWait",
+      "event": "receive RST",
+      "action": "reply error connection reset",
+      "to": "Closed"
+    },
+    {
+      "from": "Closing",
+      "event": "receive ACK",
+      "action": "send FIN",
+      "to": "TimeWait"
+    },
+    {
+      "from": "Closing",
+      "event": "receive RST",
+      "action": "reply error connection reset",
+      "to": "Closed"
+    },
+    {
+      "from": "LastAck",
+      "event": "receive ACK",
+      "action": "close connection",
+      "to": "Closed"
+    },
+    {
+      "from": "LastAck",
+      "event": "receive RST",
+      "action": "reply error connection reset",
+      "to": "Closed"
+    },
+    {
+      "from": "TimeWait",
+      "event": "timeout 2 MSL",
+      "action": "close connection",
+      "to": "Closed"
+    },
+    {
+      "from": "TimeWait",
+      "event": "receive SEGMENT",
+      "action": "send ACK",
+      "to": "TimeWait"
+    },
+    {
+      "from": "TimeWait",
+      "event": "receive SYN",
+      "action": "send RST",
+      "to": "Closed"
+    }
+  ]
+}

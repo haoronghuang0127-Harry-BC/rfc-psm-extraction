@@ -1,0 +1,129 @@
+{
+  "states": [
+    "Initial",
+    "Starting",
+    "Closed",
+    "Stopped",
+    "Closing",
+    "Stopping",
+    "Req-Sent",
+    "Ack-Rcvd",
+    "Ack-Sent",
+    "Opened"
+  ],
+  "initial_state": "Initial",
+  "final_states": [
+    "Opened",
+    "Stopped"
+  ],
+  "transitions": [
+    {
+      "from": "Initial",
+      "event": "receive Up",
+      "action": "send Configure-Request",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Starting",
+      "event": "receive Down",
+      "action": "set Layer-Down",
+      "to": "Initial"
+    },
+    {
+      "from": "Starting",
+      "event": "receive Up",
+      "action": "send Configure-Request",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Closed",
+      "event": "receive Open",
+      "action": "set Layer-Up",
+      "to": "Starting"
+    },
+    {
+      "from": "Stopped",
+      "event": "receive Open",
+      "action": "send Configure-Request",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Closing",
+      "event": "timeout Max-Terminate",
+      "action": "set Layer-Down",
+      "to": "Stopped"
+    },
+    {
+      "from": "Stopping",
+      "event": "receive RTA",
+      "action": "set Layer-Down",
+      "to": "Stopped"
+    },
+    {
+      "from": "Req-Sent",
+      "event": "receive RCR+",
+      "action": "send Configure-Ack",
+      "to": "Ack-Rcvd"
+    },
+    {
+      "from": "Req-Sent",
+      "event": "receive RCR-",
+      "action": "send Configure-Nak",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Req-Sent",
+      "event": "receive RCA",
+      "action": "set Layer-Up",
+      "to": "Ack-Rcvd"
+    },
+    {
+      "from": "Req-Sent",
+      "event": "receive RCN",
+      "action": "send Configure-Request",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Ack-Rcvd",
+      "event": "receive RCR+",
+      "action": "send Configure-Ack",
+      "to": "Ack-Sent"
+    },
+    {
+      "from": "Ack-Rcvd",
+      "event": "receive RCA",
+      "action": "set Layer-Up",
+      "to": "Opened"
+    },
+    {
+      "from": "Ack-Rcvd",
+      "event": "receive RCN",
+      "action": "send Configure-Request",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "receive RCR+",
+      "action": "send Configure-Ack",
+      "to": "Ack-Rcvd"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "receive RCA",
+      "action": "set Layer-Up",
+      "to": "Opened"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "receive RCN",
+      "action": "send Configure-Request",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Stopped",
+      "event": "receive RTR",
+      "action": "send Terminate-Ack",
+      "to": "Closing"
+    }
+  ]
+}

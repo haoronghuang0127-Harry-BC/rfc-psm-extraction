@@ -1,0 +1,44 @@
+{
+  "states": [
+    "Connecting",
+    "Authenticated",
+    "Unauthorized"
+  ],
+  "initial_state": "Connecting",
+  "final_states": [
+    "Authenticated",
+    "Unauthorized"
+  ],
+  "transitions": [
+    {
+      "from": "Connecting",
+      "event": "receive CONNECT with token",
+      "action": "validate token",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Connecting",
+      "event": "receive CONNECT without token",
+      "action": "check stored token",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Connecting",
+      "event": "receive CONNECT with invalid token",
+      "action": "send CONNACK 0x87",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Connecting",
+      "event": "receive CONNECT with malformed data",
+      "action": "send CONNACK error",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Connecting",
+      "event": "receive CONNECT with invalid Will scope",
+      "action": "send CONNACK 0x87",
+      "to": "Unauthorized"
+    }
+  ]
+}

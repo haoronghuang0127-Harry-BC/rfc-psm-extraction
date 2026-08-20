@@ -1,0 +1,643 @@
+{
+  "states": [
+    "UserLocation",
+    "UserAvailability",
+    "UserCapabilities",
+    "SessionSetup",
+    "SessionManagement",
+    "Softphone",
+    "ProxyServer",
+    "SIPPhone",
+    "AtlantacomProxy",
+    "BiloxicomProxy",
+    "Waiting",
+    "Ringing",
+    "Answering",
+    "RequestReceived",
+    "ResponseSent",
+    "Provisional",
+    "Success",
+    "Redirection",
+    "ClientError",
+    "ServerError",
+    "GlobalFailure",
+    "ClientIdle",
+    "ClientCanceling",
+    "ServerProcessingCancel",
+    "ServerIdle",
+    "UASProcessingCancel",
+    "Idle",
+    "ProcessingRequest",
+    "Authenticated",
+    "Unauthorized",
+    "BindingUpdate",
+    "UASReady",
+    "UASBusy",
+    "ProxyHandling",
+    "DialogEstablished",
+    "Early",
+    "Confirmed",
+    "UACProcessing",
+    "UASProcessing",
+    "EarlyDialog",
+    "ConfirmedDialog",
+    "TransactionCompleted",
+    "Established",
+    "ReInvitePending",
+    "UACByeSent",
+    "UASIdle",
+    "UASProcessingBye",
+    "Calling",
+    "Proceeding",
+    "Completed",
+    "Terminated",
+    "UAC",
+    "UAS",
+    "keyring",
+    "initial",
+    "verified",
+    "unverified",
+    "Dialog",
+    "WaitingForReply",
+    "Canceling",
+    "Merging"
+  ],
+  "initial_state": "Idle",
+  "final_states": [
+    "TransactionCompleted",
+    "UASIdle",
+    "Terminated"
+  ],
+  "transitions": [
+    {
+      "from": "UserLocation",
+      "event": "receive request",
+      "action": "reply success",
+      "to": "UserAvailability"
+    },
+    {
+      "from": "UserAvailability",
+      "event": "receive request",
+      "action": "reply success",
+      "to": "UserCapabilities"
+    },
+    {
+      "from": "UserCapabilities",
+      "event": "receive request",
+      "action": "reply success",
+      "to": "SessionSetup"
+    },
+    {
+      "from": "SessionSetup",
+      "event": "receive request",
+      "action": "reply success",
+      "to": "SessionManagement"
+    },
+    {
+      "from": "SessionManagement",
+      "event": "receive request",
+      "action": "reply success",
+      "to": "SessionManagement"
+    },
+    {
+      "from": "Softphone",
+      "event": "receive INVITE",
+      "action": "send INVITE",
+      "to": "ProxyServer"
+    },
+    {
+      "from": "ProxyServer",
+      "event": "receive INVITE",
+      "action": "reply 100",
+      "to": "AtlantacomProxy"
+    },
+    {
+      "from": "AtlantacomProxy",
+      "event": "receive INVITE",
+      "action": "send INVITE",
+      "to": "BiloxicomProxy"
+    },
+    {
+      "from": "BiloxicomProxy",
+      "event": "receive INVITE",
+      "action": "send INVITE",
+      "to": "SIPPhone"
+    },
+    {
+      "from": "SIPPhone",
+      "event": "receive INVITE",
+      "action": "reply 180",
+      "to": "Waiting"
+    },
+    {
+      "from": "Waiting",
+      "event": "receive 180",
+      "action": "reply 180",
+      "to": "Softphone"
+    },
+    {
+      "from": "SIPPhone",
+      "event": "cond answer",
+      "action": "reply 200",
+      "to": "Answering"
+    },
+    {
+      "from": "Answering",
+      "event": "receive 200",
+      "action": "reply 200",
+      "to": "Softphone"
+    },
+    {
+      "from": "Softphone",
+      "event": "receive 200",
+      "action": "send ACK",
+      "to": "Softphone"
+    },
+    {
+      "from": "Softphone",
+      "event": "receive BYE",
+      "action": "reply 200",
+      "to": "Softphone"
+    },
+    {
+      "from": "RequestReceived",
+      "event": "receive REGISTER",
+      "action": "reply 200",
+      "to": "ResponseSent"
+    },
+    {
+      "from": "RequestReceived",
+      "event": "receive INVITE",
+      "action": "reply 200",
+      "to": "ResponseSent"
+    },
+    {
+      "from": "RequestReceived",
+      "event": "receive ACK",
+      "action": "reply 200",
+      "to": "ResponseSent"
+    },
+    {
+      "from": "RequestReceived",
+      "event": "receive CANCEL",
+      "action": "reply 200",
+      "to": "ResponseSent"
+    },
+    {
+      "from": "RequestReceived",
+      "event": "receive BYE",
+      "action": "reply 200",
+      "to": "ResponseSent"
+    },
+    {
+      "from": "RequestReceived",
+      "event": "receive OPTIONS",
+      "action": "reply 200",
+      "to": "ResponseSent"
+    },
+    {
+      "from": "ResponseSent",
+      "event": "cond 1xx",
+      "action": "set Provisional",
+      "to": "Provisional"
+    },
+    {
+      "from": "ResponseSent",
+      "event": "cond 2xx",
+      "action": "set Success",
+      "to": "Success"
+    },
+    {
+      "from": "ResponseSent",
+      "event": "cond 3xx",
+      "action": "set Redirection",
+      "to": "Redirection"
+    },
+    {
+      "from": "ResponseSent",
+      "event": "cond 4xx",
+      "action": "set ClientError",
+      "to": "ClientError"
+    },
+    {
+      "from": "ResponseSent",
+      "event": "cond 5xx",
+      "action": "set ServerError",
+      "to": "ServerError"
+    },
+    {
+      "from": "ResponseSent",
+      "event": "cond 6xx",
+      "action": "set GlobalFailure",
+      "to": "GlobalFailure"
+    },
+    {
+      "from": "ClientIdle",
+      "event": "receive INVITE",
+      "action": "send CANCEL",
+      "to": "ClientCanceling"
+    },
+    {
+      "from": "ClientCanceling",
+      "event": "timeout 64s",
+      "action": "reset transaction",
+      "to": "ClientIdle"
+    },
+    {
+      "from": "ServerIdle",
+      "event": "receive CANCEL",
+      "action": "process cancel",
+      "to": "ServerProcessingCancel"
+    },
+    {
+      "from": "ServerProcessingCancel",
+      "event": "cond matching_transaction",
+      "action": "reply 200",
+      "to": "ServerIdle"
+    },
+    {
+      "from": "ServerProcessingCancel",
+      "event": "cond no_matching_transaction",
+      "action": "reply 481",
+      "to": "ServerIdle"
+    },
+    {
+      "from": "UASProcessingCancel",
+      "event": "cond has_final_response",
+      "action": "no_op",
+      "to": "UASProcessingCancel"
+    },
+    {
+      "from": "UASProcessingCancel",
+      "event": "cond no_final_response",
+      "action": "reply 487",
+      "to": "UASProcessingCancel"
+    },
+    {
+      "from": "Idle",
+      "event": "receive REGISTER",
+      "action": "ProcessingRequest",
+      "to": "ProcessingRequest"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond authorized_user",
+      "action": "set authenticated true",
+      "to": "Authenticated"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "cond unauthorized_user",
+      "action": "reply 403",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "ProcessingRequest",
+      "event": "receive Contact",
+      "action": "BindingUpdate",
+      "to": "BindingUpdate"
+    },
+    {
+      "from": "BindingUpdate",
+      "event": "cond binding_updates_succeed",
+      "action": "reply 200",
+      "to": "Idle"
+    },
+    {
+      "from": "BindingUpdate",
+      "event": "cond binding_updates_fail",
+      "action": "reply 500",
+      "to": "Idle"
+    },
+    {
+      "from": "UASReady",
+      "event": "receive OPTIONS",
+      "action": "reply 200",
+      "to": "UASReady"
+    },
+    {
+      "from": "UASBusy",
+      "event": "receive OPTIONS",
+      "action": "reply 486",
+      "to": "UASBusy"
+    },
+    {
+      "from": "ProxyHandling",
+      "event": "receive OPTIONS",
+      "action": "reply 200",
+      "to": "ProxyHandling"
+    },
+    {
+      "from": "DialogEstablished",
+      "event": "receive OPTIONS",
+      "action": "reply 200",
+      "to": "DialogEstablished"
+    },
+    {
+      "from": "Early",
+      "event": "receive 2xx final response",
+      "action": "transition",
+      "to": "Confirmed"
+    },
+    {
+      "from": "Early",
+      "event": "receive other response",
+      "action": "terminate",
+      "to": "Confirmed"
+    },
+    {
+      "from": "Early",
+      "event": "no response",
+      "action": "terminate",
+      "to": "Confirmed"
+    },
+    {
+      "from": "UACProcessing",
+      "event": "receive INVITE",
+      "action": "send INVITE",
+      "to": "UACProcessing"
+    },
+    {
+      "from": "UACProcessing",
+      "event": "timeout",
+      "action": "reply 408",
+      "to": "TransactionCompleted"
+    },
+    {
+      "from": "UASProcessing",
+      "event": "receive INVITE",
+      "action": "process INVITE",
+      "to": "UASProcessing"
+    },
+    {
+      "from": "UASProcessing",
+      "event": "cond accept invitation",
+      "action": "reply 2xx",
+      "to": "ConfirmedDialog"
+    },
+    {
+      "from": "UASProcessing",
+      "event": "cond redirect invitation",
+      "action": "reply 3xx",
+      "to": "UASProcessing"
+    },
+    {
+      "from": "UASProcessing",
+      "event": "cond reject invitation",
+      "action": "reply 4xx/6xx",
+      "to": "TransactionCompleted"
+    },
+    {
+      "from": "EarlyDialog",
+      "event": "receive 2xx",
+      "action": "transition to confirmed",
+      "to": "ConfirmedDialog"
+    },
+    {
+      "from": "ConfirmedDialog",
+      "event": "receive 2xx",
+      "action": "recompute route set",
+      "to": "ConfirmedDialog"
+    },
+    {
+      "from": "ConfirmedDialog",
+      "event": "timeout",
+      "action": "send BYE",
+      "to": "TransactionCompleted"
+    },
+    {
+      "from": "TransactionCompleted",
+      "event": "receive ACK",
+      "action": "complete transaction",
+      "to": "TransactionCompleted"
+    },
+    {
+      "from": "UACByeSent",
+      "event": "timeout 5s",
+      "action": "reply 481",
+      "to": "UACIdle"
+    },
+    {
+      "from": "UASIdle",
+      "event": "receive BYE",
+      "action": "reply 481",
+      "to": "UASIdle"
+    },
+    {
+      "from": "DialogActive",
+      "event": "receive BYE",
+      "action": "process BYE",
+      "to": "UASProcessingBye"
+    },
+    {
+      "from": "UASProcessingBye",
+      "event": "cond BYE processing complete",
+      "action": "reply 200",
+      "to": "UASIdle"
+    },
+    {
+      "from": "Calling",
+      "event": "timer A fires",
+      "action": "reset A, send INVITE",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "timer B fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "receive 1xx",
+      "action": "pass to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Calling",
+      "event": "receive 300-699",
+      "action": "pass response to TU, generate ACK, send ACK",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive 2xx",
+      "action": "pass response to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "timer A fires",
+      "action": "reset A, send INVITE",
+      "to": "Calling"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive 300-699",
+      "action": "pass response to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "timer D fires",
+      "action": "move to Terminated",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "receive retransmitted response",
+      "action": "re-pass ACK to transport",
+      "to": "Completed"
+    },
+    {
+      "from": "UAC",
+      "event": "receive BYE",
+      "action": "send BYE",
+      "to": "UACByeSent"
+    },
+    {
+      "from": "UAC",
+      "event": "receive INVITE",
+      "action": "reply 200",
+      "to": "UAS"
+    },
+    {
+      "from": "UAC",
+      "event": "receive 2xx",
+      "action": "reply ACK",
+      "to": "Dialog"
+    },
+    {
+      "from": "UAC",
+      "event": "receive 487",
+      "action": "reply 603",
+      "to": "UAC"
+    },
+    {
+      "from": "UAS",
+      "event": "receive CANCEL",
+      "action": "reply 200",
+      "to": "UAC"
+    },
+    {
+      "from": "Dialog",
+      "event": "send BYE",
+      "action": "reply 200",
+      "to": "UAC"
+    },
+    {
+      "from": "UAS",
+      "event": "receive BYE",
+      "action": "reply 200",
+      "to": "UAC"
+    },
+    {
+      "from": "UAC",
+      "event": "receive provisional response",
+      "action": "send CANCEL",
+      "to": "Canceling"
+    },
+    {
+      "from": "UAC",
+      "event": "receive 6xx",
+      "action": "send CANCEL",
+      "to": "Merging"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "receive REQUEST",
+      "action": "reply 401",
+      "to": "Challenged"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "receive ACK",
+      "action": "reply 401",
+      "to": "Challenged"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "receive CANCEL",
+      "action": "reply 401",
+      "to": "CANCELProcessing"
+    },
+    {
+      "from": "Challenged",
+      "event": "receive REQUEST with credentials",
+      "action": "verify credentials",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Challenged",
+      "event": "receive ACK with credentials",
+      "action": "verify credentials",
+      "to": "Authenticated"
+    },
+    {
+      "from": "ACKProcessing",
+      "event": "receive credentials",
+      "action": "verify credentials",
+      "to": "Authenticated"
+    },
+    {
+      "from": "CANCELProcessing",
+      "event": "receive credentials",
+      "action": "verify credentials",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive ACK",
+      "action": "accept credentials",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive CANCEL",
+      "action": "reject challenge",
+      "to": "CANCELProcessing"
+    },
+    {
+      "from": "UAC",
+      "event": "receive CMS SignedData",
+      "action": "send certificate",
+      "to": "UAS"
+    },
+    {
+      "from": "UAS",
+      "event": "receive request with S/MIME body",
+      "action": "validate certificate",
+      "to": "unverified"
+    },
+    {
+      "from": "unverified",
+      "event": "certificate cannot be verified",
+      "action": "notify user",
+      "to": "UAS"
+    },
+    {
+      "from": "unverified",
+      "event": "certificate is verified",
+      "action": "add certificate to keyring",
+      "to": "verified"
+    },
+    {
+      "from": "verified",
+      "event": "receive request with S/MIME body",
+      "action": "use certificate",
+      "to": "UAS"
+    },
+    {
+      "from": "UAC",
+      "event": "receive response with S/MIME body",
+      "action": "validate certificate",
+      "to": "keyring"
+    },
+    {
+      "from": "keyring",
+      "event": "certificate discrepancy",
+      "action": "notify user",
+      "to": "UAC"
+    }
+  ]
+}

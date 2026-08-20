@@ -1,0 +1,93 @@
+{
+  "states": [
+    "CLOSED",
+    "LISTEN",
+    "SYN_SENT",
+    "SYN_RECEIVED",
+    "ESTABLISHED",
+    "FIN_WAIT_1",
+    "FIN_WAIT_2",
+    "CLOSE_WAIT",
+    "CLOSING",
+    "LAST_ACK",
+    "TIME_WAIT"
+  ],
+  "initial_state": "CLOSED",
+  "final_states": [
+    "TIME_WAIT"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "OPEN",
+      "action": "reply error: connection does not exist",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "receive SYN",
+      "action": "reply SYN,ACK",
+      "to": "SYN_RECEIVED"
+    },
+    {
+      "from": "SYN_SENT",
+      "event": "receive ACK",
+      "action": "reply ok",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN_RECEIVED",
+      "event": "receive ACK",
+      "action": "reply ok",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "send",
+      "action": "reply ok",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "receive",
+      "action": "reply ok",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "close",
+      "action": "reply ok",
+      "to": "FIN_WAIT_1"
+    },
+    {
+      "from": "FIN_WAIT_1",
+      "event": "receive FIN",
+      "action": "reply ok",
+      "to": "FIN_WAIT_2"
+    },
+    {
+      "from": "FIN_WAIT_2",
+      "event": "receive ACK",
+      "action": "reply ok",
+      "to": "TIME_WAIT"
+    },
+    {
+      "from": "CLOSE_WAIT",
+      "event": "close",
+      "action": "reply ok",
+      "to": "LAST_ACK"
+    },
+    {
+      "from": "LAST_ACK",
+      "event": "timeout",
+      "action": "reply ok",
+      "to": "TIME_WAIT"
+    },
+    {
+      "from": "TIME_WAIT",
+      "event": "timeout",
+      "action": "reply ok",
+      "to": "CLOSED"
+    }
+  ]
+}

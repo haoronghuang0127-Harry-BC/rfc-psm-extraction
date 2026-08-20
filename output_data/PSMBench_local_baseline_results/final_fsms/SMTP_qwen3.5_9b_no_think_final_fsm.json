@@ -1,0 +1,127 @@
+{
+  "states": [
+    "Initial",
+    "SessionOpen",
+    "MailTransaction",
+    "DataInput",
+    "Closing"
+  ],
+  "initial_state": "Initial",
+  "final_states": [],
+  "transitions": [
+    {
+      "from": "Initial",
+      "event": "receive greeting",
+      "action": "set session open",
+      "to": "SessionOpen"
+    },
+    {
+      "from": "SessionOpen",
+      "event": "receive EHLO",
+      "action": "send extensions list",
+      "to": "SessionOpen"
+    },
+    {
+      "from": "SessionOpen",
+      "event": "receive HELO",
+      "action": "send greeting",
+      "to": "SessionOpen"
+    },
+    {
+      "from": "SessionOpen",
+      "event": "receive MAIL FROM",
+      "action": "reset state tables",
+      "to": "MailTransaction"
+    },
+    {
+      "from": "Initial",
+      "event": "receive EHLO or HELO",
+      "action": "reply 250",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "receive MAIL",
+      "action": "reply 250",
+      "to": "MailTransaction"
+    },
+    {
+      "from": "MailTransaction",
+      "event": "receive RCPT TO",
+      "action": "store forward-path",
+      "to": "MailTransaction"
+    },
+    {
+      "from": "MailTransaction",
+      "event": "receive RCPT",
+      "action": "reply 250",
+      "to": "MailTransaction"
+    },
+    {
+      "from": "MailTransaction",
+      "event": "receive DATA",
+      "action": "send 354 intermediate",
+      "to": "DataInput"
+    },
+    {
+      "from": "DataInput",
+      "event": "receive end-of-data",
+      "action": "process recipients and data",
+      "to": "Initial"
+    },
+    {
+      "from": "DataInput",
+      "event": "receive <CRLF>.<CRLF>",
+      "action": "reply 250",
+      "to": "Initial"
+    },
+    {
+      "from": "DataInput",
+      "event": "receive <CRLF>.<CRLF>",
+      "action": "reply 552",
+      "to": "MailTransaction"
+    },
+    {
+      "from": "MailTransaction",
+      "event": "receive DATA (invalid)",
+      "action": "send 503 or 554",
+      "to": "SessionOpen"
+    },
+    {
+      "from": "MailTransaction",
+      "event": "receive RSET",
+      "action": "reply 250",
+      "to": "Initial"
+    },
+    {
+      "from": "DataInput",
+      "event": "receive failure",
+      "action": "send 550",
+      "to": "Initial"
+    },
+    {
+      "from": "MailTransaction",
+      "event": "receive RSET",
+      "action": "discard buffers",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "Closing"
+    },
+    {
+      "from": "DataInput",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "Closing"
+    },
+    {
+      "from": "Terminated",
+      "event": "receive QUIT",
+      "action": "send 221 and close",
+      "to": "Initial"
+    }
+  ]
+}
