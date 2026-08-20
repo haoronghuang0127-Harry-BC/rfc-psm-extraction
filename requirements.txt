@@ -6,3 +6,6 @@ matplotlib
 seaborn
 sentence-transformers
 tiktoken
+
+# For new evaluation require
+scipy

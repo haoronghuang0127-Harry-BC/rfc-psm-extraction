@@ -1,4 +1,11 @@
-from PSMBench.eval_fsm_sim import compute_match_metrics, match_states, match_transitions_combined_event_action
+import sys
+
+from config.paths import PSMBENCH_DIR
+
+
+if str(PSMBENCH_DIR) not in sys.path:
+    sys.path.insert(0, str(PSMBENCH_DIR))
+from eval_fsm_sim import compute_match_metrics, match_states, match_transitions_combined_event_action
 
 from evaluation.evaluation_types import EvaluationResult, MetricResult, StateMachine, TransitionRecord
 

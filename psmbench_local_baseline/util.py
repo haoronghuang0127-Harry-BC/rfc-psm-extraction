@@ -27,3 +27,4 @@ def get_ollama_response(prompt: str, connection: OllamaConnection, model_config:
                                                        output_format=output_format, extra_headers=headers)
 
     return response
+
