@@ -28,7 +28,7 @@ def _build_state_similarity_matrix(predicted_states: list[str], ground_truth_sta
     ground_truth_embeddings: np.ndarray = psmbench_evaluator.model.encode(normalize_ground_truth_states, normalize_embeddings=True)
 
     # using cosine similarity calculation.(PSMBench used)
-    similarity_matrix: np.ndarray = util.pytorch_cos_sim(predicted_embeddings, ground_truth_embeddings,).numpy()
+    similarity_matrix: np.ndarray = util.pytorch_cos_sim(predicted_embeddings, ground_truth_embeddings).numpy()
 
     return similarity_matrix
 
@@ -62,7 +62,7 @@ def match_state_one_to_one(predicted_states: list[str], ground_truth_states: lis
     match_bonus: float = float(match_count + 1)
     matching_scores: np.ndarray = np.where(mark_match_matrix, match_bonus + similarity_matrix, 0.0)
 
-
+    # Hungarian algorithm
     predicted_indexes, ground_truth_indexes = linear_sum_assignment(matching_scores, maximize=True)
 
     # store the final valid matches.
