@@ -1,0 +1,52 @@
+{
+  "states": [
+    "Connecting",
+    "ValidatingToken",
+    "AwaitingResponse",
+    "Authenticated",
+    "Unauthorized"
+  ],
+  "initial_state": "Connecting",
+  "final_states": [
+    "Authenticated",
+    "Unauthorized"
+  ],
+  "transitions": [
+    {
+      "from": "Connecting",
+      "event": "receive CONNECT",
+      "action": "verify token",
+      "to": "ValidatingToken"
+    },
+    {
+      "from": "ValidatingToken",
+      "event": "cond needs_challenge",
+      "action": "send AUTH Challenge",
+      "to": "AwaitingResponse"
+    },
+    {
+      "from": "ValidatingToken",
+      "event": "cond token_valid",
+      "action": "send CONNACK Success",
+      "to": "Authenticated"
+    },
+    {
+      "from": "ValidatingToken",
+      "event": "cond token_invalid",
+      "action": "send CONNACK Unauthorized",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "AwaitingResponse",
+      "event": "receive AUTH Response",
+      "action": "verify MAC",
+      "to": "ValidatingToken"
+    },
+    {
+      "from": "AwaitingResponse",
+      "event": "timeout",
+      "action": "send CONNACK Unauthorized",
+      "to": "Unauthorized"
+    }
+  ]
+}

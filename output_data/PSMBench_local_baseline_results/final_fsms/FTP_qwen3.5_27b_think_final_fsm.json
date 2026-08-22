@@ -1,0 +1,94 @@
+{
+  "states": [
+    "Initial",
+    "Connected",
+    "AwaitingPassword",
+    "Authenticated",
+    "TransferInProgress",
+    "Closed"
+  ],
+  "initial_state": "Initial",
+  "final_states": [
+    "Closed"
+  ],
+  "transitions": [
+    {
+      "from": "Initial",
+      "event": "receive connect",
+      "action": "reply 220",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "receive USER",
+      "action": "reply 331",
+      "to": "AwaitingPassword"
+    },
+    {
+      "from": "AwaitingPassword",
+      "event": "receive PASS",
+      "action": "reply 230",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive RETR",
+      "action": "reply 150",
+      "to": "TransferInProgress"
+    },
+    {
+      "from": "TransferInProgress",
+      "event": "cond transfer_complete",
+      "action": "reply 226",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "Closed"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive TYPE",
+      "action": "reply 200",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive STOR",
+      "action": "reply 550",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive MKD",
+      "action": "reply 257",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive MKD",
+      "action": "reply 521",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive PWD",
+      "action": "reply 257",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive CDUP",
+      "action": "reply 200",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive RMD",
+      "action": "reply 250",
+      "to": "Authenticated"
+    }
+  ]
+}

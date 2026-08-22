@@ -1,0 +1,117 @@
+{
+  "states": [
+    "ConnectionOpen",
+    "Authorization",
+    "Transaction",
+    "Closing",
+    "Closed"
+  ],
+  "initial_state": "ConnectionOpen",
+  "final_states": [
+    "Closed"
+  ],
+  "transitions": [
+    {
+      "from": "ConnectionOpen",
+      "event": "send greeting",
+      "action": "send greeting",
+      "to": "Authorization"
+    },
+    {
+      "from": "Authorization",
+      "event": "receive USER",
+      "action": "reply status",
+      "to": "Authorization"
+    },
+    {
+      "from": "Authorization",
+      "event": "receive PASS",
+      "action": "reply status",
+      "to": "Transaction"
+    },
+    {
+      "from": "Authorization",
+      "event": "receive APOP",
+      "action": "reply status",
+      "to": "Transaction"
+    },
+    {
+      "from": "Authorization",
+      "event": "receive QUIT",
+      "action": "reply status",
+      "to": "Closing"
+    },
+    {
+      "from": "Authorization",
+      "event": "timeout inactivity",
+      "action": "close connection",
+      "to": "Closed"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive STAT",
+      "action": "reply status",
+      "to": "Transaction"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive LIST",
+      "action": "reply status",
+      "to": "Transaction"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive RETR",
+      "action": "reply status",
+      "to": "Transaction"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive DELE",
+      "action": "reply status",
+      "to": "Transaction"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive NOOP",
+      "action": "reply status",
+      "to": "Transaction"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive RSET",
+      "action": "reply status",
+      "to": "Transaction"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive TOP",
+      "action": "reply status",
+      "to": "Transaction"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive UIDL",
+      "action": "reply status",
+      "to": "Transaction"
+    },
+    {
+      "from": "Transaction",
+      "event": "receive QUIT",
+      "action": "reply status",
+      "to": "Closing"
+    },
+    {
+      "from": "Transaction",
+      "event": "timeout inactivity",
+      "action": "close connection",
+      "to": "Closed"
+    },
+    {
+      "from": "Closing",
+      "event": "cond operation_complete",
+      "action": "send goodbye",
+      "to": "Closed"
+    }
+  ]
+}

@@ -1,0 +1,133 @@
+{
+  "states": [
+    "Idle",
+    "SessionEstablished",
+    "Playing",
+    "Paused",
+    "Terminated",
+    "Authenticated",
+    "ProxyAuthRequired",
+    "AwaitingAck"
+  ],
+  "initial_state": "Idle",
+  "final_states": [
+    "Terminated",
+    "ErrorState"
+  ],
+  "transitions": [
+    {
+      "from": "Idle",
+      "event": "receive SETUP",
+      "action": "reply 200",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive PLAY",
+      "action": "reply 200",
+      "to": "Playing"
+    },
+    {
+      "from": "Playing",
+      "event": "receive PAUSE",
+      "action": "reply 200",
+      "to": "Paused"
+    },
+    {
+      "from": "Paused",
+      "event": "receive PLAY",
+      "action": "reply 200",
+      "to": "Playing"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive TEARDOWN",
+      "action": "reply 200",
+      "to": "Terminated"
+    },
+    {
+      "from": "Playing",
+      "event": "receive TEARDOWN",
+      "action": "reply 200",
+      "to": "Terminated"
+    },
+    {
+      "from": "Paused",
+      "event": "receive TEARDOWN",
+      "action": "reply 200",
+      "to": "Terminated"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "timeout session",
+      "action": "close session",
+      "to": "Terminated"
+    },
+    {
+      "from": "Playing",
+      "event": "timeout session",
+      "action": "close session",
+      "to": "Terminated"
+    },
+    {
+      "from": "Paused",
+      "event": "timeout session",
+      "action": "close session",
+      "to": "Terminated"
+    },
+    {
+      "from": "Idle",
+      "event": "send Request",
+      "action": "send request",
+      "to": "AwaitingAck"
+    },
+    {
+      "from": "AwaitingAck",
+      "event": "receive ACK",
+      "action": "stop timer",
+      "to": "Idle"
+    },
+    {
+      "from": "AwaitingAck",
+      "event": "timeout RTT",
+      "action": "send request",
+      "to": "AwaitingAck"
+    },
+    {
+      "from": "Idle",
+      "event": "receive 401 Unauthorized",
+      "action": "send Authorization header",
+      "to": "Authenticating"
+    },
+    {
+      "from": "Authenticating",
+      "event": "receive 200 OK",
+      "action": "proceed",
+      "to": "Authenticated"
+    },
+    {
+      "from": "ProxyAuthRequired",
+      "event": "receive 470 Connection Authorization Required",
+      "action": "send Accept-Credentials hash",
+      "to": "ProxyAuthenticating"
+    },
+    {
+      "from": "ProxyAuthenticating",
+      "event": "receive 200 OK",
+      "action": "establish TLS",
+      "to": "Connected"
+    },
+    {
+      "from": "ProxyAuthRequired",
+      "event": "receive 471 Connection Credentials Not Accepted",
+      "action": "error",
+      "to": "ErrorState"
+    },
+    {
+      "from": "ProxyAuthRequired",
+      "event": "receive 472 Failure to Establish Secure Connection",
+      "action": "error",
+      "to": "ErrorState"
+    }
+  ]
+}

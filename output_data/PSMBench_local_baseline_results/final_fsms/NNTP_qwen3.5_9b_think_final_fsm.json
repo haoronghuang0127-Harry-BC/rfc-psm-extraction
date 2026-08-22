@@ -1,0 +1,45 @@
+{
+  "states": [
+    "InitialGreeting",
+    "ServiceReady",
+    "ReaderMode",
+    "Closing"
+  ],
+  "initial_state": "InitialGreeting",
+  "final_states": [
+    "ReaderMode",
+    "Closing"
+  ],
+  "transitions": [
+    {
+      "from": "InitialGreeting",
+      "event": "receive connection",
+      "action": "reply 200",
+      "to": "ServiceReady"
+    },
+    {
+      "from": "InitialGreeting",
+      "event": "receive connection",
+      "action": "reply 400",
+      "to": "Closing"
+    },
+    {
+      "from": "ServiceReady",
+      "event": "receive MODE READER",
+      "action": "reply 200",
+      "to": "ReaderMode"
+    },
+    {
+      "from": "ServiceReady",
+      "event": "receive CAPABILITIES",
+      "action": "send 101",
+      "to": "ServiceReady"
+    },
+    {
+      "from": "ServiceReady",
+      "event": "receive QUIT",
+      "action": "reply 205",
+      "to": "Closing"
+    }
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "states": [
+    "Idle",
+    "Connect",
+    "Active",
+    "OpenSent",
+    "OpenConfirm",
+    "Established"
+  ],
+  "initial_state": "Idle",
+  "final_states": [],
+  "transitions": [
+    {
+      "from": "Idle",
+      "event": "receive ManualStart",
+      "action": "init resources start timer",
+      "to": "Connect"
+    },
+    {
+      "from": "Idle",
+      "event": "receive PassiveStart",
+      "action": "init resources listen",
+      "to": "Active"
+    },
+    {
+      "from": "Connect",
+      "event": "receive ManualStop",
+      "action": "drop TCP release resources",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "timeout DelayOpenTimer_Expires",
+      "action": "send OPEN set HoldTimer",
+      "to": "OpenSent"
+    },
+    {
+      "from": "Connect",
+      "event": "receive TcpConnectionFails",
+      "action": "restart timer listen",
+      "to": "Active"
+    },
+    {
+      "from": "Connect",
+      "event": "receive BGPOpen_Delayed",
+      "action": "send OPEN send KEEPALIVE",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "Connect",
+      "event": "timeout ConnectRetryTimer_Expires",
+      "action": "drop TCP restart timer",
+      "to": "Connect"
+    },
+    {
+      "from": "Active",
+      "event": "receive ManualStop",
+      "action": "drop TCP release resources",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "timeout ConnectRetryTimer_Expires",
+      "action": "initiate TCP listen",
+      "to": "Connect"
+    },
+    {
+      "from": "Active",
+      "event": "timeout DelayOpenTimer_Expires",
+      "action": "send OPEN set HoldTimer",
+      "to": "OpenSent"
+    },
+    {
+      "from": "Active",
+      "event": "receive BGPOpen_Delayed",
+      "action": "send OPEN send KEEPALIVE",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "Active",
+      "event": "receive TcpConnection_Valid",
+      "action": "process flags stay",
+      "to": "Active"
+    },
+    {
+      "from": "OpenSent",
+      "event": "receive ManualStop",
+      "action": "send NOTIFICATION drop TCP",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "receive TcpConnectionFails",
+      "action": "restart timer listen",
+      "to": "Active"
+    },
+    {
+      "from": "OpenSent",
+      "event": "receive BGPOpen",
+      "action": "send KEEPALIVE set timers",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "receive ManualStop",
+      "action": "send NOTIFICATION drop TCP",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "receive KeepAliveMsg",
+      "action": "restart HoldTimer",
+      "to": "Established"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "timeout KeepaliveTimer_Expires",
+      "action": "send KEEPALIVE restart timer",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "Established",
+      "event": "receive ManualStop",
+      "action": "delete routes drop TCP",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "receive KeepAliveMsg",
+      "action": "restart HoldTimer",
+      "to": "Established"
+    }
+  ]
+}

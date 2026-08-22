@@ -1,0 +1,102 @@
+{
+  "states": [
+    "TokenRequestSent",
+    "TokenReceived",
+    "ConnectingToBroker",
+    "Authenticated",
+    "Reauthenticating",
+    "Unauthorized",
+    "Disconnected"
+  ],
+  "initial_state": "TokenRequestSent",
+  "final_states": [
+    "Disconnected",
+    "ConnectionRejected"
+  ],
+  "transitions": [
+    {
+      "from": "TokenRequestSent",
+      "event": "receive AccessToken",
+      "action": "proceed",
+      "to": "TokenReceived"
+    },
+    {
+      "from": "TokenReceived",
+      "event": "send ConnectionRequest",
+      "action": "proceed",
+      "to": "ConnectingToBroker"
+    },
+    {
+      "from": "ConnectingToBroker",
+      "event": "receive CONNACK 0x00",
+      "action": "establish connection",
+      "to": "Authenticated"
+    },
+    {
+      "from": "ConnectingToBroker",
+      "event": "receive CONNACK 0x87",
+      "action": "handle rejection",
+      "to": "ConnectionRejected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive PUBLISH QoS0",
+      "action": "send DISCONNECT 0x87 and close connection",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive PUBLISH QoS1",
+      "action": "send PUBACK 0x87",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive SUBSCRIBE (unauthorized topic)",
+      "action": "send SUBACK 0x87 for topic",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive AUTH (Reauthentication)",
+      "action": "process reauth",
+      "to": "Reauthenticating"
+    },
+    {
+      "from": "Reauthenticating",
+      "event": "cond valid_reauth",
+      "action": "set authenticated true",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Reauthenticating",
+      "event": "cond invalid_reauth",
+      "action": "send DISCONNECT 0x87",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "cond expired token",
+      "action": "disconnect client",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Authorized",
+      "event": "receive unauthorized PUBLISH",
+      "action": "disconnect client",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connecting",
+      "event": "receive valid CONNECT",
+      "action": "send CONNACK 0",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Connecting",
+      "event": "receive invalid CONNECT",
+      "action": "send CONNACK 0x05",
+      "to": "Disconnected"
+    }
+  ]
+}

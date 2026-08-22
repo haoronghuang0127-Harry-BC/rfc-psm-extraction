@@ -1,0 +1,131 @@
+{
+  "states": [
+    "Init",
+    "Ready",
+    "Play"
+  ],
+  "initial_state": "Init",
+  "final_states": [],
+  "transitions": [
+    {
+      "from": "Init",
+      "event": "receive SETUP",
+      "action": "reply 200 OK",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "receive PLAY",
+      "action": "reply 200 OK",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "receive SETUP",
+      "action": "reply 200 OK",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "receive PLAY",
+      "action": "reply 200 OK",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "receive PAUSE",
+      "action": "reply 200 OK",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "receive SETUP",
+      "action": "reply 200 OK",
+      "to": "Play"
+    },
+    {
+      "from": "Init",
+      "event": "receive SETUP",
+      "action": "set NRM=1",
+      "to": "Ready"
+    },
+    {
+      "from": "Init",
+      "event": "receive SETUP",
+      "action": "reply 3rr",
+      "to": "Init"
+    },
+    {
+      "from": "Init",
+      "event": "receive REDIRECT",
+      "action": "close session",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "receive PAUSE",
+      "action": "set RP",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "receive PLAY",
+      "action": "play media",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "receive TEARDOWN",
+      "action": "close session",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "timeout",
+      "action": "stop media",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "receive PAUSE",
+      "action": "set PP",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "receive PLAY",
+      "action": "play media",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "receive TEARDOWN",
+      "action": "close session",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "timeout",
+      "action": "stop media",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "receive REDIRECT",
+      "action": "set RedP",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "receive REDIRECT",
+      "action": "close session",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "receive REDIRECT",
+      "action": "set RedP",
+      "to": "Play"
+    }
+  ]
+}

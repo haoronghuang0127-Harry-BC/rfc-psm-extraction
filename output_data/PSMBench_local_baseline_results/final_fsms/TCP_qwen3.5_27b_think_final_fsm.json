@@ -1,0 +1,123 @@
+{
+  "states": [
+    "Closed",
+    "Listen",
+    "SynSent",
+    "SynReceived",
+    "Established",
+    "FinWait1",
+    "FinWait2",
+    "CloseWait",
+    "Closing",
+    "LastAck",
+    "TimeWait"
+  ],
+  "initial_state": "Closed",
+  "final_states": [
+    "Closed"
+  ],
+  "transitions": [
+    {
+      "from": "Closed",
+      "event": "receive OPEN_passive",
+      "action": "open TCB",
+      "to": "Listen"
+    },
+    {
+      "from": "Closed",
+      "event": "receive OPEN_active",
+      "action": "send SYN",
+      "to": "SynSent"
+    },
+    {
+      "from": "Listen",
+      "event": "receive SYN",
+      "action": "send SYN_ACK",
+      "to": "SynReceived"
+    },
+    {
+      "from": "SynSent",
+      "event": "receive SYN_ACK",
+      "action": "send ACK",
+      "to": "Established"
+    },
+    {
+      "from": "SynSent",
+      "event": "receive SYN",
+      "action": "send SYN_ACK",
+      "to": "SynReceived"
+    },
+    {
+      "from": "SynReceived",
+      "event": "receive ACK",
+      "action": "record ack",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "receive CLOSE",
+      "action": "send FIN",
+      "to": "FinWait1"
+    },
+    {
+      "from": "Established",
+      "event": "receive FIN",
+      "action": "send ACK",
+      "to": "CloseWait"
+    },
+    {
+      "from": "FinWait1",
+      "event": "receive ACK",
+      "action": "record ack",
+      "to": "FinWait2"
+    },
+    {
+      "from": "FinWait1",
+      "event": "receive FIN_ACK",
+      "action": "send ACK",
+      "to": "TimeWait"
+    },
+    {
+      "from": "FinWait1",
+      "event": "receive FIN",
+      "action": "send ACK",
+      "to": "Closing"
+    },
+    {
+      "from": "FinWait2",
+      "event": "receive FIN",
+      "action": "send ACK",
+      "to": "TimeWait"
+    },
+    {
+      "from": "CloseWait",
+      "event": "receive CLOSE",
+      "action": "send FIN",
+      "to": "LastAck"
+    },
+    {
+      "from": "Closing",
+      "event": "receive ACK",
+      "action": "record ack",
+      "to": "TimeWait"
+    },
+    {
+      "from": "LastAck",
+      "event": "receive ACK",
+      "action": "close TCB",
+      "to": "Closed"
+    },
+    {
+      "from": "TimeWait",
+      "event": "timeout 2MSL",
+      "action": "close TCB",
+      "to": "Closed"
+    },
+    {
+      "from": "Established",
+      "event": "receive RST",
+      "action": "close connection",
+      "to": "Closed"
+    }
+  ]
+}

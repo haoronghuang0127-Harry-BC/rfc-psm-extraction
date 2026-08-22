@@ -1,0 +1,106 @@
+{
+  "states": [
+    "Init",
+    "InitReboot",
+    "Selecting",
+    "Requesting",
+    "Rebooting",
+    "Bound",
+    "Renewing",
+    "Rebinding"
+  ],
+  "initial_state": "Init",
+  "final_states": [],
+  "transitions": [
+    {
+      "from": "Init",
+      "event": "send DHCPDISCOVER",
+      "action": "send broadcast",
+      "to": "Selecting"
+    },
+    {
+      "from": "InitReboot",
+      "event": "send DHCPREQUEST",
+      "action": "send broadcast",
+      "to": "Rebooting"
+    },
+    {
+      "from": "InitReboot",
+      "event": "receive DHCPNAK",
+      "action": "reset state",
+      "to": "Init"
+    },
+    {
+      "from": "Selecting",
+      "event": "receive DHCPOFFER",
+      "action": "collect offers",
+      "to": "Selecting"
+    },
+    {
+      "from": "Selecting",
+      "event": "cond offer_selected",
+      "action": "send DHCPREQUEST",
+      "to": "Requesting"
+    },
+    {
+      "from": "Requesting",
+      "event": "receive DHCPACK",
+      "action": "record lease",
+      "to": "Bound"
+    },
+    {
+      "from": "Requesting",
+      "event": "receive DHCPNAK",
+      "action": "reset state",
+      "to": "Init"
+    },
+    {
+      "from": "Rebooting",
+      "event": "receive DHCPACK",
+      "action": "record lease",
+      "to": "Bound"
+    },
+    {
+      "from": "Bound",
+      "event": "timeout T1",
+      "action": "send DHCPREQUEST",
+      "to": "Renewing"
+    },
+    {
+      "from": "Renewing",
+      "event": "receive DHCPACK",
+      "action": "record lease",
+      "to": "Bound"
+    },
+    {
+      "from": "Renewing",
+      "event": "timeout T2",
+      "action": "send DHCPREQUEST",
+      "to": "Rebinding"
+    },
+    {
+      "from": "Rebinding",
+      "event": "receive DHCPACK",
+      "action": "record lease",
+      "to": "Bound"
+    },
+    {
+      "from": "Rebinding",
+      "event": "timeout Lease",
+      "action": "stop network",
+      "to": "Init"
+    },
+    {
+      "from": "Bound",
+      "event": "cond address_in_use",
+      "action": "send DHCPDECLINE",
+      "to": "Init"
+    },
+    {
+      "from": "Bound",
+      "event": "send DHCPRELEASE",
+      "action": "release lease",
+      "to": "Init"
+    }
+  ]
+}

@@ -1,0 +1,165 @@
+{
+  "states": [
+    "CLOSED",
+    "LISTEN",
+    "SYN-SENT",
+    "SYN-RECEIVED",
+    "ESTABLISHED",
+    "FIN-WAIT-1",
+    "FIN-WAIT-2",
+    "CLOSE-WAIT",
+    "CLOSING",
+    "LAST-ACK",
+    "TIME-WAIT"
+  ],
+  "initial_state": "LISTEN",
+  "final_states": [
+    "CLOSED"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "receive RST",
+      "action": "ignore",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSED",
+      "event": "receive SYN",
+      "action": "send RST",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "receive SYN",
+      "action": "send SYN-ACK",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "active OPEN",
+      "action": "send SYN",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "receive SYN-ACK",
+      "action": "send ACK",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "receive ACK",
+      "action": "none",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "receive FIN",
+      "action": "send ACK",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "send FIN",
+      "action": "none",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "receive ACK",
+      "action": "none",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "receive FIN",
+      "action": "send ACK",
+      "to": "CLOSING"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "receive FIN",
+      "action": "send ACK",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "send FIN",
+      "action": "none",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "CLOSING",
+      "event": "receive ACK",
+      "action": "none",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "receive ACK",
+      "action": "none",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "timeout 2MSL",
+      "action": "none",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "receive RST",
+      "action": "none",
+      "to": "LISTEN"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "receive RST",
+      "action": "abort",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "receive RST",
+      "action": "reset",
+      "to": "LISTEN"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "receive RST",
+      "action": "reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "receive RST",
+      "action": "reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "receive RST",
+      "action": "reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "receive RST",
+      "action": "reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "receive RST",
+      "action": "reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "receive RST",
+      "action": "reset",
+      "to": "CLOSED"
+    }
+  ]
+}

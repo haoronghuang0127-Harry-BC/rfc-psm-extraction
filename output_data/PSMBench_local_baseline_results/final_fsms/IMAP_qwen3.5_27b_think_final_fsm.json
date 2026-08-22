@@ -1,0 +1,94 @@
+{
+  "states": [
+    "ConnectionEstablished",
+    "NotAuthenticated",
+    "Authenticated",
+    "Selected",
+    "Logout",
+    "ConnectionClosed"
+  ],
+  "initial_state": "ConnectionEstablished",
+  "final_states": [
+    "ConnectionClosed"
+  ],
+  "transitions": [
+    {
+      "from": "ConnectionEstablished",
+      "event": "receive OK greeting",
+      "action": "set state NotAuthenticated",
+      "to": "NotAuthenticated"
+    },
+    {
+      "from": "ConnectionEstablished",
+      "event": "receive PREAUTH greeting",
+      "action": "set state Authenticated",
+      "to": "Authenticated"
+    },
+    {
+      "from": "ConnectionEstablished",
+      "event": "receive BYE greeting",
+      "action": "send BYE",
+      "to": "Logout"
+    },
+    {
+      "from": "NotAuthenticated",
+      "event": "receive LOGIN",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "NotAuthenticated",
+      "event": "receive AUTHENTICATE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "NotAuthenticated",
+      "event": "receive LOGOUT",
+      "action": "send BYE",
+      "to": "Logout"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive SELECT",
+      "action": "reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive EXAMINE",
+      "action": "reply OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive LOGOUT",
+      "action": "send BYE",
+      "to": "Logout"
+    },
+    {
+      "from": "Selected",
+      "event": "receive CLOSE",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "receive UNSELECT",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "receive LOGOUT",
+      "action": "send BYE",
+      "to": "Logout"
+    },
+    {
+      "from": "Logout",
+      "event": "cond connection_closed",
+      "action": "close connection",
+      "to": "ConnectionClosed"
+    }
+  ]
+}

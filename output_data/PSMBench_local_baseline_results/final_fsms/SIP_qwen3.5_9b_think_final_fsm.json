@@ -1,0 +1,191 @@
+{
+  "states": [
+    "Early",
+    "Confirmed",
+    "Terminated",
+    "Calling",
+    "Proceeding",
+    "Completed",
+    "Trying"
+  ],
+  "initial_state": "Calling",
+  "final_states": [
+    "Terminated"
+  ],
+  "transitions": [
+    {
+      "from": "Early",
+      "event": "receive 2xx response",
+      "action": "set confirmed",
+      "to": "Confirmed"
+    },
+    {
+      "from": "Early",
+      "event": "receive non-2xx response",
+      "action": "terminate dialog",
+      "to": "Terminated"
+    },
+    {
+      "from": "Early",
+      "event": "timeout",
+      "action": "terminate dialog",
+      "to": "Terminated"
+    },
+    {
+      "from": "Confirmed",
+      "event": "send BYE",
+      "action": "terminate dialog",
+      "to": "Terminated"
+    },
+    {
+      "from": "Confirmed",
+      "event": "receive 481 response",
+      "action": "terminate dialog",
+      "to": "Terminated"
+    },
+    {
+      "from": "Confirmed",
+      "event": "timeout 64*T1",
+      "action": "terminate session",
+      "to": "Terminated"
+    },
+    {
+      "from": "Confirmed",
+      "event": "cond uac_decision",
+      "action": "send BYE",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "timeout TimerA",
+      "action": "retransmit request",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "timeout TimerB",
+      "action": "notify TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "receive 1xx",
+      "action": "forward response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Calling",
+      "event": "receive 2xx",
+      "action": "terminate",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "receive 300-699",
+      "action": "send ACK",
+      "to": "Completed"
+    },
+    {
+      "from": "Trying",
+      "event": "timeout TimerE",
+      "action": "retransmit request",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "timeout TimerF",
+      "action": "notify TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "receive 1xx",
+      "action": "forward response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "receive 200-699",
+      "action": "forward response",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "timeout TimerE",
+      "action": "retransmit request",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "timeout TimerF",
+      "action": "notify TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive 200-699",
+      "action": "forward response",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive 1xx",
+      "action": "forward response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive 2xx",
+      "action": "terminate",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive 300-699",
+      "action": "forward response",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "timeout TimerD",
+      "action": "terminate",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "timeout TimerK",
+      "action": "retransmit response",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "receive ACK",
+      "action": "set confirmed",
+      "to": "Confirmed"
+    },
+    {
+      "from": "Completed",
+      "event": "timeout TimerG",
+      "action": "retransmit response",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "timeout TimerH",
+      "action": "indicate failure",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "timeout TimerJ",
+      "action": "terminate",
+      "to": "Terminated"
+    },
+    {
+      "from": "Confirmed",
+      "event": "timeout TimerI",
+      "action": "terminate",
+      "to": "Terminated"
+    }
+  ]
+}

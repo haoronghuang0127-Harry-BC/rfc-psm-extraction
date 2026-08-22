@@ -1,0 +1,70 @@
+{
+  "states": [
+    "AwaitingConnection",
+    "AuthRequired",
+    "Authenticated",
+    "ClosingConnection"
+  ],
+  "transitions": [
+    {
+      "from": "AwaitingConnection",
+      "event": "receive connection_open",
+      "action": "send OK",
+      "to": "AuthRequired"
+    },
+    {
+      "from": "AuthRequired",
+      "event": "receive APOP",
+      "action": "reply OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive STAT",
+      "action": "reply OK 2 320",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive LIST",
+      "action": "reply OK 2 messages",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive RETR 1",
+      "action": "reply OK 120 octets",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive DELE 1",
+      "action": "reply OK message 1 deleted",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive RETR 2",
+      "action": "reply OK 200 octets",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive DELE 2",
+      "action": "reply OK message 2 deleted",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive QUIT",
+      "action": "reply OK dewey POP3 server signing off",
+      "to": "ClosingConnection"
+    },
+    {
+      "from": "ClosingConnection",
+      "event": "receive connection_close",
+      "action": "close connection",
+      "to": "AwaitingConnection"
+    }
+  ]
+}

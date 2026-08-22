@@ -1,0 +1,116 @@
+{
+  "states": [
+    "INIT",
+    "SELECTING",
+    "REQUESTING",
+    "BOUND",
+    "RENEWING",
+    "REBINDING"
+  ],
+  "initial_state": "INIT",
+  "final_states": [],
+  "transitions": [
+    {
+      "from": "INIT",
+      "event": "send DHCPDISCOVER",
+      "action": "send DISCOVER",
+      "to": "SELECTING"
+    },
+    {
+      "from": "INIT",
+      "event": "receive DHCPACK",
+      "action": "set configured",
+      "to": "BOUND"
+    },
+    {
+      "from": "INIT",
+      "event": "timeout no_response",
+      "action": "set address",
+      "to": "BOUND"
+    },
+    {
+      "from": "SELECTING",
+      "event": "receive OFFERS",
+      "action": "send DHCPREQUEST",
+      "to": "REQUESTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "receive DHCPACK",
+      "action": "record lease set timers",
+      "to": "BOUND"
+    },
+    {
+      "from": "SELECTING",
+      "event": "receive DHCPNAK",
+      "action": "reset state INIT",
+      "to": "INIT"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "receive DHCPACK",
+      "action": "record lease set timers",
+      "to": "BOUND"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "receive DHCPNAK",
+      "action": "reset state INIT",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "timeout T1",
+      "action": "send DHCPREQUEST",
+      "to": "RENEWING"
+    },
+    {
+      "from": "BOUND",
+      "event": "receive DHCPACK",
+      "action": "record lease set timers",
+      "to": "BOUND"
+    },
+    {
+      "from": "BOUND",
+      "event": "receive DHCPNAK",
+      "action": "reset state INIT",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "cond address_in_use",
+      "action": "send DECLINE",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "timeout no_response",
+      "action": "reset state INIT",
+      "to": "INIT"
+    },
+    {
+      "from": "RENEWING",
+      "event": "receive DHCPACK",
+      "action": "record lease set timers",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEWING",
+      "event": "timeout T2",
+      "action": "send DHCPREQUEST_BROADCAST",
+      "to": "REBINDING"
+    },
+    {
+      "from": "REBINDING",
+      "event": "receive DHCPACK",
+      "action": "record lease set timers",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBINDING",
+      "event": "timeout LEASE_EXPIRED",
+      "action": "reset state INIT",
+      "to": "INIT"
+    }
+  ]
+}

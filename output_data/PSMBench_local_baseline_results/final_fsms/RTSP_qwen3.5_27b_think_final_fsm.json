@@ -1,0 +1,132 @@
+{
+  "states": [
+    "NoSession",
+    "CheckingCredentials",
+    "AwaitingApproval",
+    "Forwarding",
+    "SessionEstablished",
+    "MediaPlaying",
+    "MediaPaused",
+    "SessionTerminated"
+  ],
+  "initial_state": "NoSession",
+  "final_states": [
+    "SessionTerminated"
+  ],
+  "transitions": [
+    {
+      "from": "NoSession",
+      "event": "receive SETUP",
+      "action": "set session context",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "NoSession",
+      "event": "receive SETUP Redirect",
+      "action": "reply 3rr Redirect",
+      "to": "NoSession"
+    },
+    {
+      "from": "NoSession",
+      "event": "receive SETUP User method",
+      "action": "extract certificate chain",
+      "to": "CheckingCredentials"
+    },
+    {
+      "from": "CheckingCredentials",
+      "event": "cond hash_present",
+      "action": "forward request",
+      "to": "Forwarding"
+    },
+    {
+      "from": "CheckingCredentials",
+      "event": "cond hash_missing",
+      "action": "reply 470 or 407",
+      "to": "AwaitingApproval"
+    },
+    {
+      "from": "AwaitingApproval",
+      "event": "receive SETUP with hash",
+      "action": "verify and forward",
+      "to": "Forwarding"
+    },
+    {
+      "from": "Forwarding",
+      "event": "cond auth_success",
+      "action": "set session context",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive PLAY",
+      "action": "start media delivery",
+      "to": "MediaPlaying"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive TEARDOWN",
+      "action": "close session context",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "receive TEARDOWN NRM>1",
+      "action": "decrement NRM",
+      "to": "SessionEstablished"
+    },
+    {
+      "from": "SessionEstablished",
+      "event": "timeout liveness",
+      "action": "close session context",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "MediaPlaying",
+      "event": "receive PAUSE",
+      "action": "stop media stream",
+      "to": "MediaPaused"
+    },
+    {
+      "from": "MediaPlaying",
+      "event": "receive PLAY",
+      "action": "replace previous request",
+      "to": "MediaPlaying"
+    },
+    {
+      "from": "MediaPlaying",
+      "event": "cond End of media",
+      "action": "set RP = End",
+      "to": "MediaPlaying"
+    },
+    {
+      "from": "MediaPlaying",
+      "event": "receive TEARDOWN",
+      "action": "close session context",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "MediaPlaying",
+      "event": "timeout liveness",
+      "action": "close session context",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "MediaPaused",
+      "event": "receive PLAY",
+      "action": "resume media delivery",
+      "to": "MediaPlaying"
+    },
+    {
+      "from": "MediaPaused",
+      "event": "receive TEARDOWN",
+      "action": "close session context",
+      "to": "SessionTerminated"
+    },
+    {
+      "from": "MediaPaused",
+      "event": "timeout liveness",
+      "action": "close session context",
+      "to": "SessionTerminated"
+    }
+  ]
+}

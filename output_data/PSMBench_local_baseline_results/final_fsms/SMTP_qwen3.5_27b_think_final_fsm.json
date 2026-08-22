@@ -1,0 +1,88 @@
+{
+  "states": [
+    "ConnectionOpen",
+    "GreetingSent",
+    "SessionReady",
+    "MailTransaction",
+    "DataTransfer",
+    "SessionClosed"
+  ],
+  "initial_state": "ConnectionOpen",
+  "final_states": [
+    "SessionClosed"
+  ],
+  "transitions": [
+    {
+      "from": "ConnectionOpen",
+      "event": "receive connection",
+      "action": "reply 220",
+      "to": "GreetingSent"
+    },
+    {
+      "from": "GreetingSent",
+      "event": "receive EHLO or HELO",
+      "action": "reply 250",
+      "to": "SessionReady"
+    },
+    {
+      "from": "GreetingSent",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "SessionClosed"
+    },
+    {
+      "from": "SessionReady",
+      "event": "receive MAIL FROM",
+      "action": "reply 250",
+      "to": "MailTransaction"
+    },
+    {
+      "from": "SessionReady",
+      "event": "receive VRFY",
+      "action": "reply 250",
+      "to": "SessionReady"
+    },
+    {
+      "from": "SessionReady",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "SessionClosed"
+    },
+    {
+      "from": "MailTransaction",
+      "event": "receive RCPT TO",
+      "action": "reply 250 or 251",
+      "to": "MailTransaction"
+    },
+    {
+      "from": "MailTransaction",
+      "event": "receive DATA",
+      "action": "reply 354",
+      "to": "DataTransfer"
+    },
+    {
+      "from": "MailTransaction",
+      "event": "receive RSET",
+      "action": "reply 250",
+      "to": "SessionReady"
+    },
+    {
+      "from": "MailTransaction",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "SessionClosed"
+    },
+    {
+      "from": "DataTransfer",
+      "event": "receive end_of_data",
+      "action": "reply 250",
+      "to": "SessionReady"
+    },
+    {
+      "from": "DataTransfer",
+      "event": "receive RSET",
+      "action": "reply 250",
+      "to": "SessionReady"
+    }
+  ]
+}

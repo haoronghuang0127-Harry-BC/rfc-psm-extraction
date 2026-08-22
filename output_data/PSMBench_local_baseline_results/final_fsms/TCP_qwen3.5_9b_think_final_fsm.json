@@ -1,0 +1,93 @@
+{
+  "states": [
+    "closed",
+    "listen",
+    "syn_sent",
+    "syn_received",
+    "established",
+    "fin_wait_1",
+    "fin_wait_2",
+    "close_wait",
+    "closing",
+    "last_ack",
+    "time_wait"
+  ],
+  "initial_state": "closed",
+  "final_states": [
+    "fin_wait_2"
+  ],
+  "transitions": [
+    {
+      "from": "closed",
+      "event": "cond passive_open",
+      "action": "set state listen",
+      "to": "listen"
+    },
+    {
+      "from": "closed",
+      "event": "cond active_open",
+      "action": "send SYN",
+      "to": "syn_sent"
+    },
+    {
+      "from": "listen",
+      "event": "receive SYN",
+      "action": "set state syn_received",
+      "to": "syn_received"
+    },
+    {
+      "from": "syn_sent",
+      "event": "receive SYN_ACK",
+      "action": "set state established",
+      "to": "established"
+    },
+    {
+      "from": "syn_received",
+      "event": "receive ACK",
+      "action": "set state established",
+      "to": "established"
+    },
+    {
+      "from": "established",
+      "event": "cond close_call",
+      "action": "send FIN",
+      "to": "fin_wait_1"
+    },
+    {
+      "from": "fin_wait_1",
+      "event": "receive ACK_FIN",
+      "action": "set state fin_wait_2",
+      "to": "fin_wait_2"
+    },
+    {
+      "from": "established",
+      "event": "receive FIN",
+      "action": "set state close_wait",
+      "to": "close_wait"
+    },
+    {
+      "from": "close_wait",
+      "event": "cond close_call",
+      "action": "send FIN",
+      "to": "last_ack"
+    },
+    {
+      "from": "closing",
+      "event": "receive ACK_FIN",
+      "action": "set state time_wait",
+      "to": "time_wait"
+    },
+    {
+      "from": "last_ack",
+      "event": "receive ACK_FIN",
+      "action": "delete TCB",
+      "to": "closed"
+    },
+    {
+      "from": "time_wait",
+      "event": "timeout 2msl",
+      "action": "delete TCB",
+      "to": "closed"
+    }
+  ]
+}

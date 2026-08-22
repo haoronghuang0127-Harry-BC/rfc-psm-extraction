@@ -1,0 +1,200 @@
+{
+  "states": [
+    "Closed",
+    "Listen",
+    "Request",
+    "Respond",
+    "PartOpen",
+    "Open",
+    "CloseReq",
+    "Closing",
+    "TimeWait",
+    "Stable",
+    "Changing",
+    "Unstable"
+  ],
+  "initial_state": "Listen",
+  "final_states": [],
+  "transitions": [
+    {
+      "from": "Closed",
+      "event": "send DCCP-Request",
+      "action": "open connection",
+      "to": "Request"
+    },
+    {
+      "from": "Listen",
+      "event": "receive DCCP-Request",
+      "action": "reply accept",
+      "to": "Respond"
+    },
+    {
+      "from": "Request",
+      "event": "receive DCCP-Response",
+      "action": "reply ack",
+      "to": "PartOpen"
+    },
+    {
+      "from": "PartOpen",
+      "event": "receive DCCP-Ack",
+      "action": "open connection",
+      "to": "Open"
+    },
+    {
+      "from": "Respond",
+      "event": "receive DCCP-Ack",
+      "action": "open connection",
+      "to": "Open"
+    },
+    {
+      "from": "Request",
+      "event": "receive DCCP-SyncAck",
+      "action": "set sync true",
+      "to": "Open"
+    },
+    {
+      "from": "Respond",
+      "event": "receive Ack/DataAck",
+      "action": "set state OPEN",
+      "to": "Open"
+    },
+    {
+      "from": "PartOpen",
+      "event": "receive Packet",
+      "action": "set state OPEN",
+      "to": "Open"
+    },
+    {
+      "from": "Open",
+      "event": "send DCCP-Close",
+      "action": "close connection",
+      "to": "Closing"
+    },
+    {
+      "from": "Open",
+      "event": "send DCCP-CloseReq",
+      "action": "close connection",
+      "to": "CloseReq"
+    },
+    {
+      "from": "Open",
+      "event": "cond close_connection",
+      "action": "send CloseReq",
+      "to": "CloseReq"
+    },
+    {
+      "from": "Open",
+      "event": "cond close_connection",
+      "action": "send Close",
+      "to": "Closing"
+    },
+    {
+      "from": "Closing",
+      "event": "receive DCCP-Reset",
+      "action": "reset connection",
+      "to": "TimeWait"
+    },
+    {
+      "from": "CloseReq",
+      "event": "receive DCCP-Reset",
+      "action": "close connection",
+      "to": "Closed"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "receive Close",
+      "action": "send Reset",
+      "to": "Closed"
+    },
+    {
+      "from": "CLOSING",
+      "event": "receive Reset",
+      "action": "set state TIMEWAIT",
+      "to": "TimeWait"
+    },
+    {
+      "from": "OPEN",
+      "event": "receive Reset",
+      "action": "set state TIMEWAIT",
+      "to": "TimeWait"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "timeout 2MSL",
+      "action": "stop",
+      "to": "Closed"
+    },
+    {
+      "from": "REQUEST",
+      "event": "receive DCCP-Reset",
+      "action": "close connection",
+      "to": "CLOSED"
+    },
+    {
+      "from": "RESPOND",
+      "event": "timeout 4MSL",
+      "action": "send Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "REQUEST",
+      "event": "timeout 3min",
+      "action": "send Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "Stable",
+      "event": "send Change L",
+      "action": "set state Changing",
+      "to": "Changing"
+    },
+    {
+      "from": "Stable",
+      "event": "cond pref_list_changed",
+      "action": "set state Unstable",
+      "to": "Unstable"
+    },
+    {
+      "from": "Changing",
+      "event": "receive Confirm R",
+      "action": "set value, set state Stable",
+      "to": "Stable"
+    },
+    {
+      "from": "Changing",
+      "event": "receive Empty Confirm R",
+      "action": "revert value, set state Stable",
+      "to": "Stable"
+    },
+    {
+      "from": "Changing",
+      "event": "timeout",
+      "action": "send Change L",
+      "to": "Changing"
+    },
+    {
+      "from": "Changing",
+      "event": "cond pref_list_changed",
+      "action": "set state Unstable",
+      "to": "Unstable"
+    },
+    {
+      "from": "Unstable",
+      "event": "send Change L",
+      "action": "set state Changing",
+      "to": "Changing"
+    },
+    {
+      "from": "Unstable",
+      "event": "receive Confirm R",
+      "action": "set state Stable",
+      "to": "Stable"
+    },
+    {
+      "from": "Unstable",
+      "event": "receive Change R",
+      "action": "set state Stable",
+      "to": "Stable"
+    }
+  ]
+}

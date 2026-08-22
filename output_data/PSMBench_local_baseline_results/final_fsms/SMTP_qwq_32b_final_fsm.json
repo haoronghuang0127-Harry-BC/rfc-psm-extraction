@@ -1,0 +1,122 @@
+{
+  "states": [
+    "Initial",
+    "GreetingReceived",
+    "MailFromSent",
+    "RecipientProcessing",
+    "DataInput",
+    "MessageSent",
+    "Closed",
+    "ErrorState",
+    "VRFYDisabled",
+    "RelayRestricted"
+  ],
+  "initial_state": "Initial",
+  "final_states": [
+    "Closed"
+  ],
+  "transitions": [
+    {
+      "from": "Initial",
+      "event": "receive EHLO",
+      "action": "reply 250",
+      "to": "GreetingReceived"
+    },
+    {
+      "from": "GreetingReceived",
+      "event": "receive MAIL FROM",
+      "action": "reply 250",
+      "to": "MailFromSent"
+    },
+    {
+      "from": "MailFromSent",
+      "event": "receive RCPT TO",
+      "action": "reply 250",
+      "to": "RecipientProcessing"
+    },
+    {
+      "from": "RecipientProcessing",
+      "event": "receive RCPT TO",
+      "action": "reply 250",
+      "to": "RecipientProcessing"
+    },
+    {
+      "from": "RecipientProcessing",
+      "event": "receive RCPT TO",
+      "action": "reply 550",
+      "to": "RecipientProcessing"
+    },
+    {
+      "from": "RecipientProcessing",
+      "event": "receive DATA",
+      "action": "reply 354",
+      "to": "DataInput"
+    },
+    {
+      "from": "DataInput",
+      "event": "receive .",
+      "action": "reply 250",
+      "to": "MessageSent"
+    },
+    {
+      "from": "MessageSent",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "Closed"
+    },
+    {
+      "from": "RecipientProcessing",
+      "event": "receive RSET",
+      "action": "reply 250",
+      "to": "MailFromSent"
+    },
+    {
+      "from": "MailFromSent",
+      "event": "receive QUIT",
+      "action": "reply 221",
+      "to": "Closed"
+    },
+    {
+      "from": "GreetingReceived",
+      "event": "receive VRFY",
+      "action": "reply 252",
+      "to": "VRFYDisabled"
+    },
+    {
+      "from": "VRFYDisabled",
+      "event": "receive VRFY",
+      "action": "reply 252",
+      "to": "VRFYDisabled"
+    },
+    {
+      "from": "GreetingReceived",
+      "event": "receive RCPT TO",
+      "action": "reply 550",
+      "to": "RelayRestricted"
+    },
+    {
+      "from": "RelayRestricted",
+      "event": "receive RCPT TO",
+      "action": "reply 550",
+      "to": "RelayRestricted"
+    },
+    {
+      "from": "GreetingReceived",
+      "event": "cond attack_detected",
+      "action": "close connection",
+      "to": "Closed"
+    },
+    {
+      "from": "RecipientProcessing",
+      "event": "receive invalid command",
+      "action": "reply 500",
+      "to": "ErrorState"
+    },
+    {
+      "from": "ErrorState",
+      "event": "receive RSET",
+      "action": "reply 250",
+      "to": "MailFromSent"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "states": [
+    "ConnectionEstablished",
+    "ReadyForMail",
+    "AwaitingRCPT",
+    "AwaitingData",
+    "ProcessingData",
+    "ClosingConnection"
+  ],
+  "initial_state": "ConnectionEstablished",
+  "final_states": [
+    "ClosingConnection"
+  ],
+  "transitions": [
+    {
+      "from": "ConnectionEstablished",
+      "event": "receive EHLO",
+      "action": "reply 250",
+      "to": "ReadyForMail"
+    },
+    {
+      "from": "ReadyForMail",
+      "event": "receive MAIL",
+      "action": "reply 250",
+      "to": "AwaitingRCPT"
+    },
+    {
+      "from": "AwaitingRCPT",
+      "event": "receive RCPT",
+      "action": "reply 250",
+      "to": "AwaitingData"
+    },
+    {
+      "from": "AwaitingData",
+      "event": "receive DATA",
+      "action": "reply 354",
+      "to": "ProcessingData"
+    },
+    {
+      "from": "ProcessingData",
+      "event": "receive EndOfData",
+      "action": "process mail",
+      "to": "ReadyForMail"
+    },
+    {
+      "from": "ReadyForMail",
+      "event": "receive RSET",
+      "action": "reply 250",
+      "to": "ReadyForMail"
+    },
+    {
+      "from": "ProcessingData",
+      "event": "receive RSET",
+      "action": "reply 250",
+      "to": "ReadyForMail"
+    },
+    {
+      "from": "ReadyForMail",
+      "event": "receive QUIT",
+      "action": "send 221",
+      "to": "ClosingConnection"
+    }
+  ]
+}

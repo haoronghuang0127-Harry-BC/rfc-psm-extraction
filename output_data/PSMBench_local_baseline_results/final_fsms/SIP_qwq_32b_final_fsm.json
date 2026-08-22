@@ -1,0 +1,43 @@
+{
+  "states": [
+    "Initial",
+    "Trying",
+    "Ringing",
+    "Connected",
+    "Terminated",
+    "Registering",
+    "Registered"
+  ],
+  "transitions": [
+    {
+      "from": "Initial",
+      "event": "receive 100 Trying",
+      "action": "transition to Trying",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "receive 180 Ringing",
+      "action": "transition to Ringing",
+      "to": "Ringing"
+    },
+    {
+      "from": "Ringing",
+      "event": "receive 200 OK",
+      "action": "send ACK",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "receive BYE",
+      "action": "send 200 OK",
+      "to": "Terminated"
+    },
+    {
+      "from": "Registering",
+      "event": "receive 200 OK",
+      "action": "transition to Registered",
+      "to": "Registered"
+    }
+  ]
+}

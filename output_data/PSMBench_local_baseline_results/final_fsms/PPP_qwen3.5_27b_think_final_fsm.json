@@ -1,0 +1,797 @@
+{
+  "states": [
+    "LinkDead",
+    "LinkEstablishment",
+    "Authentication",
+    "NetworkLayerProtocol",
+    "LinkTermination",
+    "Initial",
+    "Starting",
+    "Closed",
+    "Stopped",
+    "Closing",
+    "Stopping",
+    "RequestSent",
+    "AckReceived",
+    "AckSent",
+    "Opened"
+  ],
+  "initial_state": "LinkDead",
+  "final_states": [],
+  "transitions": [
+    {
+      "from": "LinkDead",
+      "event": "cond physical_layer_ready",
+      "action": "send LCP_Configure_Request",
+      "to": "LinkEstablishment"
+    },
+    {
+      "from": "LinkEstablishment",
+      "event": "cond LCP_Opened",
+      "action": "open Authentication",
+      "to": "Authentication"
+    },
+    {
+      "from": "LinkEstablishment",
+      "event": "cond LCP_Failure",
+      "action": "close connection",
+      "to": "LinkDead"
+    },
+    {
+      "from": "Authentication",
+      "event": "cond authentication_success",
+      "action": "open NCP_Configuration",
+      "to": "NetworkLayerProtocol"
+    },
+    {
+      "from": "Authentication",
+      "event": "cond authentication_failure",
+      "action": "send LCP_Terminate_Request",
+      "to": "LinkTermination"
+    },
+    {
+      "from": "Authentication",
+      "event": "receive LCP_Configure_Request",
+      "action": "transition to LinkEstablishment",
+      "to": "LinkEstablishment"
+    },
+    {
+      "from": "NetworkLayerProtocol",
+      "event": "cond link_close_requested",
+      "action": "send LCP_Terminate_Request",
+      "to": "LinkTermination"
+    },
+    {
+      "from": "NetworkLayerProtocol",
+      "event": "receive LCP_Configure_Request",
+      "action": "transition to LinkEstablishment",
+      "to": "LinkEstablishment"
+    },
+    {
+      "from": "LinkTermination",
+      "event": "cond termination_complete",
+      "action": "close physical_layer",
+      "to": "LinkDead"
+    },
+    {
+      "from": "Initial",
+      "event": "receive LowerLayerUp",
+      "action": "log no_action",
+      "to": "Closed"
+    },
+    {
+      "from": "Starting",
+      "event": "receive LowerLayerUp",
+      "action": "set timer send request",
+      "to": "RequestSent"
+    },
+    {
+      "from": "Closed",
+      "event": "receive LowerLayerDown",
+      "action": "log no_action",
+      "to": "Initial"
+    },
+    {
+      "from": "Stopped",
+      "event": "receive LowerLayerDown",
+      "action": "open layer",
+      "to": "Starting"
+    },
+    {
+      "from": "Closing",
+      "event": "receive LowerLayerDown",
+      "action": "log no_action",
+      "to": "Initial"
+    },
+    {
+      "from": "Stopping",
+      "event": "receive LowerLayerDown",
+      "action": "log no_action",
+      "to": "Starting"
+    },
+    {
+      "from": "RequestSent",
+      "event": "receive LowerLayerDown",
+      "action": "log no_action",
+      "to": "Starting"
+    },
+    {
+      "from": "AckReceived",
+      "event": "receive LowerLayerDown",
+      "action": "log no_action",
+      "to": "Starting"
+    },
+    {
+      "from": "AckSent",
+      "event": "receive LowerLayerDown",
+      "action": "log no_action",
+      "to": "Starting"
+    },
+    {
+      "from": "Opened",
+      "event": "receive LowerLayerDown",
+      "action": "close layer",
+      "to": "Starting"
+    },
+    {
+      "from": "Initial",
+      "event": "receive AdminOpen",
+      "action": "open layer",
+      "to": "Starting"
+    },
+    {
+      "from": "Starting",
+      "event": "receive AdminOpen",
+      "action": "log no_action",
+      "to": "Starting"
+    },
+    {
+      "from": "Closed",
+      "event": "receive AdminOpen",
+      "action": "set timer send request",
+      "to": "RequestSent"
+    },
+    {
+      "from": "Stopped",
+      "event": "receive AdminOpen",
+      "action": "log no_action",
+      "to": "Stopped"
+    },
+    {
+      "from": "Closing",
+      "event": "receive AdminOpen",
+      "action": "log no_action",
+      "to": "Stopping"
+    },
+    {
+      "from": "Stopping",
+      "event": "receive AdminOpen",
+      "action": "log no_action",
+      "to": "Stopping"
+    },
+    {
+      "from": "RequestSent",
+      "event": "receive AdminOpen",
+      "action": "log no_action",
+      "to": "RequestSent"
+    },
+    {
+      "from": "AckReceived",
+      "event": "receive AdminOpen",
+      "action": "log no_action",
+      "to": "AckReceived"
+    },
+    {
+      "from": "AckSent",
+      "event": "receive AdminOpen",
+      "action": "log no_action",
+      "to": "AckSent"
+    },
+    {
+      "from": "Opened",
+      "event": "receive AdminOpen",
+      "action": "log no_action",
+      "to": "Opened"
+    },
+    {
+      "from": "Initial",
+      "event": "receive AdminClose",
+      "action": "log no_action",
+      "to": "Initial"
+    },
+    {
+      "from": "Starting",
+      "event": "receive AdminClose",
+      "action": "close layer",
+      "to": "Initial"
+    },
+    {
+      "from": "Closed",
+      "event": "receive AdminClose",
+      "action": "log no_action",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "receive AdminClose",
+      "action": "log no_action",
+      "to": "Closed"
+    },
+    {
+      "from": "Closing",
+      "event": "receive AdminClose",
+      "action": "log no_action",
+      "to": "Closing"
+    },
+    {
+      "from": "Stopping",
+      "event": "receive AdminClose",
+      "action": "log no_action",
+      "to": "Closing"
+    },
+    {
+      "from": "RequestSent",
+      "event": "receive AdminClose",
+      "action": "set timer send term",
+      "to": "Closing"
+    },
+    {
+      "from": "AckReceived",
+      "event": "receive AdminClose",
+      "action": "set timer send term",
+      "to": "Closing"
+    },
+    {
+      "from": "AckSent",
+      "event": "receive AdminClose",
+      "action": "set timer send term",
+      "to": "Closing"
+    },
+    {
+      "from": "Opened",
+      "event": "receive AdminClose",
+      "action": "close layer set timer send term",
+      "to": "Closing"
+    },
+    {
+      "from": "Closing",
+      "event": "timeout RestartPositive",
+      "action": "send terminate request",
+      "to": "Closing"
+    },
+    {
+      "from": "Stopping",
+      "event": "timeout RestartPositive",
+      "action": "send terminate request",
+      "to": "Stopping"
+    },
+    {
+      "from": "RequestSent",
+      "event": "timeout RestartPositive",
+      "action": "send configure request",
+      "to": "RequestSent"
+    },
+    {
+      "from": "AckReceived",
+      "event": "timeout RestartPositive",
+      "action": "send configure request",
+      "to": "RequestSent"
+    },
+    {
+      "from": "AckSent",
+      "event": "timeout RestartPositive",
+      "action": "send configure request",
+      "to": "AckSent"
+    },
+    {
+      "from": "Closing",
+      "event": "timeout RestartExpired",
+      "action": "close layer",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopping",
+      "event": "timeout RestartExpired",
+      "action": "close layer",
+      "to": "Stopped"
+    },
+    {
+      "from": "RequestSent",
+      "event": "timeout RestartExpired",
+      "action": "close layer",
+      "to": "Stopped"
+    },
+    {
+      "from": "AckReceived",
+      "event": "timeout RestartExpired",
+      "action": "close layer",
+      "to": "Stopped"
+    },
+    {
+      "from": "AckSent",
+      "event": "timeout RestartExpired",
+      "action": "close layer",
+      "to": "Stopped"
+    },
+    {
+      "from": "Closed",
+      "event": "receive ConfigureRequestGood",
+      "action": "send TerminateAck",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "receive ConfigureRequestGood",
+      "action": "set timer send request send ack",
+      "to": "AckSent"
+    },
+    {
+      "from": "Closing",
+      "event": "receive ConfigureRequestGood",
+      "action": "log no_action",
+      "to": "Closing"
+    },
+    {
+      "from": "Stopping",
+      "event": "receive ConfigureRequestGood",
+      "action": "log no_action",
+      "to": "Stopping"
+    },
+    {
+      "from": "RequestSent",
+      "event": "receive ConfigureRequestGood",
+      "action": "send ConfigureAck",
+      "to": "AckSent"
+    },
+    {
+      "from": "AckReceived",
+      "event": "receive ConfigureRequestGood",
+      "action": "send ack open layer",
+      "to": "Opened"
+    },
+    {
+      "from": "AckSent",
+      "event": "receive ConfigureRequestGood",
+      "action": "send ConfigureAck",
+      "to": "AckSent"
+    },
+    {
+      "from": "Opened",
+      "event": "receive ConfigureRequestGood",
+      "action": "close layer set timer send request send ack",
+      "to": "AckSent"
+    },
+    {
+      "from": "Closed",
+      "event": "receive ConfigureRequestBad",
+      "action": "send TerminateAck",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "receive ConfigureRequestBad",
+      "action": "set timer send request send nak",
+      "to": "RequestSent"
+    },
+    {
+      "from": "Closing",
+      "event": "receive ConfigureRequestBad",
+      "action": "log no_action",
+      "to": "Closing"
+    },
+    {
+      "from": "Stopping",
+      "event": "receive ConfigureRequestBad",
+      "action": "log no_action",
+      "to": "Stopping"
+    },
+    {
+      "from": "RequestSent",
+      "event": "receive ConfigureRequestBad",
+      "action": "send ConfigureNak",
+      "to": "RequestSent"
+    },
+    {
+      "from": "AckReceived",
+      "event": "receive ConfigureRequestBad",
+      "action": "send ConfigureNak",
+      "to": "AckReceived"
+    },
+    {
+      "from": "AckSent",
+      "event": "receive ConfigureRequestBad",
+      "action": "send ConfigureNak",
+      "to": "RequestSent"
+    },
+    {
+      "from": "Opened",
+      "event": "receive ConfigureRequestBad",
+      "action": "close layer set timer send request send nak",
+      "to": "RequestSent"
+    },
+    {
+      "from": "Closed",
+      "event": "receive ConfigureAck",
+      "action": "send TerminateAck",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "receive ConfigureAck",
+      "action": "send TerminateAck",
+      "to": "Stopped"
+    },
+    {
+      "from": "Closing",
+      "event": "receive ConfigureAck",
+      "action": "log no_action",
+      "to": "Closing"
+    },
+    {
+      "from": "Stopping",
+      "event": "receive ConfigureAck",
+      "action": "log no_action",
+      "to": "Stopping"
+    },
+    {
+      "from": "RequestSent",
+      "event": "receive ConfigureAck",
+      "action": "set timer",
+      "to": "AckReceived"
+    },
+    {
+      "from": "AckReceived",
+      "event": "receive ConfigureAck",
+      "action": "send configure request",
+      "to": "RequestSent"
+    },
+    {
+      "from": "AckSent",
+      "event": "receive ConfigureAck",
+      "action": "set timer open layer",
+      "to": "Opened"
+    },
+    {
+      "from": "Opened",
+      "event": "receive ConfigureAck",
+      "action": "close layer send configure request",
+      "to": "RequestSent"
+    },
+    {
+      "from": "Closed",
+      "event": "receive ConfigureNakRej",
+      "action": "send TerminateAck",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "receive ConfigureNakRej",
+      "action": "send TerminateAck",
+      "to": "Stopped"
+    },
+    {
+      "from": "Closing",
+      "event": "receive ConfigureNakRej",
+      "action": "log no_action",
+      "to": "Closing"
+    },
+    {
+      "from": "Stopping",
+      "event": "receive ConfigureNakRej",
+      "action": "log no_action",
+      "to": "Stopping"
+    },
+    {
+      "from": "RequestSent",
+      "event": "receive ConfigureNakRej",
+      "action": "set timer send request",
+      "to": "RequestSent"
+    },
+    {
+      "from": "AckReceived",
+      "event": "receive ConfigureNakRej",
+      "action": "send configure request",
+      "to": "RequestSent"
+    },
+    {
+      "from": "AckSent",
+      "event": "receive ConfigureNakRej",
+      "action": "set timer send request",
+      "to": "AckSent"
+    },
+    {
+      "from": "Opened",
+      "event": "receive ConfigureNakRej",
+      "action": "close layer send configure request",
+      "to": "RequestSent"
+    },
+    {
+      "from": "Closed",
+      "event": "receive TerminateRequest",
+      "action": "send TerminateAck",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "receive TerminateRequest",
+      "action": "send TerminateAck",
+      "to": "Stopped"
+    },
+    {
+      "from": "Closing",
+      "event": "receive TerminateRequest",
+      "action": "send TerminateAck",
+      "to": "Closing"
+    },
+    {
+      "from": "Stopping",
+      "event": "receive TerminateRequest",
+      "action": "send TerminateAck",
+      "to": "Stopping"
+    },
+    {
+      "from": "RequestSent",
+      "event": "receive TerminateRequest",
+      "action": "send TerminateAck",
+      "to": "RequestSent"
+    },
+    {
+      "from": "AckReceived",
+      "event": "receive TerminateRequest",
+      "action": "send TerminateAck",
+      "to": "RequestSent"
+    },
+    {
+      "from": "AckSent",
+      "event": "receive TerminateRequest",
+      "action": "send TerminateAck",
+      "to": "RequestSent"
+    },
+    {
+      "from": "Opened",
+      "event": "receive TerminateRequest",
+      "action": "close layer reset timer send ack",
+      "to": "Stopping"
+    },
+    {
+      "from": "Closed",
+      "event": "receive TerminateAck",
+      "action": "log no_action",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "receive TerminateAck",
+      "action": "log no_action",
+      "to": "Stopped"
+    },
+    {
+      "from": "Closing",
+      "event": "receive TerminateAck",
+      "action": "close layer",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopping",
+      "event": "receive TerminateAck",
+      "action": "close layer",
+      "to": "Stopped"
+    },
+    {
+      "from": "RequestSent",
+      "event": "receive TerminateAck",
+      "action": "log no_action",
+      "to": "RequestSent"
+    },
+    {
+      "from": "AckReceived",
+      "event": "receive TerminateAck",
+      "action": "log no_action",
+      "to": "RequestSent"
+    },
+    {
+      "from": "AckSent",
+      "event": "receive TerminateAck",
+      "action": "log no_action",
+      "to": "AckSent"
+    },
+    {
+      "from": "Opened",
+      "event": "receive TerminateAck",
+      "action": "close layer send configure request",
+      "to": "RequestSent"
+    },
+    {
+      "from": "Closed",
+      "event": "receive UnknownCode",
+      "action": "send CodeReject",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "receive UnknownCode",
+      "action": "send CodeReject",
+      "to": "Stopped"
+    },
+    {
+      "from": "Closing",
+      "event": "receive UnknownCode",
+      "action": "send CodeReject",
+      "to": "Closing"
+    },
+    {
+      "from": "Stopping",
+      "event": "receive UnknownCode",
+      "action": "send CodeReject",
+      "to": "Stopping"
+    },
+    {
+      "from": "RequestSent",
+      "event": "receive UnknownCode",
+      "action": "send CodeReject",
+      "to": "RequestSent"
+    },
+    {
+      "from": "AckReceived",
+      "event": "receive UnknownCode",
+      "action": "send CodeReject",
+      "to": "AckReceived"
+    },
+    {
+      "from": "AckSent",
+      "event": "receive UnknownCode",
+      "action": "send CodeReject",
+      "to": "AckSent"
+    },
+    {
+      "from": "Opened",
+      "event": "receive UnknownCode",
+      "action": "send CodeReject",
+      "to": "Opened"
+    },
+    {
+      "from": "Closed",
+      "event": "receive RejectPermitted",
+      "action": "log no_action",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "receive RejectPermitted",
+      "action": "log no_action",
+      "to": "Stopped"
+    },
+    {
+      "from": "Closing",
+      "event": "receive RejectPermitted",
+      "action": "log no_action",
+      "to": "Closing"
+    },
+    {
+      "from": "Stopping",
+      "event": "receive RejectPermitted",
+      "action": "log no_action",
+      "to": "Stopping"
+    },
+    {
+      "from": "RequestSent",
+      "event": "receive RejectPermitted",
+      "action": "log no_action",
+      "to": "RequestSent"
+    },
+    {
+      "from": "AckReceived",
+      "event": "receive RejectPermitted",
+      "action": "log no_action",
+      "to": "RequestSent"
+    },
+    {
+      "from": "AckSent",
+      "event": "receive RejectPermitted",
+      "action": "log no_action",
+      "to": "AckSent"
+    },
+    {
+      "from": "Opened",
+      "event": "receive RejectPermitted",
+      "action": "log no_action",
+      "to": "Opened"
+    },
+    {
+      "from": "Closed",
+      "event": "receive RejectCatastrophic",
+      "action": "close layer",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "receive RejectCatastrophic",
+      "action": "close layer",
+      "to": "Stopped"
+    },
+    {
+      "from": "Closing",
+      "event": "receive RejectCatastrophic",
+      "action": "close layer",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopping",
+      "event": "receive RejectCatastrophic",
+      "action": "close layer",
+      "to": "Stopped"
+    },
+    {
+      "from": "RequestSent",
+      "event": "receive RejectCatastrophic",
+      "action": "close layer",
+      "to": "Stopped"
+    },
+    {
+      "from": "AckReceived",
+      "event": "receive RejectCatastrophic",
+      "action": "close layer",
+      "to": "Stopped"
+    },
+    {
+      "from": "AckSent",
+      "event": "receive RejectCatastrophic",
+      "action": "close layer",
+      "to": "Stopped"
+    },
+    {
+      "from": "Opened",
+      "event": "receive RejectCatastrophic",
+      "action": "close layer set timer send term",
+      "to": "Stopping"
+    },
+    {
+      "from": "Closed",
+      "event": "receive EchoDiscard",
+      "action": "log no_action",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "receive EchoDiscard",
+      "action": "log no_action",
+      "to": "Stopped"
+    },
+    {
+      "from": "Closing",
+      "event": "receive EchoDiscard",
+      "action": "log no_action",
+      "to": "Closing"
+    },
+    {
+      "from": "Stopping",
+      "event": "receive EchoDiscard",
+      "action": "log no_action",
+      "to": "Stopping"
+    },
+    {
+      "from": "RequestSent",
+      "event": "receive EchoDiscard",
+      "action": "log no_action",
+      "to": "RequestSent"
+    },
+    {
+      "from": "AckReceived",
+      "event": "receive EchoDiscard",
+      "action": "log no_action",
+      "to": "AckReceived"
+    },
+    {
+      "from": "AckSent",
+      "event": "receive EchoDiscard",
+      "action": "log no_action",
+      "to": "AckSent"
+    },
+    {
+      "from": "Opened",
+      "event": "receive EchoDiscard",
+      "action": "send EchoReply",
+      "to": "Opened"
+    }
+  ]
+}

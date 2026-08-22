@@ -1,0 +1,340 @@
+{
+  "states": [
+    "Unregistered",
+    "Registered",
+    "Idle",
+    "UACalling",
+    "Ringing",
+    "Established",
+    "Terminated",
+    "InitialDialog",
+    "EarlyDialog",
+    "ConfirmedDialog",
+    "TransactionCalling",
+    "TransactionTrying",
+    "TransactionProceeding",
+    "TransactionCompleted",
+    "TransactionConfirmed",
+    "ClientAwaitingResponse",
+    "ClientCancelSent",
+    "ClientTransactionComplete",
+    "ServerProcessingCancel",
+    "TransactionFound",
+    "ServerDone",
+    "OngoingClientTransaction",
+    "OngoingServerTransaction",
+    "ReInviteSent",
+    "TimerRunning",
+    "ProcessingFirstInvite",
+    "SentInviteInProgress",
+    "ResponseSent"
+  ],
+  "initial_state": "Unregistered",
+  "final_states": [
+    "Terminated",
+    "ServerDone",
+    "ClientTransactionComplete"
+  ],
+  "transitions": [
+    {
+      "from": "Unregistered",
+      "event": "send REGISTER",
+      "action": "receive 200 OK",
+      "to": "Registered"
+    },
+    {
+      "from": "Idle",
+      "event": "send INVITE",
+      "action": "receive 100 Trying",
+      "to": "UACalling"
+    },
+    {
+      "from": "UACalling",
+      "event": "receive 180 Ringing",
+      "action": "log ringing",
+      "to": "Ringing"
+    },
+    {
+      "from": "Ringing",
+      "event": "receive 200 OK",
+      "action": "send ACK",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "send BYE",
+      "action": "receive 200 OK",
+      "to": "Terminated"
+    },
+    {
+      "from": "InitialDialog",
+      "event": "receive provisional_response",
+      "action": "create dialog",
+      "to": "EarlyDialog"
+    },
+    {
+      "from": "InitialDialog",
+      "event": "receive final_response_2xx",
+      "action": "send ACK",
+      "to": "ConfirmedDialog"
+    },
+    {
+      "from": "InitialDialog",
+      "event": "receive final_response_non2xx",
+      "action": "close dialogs",
+      "to": "Terminated"
+    },
+    {
+      "from": "InitialDialog",
+      "event": "timeout Expires",
+      "action": "send CANCEL",
+      "to": "Terminated"
+    },
+    {
+      "from": "EarlyDialog",
+      "event": "receive final_response_2xx",
+      "action": "set state ConfirmedDialog",
+      "to": "ConfirmedDialog"
+    },
+    {
+      "from": "EarlyDialog",
+      "event": "receive final_response_non2xx",
+      "action": "terminate dialog",
+      "to": "Terminated"
+    },
+    {
+      "from": "EarlyDialog",
+      "event": "timeout No Response",
+      "action": "terminate dialog",
+      "to": "Terminated"
+    },
+    {
+      "from": "ConfirmedDialog",
+      "event": "send BYE",
+      "action": "terminate session and dialog",
+      "to": "Terminated"
+    },
+    {
+      "from": "ConfirmedDialog",
+      "event": "receive BYE",
+      "action": "reply 2xx",
+      "to": "Terminated"
+    },
+    {
+      "from": "ConfirmedDialog",
+      "event": "receive 481 or 408",
+      "action": "terminate dialog",
+      "to": "Terminated"
+    },
+    {
+      "from": "ConfirmedDialog",
+      "event": "timeout 64*T1",
+      "action": "send BYE",
+      "to": "Terminated"
+    },
+    {
+      "from": "TransactionCalling",
+      "event": "timeout Timer A",
+      "action": "retransmit request",
+      "to": "TransactionCalling"
+    },
+    {
+      "from": "TransactionCalling",
+      "event": "receive provisional_response",
+      "action": "pass to TU",
+      "to": "TransactionProceeding"
+    },
+    {
+      "from": "TransactionCalling",
+      "event": "receive final_response",
+      "action": "send ACK",
+      "to": "TransactionCompleted"
+    },
+    {
+      "from": "TransactionCalling",
+      "event": "timeout Timer B",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "TransactionCalling",
+      "event": "transport error",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "TransactionTrying",
+      "event": "timeout Timer E",
+      "action": "retransmit request",
+      "to": "TransactionTrying"
+    },
+    {
+      "from": "TransactionTrying",
+      "event": "receive provisional_response",
+      "action": "pass to TU",
+      "to": "TransactionProceeding"
+    },
+    {
+      "from": "TransactionTrying",
+      "event": "receive final_response",
+      "action": "pass to TU",
+      "to": "TransactionCompleted"
+    },
+    {
+      "from": "TransactionTrying",
+      "event": "timeout Timer F",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "TransactionTrying",
+      "event": "transport error",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "TransactionProceeding",
+      "event": "receive final_response",
+      "action": "send ACK",
+      "to": "TransactionCompleted"
+    },
+    {
+      "from": "TransactionProceeding",
+      "event": "receive success response",
+      "action": "pass to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "TransactionProceeding",
+      "event": "timeout Timer B",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "TransactionProceeding",
+      "event": "transport error",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "TransactionCompleted",
+      "event": "receive retransmission",
+      "action": "retransmit ACK",
+      "to": "TransactionCompleted"
+    },
+    {
+      "from": "TransactionCompleted",
+      "event": "timeout Timer D",
+      "action": "destroy transaction",
+      "to": "Terminated"
+    },
+    {
+      "from": "TransactionCompleted",
+      "event": "receive ACK",
+      "action": "stop retransmission",
+      "to": "TransactionConfirmed"
+    },
+    {
+      "from": "TransactionCompleted",
+      "event": "timeout Timer H",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "TransactionCompleted",
+      "event": "transport error",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "TransactionConfirmed",
+      "event": "timeout Timer I",
+      "action": "destroy transaction",
+      "to": "Terminated"
+    },
+    {
+      "from": "ClientAwaitingResponse",
+      "event": "receive provisional_response",
+      "action": "send CANCEL request",
+      "to": "ClientCancelSent"
+    },
+    {
+      "from": "ClientAwaitingResponse",
+      "event": "receive final_response",
+      "action": "log no cancel",
+      "to": "ClientTransactionComplete"
+    },
+    {
+      "from": "ClientAwaitingResponse",
+      "event": "timeout 64*T1",
+      "action": "destroy client transaction",
+      "to": "ClientTransactionComplete"
+    },
+    {
+      "from": "ServerProcessingCancel",
+      "event": "cond no matching transaction",
+      "action": "reply 481",
+      "to": "ServerDone"
+    },
+    {
+      "from": "ServerProcessingCancel",
+      "event": "cond matching transaction found",
+      "action": "check final response status",
+      "to": "TransactionFound"
+    },
+    {
+      "from": "TransactionFound",
+      "event": "cond final response sent",
+      "action": "reply 200 OK",
+      "to": "ServerDone"
+    },
+    {
+      "from": "TransactionFound",
+      "event": "cond no final response INVITE",
+      "action": "reply 487 and 200",
+      "to": "ServerDone"
+    },
+    {
+      "from": "TransactionFound",
+      "event": "cond no final response other",
+      "action": "reply 200 OK",
+      "to": "ServerDone"
+    },
+    {
+      "from": "OngoingClientTransaction",
+      "event": "cond transaction_completed",
+      "action": "send reinvite",
+      "to": "ReInviteSent"
+    },
+    {
+      "from": "OngoingServerTransaction",
+      "event": "cond transaction_confirmed",
+      "action": "send reinvite",
+      "to": "ReInviteSent"
+    },
+    {
+      "from": "ProcessingFirstInvite",
+      "event": "receive INVITE",
+      "action": "reply 500",
+      "to": "ResponseSent"
+    },
+    {
+      "from": "SentInviteInProgress",
+      "event": "receive INVITE",
+      "action": "reply 491",
+      "to": "ResponseSent"
+    },
+    {
+      "from": "ReInviteSent",
+      "event": "receive 491",
+      "action": "set timer T",
+      "to": "TimerRunning"
+    },
+    {
+      "from": "TimerRunning",
+      "event": "timeout T",
+      "action": "send reinvite",
+      "to": "ReInviteSent"
+    }
+  ]
+}

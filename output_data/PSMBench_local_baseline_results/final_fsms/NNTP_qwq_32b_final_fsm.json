@@ -1,0 +1,113 @@
+{
+  "states": [
+    "InitialConnection",
+    "TransitMode",
+    "ReadingMode",
+    "ConnectionClosed",
+    "ReaderMode",
+    "NewsgroupSelected",
+    "ValidArticleSelected",
+    "InvalidArticle",
+    "Posting",
+    "TransferInProgress",
+    "Ready",
+    "AwaitingContinuation",
+    "ServiceReady",
+    "Encrypted",
+    "Authenticated",
+    "ErrorState",
+    "Closing"
+  ],
+  "initial_state": "InitialConnection",
+  "final_states": [
+    "ConnectionClosed",
+    "Closing",
+    "ErrorState"
+  ],
+  "transitions": [
+    {
+      "from": "InitialConnection",
+      "event": "receive MODE READER",
+      "action": "reply 200",
+      "to": "ReadingMode"
+    },
+    {
+      "from": "InitialConnection",
+      "event": "timeout inactivity",
+      "action": "close connection",
+      "to": "ConnectionClosed"
+    },
+    {
+      "from": "TransitMode",
+      "event": "receive MODE READER",
+      "action": "reply 200",
+      "to": "ReadingMode"
+    },
+    {
+      "from": "TransitMode",
+      "event": "timeout inactivity",
+      "action": "close connection",
+      "to": "ConnectionClosed"
+    },
+    {
+      "from": "ReadingMode",
+      "event": "timeout inactivity",
+      "action": "close connection",
+      "to": "ConnectionClosed"
+    },
+    {
+      "from": "Initial",
+      "event": "receive GROUP group",
+      "action": "reply 211",
+      "to": "NewsgroupSelected"
+    },
+    {
+      "from": "ValidArticleSelected",
+      "event": "receive LAST",
+      "action": "reply 223",
+      "to": "ValidArticleSelected"
+    },
+    {
+      "from": "Posting",
+      "event": "receive article data",
+      "action": "reply 240",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "receive IHAVE",
+      "action": "reply 335",
+      "to": "AwaitingContinuation"
+    },
+    {
+      "from": "AwaitingContinuation",
+      "event": "receive command-continuation",
+      "action": "reply 200",
+      "to": "Ready"
+    },
+    {
+      "from": "ServiceReady",
+      "event": "receive XENCRYPT",
+      "action": "reply 283",
+      "to": "Encrypted"
+    },
+    {
+      "from": "Encrypted",
+      "event": "receive XSECRET valid",
+      "action": "reply 290",
+      "to": "Authenticated"
+    },
+    {
+      "from": "ReaderMode",
+      "event": "receive QUIT",
+      "action": "reply 205",
+      "to": "Closing"
+    },
+    {
+      "from": "Closing",
+      "event": "send 205",
+      "action": "close connection",
+      "to": "Closed"
+    }
+  ]
+}

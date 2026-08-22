@@ -1,0 +1,170 @@
+{
+  "states": [
+    "Closed",
+    "Listen",
+    "Request",
+    "Respond",
+    "PartOpen",
+    "Open",
+    "CloseReq",
+    "Closing",
+    "TimeWait",
+    "Stable",
+    "Changing",
+    "Unstable"
+  ],
+  "initial_state": "Closed",
+  "final_states": [],
+  "transitions": [
+    {
+      "from": "Closed",
+      "event": "send DCCP-Request",
+      "action": "initiate connection",
+      "to": "Request"
+    },
+    {
+      "from": "Closed",
+      "event": "cond passive_open",
+      "action": "start listening",
+      "to": "Listen"
+    },
+    {
+      "from": "Listen",
+      "event": "receive DCCP-Request",
+      "action": "send DCCP-Response",
+      "to": "Respond"
+    },
+    {
+      "from": "Request",
+      "event": "receive DCCP-Response",
+      "action": "send DCCP-Ack",
+      "to": "PartOpen"
+    },
+    {
+      "from": "Request",
+      "event": "timeout",
+      "action": "send Reset",
+      "to": "Closed"
+    },
+    {
+      "from": "PartOpen",
+      "event": "send DCCP-Ack",
+      "action": "complete handshake",
+      "to": "Open"
+    },
+    {
+      "from": "PartOpen",
+      "event": "receive Packet",
+      "action": "process packet",
+      "to": "Open"
+    },
+    {
+      "from": "Respond",
+      "event": "receive DCCP-Ack",
+      "action": "complete handshake",
+      "to": "Open"
+    },
+    {
+      "from": "Respond",
+      "event": "timeout",
+      "action": "send Reset",
+      "to": "Closed"
+    },
+    {
+      "from": "Open",
+      "event": "send DCCP-CloseReq",
+      "action": "request termination",
+      "to": "CloseReq"
+    },
+    {
+      "from": "Open",
+      "event": "receive DCCP-CloseReq",
+      "action": "prepare close",
+      "to": "Closing"
+    },
+    {
+      "from": "Open",
+      "event": "send DCCP-Close",
+      "action": "request termination",
+      "to": "Closing"
+    },
+    {
+      "from": "Open",
+      "event": "receive Reset",
+      "action": "set state TimeWait",
+      "to": "TimeWait"
+    },
+    {
+      "from": "CloseReq",
+      "event": "receive DCCP-Close",
+      "action": "send DCCP-Reset",
+      "to": "Closed"
+    },
+    {
+      "from": "Closing",
+      "event": "receive DCCP-Reset",
+      "action": "wait 2MSL",
+      "to": "TimeWait"
+    },
+    {
+      "from": "TimeWait",
+      "event": "timeout 2MSL",
+      "action": "clear state",
+      "to": "Closed"
+    },
+    {
+      "from": "Stable",
+      "event": "send Change",
+      "action": "initiate negotiation",
+      "to": "Changing"
+    },
+    {
+      "from": "Changing",
+      "event": "receive Confirm",
+      "action": "accept value",
+      "to": "Stable"
+    },
+    {
+      "from": "Changing",
+      "event": "receive empty Confirm",
+      "action": "revert value",
+      "to": "Stable"
+    },
+    {
+      "from": "Changing",
+      "event": "cond preference change",
+      "action": "update preferences",
+      "to": "Unstable"
+    },
+    {
+      "from": "Unstable",
+      "event": "send Change",
+      "action": "transmit new preference",
+      "to": "Changing"
+    },
+    {
+      "from": "Changing",
+      "event": "timeout retransmission",
+      "action": "retransmit Change",
+      "to": "Changing"
+    },
+    {
+      "from": "Stable",
+      "event": "receive Confirm",
+      "action": "ignore",
+      "to": "Stable"
+    },
+    {
+      "from": "Stable",
+      "event": "receive Change",
+      "action": "send Confirm",
+      "to": "Stable"
+    },
+    {
+      "from": "Changing",
+      "event": "receive Change",
+      "action": "resolve negotiation",
+      "to": "Stable"
+    }
+  ]
+}

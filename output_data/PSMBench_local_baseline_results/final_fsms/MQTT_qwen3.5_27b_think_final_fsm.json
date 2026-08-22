@@ -1,0 +1,117 @@
+{
+  "states": [
+    "Idle",
+    "AwaitingAuthResponse",
+    "Authenticated",
+    "Reauthenticating",
+    "Disconnected"
+  ],
+  "initial_state": "Idle",
+  "final_states": [
+    "Disconnected"
+  ],
+  "transitions": [
+    {
+      "from": "Idle",
+      "event": "receive CONNECT token",
+      "action": "send CONNACK 0x00",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Idle",
+      "event": "receive CONNECT none",
+      "action": "close connection",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Idle",
+      "event": "receive CONNECT fail",
+      "action": "send CONNACK 0x87",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Idle",
+      "event": "receive CONNECT",
+      "action": "send AUTH request",
+      "to": "AwaitingAuthResponse"
+    },
+    {
+      "from": "AwaitingAuthResponse",
+      "event": "receive AUTH success",
+      "action": "send CONNACK 0x00",
+      "to": "Authenticated"
+    },
+    {
+      "from": "AwaitingAuthResponse",
+      "event": "receive AUTH fail",
+      "action": "send CONNACK 0x87",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive PUBLISH authorized",
+      "action": "forward message",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive SUBSCRIBE authorized",
+      "action": "send SUBACK success",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "cond publish_QoS1_fail",
+      "action": "send PUBACK error",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive SUBSCRIBE unauth",
+      "action": "send SUBACK 0x87",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive SUBSCRIBE unauth",
+      "action": "send SUBACK 0x80",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "cond publish_QoS0_fail",
+      "action": "send DISCONNECT error",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "forward PUBLISH expired",
+      "action": "send DISCONNECT error",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "cond token_expired",
+      "action": "send DISCONNECT error",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "receive Not Authorized",
+      "action": "send AUTH request",
+      "to": "Reauthenticating"
+    },
+    {
+      "from": "Reauthenticating",
+      "event": "cond reauth_success",
+      "action": "set token valid",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Reauthenticating",
+      "event": "cond reauth_fail",
+      "action": "send DISCONNECT error",
+      "to": "Disconnected"
+    }
+  ]
+}

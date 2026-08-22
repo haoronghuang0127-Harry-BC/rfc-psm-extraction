@@ -1,0 +1,53 @@
+{
+  "states": [
+    "Begin",
+    "WaitingForReply",
+    "Success",
+    "Failure",
+    "Error"
+  ],
+  "initial_state": "Begin",
+  "final_states": [
+    "Success",
+    "Failure",
+    "Error"
+  ],
+  "transitions": [
+    {
+      "from": "Begin",
+      "event": "receive COMMAND",
+      "action": "set state waiting",
+      "to": "WaitingForReply"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "reply 2xx",
+      "action": "reply success",
+      "to": "Success"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "reply 4xx",
+      "action": "reply failure",
+      "to": "Failure"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "reply 1xx",
+      "action": "reply error",
+      "to": "Error"
+    },
+    {
+      "from": "WaitingForReply",
+      "event": "reply 3xx",
+      "action": "reply error",
+      "to": "Error"
+    },
+    {
+      "from": "Begin",
+      "event": "receive 1xx",
+      "action": "set state waiting",
+      "to": "WaitingForReply"
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+{
+  "states": [
+    "Idle",
+    "ControlConnected",
+    "CallActive",
+    "CallNegotiating",
+    "WaitCtlReply",
+    "WaitStopReply",
+    "WaitConnect",
+    "WaitDisconnect",
+    "WaitCsAns",
+    "WaitReply"
+  ],
+  "initial_state": "Idle",
+  "final_states": [],
+  "transitions": [
+    {
+      "from": "Idle",
+      "event": "receive StartControlRequest",
+      "action": "send StartControlReply",
+      "to": "ControlConnected"
+    },
+    {
+      "from": "Idle",
+      "event": "receive TcpOpenIndication",
+      "action": "send StartControlConnectionRequest",
+      "to": "WaitCtlReply"
+    },
+    {
+      "from": "WaitCtlReply",
+      "event": "receive StartControlConnectionReplyVersionOK",
+      "action": "log ConnectionEstablished",
+      "to": "ControlConnected"
+    },
+    {
+      "from": "WaitCtlReply",
+      "event": "receive StartControlConnectionReplyVersionNotOK",
+      "action": "send StopControlRequest",
+      "to": "WaitStopReply"
+    },
+    {
+      "from": "Idle",
+      "event": "receive StartControlConnectionRequestVersionOK",
+      "action": "send StartControlConnectionReply",
+      "to": "ControlConnected"
+    },
+    {
+      "from": "Idle",
+      "event": "receive StartControlConnectionRequestVersionNotOK",
+      "action": "send StartControlConnectionReplyErrorCloseTCP",
+      "to": "Idle"
+    },
+    {
+      "from": "ControlConnected",
+      "event": "receive StopControlRequest",
+      "action": "send StopControlReply",
+      "to": "Idle"
+    },
+    {
+      "from": "ControlConnected",
+      "event": "cond LocalTerminate",
+      "action": "send StopControlRequest",
+      "to": "WaitStopReply"
+    },
+    {
+      "from": "WaitStopReply",
+      "event": "receive StopControlConnectionReply",
+      "action": "close TCP",
+      "to": "Idle"
+    },
+    {
+      "from": "ControlConnected",
+      "event": "receive EchoRequest",
+      "action": "send EchoReply",
+      "to": "ControlConnected"
+    },
+    {
+      "from": "ControlConnected",
+      "event": "timeout EchoReply",
+      "action": "close ControlConnection",
+      "to": "Idle"
+    },
+    {
+      "from": "ControlConnected",
+      "event": "receive IncomingCallRequest",
+      "action": "send IncomingCallReply",
+      "to": "CallNegotiating"
+    },
+    {
+      "from": "CallNegotiating",
+      "event": "receive IncomingCallConnected",
+      "action": "log CallEstablished",
+      "to": "CallActive"
+    },
+    {
+      "from": "ControlConnected",
+      "event": "receive OutgoingCallRequest",
+      "action": "send OutgoingCallReply",
+      "to": "CallActive"
+    },
+    {
+      "from": "ControlConnected",
+      "event": "receive RingSignal",
+      "action": "send IncomingCallRequest",
+      "to": "WaitReply"
+    },
+    {
+      "from": "WaitReply",
+      "event": "receive IncomingCallReplyAccepting",
+      "action": "send CallConnected",
+      "to": "CallActive"
+    },
+    {
+      "from": "WaitReply",
+      "event": "receive IncomingCallReplyNotAccepting",
+      "action": "send CallDisconnectNotify",
+      "to": "ControlConnected"
+    },
+    {
+      "from": "ControlConnected",
+      "event": "receive OutgoingCallRequestNoError",
+      "action": "send OffHookSignal",
+      "to": "WaitCsAns"
+    },
+    {
+      "from": "WaitCsAns",
+      "event": "receive TelcoAnswer",
+      "action": "send OutgoingCallReply",
+      "to": "CallActive"
+    },
+    {
+      "from": "WaitCsAns",
+      "event": "receive IncompleteCallOrClearReq",
+      "action": "send OutgoingCallReplyErrorSendDisconnectNotify",
+      "to": "ControlConnected"
+    },
+    {
+      "from": "CallActive",
+      "event": "receive CallClearRequest",
+      "action": "send CallDisconnectNotify",
+      "to": "ControlConnected"
+    },
+    {
+      "from": "CallActive",
+      "event": "cond LocalTerminate",
+      "action": "send CallClearRequest",
+      "to": "WaitDisconnect"
+    },
+    {
+      "from": "WaitDisconnect",
+      "event": "receive CallDisconnectNotify",
+      "action": "log CallTerminated",
+      "to": "ControlConnected"
+    },
+    {
+      "from": "CallActive",
+      "event": "receive StopControlRequest",
+      "action": "send StopControlReply",
+      "to": "Idle"
+    }
+  ]
+}
