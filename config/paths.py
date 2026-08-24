@@ -65,6 +65,8 @@ PROMPT_EXPERIMENT_PROMPTS_DIR = PROMPT_EXPERIMENT_OUTPUT_DIR / "prompts"
 PROMPT_EXPERIMENT_RESPONSES_DIR = PROMPT_EXPERIMENT_OUTPUT_DIR / "responses"
 # original ollama extraction responses directory
 PROMPT_EXPERIMENT_ORIGINAL_RESPONSES_DIR = PROMPT_EXPERIMENT_RESPONSES_DIR / "original"
+# extracted response text directory
+PROMPT_EXPERIMENT_PARTIAL_RESPONSES_DIR = PROMPT_EXPERIMENT_RESPONSES_DIR / "partial_responses"
 # parsed partial FSM files directory
 PROMPT_EXPERIMENT_PARTIAL_FSMS_DIR = PROMPT_EXPERIMENT_RESPONSES_DIR / "partial_fsms"
 # original ollama combination responses directory

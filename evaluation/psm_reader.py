@@ -137,4 +137,38 @@ def load_and_build_state_machine(file_path: Path) -> StateMachine:
 
     return state_machine
 
-    
+
+# load a research fsm containing states and transitions.
+def load_and_build_research_state_machine(file_path: Path) -> StateMachine:
+    # check the file is exists
+    check_file_exists(file_path=file_path, erros_message=f"PSM file is not found: {file_path}")
+
+    # load the json state machine file
+    try:
+        with file_path.open("r", encoding="utf-8") as file:
+            state_machine_object: object = json.load(file)
+    except json.JSONDecodeError as error:
+        raise ValueError(f"The PSM file contains invalid JSON: {file_path}") from error
+
+    # the research fsm must be a json object.
+    if not isinstance(state_machine_object, dict):
+        raise ValueError("The PSM must be a JSON object")
+
+    # get the states.
+    states_object: object = state_machine_object.get("states")
+    states: list[str] = _get_string_list(_object=states_object, name="states")
+
+    # get the transitions.
+    transitions_object: object = state_machine_object.get("transitions")
+    transitions: list[TransitionRecord] = _get_transitions(transitions_object=transitions_object)
+
+    # initial and final states are not generated or evaluated in Research mode.
+    # because in some protocol do not have the real initial_state and final_states
+    state_machine: StateMachine = {
+        "states": states,
+        "initial_state": "",
+        "final_states": [],
+        "transitions": transitions,
+    }
+
+    return state_machine

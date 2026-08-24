@@ -1,4 +1,3 @@
-
 from prompt_experiment.output_format.prompt_schema import FSM_JSON_SCHEMA
 from prompt_experiment.types import OutputControl
 
@@ -55,3 +54,20 @@ def get_selected_output_controls(output_control_name: str) -> dict[str, OutputCo
     }
 
     return selected_output_controls
+
+
+# return the output control name from an experiment name.
+# prompt_name name is the full name of the output file
+# e.g TCP_qwen3.5_9b_qwen_no_think_tagged_json_output
+# it will return the control name like -> tagged_json_output
+def get_output_control_name_from_experiment_name(prompt_name: str) -> str:
+    # get all the output format name
+    output_control_names: list[str] = get_output_control_names()
+
+    for output_control_name in output_control_names:
+        required_suffix: str = f"_{output_control_name}"
+
+        if prompt_name.endswith(required_suffix):
+            return output_control_name
+
+    raise ValueError(f"Could not find the output control name from: {prompt_name}")
