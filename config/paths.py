@@ -50,6 +50,55 @@ EVALUATION_OUTPUT_DIR: Final[Path] = PSMBENCH_LOCAL_BASELINE_OUTPUT_DIR / "evalu
 
 
 
+
+
+"""
+prompt experiment
+"""
+# prompt experiment root directory
+PROMPT_EXPERIMENT_DIR = PROJECT_FOLDER_DIR / "prompt_experiment"
+# prompt experiment output directory
+PROMPT_EXPERIMENT_OUTPUT_DIR = PROMPT_EXPERIMENT_DIR / "outputs"
+# prompt files directory
+PROMPT_EXPERIMENT_PROMPTS_DIR = PROMPT_EXPERIMENT_OUTPUT_DIR / "prompts"
+# all response files directory
+PROMPT_EXPERIMENT_RESPONSES_DIR = PROMPT_EXPERIMENT_OUTPUT_DIR / "responses"
+# original ollama extraction responses directory
+PROMPT_EXPERIMENT_ORIGINAL_RESPONSES_DIR = PROMPT_EXPERIMENT_RESPONSES_DIR / "original"
+# parsed partial FSM files directory
+PROMPT_EXPERIMENT_PARTIAL_FSMS_DIR = PROMPT_EXPERIMENT_RESPONSES_DIR / "partial_fsms"
+# original ollama combination responses directory
+PROMPT_EXPERIMENT_COMBINATION_RESPONSES_DIR = PROMPT_EXPERIMENT_RESPONSES_DIR / "combination_response"
+# final fsm files directory
+PROMPT_EXPERIMENT_FINAL_FSMS_DIR = PROMPT_EXPERIMENT_OUTPUT_DIR / "final_fsms"
+# evaluation csv files directory
+PROMPT_EXPERIMENT_EVALUATIONS_DIR = PROMPT_EXPERIMENT_OUTPUT_DIR / "evaluations"
+# experiment manifest file
+PROMPT_EXPERIMENT_MANIFEST_FILE = PROMPT_EXPERIMENT_OUTPUT_DIR / "experiment_manifest.json"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """
 Method1
 """
