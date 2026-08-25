@@ -1,0 +1,355 @@
+{
+  "states": [
+    "Connection Established",
+    "Transit mode",
+    "Reading mode",
+    "Initial Connection",
+    "Reader Mode",
+    "Transit Mode",
+    "Closed",
+    "No newsgroup selected",
+    "Newsgroup selected with valid current article",
+    "Newsgroup selected with invalid current article",
+    "Newsgroup selected",
+    "Unencrypted Link",
+    "Encrypted Link"
+  ],
+  "transitions": [
+    {
+      "from": "",
+      "event": "connection established",
+      "action": "server sends greeting",
+      "to": "Connection Established"
+    },
+    {
+      "from": "Connection Established",
+      "event": "MODE READER command",
+      "action": "switch to Reading mode",
+      "to": "Reading mode"
+    },
+    {
+      "from": "Transit mode",
+      "event": "MODE READER command",
+      "action": "switch to Reading mode",
+      "to": "Reading mode"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "200 Service available, posting allowed",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "201 Service available, posting prohibited",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "400 Service temporarily unavailable; close connection",
+      "to": "Closed"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "502 Service permanently unavailable; close connection",
+      "to": "Closed"
+    },
+    {
+      "from": "Transit Mode",
+      "event": "MODE READER",
+      "action": "200 Posting allowed; switch to Reader Mode",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Transit Mode",
+      "event": "MODE READER",
+      "action": "201 Posting prohibited; switch to Reader Mode",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "MODE READER",
+      "action": "200 Posting allowed",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "MODE READER",
+      "action": "201 Posting prohibited",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "MODE READER",
+      "action": "502 Reading service permanently unavailable; close connection",
+      "to": "Closed"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "QUIT",
+      "action": "205 Connection closing; close connection",
+      "to": "Closed"
+    },
+    {
+      "from": "Transit Mode",
+      "event": "QUIT",
+      "action": "205 Connection closing; close connection",
+      "to": "Closed"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "QUIT",
+      "action": "205 Connection closing; close connection",
+      "to": "Closed"
+    },
+    {
+      "from": "No newsgroup selected",
+      "event": "GROUP <group>",
+      "action": "211 number low high group; set currently selected newsgroup to <group>; set current article number to first article in group (or invalid if empty)",
+      "to": "Newsgroup selected with valid current article"
+    },
+    {
+      "from": "No newsgroup selected",
+      "event": "GROUP <group>",
+      "action": "211 0 0 0 <group>; set currently selected newsgroup to <group>; set current article number to invalid",
+      "to": "Newsgroup selected with invalid current article"
+    },
+    {
+      "from": "No newsgroup selected",
+      "event": "GROUP <invalid_group>",
+      "action": "411; no change to state",
+      "to": "No newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected with valid current article",
+      "event": "LAST",
+      "action": "223 n message-id; set current article number to previous article",
+      "to": "Newsgroup selected with valid current article"
+    },
+    {
+      "from": "Newsgroup selected with valid current article",
+      "event": "LAST",
+      "action": "422 No previous article in this group; no change to state",
+      "to": "Newsgroup selected with valid current article"
+    },
+    {
+      "from": "Newsgroup selected with valid current article",
+      "event": "NEXT",
+      "action": "223 n message-id; set current article number to next article",
+      "to": "Newsgroup selected with valid current article"
+    },
+    {
+      "from": "Newsgroup selected with valid current article",
+      "event": "NEXT",
+      "action": "421 No next article in this group; no change to state",
+      "to": "Newsgroup selected with valid current article"
+    },
+    {
+      "from": "Newsgroup selected with invalid current article",
+      "event": "LAST",
+      "action": "420 Current article number is invalid; no change to state",
+      "to": "Newsgroup selected with invalid current article"
+    },
+    {
+      "from": "Newsgroup selected with invalid current article",
+      "event": "NEXT",
+      "action": "420 Current article number is invalid; no change to state",
+      "to": "Newsgroup selected with invalid current article"
+    },
+    {
+      "from": "Newsgroup selected with valid current article",
+      "event": "GROUP <group>",
+      "action": "211 number low high group; set currently selected newsgroup to <group>; set current article number to first article in group (or invalid if empty)",
+      "to": "Newsgroup selected with valid current article"
+    },
+    {
+      "from": "Newsgroup selected with valid current article",
+      "event": "GROUP <empty_group>",
+      "action": "211 0 0 0 <group>; set currently selected newsgroup to <group>; set current article number to invalid",
+      "to": "Newsgroup selected with invalid current article"
+    },
+    {
+      "from": "Newsgroup selected with valid current article",
+      "event": "GROUP <invalid_group>",
+      "action": "411; no change to state",
+      "to": "Newsgroup selected with valid current article"
+    },
+    {
+      "from": "Newsgroup selected with invalid current article",
+      "event": "GROUP <group>",
+      "action": "211 number low high group; set currently selected newsgroup to <group>; set current article number to first article in group (or invalid if empty)",
+      "to": "Newsgroup selected with valid current article"
+    },
+    {
+      "from": "Newsgroup selected with invalid current article",
+      "event": "GROUP <empty_group>",
+      "action": "211 0 0 0 <group>; set currently selected newsgroup to <group>; set current article number to invalid",
+      "to": "Newsgroup selected with invalid current article"
+    },
+    {
+      "from": "Newsgroup selected with invalid current article",
+      "event": "GROUP <invalid_group>",
+      "action": "411; no change to state",
+      "to": "Newsgroup selected with invalid current article"
+    },
+    {
+      "from": "No newsgroup selected",
+      "event": "LISTGROUP <group>",
+      "action": "211 number low high group; set currently selected newsgroup to <group>; set current article number to first article in group (or invalid if empty)",
+      "to": "Newsgroup selected with valid current article"
+    },
+    {
+      "from": "No newsgroup selected",
+      "event": "LISTGROUP <empty_group>",
+      "action": "211 0 0 0 <group>; set currently selected newsgroup to <group>; set current article number to invalid",
+      "to": "Newsgroup selected with invalid current article"
+    },
+    {
+      "from": "No newsgroup selected",
+      "event": "LISTGROUP <invalid_group>",
+      "action": "411; no change to state",
+      "to": "No newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected with valid current article",
+      "event": "LISTGROUP",
+      "action": "211 number low high group; set currently selected newsgroup to same group; set current article number to first article in group (or invalid if empty)",
+      "to": "Newsgroup selected with valid current article"
+    },
+    {
+      "from": "Newsgroup selected with valid current article",
+      "event": "LISTGROUP <group>",
+      "action": "211 number low high group; set currently selected newsgroup to <group>; set current article number to first article in group (or invalid if empty)",
+      "to": "Newsgroup selected with valid current article"
+    },
+    {
+      "from": "Newsgroup selected with valid current article",
+      "event": "LISTGROUP <empty_group>",
+      "action": "211 0 0 0 <group>; set currently selected newsgroup to <group>; set current article number to invalid",
+      "to": "Newsgroup selected with invalid current article"
+    },
+    {
+      "from": "Newsgroup selected with valid current article",
+      "event": "LISTGROUP <invalid_group>",
+      "action": "411; no change to state",
+      "to": "Newsgroup selected with valid current article"
+    },
+    {
+      "from": "Newsgroup selected with invalid current article",
+      "event": "LISTGROUP",
+      "action": "211 number low high group; set currently selected newsgroup to same group; set current article number to first article in group (or invalid if empty)",
+      "to": "Newsgroup selected with valid current article"
+    },
+    {
+      "from": "Newsgroup selected with invalid current article",
+      "event": "LISTGROUP <group>",
+      "action": "211 number low high group; set currently selected newsgroup to <group>; set current article number to first article in group (or invalid if empty)",
+      "to": "Newsgroup selected with valid current article"
+    },
+    {
+      "from": "Newsgroup selected with invalid current article",
+      "event": "LISTGROUP <empty_group>",
+      "action": "211 0 0 0 <group>; set currently selected newsgroup to <group>; set current article number to invalid",
+      "to": "Newsgroup selected with invalid current article"
+    },
+    {
+      "from": "Newsgroup selected with invalid current article",
+      "event": "LISTGROUP <invalid_group>",
+      "action": "411; no change to state",
+      "to": "Newsgroup selected with invalid current article"
+    },
+    {
+      "from": "No newsgroup selected",
+      "event": "OVER range or OVER (no argument)",
+      "action": "412 No newsgroup selected",
+      "to": "No newsgroup selected"
+    },
+    {
+      "from": "No newsgroup selected",
+      "event": "HDR field range or HDR field (no argument)",
+      "action": "412 No newsgroup selected",
+      "to": "No newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected",
+      "event": "OVER message-id",
+      "action": "224 Overview information follows (multi-line)",
+      "to": "Newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected",
+      "event": "OVER message-id",
+      "action": "430 No article with that message-id",
+      "to": "Newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected",
+      "event": "OVER range",
+      "action": "224 Overview information follows (multi-line)",
+      "to": "Newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected",
+      "event": "OVER range",
+      "action": "423 No articles in that range",
+      "to": "Newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected",
+      "event": "OVER (no argument)",
+      "action": "224 Overview information follows (multi-line)",
+      "to": "Newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected",
+      "event": "OVER (no argument)",
+      "action": "420 Current article number is invalid",
+      "to": "Newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected",
+      "event": "HDR field message-id",
+      "action": "225 Headers follow (multi-line)",
+      "to": "Newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected",
+      "event": "HDR field message-id",
+      "action": "430 No article with that message-id",
+      "to": "Newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected",
+      "event": "HDR field range",
+      "action": "225 Headers follow (multi-line)",
+      "to": "Newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected",
+      "event": "HDR field range",
+      "action": "423 No articles in that range",
+      "to": "Newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected",
+      "event": "HDR field (no argument)",
+      "action": "225 Headers follow (multi-line)",
+      "to": "Newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected",
+      "event": "HDR field (no argument)",
+      "action": "420 Current article number is invalid",
+      "to": "Newsgroup selected"
+    },
+    {
+      "from": "Unencrypted Link",
+      "event": "XENCRYPT",
+      "action": "negotiate encryption on the link",
+      "to": "Encrypted Link"
+    }
+  ]
+}

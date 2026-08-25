@@ -1,0 +1,16 @@
+[
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [\"Initial Connection\", \"Session Established\", \"Reader Mode\"], \"transitions\": [{\"from\": \"Initial Connection\", \"event\": \"Initial Connection\", \"action\": \"200, 201, 400, 502\", \"to\": \"Initial Connection\"}, {\"from\": \"Initial Connection\", \"event\": \"200\", \"action\": \"\", \"to\": \"Session Established\"}, {\"from\": \"Initial Connection\", \"event\": \"201\", \"action\": \"\", \"to\": \"Session Established\"}, {\"from\": \"Initial Connection\", \"event\": \"400\", \"action\": \"close connection\", \"to\": \"Initial Connection\"}, {\"from\": \"Initial Connection\", \"event\": \"502\", \"action\": \"close connection\", \"to\": \"Initial Connection\"}, {\"from\": \"Session Established\", \"event\": \"MODE READER\", \"action\": \"200, 201, or 502\", \"to\": \"Reader Mode\"}, {\"from\": \"Session Established\", \"event\": \"QUIT\", \"action\": \"205\", \"to\": \"Initial Connection\"}, {\"from\": \"Reader Mode\", \"event\": \"QUIT\", \"action\": \"205\", \"to\": \"Initial Connection\"}]}",
+  "{\"states\": [\"Invalid\", \"Selected\"], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [\"Overview Database State\"], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [\"NNTP Service Ready\", \"XENCRYPT Negotiation\", \"XSECRET Authentication\", \"Capabilities Cached\"], \"transitions\": [{\"from\": \"NNTP Service Ready\", \"event\": \"CAPABILITIES\", \"action\": \"101 Capability list\", \"to\": \"Capabilities Cached\"}, {\"from\": \"Capabilities Cached\", \"event\": \"XENCRYPT\", \"action\": \"283 Encrypted link established\", \"to\": \"XENCRYPT Negotiation\"}, {\"from\": \"XENCRYPT Negotiation\", \"event\": \"CAPABILITIES\", \"action\": \"101 Capability list\", \"to\": \"XENCRYPT Negotiation\"}, {\"from\": \"XENCRYPT Negotiation\", \"event\": \"XSECRET fred flintstone\", \"action\": \"290 Password for fred accepted\", \"to\": \"XSECRET Authentication\"}, {\"from\": \"XSECRET Authentication\", \"event\": \"\", \"action\": \"483 Only permitted on secure links\", \"to\": \"XENCRYPT Negotiation\"}]}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}"
+]

@@ -1,0 +1,310 @@
+{
+  "states": [
+    "AUTHORIZATION",
+    "TRANSACTION",
+    "UPDATE",
+    "wait for connection",
+    "server ready",
+    "mail drop has messages",
+    "messages listed",
+    "message retrieved",
+    "message deleted",
+    "server signing off"
+  ],
+  "transitions": [
+    {
+      "from": "AUTHORIZATION",
+      "event": "successful identification",
+      "action": "acquires resources",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "QUIT command",
+      "action": "releases resources, says goodbye",
+      "to": "UPDATE"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "USER and PASS command combination or APOP command",
+      "action": "acquire an exclusive-access lock on the maildrop",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "USER and PASS command combination or APOP command",
+      "action": "respond with a negative status indicator, release the lock",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "QUIT",
+      "action": "+OK dewey POP3 server signing off",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "QUIT",
+      "action": "",
+      "to": "UPDATE"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "STAT",
+      "action": "issues a positive response with a line containing information for the maildrop",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "LIST",
+      "action": "issues a positive response",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "RETR msg",
+      "action": "issues a positive response",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "DELE msg",
+      "action": "marks the message as deleted",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "NOOP",
+      "action": "replies with a positive response",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "RSET",
+      "action": "unmarks any deleted messages, replies with a positive response",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "QUIT",
+      "action": "removes all messages marked as deleted from the maildrop and replies as to the status of this operation. releases any exclusive-access lock on the maildrop and closes the TCP connection.",
+      "to": "UPDATE"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "QUIT",
+      "action": "terminates",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "USER",
+      "action": "+OK name is a valid mailbox",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "USER",
+      "action": "-ERR never heard of mailbox name",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "PASS",
+      "action": "+OK maildrop locked and ready",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "PASS",
+      "action": "-ERR invalid password",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "PASS",
+      "action": "-ERR unable to lock maildrop",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "APOP",
+      "action": "+OK maildrop locked and ready",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "APOP",
+      "action": "-ERR permission denied",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "TOP",
+      "action": "+OK top of message follows",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "TOP",
+      "action": "-ERR no such message",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "UIDL",
+      "action": "+OK unique-id listing follows",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "UIDL",
+      "action": "-ERR no such message",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "USER name",
+      "action": "",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "PASS string",
+      "action": "",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "APOP name digest",
+      "action": "",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "STAT",
+      "action": "",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "LIST [msg]",
+      "action": "",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "RETR msg",
+      "action": "",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "DELE msg",
+      "action": "",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "NOOP",
+      "action": "",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "RSET",
+      "action": "",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "TOP msg n",
+      "action": "",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "UIDL [msg]",
+      "action": "",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "QUIT",
+      "action": "",
+      "to": ""
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "QUIT",
+      "action": "",
+      "to": ""
+    },
+    {
+      "from": "wait for connection",
+      "event": "open connection",
+      "action": "+OK POP3 server ready <1896.697170952@dbc.mtview.ca.us>",
+      "to": "server ready"
+    },
+    {
+      "from": "server ready",
+      "event": "APOP mrose c4c9334bac560ecc979e58001b3e22fb",
+      "action": "+OK mrose's maildrop has 2 messages (320 octets)",
+      "to": "mail drop has messages"
+    },
+    {
+      "from": "mail drop has messages",
+      "event": "STAT",
+      "action": "+OK 2 320",
+      "to": "mail drop has messages"
+    },
+    {
+      "from": "mail drop has messages",
+      "event": "LIST",
+      "action": "+OK 2 messages (320 octets)",
+      "to": "messages listed"
+    },
+    {
+      "from": "messages listed",
+      "event": "",
+      "action": "1 120\n2 200\n.",
+      "to": "messages listed"
+    },
+    {
+      "from": "messages listed",
+      "event": "RETR 1",
+      "action": "+OK 120 octets\n<the POP3 server sends message 1>\n.",
+      "to": "message retrieved"
+    },
+    {
+      "from": "message retrieved",
+      "event": "DELE 1",
+      "action": "+OK message 1 deleted",
+      "to": "message deleted"
+    },
+    {
+      "from": "message deleted",
+      "event": "RETR 2",
+      "action": "+OK 200 octets\n<the POP3 server sends message 2>\n.",
+      "to": "message retrieved"
+    },
+    {
+      "from": "message retrieved",
+      "event": "DELE 2",
+      "action": "+OK message 2 deleted",
+      "to": "message deleted"
+    },
+    {
+      "from": "message deleted",
+      "event": "QUIT",
+      "action": "+OK dewey POP3 server signing off (maildrop empty)",
+      "to": "server signing off"
+    },
+    {
+      "from": "server signing off",
+      "event": "close connection",
+      "action": "",
+      "to": "wait for connection"
+    }
+  ]
+}

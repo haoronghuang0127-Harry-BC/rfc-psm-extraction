@@ -1,0 +1,15 @@
+{
+  "states": [
+    "Padding Protocol",
+    "reserved (transparency inefficient)",
+    "reserved (Control Escape)",
+    "reserved (PPP NLPID)",
+    "reserved (compression inefficient)",
+    "unused",
+    "Link Control Protocol",
+    "Password Authentication Protocol",
+    "Link Quality Report",
+    "Challenge Handshake Authentication Protocol"
+  ],
+  "transitions": []
+}

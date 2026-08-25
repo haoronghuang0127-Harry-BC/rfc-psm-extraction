@@ -1,0 +1,28 @@
+{
+  "states": [
+    "Authenticated Requestors",
+    "Administrative Domain",
+    "Submission Client State",
+    "MTA State"
+  ],
+  "transitions": [
+    {
+      "from": "Authenticated Requestors",
+      "event": "VRFY and EXPN",
+      "action": "available",
+      "to": "Authenticated Requestors"
+    },
+    {
+      "from": "Administrative Domain",
+      "event": "VRFY and EXPN",
+      "action": "useful",
+      "to": "Administrative Domain"
+    },
+    {
+      "from": "Submission Client State",
+      "event": "",
+      "action": "SHOULD be generated as follows: 1. Each recipient address from a TO, CC, or BCC header field SHOULD be copied to a RCPT command (generating multiple message copies if that is required for queuing or delivery). This includes any addresses listed in a RFC 822 \"group\". Any BCC header fields SHOULD then be removed from the header section. Once this process is completed, the remaining header fields SHOULD be checked to verify that at least one TO, CC, or BCC header field remains. If none do, then a BCC header field with no additional information SHOULD be inserted as specified in [4]. 2. The return address in the MAIL command SHOULD, if possible, be derived from the system’s identity for the submitting (local) user, and the \"From:\" header field otherwise.",
+      "to": "MTA State"
+    }
+  ]
+}

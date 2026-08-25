@@ -1,0 +1,202 @@
+{
+  "states": [
+    "Transit mode",
+    "Reading mode",
+    "Initial Connection",
+    "Reader Mode",
+    "Connected",
+    "invalid",
+    "group selected",
+    "empty group",
+    "Initial connection set-up completed",
+    "Encrypted link established"
+  ],
+  "transitions": [
+    {
+      "from": "Transit mode",
+      "event": "MODE READER command",
+      "action": "switch to reading mode",
+      "to": "Reading mode"
+    },
+    {
+      "from": "Reading mode",
+      "event": "",
+      "action": "",
+      "to": "Reading mode"
+    },
+    {
+      "from": "Transit mode",
+      "event": "",
+      "action": "",
+      "to": "Transit mode"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "200",
+      "action": "Service available, posting allowed",
+      "to": "Connected"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "201",
+      "action": "Service available, posting prohibited",
+      "to": "Connected"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "400",
+      "action": "Service temporarily unavailable; close connection",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "502",
+      "action": "Service permanently unavailable; close connection",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Connected",
+      "event": "MODE READER",
+      "action": "200 or 201 response",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Connected",
+      "event": "MODE READER",
+      "action": "200 or 201 response",
+      "to": "Connected"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "502",
+      "action": "Reading service permanently unavailable; close connection",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Connected",
+      "event": "QUIT",
+      "action": "205 Connection closing",
+      "to": "Connected"
+    },
+    {
+      "from": "invalid",
+      "event": "GROUP",
+      "action": "set currently selected newsgroup, return summary information",
+      "to": "group selected"
+    },
+    {
+      "from": "group selected",
+      "event": "GROUP",
+      "action": "set currently selected newsgroup, return summary information",
+      "to": "group selected"
+    },
+    {
+      "from": "group selected",
+      "event": "ARTICLE",
+      "action": "set current article number",
+      "to": "group selected"
+    },
+    {
+      "from": "group selected",
+      "event": "HEAD",
+      "action": "set current article number",
+      "to": "group selected"
+    },
+    {
+      "from": "group selected",
+      "event": "BODY",
+      "action": "set current article number",
+      "to": "group selected"
+    },
+    {
+      "from": "group selected",
+      "event": "STAT",
+      "action": "set current article number",
+      "to": "group selected"
+    },
+    {
+      "from": "group selected",
+      "event": "NEXT",
+      "action": "set current article number",
+      "to": "group selected"
+    },
+    {
+      "from": "group selected",
+      "event": "LAST",
+      "action": "set current article number",
+      "to": "group selected"
+    },
+    {
+      "from": "group selected",
+      "event": "POST",
+      "action": "",
+      "to": "group selected"
+    },
+    {
+      "from": "group selected",
+      "event": "IHAVE",
+      "action": "",
+      "to": "group selected"
+    },
+    {
+      "from": "invalid",
+      "event": "POST",
+      "action": "return 440",
+      "to": "invalid"
+    },
+    {
+      "from": "invalid",
+      "event": "IHAVE",
+      "action": "return 335 or 435 or 436",
+      "to": "invalid"
+    },
+    {
+      "from": "group selected",
+      "event": "GROUP",
+      "action": "set current article number to first article",
+      "to": "group selected"
+    },
+    {
+      "from": "group selected",
+      "event": "GROUP",
+      "action": "set current article number to invalid",
+      "to": "empty group"
+    },
+    {
+      "from": "empty group",
+      "event": "GROUP",
+      "action": "set current article number to first article",
+      "to": "group selected"
+    },
+    {
+      "from": "Initial connection set-up completed",
+      "event": "CAPABILITIES",
+      "action": "101 Capability list",
+      "to": "Initial connection set-up completed"
+    },
+    {
+      "from": "Initial connection set-up completed",
+      "event": "XENCRYPT",
+      "action": "283 Encrypted link established",
+      "to": "Encrypted link established"
+    },
+    {
+      "from": "Encrypted link established",
+      "event": "CAPABILITIES",
+      "action": "101 Capability list",
+      "to": "Encrypted link established"
+    },
+    {
+      "from": "Encrypted link established",
+      "event": "XSECRET",
+      "action": "290 Password for fred accepted",
+      "to": "Encrypted link established"
+    },
+    {
+      "from": "Initial connection set-up completed",
+      "event": "XSECRET",
+      "action": "483 Only permitted on secure links",
+      "to": "Initial connection set-up completed"
+    }
+  ]
+}

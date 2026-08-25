@@ -1,0 +1,543 @@
+{
+  "states": [
+    "active",
+    "passive",
+    "File-structure",
+    "Record-structure",
+    "Page-structure",
+    "logged out",
+    "logged in",
+    "data connection open",
+    "file transfer in progress",
+    "pending further information",
+    "awaiting input",
+    "Entering Passive Mode",
+    "Okay",
+    "file transfer completed",
+    "closed data port",
+    "B",
+    "W",
+    "S",
+    "F",
+    "E",
+    "Connected to directory"
+  ],
+  "transitions": [
+    {
+      "from": "active",
+      "event": "",
+      "action": "establish the data connection and data transfer",
+      "to": "active"
+    },
+    {
+      "from": "passive",
+      "event": "",
+      "action": "establish the data connection and data transfer",
+      "to": "passive"
+    },
+    {
+      "from": "File-structure",
+      "event": "STRUCTURE command",
+      "action": "",
+      "to": "Record-structure"
+    },
+    {
+      "from": "Record-structure",
+      "event": "STRUCTURE command",
+      "action": "",
+      "to": "File-structure"
+    },
+    {
+      "from": "File-structure",
+      "event": "STRUCTURE command",
+      "action": "",
+      "to": "Page-structure"
+    },
+    {
+      "from": "Page-structure",
+      "event": "STRUCTURE command",
+      "action": "",
+      "to": "File-structure"
+    },
+    {
+      "from": "logged out",
+      "event": "USER",
+      "action": "",
+      "to": "logged out"
+    },
+    {
+      "from": "logged out",
+      "event": "USER",
+      "action": "",
+      "to": "pending further information"
+    },
+    {
+      "from": "pending further information",
+      "event": "PASS",
+      "action": "230 User logged in, proceed.",
+      "to": "logged in"
+    },
+    {
+      "from": "pending further information",
+      "event": "PASS",
+      "action": "332 Need account for login.",
+      "to": "pending further information"
+    },
+    {
+      "from": "logged in",
+      "event": "ABOR",
+      "action": "close data connection",
+      "to": "logged in"
+    },
+    {
+      "from": "logged in",
+      "event": "QUIT",
+      "action": "close control connection",
+      "to": "logged out"
+    },
+    {
+      "from": "logged in",
+      "event": "REIN",
+      "action": "reset parameters",
+      "to": "logged in"
+    },
+    {
+      "from": "logged in",
+      "event": "CWD",
+      "action": "",
+      "to": "logged in"
+    },
+    {
+      "from": "logged in",
+      "event": "CDUP",
+      "action": "",
+      "to": "logged in"
+    },
+    {
+      "from": "logged in",
+      "event": "SMNT",
+      "action": "",
+      "to": "logged in"
+    },
+    {
+      "from": "logged in",
+      "event": "ACCESS CONTROL COMMANDS",
+      "action": "",
+      "to": "logged in"
+    },
+    {
+      "from": "logged in",
+      "event": "TRANSFER PARAMETER COMMANDS",
+      "action": "",
+      "to": "logged in"
+    },
+    {
+      "from": "logged in",
+      "event": "FTP SERVICE COMMANDS",
+      "action": "",
+      "to": "file transfer in progress"
+    },
+    {
+      "from": "file transfer in progress",
+      "event": "ABOR",
+      "action": "close data connection",
+      "to": "logged in"
+    },
+    {
+      "from": "file transfer in progress",
+      "event": "QUIT",
+      "action": "close connection after result",
+      "to": "logged out"
+    },
+    {
+      "from": "file transfer in progress",
+      "event": "REIN",
+      "action": "complete transfer",
+      "to": "logged in"
+    },
+    {
+      "from": "logged in",
+      "event": "PORT",
+      "action": "",
+      "to": "data connection open"
+    },
+    {
+      "from": "logged in",
+      "event": "PASV",
+      "action": "",
+      "to": "data connection open"
+    },
+    {
+      "from": "data connection open",
+      "event": "RETR",
+      "action": "",
+      "to": "file transfer in progress"
+    },
+    {
+      "from": "data connection open",
+      "event": "STOR",
+      "action": "",
+      "to": "file transfer in progress"
+    },
+    {
+      "from": "data connection open",
+      "event": "STOU",
+      "action": "",
+      "to": "file transfer in progress"
+    },
+    {
+      "from": "data connection open",
+      "event": "APPE",
+      "action": "",
+      "to": "file transfer in progress"
+    },
+    {
+      "from": "data connection open",
+      "event": "ALLO",
+      "action": "",
+      "to": "file transfer in progress"
+    },
+    {
+      "from": "data connection open",
+      "event": "REST",
+      "action": "",
+      "to": "file transfer in progress"
+    },
+    {
+      "from": "data connection open",
+      "event": "RNFR",
+      "action": "",
+      "to": "file transfer in progress"
+    },
+    {
+      "from": "data connection open",
+      "event": "RNTO",
+      "action": "",
+      "to": "file transfer in progress"
+    },
+    {
+      "from": "data connection open",
+      "event": "DELE",
+      "action": "",
+      "to": "file transfer in progress"
+    },
+    {
+      "from": "data connection open",
+      "event": "RMD",
+      "action": "",
+      "to": "file transfer in progress"
+    },
+    {
+      "from": "data connection open",
+      "event": "MKD",
+      "action": "",
+      "to": "file transfer in progress"
+    },
+    {
+      "from": "data connection open",
+      "event": "PWD",
+      "action": "",
+      "to": "file transfer in progress"
+    },
+    {
+      "from": "data connection open",
+      "event": "LIST",
+      "action": "",
+      "to": "file transfer in progress"
+    },
+    {
+      "from": "data connection open",
+      "event": "NLST",
+      "action": "",
+      "to": "file transfer in progress"
+    },
+    {
+      "from": "data connection open",
+      "event": "SITE",
+      "action": "",
+      "to": "file transfer in progress"
+    },
+    {
+      "from": "data connection open",
+      "event": "SYST",
+      "action": "",
+      "to": "file transfer in progress"
+    },
+    {
+      "from": "data connection open",
+      "event": "STAT",
+      "action": "",
+      "to": "file transfer in progress"
+    },
+    {
+      "from": "data connection open",
+      "event": "HELP",
+      "action": "",
+      "to": "file transfer in progress"
+    },
+    {
+      "from": "data connection open",
+      "event": "NOOP",
+      "action": "",
+      "to": "data connection open"
+    },
+    {
+      "from": "awaiting input",
+      "event": "Connect",
+      "action": "",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "PASV",
+      "action": "",
+      "to": "Entering Passive Mode"
+    },
+    {
+      "from": "Entering Passive Mode",
+      "event": "227 Entering Passive Mode. A1,A2,A3,A4,a1,a2",
+      "action": "",
+      "to": "Okay"
+    },
+    {
+      "from": "Okay",
+      "event": "PORT A1,A2,A3,A4,a1,a2",
+      "action": "",
+      "to": "Okay"
+    },
+    {
+      "from": "Okay",
+      "event": "200 Okay",
+      "action": "",
+      "to": "Okay"
+    },
+    {
+      "from": "Okay",
+      "event": "STOR",
+      "action": "",
+      "to": "Okay"
+    },
+    {
+      "from": "Okay",
+      "event": "RETR",
+      "action": "",
+      "to": "Okay"
+    },
+    {
+      "from": "Okay",
+      "event": "Connect to HOST-A, PORT-a",
+      "action": "",
+      "to": "Okay"
+    },
+    {
+      "from": "Okay",
+      "event": "226",
+      "action": "closing the data connection",
+      "to": "file transfer completed"
+    },
+    {
+      "from": "Okay",
+      "event": "250",
+      "action": "file transfer completed",
+      "to": "file transfer completed"
+    },
+    {
+      "from": "file transfer completed",
+      "event": "new transfer command",
+      "action": "",
+      "to": "closed data port"
+    },
+    {
+      "from": "closed data port",
+      "event": "listen",
+      "action": "",
+      "to": "awaiting input"
+    },
+    {
+      "from": "B",
+      "event": "cmd",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "2",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "4,5",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "W",
+      "event": "1,3",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "B",
+      "event": "cmd",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "2",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "4,5",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "W",
+      "event": "1",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "W",
+      "event": "3",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "B",
+      "event": "RNFR",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "1,2",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "W",
+      "event": "3",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "4,5",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "B",
+      "event": "REST",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "1,2",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "W",
+      "event": "3",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "4,5",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "B",
+      "event": "USER",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "2",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "W",
+      "event": "3",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "4,5",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "B",
+      "event": "PASS",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "2",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "3",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "4,5",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "B",
+      "event": "ACCT",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "4,5",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "Connected to directory",
+      "event": "MKD pathname",
+      "action": "return 257 \"<directory-name>\" <commentary>",
+      "to": "Connected to directory"
+    },
+    {
+      "from": "Connected to directory",
+      "event": "RMD pathname",
+      "action": "reply codes identical to DELE",
+      "to": "Connected to directory"
+    },
+    {
+      "from": "Connected to directory",
+      "event": "PWD",
+      "action": "return 257 \"<directory-name>\"",
+      "to": "Connected to directory"
+    },
+    {
+      "from": "Connected to directory",
+      "event": "CDUP",
+      "action": "reply codes identical to CWD",
+      "to": "Connected to directory"
+    }
+  ]
+}

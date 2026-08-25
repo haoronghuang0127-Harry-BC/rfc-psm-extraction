@@ -4,6 +4,7 @@ FSM_JSON_SCHEMA = {
     "properties": {
         "states": {
             "type": "array",
+            "uniqueItems": True,
             "items": {
                 "type": "string",
                 "minLength": 1,
@@ -11,6 +12,7 @@ FSM_JSON_SCHEMA = {
         },
         "transitions": {
             "type": "array",
+            "uniqueItems": True,
             "items": {
                 "type": "object",
                 "properties": {

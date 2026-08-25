@@ -1,0 +1,182 @@
+{
+  "states": [
+    "INIT",
+    "REBOOTING",
+    "REQUESTING",
+    "REBINDING",
+    "BOUND",
+    "RENEWING",
+    "INIT-REBOOT",
+    "SELECTING"
+  ],
+  "transitions": [
+    {
+      "from": "INIT",
+      "event": "",
+      "action": "Begin initialization",
+      "to": "REQUESTING"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPDISCOVER",
+      "action": "Client broadcasts DHCPDISCOVER",
+      "to": "REQUESTING"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPOFFER",
+      "action": "Client receives DHCPOFFER and selects server",
+      "to": "REQUESTING"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPREQUEST",
+      "action": "Client broadcasts DHCPREQUEST",
+      "to": "BOUND"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPNAK",
+      "action": "Server responds with DHCPNAK",
+      "to": "INIT"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "timeout",
+      "action": "Retransmit DHCPREQUEST or revert to INIT",
+      "to": "INIT"
+    },
+    {
+      "from": "REBOOTING",
+      "event": "DHCPREQUEST",
+      "action": "Client broadcasts DHCPREQUEST",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBOOTING",
+      "event": "DHCPNAK",
+      "action": "Server responds with DHCPNAK",
+      "to": "INIT"
+    },
+    {
+      "from": "REBOOTING",
+      "event": "timeout",
+      "action": "Retransmit DHCPREQUEST or revert to INIT",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPACK",
+      "action": "Client receives DHCPACK",
+      "to": "BOUND"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPNAK",
+      "action": "Server responds with DHCPNAK",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "timeout",
+      "action": "Retransmit DHCPREQUEST or revert to INIT",
+      "to": "INIT"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPACK",
+      "action": "Client receives DHCPACK",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPNAK",
+      "action": "Server responds with DHCPNAK",
+      "to": "INIT"
+    },
+    {
+      "from": "RENEWING",
+      "event": "timeout",
+      "action": "Retransmit DHCPREQUEST or revert to INIT",
+      "to": "INIT"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPACK",
+      "action": "Client receives DHCPACK",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPNAK",
+      "action": "Server responds with DHCPNAK",
+      "to": "INIT"
+    },
+    {
+      "from": "REBINDING",
+      "event": "timeout",
+      "action": "Retransmit DHCPREQUEST or revert to INIT",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "",
+      "action": "Send DHCPDISCOVER",
+      "to": "SELECTING"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "",
+      "action": "Send DHCPREQUEST",
+      "to": "REQUESTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPOFFER",
+      "action": "Collect replies",
+      "to": "SELECTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPNAK",
+      "action": "",
+      "to": "INIT-REBOOT"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPNAK",
+      "action": "",
+      "to": "INIT-REBOOT"
+    },
+    {
+      "from": "BOUND",
+      "event": "T1 expires",
+      "action": "Send DHCPREQUEST to leasing server",
+      "to": "RENEWING"
+    },
+    {
+      "from": "BOUND",
+      "event": "T2 expires",
+      "action": "Broadcast DHCPREQUEST",
+      "to": "REBINDING"
+    },
+    {
+      "from": "BOUND",
+      "event": "Lease expired",
+      "action": "",
+      "to": "INIT"
+    }
+  ]
+}

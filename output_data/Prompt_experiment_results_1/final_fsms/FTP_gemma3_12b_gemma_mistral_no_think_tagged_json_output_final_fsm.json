@@ -1,0 +1,62 @@
+{
+  "states": [
+    "Service ready",
+    "User logged in",
+    "File status okay; about to open data connection",
+    "Closing data connection, file transfer successful",
+    "Command OK",
+    "Access denied",
+    "Server closes all connections",
+    "Connection Establishment"
+  ],
+  "transitions": [
+    {
+      "from": "Service ready",
+      "event": "ftp (host) multics<CR>",
+      "action": "<CRLF>.",
+      "to": "User logged in"
+    },
+    {
+      "from": "User logged in",
+      "event": "username Doe <CR>",
+      "action": "<CRLF>----> <CRLF>",
+      "to": "User logged in"
+    },
+    {
+      "from": "User logged in",
+      "event": "password mumble <CR>",
+      "action": "<CRLF>----> <CRLF>",
+      "to": "User logged in"
+    },
+    {
+      "from": "User logged in",
+      "event": "retrieve (local type) ASCII<CR>\n(local pathname) test 1 <CR>\n(for. pathname) test.pl1<CR>",
+      "action": "User-FTP opens local file in ASCII.\nRETR test.pl1<CRLF> ---->",
+      "to": "File status okay; about to open data connection"
+    },
+    {
+      "from": "File status okay; about to open data connection",
+      "event": "",
+      "action": "Server makes data connection\nto port U.\n<---- 226 Closing data connection, \n          file transfer successful<CRLF>.",
+      "to": "Closing data connection, file transfer successful"
+    },
+    {
+      "from": "User logged in",
+      "event": "type Image<CR>",
+      "action": "TYPE I<CRLF> ---->",
+      "to": "Command OK"
+    },
+    {
+      "from": "User logged in",
+      "event": "store (local type) image<CR>\n(local pathname) file dump<CR>\nUser-FTP opens local file in Image.\n(for.pathname) >udd>cn>fd<CR>",
+      "action": "STOR >udd>cn>fd<CRLF> ---->",
+      "to": "Access denied"
+    },
+    {
+      "from": "User logged in",
+      "event": "terminate",
+      "action": "QUIT <CRLF> ---->",
+      "to": "Server closes all connections"
+    }
+  ]
+}

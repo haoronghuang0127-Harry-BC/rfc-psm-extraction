@@ -1,0 +1,693 @@
+{
+  "states": [
+    "Play",
+    "Session Establishment",
+    "Media Delivery Control",
+    "Session Maintenance and Termination",
+    "RTSP session",
+    "Persistent Connection",
+    "Transient Connection",
+    "Connection Closed",
+    "Overload",
+    "RTSP session context",
+    "Init",
+    "Ready",
+    "Serving Stream",
+    "Stale Entry",
+    "Validating Cache Entry",
+    "Conditional Request",
+    "Full Response",
+    "Not Modified",
+    "Session Established",
+    "Session Not Established",
+    "Playing",
+    "Paused",
+    "Recording",
+    "Teardown",
+    "TLS session established",
+    "TLS session not established",
+    "Proxy authentication required",
+    "Connection authorization required",
+    "TLS connection established with proxy",
+    "TLS connection not established with proxy",
+    "TLS connection established with server",
+    "TLS connection not established with server",
+    "Media on Demand (Unicast)",
+    "Media on Demand Using Pipelining",
+    "Secured Media Session for On-Demand Content",
+    "Single-Stream Container Files",
+    "Live Media Presentation Using Multicast",
+    "Capability Negotiation",
+    "PLAY mode",
+    "Presentation Description",
+    "Setup",
+    "Control of Transmission",
+    "Synchronization",
+    "Termination",
+    "Waiting for Acknowledgment"
+  ],
+  "transitions": [
+    {
+      "from": "Play",
+      "event": "PLAY",
+      "action": "",
+      "to": "Play"
+    },
+    {
+      "from": "Session Establishment",
+      "event": "SETUP",
+      "action": "Session header with Session ID",
+      "to": "Media Delivery Control"
+    },
+    {
+      "from": "Media Delivery Control",
+      "event": "PLAY",
+      "action": "Start media delivery",
+      "to": "Media Delivery Control"
+    },
+    {
+      "from": "Media Delivery Control",
+      "event": "PAUSE",
+      "action": "Pause media delivery",
+      "to": "Media Delivery Control"
+    },
+    {
+      "from": "Media Delivery Control",
+      "event": "TEARDOWN",
+      "action": "Terminate session",
+      "to": "Session Maintenance and Termination"
+    },
+    {
+      "from": "Session Maintenance and Termination",
+      "event": "TEARDOWN",
+      "action": "Terminate session",
+      "to": "Session Maintenance and Termination"
+    },
+    {
+      "from": "RTSP session",
+      "event": "SETUP request",
+      "action": "200 OK response",
+      "to": "RTSP session"
+    },
+    {
+      "from": "RTSP session",
+      "event": "TEARDOWN request",
+      "action": "",
+      "to": "RTSP session"
+    },
+    {
+      "from": "Persistent Connection",
+      "event": "Client closes connection",
+      "action": "Close connection",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "Persistent Connection",
+      "event": "Server receives incomplete message",
+      "action": "Wait 10 seconds for completion",
+      "to": "Persistent Connection"
+    },
+    {
+      "from": "Persistent Connection",
+      "event": "Server receives error response",
+      "action": "Keep connection open",
+      "to": "Persistent Connection"
+    },
+    {
+      "from": "Persistent Connection",
+      "event": "Server sends 503 (Service Unavailable)",
+      "action": "Indicate time to retry",
+      "to": "Overload"
+    },
+    {
+      "from": "Transient Connection",
+      "event": "Client closes connection",
+      "action": "Close connection",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "Transient Connection",
+      "event": "Server receives incomplete message",
+      "action": "Wait 10 seconds for completion",
+      "to": "Transient Connection"
+    },
+    {
+      "from": "Transient Connection",
+      "event": "Server sends 503 (Service Unavailable)",
+      "action": "Indicate time to retry",
+      "to": "Overload"
+    },
+    {
+      "from": "Overload",
+      "event": "Retry-After timeout",
+      "action": "Retry request",
+      "to": "Persistent Connection"
+    },
+    {
+      "from": "Overload",
+      "event": "Retry-After timeout",
+      "action": "Retry request",
+      "to": "Transient Connection"
+    },
+    {
+      "from": "RTSP session context",
+      "event": "Pipelined-Request",
+      "action": "process multiple requests in the same RTSP session context",
+      "to": "RTSP session context"
+    },
+    {
+      "from": "Init",
+      "event": "SETUP",
+      "action": "Session header with session identifier",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "Start sending media",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PAUSE",
+      "action": "Interrupt stream delivery",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY",
+      "action": "Update current PLAY request",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP",
+      "action": "Change transport parameters",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP",
+      "action": "Change transport parameters",
+      "to": "Play"
+    },
+    {
+      "from": "Serving Stream",
+      "event": "SETUP or PLAY request",
+      "action": "ascertains whether it has an up-to-date copy of the continuous media content and its description",
+      "to": "Stale Entry"
+    },
+    {
+      "from": "Stale Entry",
+      "event": "",
+      "action": "checks with the origin server to see if its cached entry is still usable",
+      "to": "Validating Cache Entry"
+    },
+    {
+      "from": "Validating Cache Entry",
+      "event": "DESCRIBE or SETUP request",
+      "action": "includes the associated validator in the request",
+      "to": "Conditional Request"
+    },
+    {
+      "from": "Conditional Request",
+      "event": "validators match",
+      "action": "responds with a special status code (usually, 304 (Not Modified)) and no message body",
+      "to": "Not Modified"
+    },
+    {
+      "from": "Conditional Request",
+      "event": "validators do not match",
+      "action": "returns a full response (including message body)",
+      "to": "Full Response"
+    },
+    {
+      "from": "Session Not Established",
+      "event": "3rr response",
+      "action": "send TEARDOWN request for the session and may reestablish the session using the resource indicated by the Location",
+      "to": "Session Not Established"
+    },
+    {
+      "from": "Session Established",
+      "event": "3rr response",
+      "action": "send TEARDOWN request for the session and may reestablish the session using the resource indicated by the Location",
+      "to": "Session Not Established"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "Start playing",
+      "to": "Playing"
+    },
+    {
+      "from": "Playing",
+      "event": "PAUSE",
+      "action": "Pause playing",
+      "to": "Paused"
+    },
+    {
+      "from": "Paused",
+      "event": "PLAY",
+      "action": "Resume playing",
+      "to": "Playing"
+    },
+    {
+      "from": "Playing",
+      "event": "TEARDOWN",
+      "action": "Stop playing",
+      "to": "Teardown"
+    },
+    {
+      "from": "Paused",
+      "event": "TEARDOWN",
+      "action": "Stop playing",
+      "to": "Teardown"
+    },
+    {
+      "from": "Ready",
+      "event": "RECORD",
+      "action": "Start recording",
+      "to": "Recording"
+    },
+    {
+      "from": "Recording",
+      "event": "TEARDOWN",
+      "action": "Stop recording",
+      "to": "Teardown"
+    },
+    {
+      "from": "TLS session not established",
+      "event": "TLS handshake",
+      "action": "Establish TLS session",
+      "to": "TLS session established"
+    },
+    {
+      "from": "TLS session established",
+      "event": "470 Connection Authorization Required",
+      "action": "Include Accept-Credentials header with hash of certificate",
+      "to": "Connection authorization required"
+    },
+    {
+      "from": "TLS session established",
+      "event": "407 Proxy Authentication Required",
+      "action": "Include Accept-Credentials header with hash of certificate",
+      "to": "Proxy authentication required"
+    },
+    {
+      "from": "TLS connection not established with proxy",
+      "event": "TLS handshake",
+      "action": "Establish TLS connection with proxy",
+      "to": "TLS connection established with proxy"
+    },
+    {
+      "from": "TLS connection established with proxy",
+      "event": "TLS handshake",
+      "action": "Establish TLS connection with server",
+      "to": "TLS connection established with server"
+    },
+    {
+      "from": "TLS connection not established with server",
+      "event": "TLS handshake",
+      "action": "Establish TLS connection with server",
+      "to": "TLS connection established with server"
+    },
+    {
+      "from": "Media on Demand (Unicast)",
+      "event": "DESCRIBE",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Media on Demand (Unicast)"
+    },
+    {
+      "from": "Media on Demand (Unicast)",
+      "event": "SETUP",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Media on Demand (Unicast)"
+    },
+    {
+      "from": "Media on Demand (Unicast)",
+      "event": "PLAY",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Media on Demand (Unicast)"
+    },
+    {
+      "from": "Media on Demand (Unicast)",
+      "event": "PAUSE",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Media on Demand (Unicast)"
+    },
+    {
+      "from": "Media on Demand (Unicast)",
+      "event": "TEARDOWN",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Media on Demand (Unicast)"
+    },
+    {
+      "from": "Media on Demand Using Pipelining",
+      "event": "DESCRIBE",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Media on Demand Using Pipelining"
+    },
+    {
+      "from": "Media on Demand Using Pipelining",
+      "event": "SETUP",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Media on Demand Using Pipelining"
+    },
+    {
+      "from": "Media on Demand Using Pipelining",
+      "event": "PLAY",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Media on Demand Using Pipelining"
+    },
+    {
+      "from": "Secured Media Session for On-Demand Content",
+      "event": "DESCRIBE",
+      "action": "RTSP/2.0 301 Moved Permanently",
+      "to": "Secured Media Session for On-Demand Content"
+    },
+    {
+      "from": "Secured Media Session for On-Demand Content",
+      "event": "DESCRIBE",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Secured Media Session for On-Demand Content"
+    },
+    {
+      "from": "Secured Media Session for On-Demand Content",
+      "event": "SETUP",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Secured Media Session for On-Demand Content"
+    },
+    {
+      "from": "Secured Media Session for On-Demand Content",
+      "event": "PLAY",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Secured Media Session for On-Demand Content"
+    },
+    {
+      "from": "Single-Stream Container Files",
+      "event": "DESCRIBE",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Single-Stream Container Files"
+    },
+    {
+      "from": "Single-Stream Container Files",
+      "event": "SETUP",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Single-Stream Container Files"
+    },
+    {
+      "from": "Single-Stream Container Files",
+      "event": "PLAY",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Single-Stream Container Files"
+    },
+    {
+      "from": "Live Media Presentation Using Multicast",
+      "event": "DESCRIBE",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Live Media Presentation Using Multicast"
+    },
+    {
+      "from": "Live Media Presentation Using Multicast",
+      "event": "SETUP",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Live Media Presentation Using Multicast"
+    },
+    {
+      "from": "Live Media Presentation Using Multicast",
+      "event": "PLAY",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Live Media Presentation Using Multicast"
+    },
+    {
+      "from": "Capability Negotiation",
+      "event": "OPTIONS",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Capability Negotiation"
+    },
+    {
+      "from": "Capability Negotiation",
+      "event": "SETUP",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Capability Negotiation"
+    },
+    {
+      "from": "Init",
+      "event": "SETUP",
+      "action": "NRM=1, RP=0.0",
+      "to": "Ready"
+    },
+    {
+      "from": "Init",
+      "event": "SETUP",
+      "action": "3rr Redirect",
+      "to": "Init"
+    },
+    {
+      "from": "Init",
+      "event": "S -> C: REDIRECT",
+      "action": "Terminate all SES",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP",
+      "action": "NRM +=1",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP",
+      "action": "Change transport param",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN",
+      "action": "No session hdr, NRM = 0",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN",
+      "action": "No Session hdr, NRM = 0",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN",
+      "action": "Session hdr, NRM -= 1",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "Play from RP",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "According to range",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "According to range",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "Play from RP",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PAUSE",
+      "action": "Return PP",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SC:REDIRECT",
+      "action": "Set RedP",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SC:REDIRECT",
+      "action": "Session is removed",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "Timeout",
+      "action": "",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "RedP reached",
+      "action": "TEARDOWN of session",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "PAUSE",
+      "action": "Set RP to present point",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "End of media",
+      "action": "Set RP = End of media",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "End of range",
+      "action": "Set RP = End of range",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY",
+      "action": "Play from present point",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY",
+      "action": "According to range",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SC:PLAY_NOTIFY",
+      "action": "200",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP",
+      "action": "455",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP",
+      "action": "455",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP",
+      "action": "Change transport param.",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "TEARDOWN",
+      "action": "No session hdr",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "TEARDOWN",
+      "action": "No Session hdr, NRM=0",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "TEARDOWN",
+      "action": "455",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SC:REDIRECT",
+      "action": "Set RedP",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SC:REDIRECT",
+      "action": "Session is removed",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "RedP reached",
+      "action": "TEARDOWN of session",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "Timeout",
+      "action": "Stop Media playout",
+      "to": "Init"
+    },
+    {
+      "from": "PLAY mode",
+      "event": "",
+      "action": "The RTP/UDP packets from the server to the client MUST be sent to the address and port given by the first address specification of the \"dest_addr\" parameter.",
+      "to": "PLAY mode"
+    },
+    {
+      "from": "PLAY mode",
+      "event": "",
+      "action": "The RTCP/UDP packets from the server to the client MUST be sent to the address and port given by the second address specification of the \"dest_addr\" parameter, unless RTP and RTCP multiplexing has been negotiated, in which case RTCP MUST be sent to the first address specification. If no second pair is specified and RTP and RTCP multiplexing has not been negotiated, RTCP MUST NOT be sent.",
+      "to": "PLAY mode"
+    },
+    {
+      "from": "PLAY mode",
+      "event": "",
+      "action": "The RTCP/UDP packets from the client to the server MUST be sent to the address and port given by the second address specification of the \"src_addr\" parameter, unless RTP and RTCP multiplexing has been negotiated, in which case RTCP MUST be sent to the first address specification. If no second pair is specified and RTP and RTCP multiplexing has not been negotiated, RTCP MUST NOT be sent.",
+      "to": "PLAY mode"
+    },
+    {
+      "from": "PLAY mode",
+      "event": "",
+      "action": "The RTP/UDP packets from the client to the server MUST be sent to the address and port given by the first address specification of the \"src_addr\" parameter.",
+      "to": "PLAY mode"
+    },
+    {
+      "from": "Presentation Description",
+      "event": "",
+      "action": "",
+      "to": "Setup"
+    },
+    {
+      "from": "Setup",
+      "event": "",
+      "action": "",
+      "to": "Control of Transmission"
+    },
+    {
+      "from": "Control of Transmission",
+      "event": "",
+      "action": "",
+      "to": "Synchronization"
+    },
+    {
+      "from": "Synchronization",
+      "event": "",
+      "action": "",
+      "to": "Termination"
+    },
+    {
+      "from": "Waiting for Acknowledgment",
+      "event": "timeout of one round-trip time (RTT)",
+      "action": "resend the same message",
+      "to": "Waiting for Acknowledgment"
+    },
+    {
+      "from": "Play",
+      "event": "Play",
+      "action": "takes effect immediately replacing the previous request",
+      "to": "Play"
+    }
+  ]
+}

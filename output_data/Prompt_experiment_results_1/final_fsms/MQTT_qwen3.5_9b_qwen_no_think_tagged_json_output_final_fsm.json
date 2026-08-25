@@ -1,0 +1,17 @@
+{
+  "states": [
+    "TLS:Anon,MQTT:None",
+    "TLS:Anon,MQTT:ace",
+    "TLS:Known(RPK/PSK),MQTT:none",
+    "TLS:Known(RPK/PSK),MQTT:ace",
+    "MQTT Session State"
+  ],
+  "transitions": [
+    {
+      "from": "MQTT Session State",
+      "event": "Client DISCONNECT",
+      "action": "Broker doesn't store the Session State but MUST keep the retained messages OR Broker stores the Session State including token and its introspection result",
+      "to": ""
+    }
+  ]
+}

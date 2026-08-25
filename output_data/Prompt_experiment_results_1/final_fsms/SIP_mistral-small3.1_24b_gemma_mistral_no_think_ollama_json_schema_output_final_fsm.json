@@ -1,0 +1,974 @@
+{
+  "states": [
+    "Session Established",
+    "Session Terminated",
+    "Session Modification",
+    "Session Setup",
+    "Registration",
+    "client transaction",
+    "server transaction",
+    "Client Transaction State Machine",
+    "Server Transaction State Machine",
+    "Dialog",
+    "Call Stateful Proxy",
+    "Stateless Proxy",
+    "Stateful Proxy",
+    "Transaction Stateful Proxy",
+    "Loose Router",
+    "Strict Router",
+    "UAC Core",
+    "UAS Core",
+    "Proxy Core",
+    "Registrar",
+    "Redirect Server",
+    "Outbound Proxy",
+    "Parallel Search",
+    "Sequential Search",
+    "Regular Transaction",
+    "Client Transaction",
+    "Server Transaction",
+    "Original Request",
+    "CANCEL Request",
+    "Binding Added",
+    "Binding Removed",
+    "Binding Refreshed",
+    "Binding Fetched",
+    "Binding Expiration",
+    "Error Response",
+    "UA",
+    "Proxy Server",
+    "early",
+    "confirmed",
+    "early dialog",
+    "established dialog",
+    "INVITE transaction completed",
+    "ongoing INVITE client transaction",
+    "ongoing INVITE server transaction",
+    "completed or terminated state",
+    "confirmed or terminated state",
+    "Session",
+    "Early Dialog",
+    "Confirmed Dialog",
+    "Non-2xx Final Response",
+    "2xx Final Response",
+    "BYE Request",
+    "481 Response",
+    "408 Response",
+    "Timeout",
+    "CANCEL Request",
+    "487 Response",
+    "Stateful Proxy",
+    "Stateless Proxy",
+    "calling",
+    "Proceeding",
+    "Completed",
+    "Terminated",
+    "Trying",
+    "Confirmed",
+    "Trying",
+    "Ringing",
+    "Call Is Being Forwarded",
+    "Queued",
+    "Session Progress",
+    "Successful",
+    "Redirection",
+    "Request Failure",
+    "Server Failure",
+    "Global Failures",
+    "Unauthorized",
+    "Proxy Authentication Required",
+    "Authenticated",
+    "Unauthorized with multiple challenges",
+    "Proxy Authentication Required with multiple challenges"
+  ],
+  "transitions": [
+    {
+      "from": "Session Setup",
+      "event": "INVITE",
+      "action": "100 Trying",
+      "to": "Session Setup"
+    },
+    {
+      "from": "Session Setup",
+      "event": "180 Ringing",
+      "action": "",
+      "to": "Session Setup"
+    },
+    {
+      "from": "Session Setup",
+      "event": "200 OK",
+      "action": "ACK",
+      "to": "Session Established"
+    },
+    {
+      "from": "Session Established",
+      "event": "BYE",
+      "action": "200 OK",
+      "to": "Session Terminated"
+    },
+    {
+      "from": "Session Established",
+      "event": "re-INVITE",
+      "action": "200 OK",
+      "to": "Session Modification"
+    },
+    {
+      "from": "Session Modification",
+      "event": "ACK",
+      "action": "",
+      "to": "Session Established"
+    },
+    {
+      "from": "Session Modification",
+      "event": "488 Not Acceptable Here",
+      "action": "ACK",
+      "to": "Session Established"
+    },
+    {
+      "from": "Registration",
+      "event": "REGISTER",
+      "action": "",
+      "to": "Registration"
+    },
+    {
+      "from": "Client Transaction State Machine",
+      "event": "",
+      "action": "",
+      "to": "Server Transaction State Machine"
+    },
+    {
+      "from": "Server Transaction State Machine",
+      "event": "",
+      "action": "",
+      "to": "Client Transaction State Machine"
+    },
+    {
+      "from": "Client Transaction State Machine",
+      "event": "INVITE",
+      "action": "establishes Dialog",
+      "to": "Dialog"
+    },
+    {
+      "from": "Dialog",
+      "event": "BYE",
+      "action": "terminates Dialog",
+      "to": "Client Transaction State Machine"
+    },
+    {
+      "from": "Call Stateful Proxy",
+      "event": "",
+      "action": "",
+      "to": "Transaction Stateful Proxy"
+    },
+    {
+      "from": "Stateless Proxy",
+      "event": "",
+      "action": "",
+      "to": "Loose Router"
+    },
+    {
+      "from": "Stateless Proxy",
+      "event": "",
+      "action": "",
+      "to": "Strict Router"
+    },
+    {
+      "from": "Stateful Proxy",
+      "event": "",
+      "action": "",
+      "to": "Transaction Stateful Proxy"
+    },
+    {
+      "from": "UAC Core",
+      "event": "INVITE",
+      "action": "creates request",
+      "to": "Client Transaction State Machine"
+    },
+    {
+      "from": "UAS Core",
+      "event": "INVITE",
+      "action": "generates response",
+      "to": "Server Transaction State Machine"
+    },
+    {
+      "from": "Proxy Core",
+      "event": "INVITE",
+      "action": "forwards request",
+      "to": "Client Transaction State Machine"
+    },
+    {
+      "from": "Registrar",
+      "event": "REGISTER",
+      "action": "places information in location service",
+      "to": "Registrar"
+    },
+    {
+      "from": "Redirect Server",
+      "event": "INVITE",
+      "action": "generates 3xx response",
+      "to": "Redirect Server"
+    },
+    {
+      "from": "Outbound Proxy",
+      "event": "INVITE",
+      "action": "receives requests from client",
+      "to": "Outbound Proxy"
+    },
+    {
+      "from": "Parallel Search",
+      "event": "INVITE",
+      "action": "issues several requests",
+      "to": "Parallel Search"
+    },
+    {
+      "from": "Sequential Search",
+      "event": "INVITE",
+      "action": "attempts each contact address in sequence",
+      "to": "Sequential Search"
+    },
+    {
+      "from": "Regular Transaction",
+      "event": "INVITE",
+      "action": "processes transaction",
+      "to": "Regular Transaction"
+    },
+    {
+      "from": "Client Transaction",
+      "event": "CANCEL Request",
+      "action": "construct CANCEL request, check for responses, send CANCEL if no final response received",
+      "to": "CANCEL Request"
+    },
+    {
+      "from": "CANCEL Request",
+      "event": "CANCEL request received",
+      "action": "match CANCEL request with original request, respond with 200 OK if transaction exists",
+      "to": "Server Transaction"
+    },
+    {
+      "from": "Server Transaction",
+      "event": "CANCEL request matches original request",
+      "action": "respond to original request with 487 Request Terminated if it was an INVITE, respond to CANCEL with 200 OK",
+      "to": "Server Transaction"
+    },
+    {
+      "from": "Original Request",
+      "event": "CANCEL Request",
+      "action": "stop processing original request, generate 487 Request Terminated if it was an INVITE",
+      "to": "Original Request"
+    },
+    {
+      "from": "Registration",
+      "event": "REGISTER request",
+      "action": "Add, remove, or query bindings",
+      "to": "Binding Added"
+    },
+    {
+      "from": "Registration",
+      "event": "REGISTER request with expiration interval of 0",
+      "action": "Remove bindings",
+      "to": "Binding Removed"
+    },
+    {
+      "from": "Registration",
+      "event": "REGISTER request without Contact header field",
+      "action": "Fetch bindings",
+      "to": "Binding Fetched"
+    },
+    {
+      "from": "Binding Added",
+      "event": "Expiration interval elapsed",
+      "action": "Remove bindings",
+      "to": "Binding Expiration"
+    },
+    {
+      "from": "Binding Added",
+      "event": "REGISTER request to refresh bindings",
+      "action": "Refresh bindings",
+      "to": "Binding Refreshed"
+    },
+    {
+      "from": "Binding Refreshed",
+      "event": "Expiration interval elapsed",
+      "action": "Remove bindings",
+      "to": "Binding Expiration"
+    },
+    {
+      "from": "Registration",
+      "event": "Error in REGISTER request",
+      "action": "Return error response",
+      "to": "Error Response"
+    },
+    {
+      "from": "UA",
+      "event": "OPTIONS",
+      "action": "query capabilities",
+      "to": "UA"
+    },
+    {
+      "from": "UA",
+      "event": "OPTIONS",
+      "action": "query capabilities",
+      "to": "Proxy Server"
+    },
+    {
+      "from": "Proxy Server",
+      "event": "OPTIONS",
+      "action": "respond with capabilities",
+      "to": "Proxy Server"
+    },
+    {
+      "from": "UA",
+      "event": "OPTIONS",
+      "action": "query capabilities",
+      "to": "Dialog"
+    },
+    {
+      "from": "Dialog",
+      "event": "OPTIONS",
+      "action": "respond with capabilities",
+      "to": "Dialog"
+    },
+    {
+      "from": "early",
+      "event": "2xx final response",
+      "action": "transition to confirmed state",
+      "to": "confirmed"
+    },
+    {
+      "from": "early",
+      "event": "no response or other response",
+      "action": "terminate early dialog",
+      "to": "early"
+    },
+    {
+      "from": "early dialog",
+      "event": "non-2xx final response",
+      "action": "terminate early dialogs",
+      "to": "INVITE transaction completed"
+    },
+    {
+      "from": "early dialog",
+      "event": "2xx response",
+      "action": "transition to confirmed state",
+      "to": "confirmed"
+    },
+    {
+      "from": "confirmed",
+      "event": "ACK",
+      "action": "terminate early dialogs",
+      "to": "established dialog"
+    },
+    {
+      "from": "established dialog",
+      "event": "BYE",
+      "action": "terminate dialog",
+      "to": "INVITE transaction completed"
+    },
+    {
+      "from": "ongoing INVITE client transaction",
+      "event": "",
+      "action": "wait until the transaction reaches the completed or terminated state before initiating the new INVITE",
+      "to": "completed or terminated state"
+    },
+    {
+      "from": "ongoing INVITE server transaction",
+      "event": "",
+      "action": "wait until the transaction reaches the confirmed or terminated state before initiating the new INVITE",
+      "to": "confirmed or terminated state"
+    },
+    {
+      "from": "dialog",
+      "event": "receives a non-2xx final response to a re-INVITE",
+      "action": "session parameters MUST remain unchanged",
+      "to": "dialog"
+    },
+    {
+      "from": "dialog",
+      "event": "receives a 481 (Call/Transaction Does Not Exist), or a 408 (Request Timeout), or no response at all is received for the re-INVITE",
+      "action": "UAC will terminate the dialog",
+      "to": "dialog"
+    },
+    {
+      "from": "dialog",
+      "event": "receives a 491 response to a re-INVITE",
+      "action": "start a timer with a value T",
+      "to": "dialog"
+    },
+    {
+      "from": "Session",
+      "event": "Non-2xx Final Response",
+      "action": "Terminate all sessions and dialogs",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "BYE Request",
+      "action": "Terminate the session",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "CANCEL Request",
+      "action": "Attempt to force a non-2xx response to the INVITE",
+      "to": "Session"
+    },
+    {
+      "from": "Dialog",
+      "event": "BYE Request",
+      "action": "Terminate the session associated with the dialog",
+      "to": "Dialog"
+    },
+    {
+      "from": "Early Dialog",
+      "event": "BYE Request",
+      "action": "",
+      "to": "Early Dialog"
+    },
+    {
+      "from": "Confirmed Dialog",
+      "event": "BYE Request",
+      "action": "Terminate the session",
+      "to": "Confirmed Dialog"
+    },
+    {
+      "from": "Confirmed Dialog",
+      "event": "481 Response",
+      "action": "",
+      "to": "Confirmed Dialog"
+    },
+    {
+      "from": "Confirmed Dialog",
+      "event": "408 Response",
+      "action": "",
+      "to": "Confirmed Dialog"
+    },
+    {
+      "from": "Confirmed Dialog",
+      "event": "Timeout",
+      "action": "",
+      "to": "Confirmed Dialog"
+    },
+    {
+      "from": "Confirmed Dialog",
+      "event": "2xx Final Response",
+      "action": "Generate a 2xx response to the BYE",
+      "to": "Confirmed Dialog"
+    },
+    {
+      "from": "Confirmed Dialog",
+      "event": "Pending Requests",
+      "action": "Generate a 487 (Request Terminated) response",
+      "to": "Confirmed Dialog"
+    },
+    {
+      "from": "Stateful Proxy",
+      "event": "",
+      "action": "transition to stateless operation",
+      "to": "Stateless Proxy"
+    },
+    {
+      "from": "calling",
+      "event": "Timer A fires",
+      "action": "Reset A, INVITE sent",
+      "to": "calling"
+    },
+    {
+      "from": "calling",
+      "event": "Timer B fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "calling",
+      "event": "1xx",
+      "action": "1xx to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "calling",
+      "event": "300-699",
+      "action": "ACK sent, resp. to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "calling",
+      "event": "2xx",
+      "action": "2xx to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699",
+      "action": "ACK sent, resp. to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx",
+      "action": "2xx to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer D fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "300-699 retransmission",
+      "action": "ACK retransmission",
+      "to": "Completed"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer F fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "1xx",
+      "action": "1xx to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "200-699",
+      "action": "resp. to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer F fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "200-699",
+      "action": "resp. to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer K fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer E fires",
+      "action": "send request",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer E fires",
+      "action": "send request",
+      "to": "Trying"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Transport Err.",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "Transport Err.",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Transport Err.",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "calling",
+      "event": "Transport Err.",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "",
+      "action": "send response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx from TU",
+      "action": "send response",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699 from TU",
+      "action": "send response",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer G fires",
+      "action": "send response",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "ACK",
+      "action": "",
+      "to": "Confirmed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer H fires",
+      "action": "Inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Confirmed",
+      "event": "Timer I fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "100 Trying",
+      "action": "The request has been received by the next-hop server and that some unspecified action is being taken on behalf of this call",
+      "to": "Trying"
+    },
+    {
+      "from": "Ringing",
+      "event": "180 Ringing",
+      "action": "The UA receiving the INVITE is trying to alert the user",
+      "to": "Ringing"
+    },
+    {
+      "from": "Call Is Being Forwarded",
+      "event": "181 Call Is Being Forwarded",
+      "action": "A server MAY use this status code to indicate that the call is being forwarded to a different set of destinations",
+      "to": "Call Is Being Forwarded"
+    },
+    {
+      "from": "Queued",
+      "event": "182 Queued",
+      "action": "The called party is temporarily unavailable, but the server has decided to queue the call rather than reject it",
+      "to": "Queued"
+    },
+    {
+      "from": "Session Progress",
+      "event": "183 Session Progress",
+      "action": "The 183 (Session Progress) response is used to convey information about the progress of the call that is not otherwise classified",
+      "to": "Session Progress"
+    },
+    {
+      "from": "Successful",
+      "event": "200 OK",
+      "action": "The request has succeeded",
+      "to": "Successful"
+    },
+    {
+      "from": "Redirection",
+      "event": "300 Multiple Choices",
+      "action": "The address in the request resolved to several choices, each with its own specific location",
+      "to": "Redirection"
+    },
+    {
+      "from": "Redirection",
+      "event": "301 Moved Permanently",
+      "action": "The user can no longer be found at the address in the Request-URI",
+      "to": "Redirection"
+    },
+    {
+      "from": "Redirection",
+      "event": "302 Moved Temporarily",
+      "action": "The requesting client SHOULD retry the request at the new address(es) given by the Contact header field",
+      "to": "Redirection"
+    },
+    {
+      "from": "Redirection",
+      "event": "305 Use Proxy",
+      "action": "The requested resource MUST be accessed through the proxy given by the Contact field",
+      "to": "Redirection"
+    },
+    {
+      "from": "Redirection",
+      "event": "380 Alternative Service",
+      "action": "The call was not successful, but alternative services are possible",
+      "to": "Redirection"
+    },
+    {
+      "from": "Request Failure",
+      "event": "400 Bad Request",
+      "action": "The request could not be understood due to malformed syntax",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "401 Unauthorized",
+      "action": "The request requires user authentication",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "402 Payment Required",
+      "action": "Reserved for future use",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "403 Forbidden",
+      "action": "The server understood the request, but is refusing to fulfill it",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "404 Not Found",
+      "action": "The server has definitive information that the user does not exist at the domain specified in the Request-URI",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "405 Method Not Allowed",
+      "action": "The method specified in the Request-Line is understood, but not allowed for the address identified by the Request-URI",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "406 Not Acceptable",
+      "action": "The resource identified by the request is only capable of generating response entities that have content characteristics not acceptable according to the Accept header field sent in the request",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "407 Proxy Authentication Required",
+      "action": "This code is similar to 401 (Unauthorized), but indicates that the client MUST first authenticate itself with the proxy",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "408 Request Timeout",
+      "action": "The server could not produce a response within a suitable amount of time",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "410 Gone",
+      "action": "The requested resource is no longer available at the server and no forwarding address is known",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "413 Request Entity Too Large",
+      "action": "The server is refusing to process a request because the request entity-body is larger than the server is willing or able to process",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "414 Request-URI Too Long",
+      "action": "The server is refusing to service the request because the Request-URI is longer than the server is willing to interpret",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "415 Unsupported Media Type",
+      "action": "The server is refusing to service the request because the message body of the request is in a format not supported by the server for the requested method",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "416 Unsupported URI Scheme",
+      "action": "The server cannot process the request because the scheme of the URI in the Request-URI is unknown to the server",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "420 Bad Extension",
+      "action": "The server did not understand the protocol extension specified in a Proxy-Require or Require header field",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "421 Extension Required",
+      "action": "The UAS needs a particular extension to process the request, but this extension is not listed in a Supported header field in the request",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "423 Interval Too Brief",
+      "action": "The server is rejecting the request because the expiration time of the resource refreshed by the request is too short",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "480 Temporarily Unavailable",
+      "action": "The callee's end system was contacted successfully but the callee is currently unavailable",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "481 Call/Transaction Does Not Exist",
+      "action": "This status indicates that the UAS received a request that does not match any existing dialog or transaction",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "482 Loop Detected",
+      "action": "The server has detected a loop",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "483 Too Many Hops",
+      "action": "The server received a request that contains a Max-Forwards header field with the value zero",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "484 Address Incomplete",
+      "action": "The server received a request with a Request-URI that was incomplete",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "485 Ambiguous",
+      "action": "The Request-URI was ambiguous",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "486 Busy Here",
+      "action": "The callee's end system was contacted successfully, but the callee is currently not willing or able to take additional calls at this end system",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "487 Request Terminated",
+      "action": "The request was terminated by a BYE or CANCEL request",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "488 Not Acceptable Here",
+      "action": "The response has the same meaning as 606 (Not Acceptable), but only applies to the specific resource addressed by the Request-URI",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "491 Request Pending",
+      "action": "The request was received by a UAS that had a pending request within the same dialog",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "493 Undecipherable",
+      "action": "The request was received by a UAS that contained an encrypted MIME body for which the recipient does not possess or will not provide an appropriate decryption key",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Server Failure",
+      "event": "500 Server Internal Error",
+      "action": "The server encountered an unexpected condition that prevented it from fulfilling the request",
+      "to": "Server Failure"
+    },
+    {
+      "from": "Server Failure",
+      "event": "501 Not Implemented",
+      "action": "The server does not support the functionality required to fulfill the request",
+      "to": "Server Failure"
+    },
+    {
+      "from": "Server Failure",
+      "event": "502 Bad Gateway",
+      "action": "The server, while acting as a gateway or proxy, received an invalid response from the downstream server it accessed in attempting to fulfill the request",
+      "to": "Server Failure"
+    },
+    {
+      "from": "Server Failure",
+      "event": "503 Service Unavailable",
+      "action": "The server is temporarily unable to process the request due to a temporary overloading or maintenance of the server",
+      "to": "Server Failure"
+    },
+    {
+      "from": "Server Failure",
+      "event": "504 Server Time-out",
+      "action": "The server did not receive a timely response from an external server it accessed in attempting to process the request",
+      "to": "Server Failure"
+    },
+    {
+      "from": "Server Failure",
+      "event": "505 Version Not Supported",
+      "action": "The server does not support, or refuses to support, the SIP protocol version that was used in the request",
+      "to": "Server Failure"
+    },
+    {
+      "from": "Server Failure",
+      "event": "513 Message Too Large",
+      "action": "The server was unable to process the request since the message length exceeded its capabilities",
+      "to": "Server Failure"
+    },
+    {
+      "from": "Global Failures",
+      "event": "600 Busy Everywhere",
+      "action": "The callee's end system was contacted successfully but the callee is busy and does not wish to take the call at this time",
+      "to": "Global Failures"
+    },
+    {
+      "from": "Global Failures",
+      "event": "603 Decline",
+      "action": "The callee's machine was successfully contacted but the user explicitly does not wish to or cannot participate",
+      "to": "Global Failures"
+    },
+    {
+      "from": "Global Failures",
+      "event": "604 Does Not Exist Anywhere",
+      "action": "The server has authoritative information that the user indicated in the Request-URI does not exist anywhere",
+      "to": "Global Failures"
+    },
+    {
+      "from": "Global Failures",
+      "event": "606 Not Acceptable",
+      "action": "The user's agent was contacted successfully but some aspects of the session description such as the requested media, bandwidth, or addressing style were not acceptable",
+      "to": "Global Failures"
+    },
+    {
+      "from": "Unauthorized",
+      "event": "401 (Unauthorized)",
+      "action": "UAC re-originates the request with proper credentials",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Unauthorized",
+      "event": "401 (Unauthorized)",
+      "action": "UAC attempts to retry the request with a username of 'anonymous' and no password",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Proxy Authentication Required",
+      "event": "407 (Proxy Authentication Required)",
+      "action": "UAC re-originates the request with proper credentials",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Proxy Authentication Required",
+      "event": "407 (Proxy Authentication Required)",
+      "action": "UAC attempts to retry the request with a username of 'anonymous' and no password",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Unauthorized with multiple challenges",
+      "event": "401 (Unauthorized) with multiple challenges",
+      "action": "UAC includes an Authorization value for each WWW-Authenticate value",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Proxy Authentication Required with multiple challenges",
+      "event": "407 (Proxy Authentication Required) with multiple challenges",
+      "action": "UAC includes a Proxy-Authorization value for each Proxy-Authenticate value",
+      "to": "Authenticated"
+    }
+  ]
+}

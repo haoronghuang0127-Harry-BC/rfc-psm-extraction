@@ -1,0 +1,336 @@
+{
+  "states": [
+    "Control Connection",
+    "Tunnel",
+    "idle",
+    "wait_ctl_reply",
+    "established",
+    "wait_stop_reply",
+    "wait_reply",
+    "wait_connect",
+    "wait_disconnect",
+    "wait_cs_ans",
+    "Initial Window Size",
+    "Closing the Window",
+    "Opening the Window",
+    "Window Overflow",
+    "Multi-packet Acknowledgment",
+    "Out-of-sequence Packets",
+    "Acknowledgment Time-Outs",
+    "Congestion Control"
+  ],
+  "transitions": [
+    {
+      "from": "Control Connection",
+      "event": "Start-Control-Connection-Request",
+      "action": "Start-Control-Connection-Reply",
+      "to": "Control Connection"
+    },
+    {
+      "from": "Control Connection",
+      "event": "Stop-Control-Connection-Request",
+      "action": "Stop-Control-Connection-Reply",
+      "to": "Control Connection"
+    },
+    {
+      "from": "Control Connection",
+      "event": "Echo-Request",
+      "action": "Echo-Reply",
+      "to": "Control Connection"
+    },
+    {
+      "from": "Control Connection",
+      "event": "Outgoing-Call-Request",
+      "action": "Outgoing-Call-Reply",
+      "to": "Control Connection"
+    },
+    {
+      "from": "Control Connection",
+      "event": "Incoming-Call-Request",
+      "action": "Incoming-Call-Reply",
+      "to": "Control Connection"
+    },
+    {
+      "from": "Control Connection",
+      "event": "Incoming-Call-Connected",
+      "action": "",
+      "to": "Control Connection"
+    },
+    {
+      "from": "Control Connection",
+      "event": "Call-Clear-Request",
+      "action": "",
+      "to": "Control Connection"
+    },
+    {
+      "from": "Control Connection",
+      "event": "Call-Disconnect-Notify",
+      "action": "",
+      "to": "Control Connection"
+    },
+    {
+      "from": "Control Connection",
+      "event": "WAN-Error-Notify",
+      "action": "",
+      "to": "Control Connection"
+    },
+    {
+      "from": "Control Connection",
+      "event": "Set-Link-Info",
+      "action": "",
+      "to": "Control Connection"
+    },
+    {
+      "from": "idle",
+      "event": "TCP Open Indication",
+      "action": "Send Start Control Connection Request",
+      "to": "wait_ctl_reply"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Receive Start Control Connection Reply Version OK",
+      "action": "",
+      "to": "established"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Receive Start Control Connection Reply Version Not OK",
+      "action": "Send Stop Control Connection Request",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "established",
+      "event": "Local Terminate",
+      "action": "Send Stop Control Connection Request",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "established",
+      "event": "Receive Stop Control Connection Request",
+      "action": "Send Stop Control Connection Reply",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "wait_stop_reply",
+      "event": "Receive Stop Control Connection Reply",
+      "action": "Close TCP",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Start Control Connection Request",
+      "action": "Send Start Control Connection Reply with Error",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Start Control Connection Request Version OK",
+      "action": "Send Start Control Connection Reply",
+      "to": "established"
+    },
+    {
+      "from": "idle",
+      "event": "Ring",
+      "action": "Send Incoming Call Request",
+      "to": "wait_reply"
+    },
+    {
+      "from": "wait_reply",
+      "event": "Receive Incoming Call Reply Not Accepting",
+      "action": "",
+      "to": "idle"
+    },
+    {
+      "from": "wait_reply",
+      "event": "Receive Incoming Call Reply Accepting",
+      "action": "Send Incoming Call Connected",
+      "to": "established"
+    },
+    {
+      "from": "established",
+      "event": "Receive Clear Call Request",
+      "action": "Send Call Disconnect Notify",
+      "to": "idle"
+    },
+    {
+      "from": "established",
+      "event": "Telco call dropped",
+      "action": "Send Call Disconnect Notify",
+      "to": "idle"
+    },
+    {
+      "from": "established",
+      "event": "Local disconnect",
+      "action": "Send Call Disconnect Notify",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Incoming Call Request",
+      "action": "Send Incoming Call Reply Not Accepting",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Incoming Call Request",
+      "action": "Send Incoming Call Reply Accepting",
+      "to": "wait_connect"
+    },
+    {
+      "from": "wait_connect",
+      "event": "Receive Incoming Call Connect",
+      "action": "",
+      "to": "established"
+    },
+    {
+      "from": "established",
+      "event": "Receive Call Disconnect Notify",
+      "action": "",
+      "to": "wait_disconnect"
+    },
+    {
+      "from": "established",
+      "event": "Send Call Clear Request",
+      "action": "",
+      "to": "wait_disconnect"
+    },
+    {
+      "from": "wait_disconnect",
+      "event": "Receive Call Disconnect Notify",
+      "action": "",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Outgoing Call Request in Error",
+      "action": "Send Outgoing Call Reply with Error",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Outgoing Call Request No Error",
+      "action": "Off Hook; Dial",
+      "to": "wait_cs_ans"
+    },
+    {
+      "from": "wait_cs_ans",
+      "event": "Incomplete Call",
+      "action": "Send Outgoing Call Reply with Error",
+      "to": "idle"
+    },
+    {
+      "from": "wait_cs_ans",
+      "event": "Telco Answer",
+      "action": "Send Outgoing Call Reply",
+      "to": "established"
+    },
+    {
+      "from": "established",
+      "event": "Receive Call Clear Request",
+      "action": "Hangup call and send Call Disconnect Notify",
+      "to": "idle"
+    },
+    {
+      "from": "established",
+      "event": "Telco disconnect",
+      "action": "Send Call Disconnect Notify",
+      "to": "idle"
+    },
+    {
+      "from": "established",
+      "event": "Local terminate",
+      "action": "Send Call Disconnect Notify",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Open Indication",
+      "action": "Send Outgoing Call Request",
+      "to": "wait_reply"
+    },
+    {
+      "from": "wait_reply",
+      "event": "Receive Outgoing Call Reply with Error",
+      "action": "",
+      "to": "idle"
+    },
+    {
+      "from": "wait_reply",
+      "event": "Receive Outgoing Call Reply No Error",
+      "action": "",
+      "to": "established"
+    },
+    {
+      "from": "Initial Window Size",
+      "event": "",
+      "action": "The initial window size on the transmitter is set to half the maximum size the receiver requested, with a minimum size of one packet.",
+      "to": "Initial Window Size"
+    },
+    {
+      "from": "Initial Window Size",
+      "event": "successful transmission of a window's worth of packets without a time-out",
+      "action": "The transmit window size is increased by one packet until it reaches the maximum window size that was sent by the other side when the call was connected.",
+      "to": "Opening the Window"
+    },
+    {
+      "from": "Initial Window Size",
+      "event": "time-out does occur on a packet",
+      "action": "The sender adjusts the size of the transmit window down to one half its value when it failed.",
+      "to": "Closing the Window"
+    },
+    {
+      "from": "Closing the Window",
+      "event": "successful transmission of a window's worth of packets without a time-out",
+      "action": "The transmit window size is increased by one packet until it reaches the maximum window size that was sent by the other side when the call was connected.",
+      "to": "Opening the Window"
+    },
+    {
+      "from": "Opening the Window",
+      "event": "time-out does occur on a packet",
+      "action": "The sender adjusts the size of the transmit window down to one half its value when it failed.",
+      "to": "Closing the Window"
+    },
+    {
+      "from": "Closing the Window",
+      "event": "",
+      "action": "Fractions are rounded up, and the minimum window size is one.",
+      "to": "Closing the Window"
+    },
+    {
+      "from": "Opening the Window",
+      "event": "",
+      "action": "The transmit window size is increased by one packet until it reaches the maximum window size that was sent by the other side when the call was connected.",
+      "to": "Opening the Window"
+    },
+    {
+      "from": "Window Overflow",
+      "event": "",
+      "action": "Excess packets are thrown away.",
+      "to": "Window Overflow"
+    },
+    {
+      "from": "Multi-packet Acknowledgment",
+      "event": "",
+      "action": "All outstanding packets with a sequence number lower or equal to the acknowledgment number are considered acknowledged.",
+      "to": "Multi-packet Acknowledgment"
+    },
+    {
+      "from": "Out-of-sequence Packets",
+      "event": "",
+      "action": "Out of sequence packets between the PNS and PAC MUST be silently discarded, or they may be reordered by the receiver.",
+      "to": "Out-of-sequence Packets"
+    },
+    {
+      "from": "Acknowledgment Time-Outs",
+      "event": "",
+      "action": "The time-out mechanism proposed here has the following properties: Independent time-outs for each session, An administrator-adjustable maximum time-out, MaxTimeOut, unique to each device, An adaptive time-out mechanism that compensates for changing throughput, Timer backoff on time-out to reduce congestion.",
+      "to": "Acknowledgment Time-Outs"
+    },
+    {
+      "from": "Congestion Control",
+      "event": "time-out occurs",
+      "action": "The time-out value should be adjusted rapidly upward.",
+      "to": "Congestion Control"
+    }
+  ]
+}

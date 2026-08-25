@@ -1,0 +1,10 @@
+{
+  "states": [
+    "User location",
+    "User availability",
+    "User capabilities",
+    "Session setup",
+    "Session management"
+  ],
+  "transitions": []
+}

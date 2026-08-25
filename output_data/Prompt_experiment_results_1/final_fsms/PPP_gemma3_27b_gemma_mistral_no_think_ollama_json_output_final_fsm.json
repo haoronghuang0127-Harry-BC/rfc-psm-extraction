@@ -1,0 +1,448 @@
+{
+  "states": [
+    "Link Control Protocol (LCP)",
+    "Dead",
+    "Establish",
+    "OPENED",
+    "Authenticate",
+    "Network-Layer Protocol",
+    "CLOSING",
+    "Terminate",
+    "Initial",
+    "Starting",
+    "Closed",
+    "Stopped",
+    "Req-Sent",
+    "Ack-Rcvd",
+    "Ack-Sent",
+    "Opened"
+  ],
+  "transitions": [
+    {
+      "from": "Link Control Protocol (LCP)",
+      "event": "automatic agreement upon encapsulation format options",
+      "action": "handle varying limits on sizes of packets",
+      "to": "Link Control Protocol (LCP)"
+    },
+    {
+      "from": "Link Control Protocol (LCP)",
+      "event": "detect a looped-back link",
+      "action": "terminate the link",
+      "to": "Link Control Protocol (LCP)"
+    },
+    {
+      "from": "Link Control Protocol (LCP)",
+      "event": "detect misconfiguration errors",
+      "action": "terminate the link",
+      "to": "Link Control Protocol (LCP)"
+    },
+    {
+      "from": "Link Control Protocol (LCP)",
+      "event": "authentication of the identity of its peer",
+      "action": "determine when a link is functioning properly",
+      "to": "Link Control Protocol (LCP)"
+    },
+    {
+      "from": "Link Control Protocol (LCP)",
+      "event": "determine when a link is failing",
+      "action": "terminate the link",
+      "to": "Link Control Protocol (LCP)"
+    },
+    {
+      "from": "Link Control Protocol (LCP)",
+      "event": "option negotiation",
+      "action": "communicate improvements to the default configuration",
+      "to": "Link Control Protocol (LCP)"
+    },
+    {
+      "from": "Link Control Protocol (LCP)",
+      "event": "explicit configuration of options",
+      "action": "enable the link to operate in environments where it would otherwise be impossible",
+      "to": "Link Control Protocol (LCP)"
+    },
+    {
+      "from": "Dead",
+      "event": "carrier detection or network administrator configuration",
+      "action": "",
+      "to": "Establish"
+    },
+    {
+      "from": "Establish",
+      "event": "Configure-Ack packet sent and received",
+      "action": "",
+      "to": "OPENED"
+    },
+    {
+      "from": "OPENED",
+      "event": "FAIL",
+      "action": "",
+      "to": "Dead"
+    },
+    {
+      "from": "OPENED",
+      "event": "FAIL",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "Authenticate",
+      "event": "FAIL",
+      "action": "proceed to the Link Termination phase",
+      "to": "Terminate"
+    },
+    {
+      "from": "Authenticate",
+      "event": "authentication has completed",
+      "action": "",
+      "to": "Network-Layer Protocol"
+    },
+    {
+      "from": "Network-Layer Protocol",
+      "event": "Configure-Request",
+      "action": "return to the Link Establishment phase",
+      "to": "Establish"
+    },
+    {
+      "from": "Network-Layer Protocol",
+      "event": "Configure-Request",
+      "action": "return to the Link Establishment phase",
+      "to": "Establish"
+    },
+    {
+      "from": "CLOSING",
+      "event": "",
+      "action": "inform the network-layer protocols",
+      "to": "Dead"
+    },
+    {
+      "from": "Terminate",
+      "event": "",
+      "action": "",
+      "to": "Dead"
+    },
+    {
+      "from": "Initial",
+      "event": "Up",
+      "action": "irc,scr/6",
+      "to": "Starting"
+    },
+    {
+      "from": "Initial",
+      "event": "Down",
+      "action": "",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "Open",
+      "action": "tls/1",
+      "to": "Starting"
+    },
+    {
+      "from": "Initial",
+      "event": "Close",
+      "action": "",
+      "to": "Initial"
+    },
+    {
+      "from": "Starting",
+      "event": "Down",
+      "action": "tls/1",
+      "to": "Starting"
+    },
+    {
+      "from": "Starting",
+      "event": "Open",
+      "action": "1",
+      "to": "Starting"
+    },
+    {
+      "from": "Starting",
+      "event": "Close",
+      "action": "tlf/0",
+      "to": "Initial"
+    },
+    {
+      "from": "Closed",
+      "event": "Up",
+      "action": "",
+      "to": "Closed"
+    },
+    {
+      "from": "Closed",
+      "event": "Down",
+      "action": "0",
+      "to": "Closed"
+    },
+    {
+      "from": "Closed",
+      "event": "Open",
+      "action": "irc,scr/6",
+      "to": "Starting"
+    },
+    {
+      "from": "Closed",
+      "event": "Close",
+      "action": "2",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "Up",
+      "action": "",
+      "to": "Stopped"
+    },
+    {
+      "from": "Stopped",
+      "event": "Down",
+      "action": "tls/1",
+      "to": "Starting"
+    },
+    {
+      "from": "Stopped",
+      "event": "Open",
+      "action": "1",
+      "to": "Starting"
+    },
+    {
+      "from": "Stopped",
+      "event": "Close",
+      "action": "2",
+      "to": "Stopped"
+    },
+    {
+      "from": "Closing",
+      "event": "Up",
+      "action": "",
+      "to": "Closing"
+    },
+    {
+      "from": "Closing",
+      "event": "Down",
+      "action": "0",
+      "to": "Closing"
+    },
+    {
+      "from": "Closing",
+      "event": "Open",
+      "action": "5r",
+      "to": "Closing"
+    },
+    {
+      "from": "Closing",
+      "event": "Close",
+      "action": "4",
+      "to": "Closing"
+    },
+    {
+      "from": "Closing",
+      "event": "TO+",
+      "action": "str/4",
+      "to": "Closing"
+    },
+    {
+      "from": "Closing",
+      "event": "TO-",
+      "action": "tlf/2",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopping",
+      "event": "Up",
+      "action": "",
+      "to": "Stopping"
+    },
+    {
+      "from": "Stopping",
+      "event": "Down",
+      "action": "1",
+      "to": "Stopping"
+    },
+    {
+      "from": "Stopping",
+      "event": "Open",
+      "action": "5r",
+      "to": "Stopping"
+    },
+    {
+      "from": "Stopping",
+      "event": "Close",
+      "action": "4",
+      "to": "Stopping"
+    },
+    {
+      "from": "Stopping",
+      "event": "TO+",
+      "action": "str/5",
+      "to": "Stopping"
+    },
+    {
+      "from": "Stopping",
+      "event": "TO-",
+      "action": "tlf/3",
+      "to": "Stopped"
+    },
+    {
+      "from": "Req-Sent",
+      "event": "Up",
+      "action": "",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Req-Sent",
+      "event": "Down",
+      "action": "1",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Req-Sent",
+      "event": "Open",
+      "action": "6",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Req-Sent",
+      "event": "Close",
+      "action": "irc,str/4",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Req-Sent",
+      "event": "TO+",
+      "action": "scr/6",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Req-Sent",
+      "event": "TO-",
+      "action": "tlf/3p",
+      "to": "Stopped"
+    },
+    {
+      "from": "Ack-Rcvd",
+      "event": "Up",
+      "action": "",
+      "to": "Ack-Rcvd"
+    },
+    {
+      "from": "Ack-Rcvd",
+      "event": "Down",
+      "action": "1",
+      "to": "Ack-Rcvd"
+    },
+    {
+      "from": "Ack-Rcvd",
+      "event": "Open",
+      "action": "7",
+      "to": "Ack-Rcvd"
+    },
+    {
+      "from": "Ack-Rcvd",
+      "event": "Close",
+      "action": "irc,str/4",
+      "to": "Ack-Rcvd"
+    },
+    {
+      "from": "Ack-Rcvd",
+      "event": "TO+",
+      "action": "scr/6",
+      "to": "Ack-Rcvd"
+    },
+    {
+      "from": "Ack-Rcvd",
+      "event": "TO-",
+      "action": "tlf/3p",
+      "to": "Stopped"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "Up",
+      "action": "",
+      "to": "Ack-Sent"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "Down",
+      "action": "1",
+      "to": "Ack-Sent"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "Open",
+      "action": "8",
+      "to": "Ack-Sent"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "Close",
+      "action": "irc,str/4",
+      "to": "Ack-Sent"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "TO+",
+      "action": "scr/8",
+      "to": "Ack-Sent"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "TO-",
+      "action": "tlf/3p",
+      "to": "Stopped"
+    },
+    {
+      "from": "Opened",
+      "event": "Up",
+      "action": "",
+      "to": "Opened"
+    },
+    {
+      "from": "Opened",
+      "event": "Down",
+      "action": "tld/1",
+      "to": "Stopped"
+    },
+    {
+      "from": "Opened",
+      "event": "Open",
+      "action": "9r",
+      "to": "Opened"
+    },
+    {
+      "from": "Opened",
+      "event": "Close",
+      "action": "tld,irc,str/4",
+      "to": "Opened"
+    },
+    {
+      "from": "Opened",
+      "event": "Terminate-Request",
+      "action": "transmit Terminate-Ack",
+      "to": "Closed"
+    },
+    {
+      "from": "Closed",
+      "event": "unelicited Terminate-Ack",
+      "action": "",
+      "to": "Closed"
+    },
+    {
+      "from": "Opened",
+      "event": "Echo-Request",
+      "action": "transmit Echo-Reply",
+      "to": "Opened"
+    },
+    {
+      "from": "Opened",
+      "event": "Code-Reject",
+      "action": "report problem and drop the connection",
+      "to": "Closed"
+    },
+    {
+      "from": "Opened",
+      "event": "Protocol-Reject",
+      "action": "stop sending packets",
+      "to": "Opened"
+    }
+  ]
+}

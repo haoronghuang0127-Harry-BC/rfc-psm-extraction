@@ -1,0 +1,128 @@
+{
+  "states": [
+    "early",
+    "confirmed",
+    "terminated",
+    "stateful",
+    "stateless",
+    "Calling",
+    "Proceeding",
+    "Completed"
+  ],
+  "transitions": [
+    {
+      "from": "early",
+      "event": "",
+      "action": "2xx final response arrives",
+      "to": "confirmed"
+    },
+    {
+      "from": "early",
+      "event": "other responses or no response arrives",
+      "action": "terminate",
+      "to": "terminated"
+    },
+    {
+      "from": "early",
+      "event": "",
+      "action": "dialog transitioned to confirmed state",
+      "to": "confirmed"
+    },
+    {
+      "from": "early",
+      "event": "non-2xx final response",
+      "action": "all early dialogs terminated",
+      "to": "terminated"
+    },
+    {
+      "from": "stateful",
+      "event": "",
+      "action": "transition to stateless operation",
+      "to": "stateless"
+    },
+    {
+      "from": "Calling",
+      "event": "INVITE from TU",
+      "action": "",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer A fires",
+      "action": "retransmit request, reset timer",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "Transport Err.",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "2xx",
+      "action": "pass response to TU, destroy transaction",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "1xx",
+      "action": "pass response to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Calling",
+      "event": "300-699",
+      "action": "pass response to TU, generate ACK",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer B fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Transport Err.",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx",
+      "action": "pass response to TU, destroy transaction",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "1xx",
+      "action": "pass response to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699",
+      "action": "pass response to TU, generate ACK",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer D fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Transport Err.",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "retransmission of final response received",
+      "action": "re-pass ACK to transport",
+      "to": "Completed"
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "states": [
+    "Play state",
+    "Play Out",
+    "RTSP session",
+    "idle",
+    "request",
+    "response",
+    "Initial",
+    "Request Line",
+    "Header Section",
+    "Message Body",
+    "Message Body Present",
+    "Content-Type and Content-Length Required",
+    "406 (Not Acceptable) Error",
+    "415 (Unsupported Media Type)",
+    "RTSP Session Context",
+    "Processing Request",
+    "Sender",
+    "Receiver",
+    "RTSP 1.0",
+    "RTSP 2.0",
+    "Play State"
+  ],
+  "transitions": [
+    {
+      "from": "Play state",
+      "event": "PLAY method",
+      "action": "",
+      "to": "Play Out"
+    },
+    {
+      "from": "RTSP session",
+      "event": "SETUP request",
+      "action": "200 OK response",
+      "to": "RTSP session"
+    },
+    {
+      "from": "RTSP session",
+      "event": "TEARDOWN request",
+      "action": "",
+      "to": ""
+    },
+    {
+      "from": "idle",
+      "event": "",
+      "action": "",
+      "to": "request"
+    },
+    {
+      "from": "request",
+      "event": "",
+      "action": "",
+      "to": "response"
+    },
+    {
+      "from": "response",
+      "event": "",
+      "action": "",
+      "to": "idle"
+    },
+    {
+      "from": "Initial",
+      "event": "",
+      "action": "",
+      "to": "Request Line"
+    },
+    {
+      "from": "Request Line",
+      "event": "",
+      "action": "",
+      "to": "Header Section"
+    },
+    {
+      "from": "Header Section",
+      "event": "",
+      "action": "",
+      "to": "Message Body"
+    },
+    {
+      "from": "Message Body Present",
+      "event": "Content-Type and Content-Length headers",
+      "action": "Include Content-Type and Content-Length headers",
+      "to": "Content-Type and Content-Length Required"
+    },
+    {
+      "from": "Content-Type and Content-Length Required",
+      "event": "Responder does not support specified formats",
+      "action": "Respond with a 406 (Not Acceptable) error code",
+      "to": "406 (Not Acceptable) Error"
+    },
+    {
+      "from": "Content-Type and Content-Length Required",
+      "event": "Responder does not support the media type of the message body",
+      "action": "Respond with a 415 (Unsupported Media Type)",
+      "to": "415 (Unsupported Media Type)"
+    },
+    {
+      "from": "Processing Request",
+      "event": "",
+      "action": "MUST be sent in the order the requests were processed",
+      "to": "Processing Request"
+    },
+    {
+      "from": "Sender",
+      "event": "lack of acknowledgement",
+      "action": "resend message with same sequence number",
+      "to": "Sender"
+    },
+    {
+      "from": "RTSP 1.0",
+      "event": "",
+      "action": "respond with a 505 (RTSP Version Not Supported) status code",
+      "to": "RTSP 2.0"
+    },
+    {
+      "from": "RTSP 2.0",
+      "event": "Play",
+      "action": "takes effect immediately replacing the previous request",
+      "to": "Play State"
+    }
+  ]
+}

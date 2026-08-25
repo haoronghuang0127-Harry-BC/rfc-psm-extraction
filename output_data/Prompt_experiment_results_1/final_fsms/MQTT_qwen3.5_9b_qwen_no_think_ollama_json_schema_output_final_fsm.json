@@ -1,0 +1,69 @@
+{
+  "states": [
+    "TLS:Anon,MQTT:None",
+    "TLS:Anon,MQTT:ace",
+    "TLS:Known(RPK/PSK),MQTT:none",
+    "TLS:Known(RPK/PSK),MQTT:ace",
+    "CONNECT with Authentication Data (token only)",
+    "AUTH 0x18 (Continue Authentication) - Broker Challenge",
+    "AUTH 0x18 (Continue Authentication) - Client Response",
+    "CONNACK Success",
+    "CONNACK Not Authorized"
+  ],
+  "transitions": [
+    {
+      "from": "TLS:Anon,MQTT:None",
+      "event": "",
+      "action": "publish token to authz-info topic",
+      "to": "TLS:Known(RPK/PSK),MQTT:none"
+    },
+    {
+      "from": "TLS:Anon,MQTT:ace",
+      "event": "CONNECT with Authentication Data (token only)",
+      "action": "Broker validates token",
+      "to": "CONNACK Success"
+    },
+    {
+      "from": "TLS:Anon,MQTT:ace",
+      "event": "CONNECT with Authentication Data (token only)",
+      "action": "Broker has no token stored or validation fails",
+      "to": "CONNACK Not Authorized"
+    },
+    {
+      "from": "TLS:Known(RPK/PSK),MQTT:none",
+      "event": "",
+      "action": "Client authenticates using TLS RPK/PSK",
+      "to": "CONNACK Success"
+    },
+    {
+      "from": "TLS:Known(RPK/PSK),MQTT:none",
+      "event": "",
+      "action": "TLS authentication fails",
+      "to": "CONNACK Not Authorized"
+    },
+    {
+      "from": "CONNECT with Authentication Data (token only)",
+      "event": "Broker sends AUTH 0x18",
+      "action": "Broker provides challenge (RS Nonce)",
+      "to": "AUTH 0x18 (Continue Authentication) - Broker Challenge"
+    },
+    {
+      "from": "AUTH 0x18 (Continue Authentication) - Broker Challenge",
+      "event": "Client sends AUTH 0x18 with signature/MAC",
+      "action": "Broker validates token and challenge response",
+      "to": "CONNACK Success"
+    },
+    {
+      "from": "AUTH 0x18 (Continue Authentication) - Broker Challenge",
+      "event": "",
+      "action": "Token validation fails or signature mismatch",
+      "to": "CONNACK Not Authorized"
+    },
+    {
+      "from": "CONNACK Success",
+      "event": "",
+      "action": "Connection established, session active",
+      "to": "CONNACK Success"
+    }
+  ]
+}

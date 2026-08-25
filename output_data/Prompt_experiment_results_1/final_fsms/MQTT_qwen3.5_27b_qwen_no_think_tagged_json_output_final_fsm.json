@@ -1,0 +1,103 @@
+{
+  "states": [
+    "Session",
+    "New Session",
+    "Existing Session",
+    "Session State stored",
+    "Session State discarded",
+    "Session with cached token",
+    "Session without cached token"
+  ],
+  "transitions": [
+    {
+      "from": "Session",
+      "event": "CONNECT packet with Clean Start flag set to 1",
+      "action": "Broker starts a new Session and sets Session Present flag to 0 in CONNACK",
+      "to": "New Session"
+    },
+    {
+      "from": "Session",
+      "event": "CONNECT packet with Clean Start flag set to 0 and existing Session associated with Client Identifier",
+      "action": "Broker resumes communications based on state from existing Session and sets Session Present flag to 1 in CONNACK",
+      "to": "Existing Session"
+    },
+    {
+      "from": "Existing Session",
+      "event": "Client Identifier collision with another Client already connected",
+      "action": "Broker sends DISCONNECT packet with reason code 0x8E (Session taken over) and closes connection to existing Client",
+      "to": "Session"
+    },
+    {
+      "from": "Session State stored",
+      "event": "Client DISCONNECT with Session Expiry Interval set to 0",
+      "action": "Broker doesn't store the Session State but MUST keep the retained messages",
+      "to": "Session State discarded"
+    },
+    {
+      "from": "Session",
+      "event": "CONNECT with Clean flag = 1",
+      "action": "Broker creates a new Session and sets Session Present flag to 0 in CONNACK",
+      "to": "New Session"
+    },
+    {
+      "from": "Session",
+      "event": "CONNECT with Clean flag = 0 and no existing Session for Client Identifier",
+      "action": "Broker creates a new Session and sets Session Present flag to 0 in CONNACK",
+      "to": "New Session"
+    },
+    {
+      "from": "Session",
+      "event": "CONNECT with Clean flag = 0 and existing Session for Client Identifier",
+      "action": "Broker resumes communications based on current Session state and sets Session Present flag to 1 in CONNACK",
+      "to": "Existing Session"
+    },
+    {
+      "from": "New Session",
+      "event": "PUBLISH authorization failure",
+      "action": "Broker ignores PUBLISH packet and disconnects Client",
+      "to": "Session"
+    },
+    {
+      "from": "Existing Session",
+      "event": "PUBLISH authorization failure",
+      "action": "Broker ignores PUBLISH packet and disconnects Client",
+      "to": "Session"
+    },
+    {
+      "from": "New Session",
+      "event": "SUBSCRIBE authorization failure",
+      "action": "Broker returns SUBACK with return code 0x80 for unauthorized topic(s)",
+      "to": "New Session"
+    },
+    {
+      "from": "Existing Session",
+      "event": "SUBSCRIBE authorization failure",
+      "action": "Broker returns SUBACK with return code 0x80 for unauthorized topic(s)",
+      "to": "Existing Session"
+    },
+    {
+      "from": "New Session",
+      "event": "Broker-Client PUBLISH authorization failure due to expired token",
+      "action": "Broker disconnects Client",
+      "to": "Session"
+    },
+    {
+      "from": "Existing Session",
+      "event": "Broker-Client PUBLISH authorization failure due to expired token",
+      "action": "Broker disconnects Client",
+      "to": "Session"
+    },
+    {
+      "from": "Session without cached token",
+      "event": "Broker validates an access token and accepts a connection",
+      "action": "caches the token to authorize a Client's publish and subscribe requests",
+      "to": "Session with cached token"
+    },
+    {
+      "from": "Session with cached token",
+      "event": "access token cannot be validated",
+      "action": "Broker does not cache any tokens",
+      "to": "Session without cached token"
+    }
+  ]
+}

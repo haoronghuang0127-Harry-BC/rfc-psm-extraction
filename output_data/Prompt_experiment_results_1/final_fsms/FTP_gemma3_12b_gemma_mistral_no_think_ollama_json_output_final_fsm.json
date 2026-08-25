@@ -1,0 +1,310 @@
+{
+  "states": [
+    "Connection Establishment",
+    "Login",
+    "Logout",
+    "Transfer parameters",
+    "File action commands",
+    "Informational commands",
+    "Miscellaneous commands",
+    "B",
+    "W",
+    "S",
+    "F",
+    "E",
+    "Initial State",
+    "Connected State",
+    "User Logged In State",
+    "Data Connection Established State",
+    "File Transferring State",
+    "Type Image State",
+    "Access Denied State",
+    "Closing Connections State",
+    "Data Page",
+    "FDB Page"
+  ],
+  "transitions": [
+    {
+      "from": "Connection Establishment",
+      "event": "Connect",
+      "action": "listen",
+      "to": "Login"
+    },
+    {
+      "from": "Connection Establishment",
+      "event": "Connect",
+      "action": "awaiting input",
+      "to": "Connection Establishment"
+    },
+    {
+      "from": "Login",
+      "event": "USER",
+      "action": "send USER command",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "PASS",
+      "action": "send PASS command",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "ACCT",
+      "action": "send ACCT command",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "CWD",
+      "action": "send CWD command",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "CDUP",
+      "action": "send CDUP command",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "SMNT",
+      "action": "send SMNT command",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "REIN",
+      "action": "send REIN command",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "QUIT",
+      "action": "send QUIT command",
+      "to": "Logout"
+    },
+    {
+      "from": "Transfer parameters",
+      "event": "PORT",
+      "action": "send PORT command",
+      "to": "Transfer parameters"
+    },
+    {
+      "from": "Transfer parameters",
+      "event": "PASV",
+      "action": "send PASV command",
+      "to": "Transfer parameters"
+    },
+    {
+      "from": "Transfer parameters",
+      "event": "MODE",
+      "action": "send MODE command",
+      "to": "Transfer parameters"
+    },
+    {
+      "from": "Transfer parameters",
+      "event": "TYPE",
+      "action": "send TYPE command",
+      "to": "Transfer parameters"
+    },
+    {
+      "from": "Transfer parameters",
+      "event": "STRU",
+      "action": "send STRU command",
+      "to": "Transfer parameters"
+    },
+    {
+      "from": "File action commands",
+      "event": "ALLO",
+      "action": "send ALLO command",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "REST",
+      "action": "send REST command",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "STOR",
+      "action": "send STOR command",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "STOU",
+      "action": "send STOU command",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "RETR",
+      "action": "send RETR command",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "LIST",
+      "action": "send LIST command",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "NLST",
+      "action": "send NLST command",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "APPE",
+      "action": "send APPE command",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "RNFR",
+      "action": "send RNFR command",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "RNTO",
+      "action": "send RNTO command",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "ABOR",
+      "action": "send ABOR command",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "DELE",
+      "action": "send DELE command",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "RMD",
+      "action": "send RMD command",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "MKD",
+      "action": "send MKD command",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "PWD",
+      "action": "send PWD command",
+      "to": "File action commands"
+    },
+    {
+      "from": "Informational commands",
+      "event": "SYST",
+      "action": "send SYST command",
+      "to": "Informational commands"
+    },
+    {
+      "from": "Informational commands",
+      "event": "STAT",
+      "action": "send STAT command",
+      "to": "Informational commands"
+    },
+    {
+      "from": "Informational commands",
+      "event": "HELP",
+      "action": "send HELP command",
+      "to": "Informational commands"
+    },
+    {
+      "from": "Miscellaneous commands",
+      "event": "SITE",
+      "action": "send SITE command",
+      "to": "Miscellaneous commands"
+    },
+    {
+      "from": "Miscellaneous commands",
+      "event": "NOOP",
+      "action": "send NOOP command",
+      "to": "Miscellaneous commands"
+    },
+    {
+      "from": "B",
+      "event": "cmd",
+      "action": "W",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "S",
+      "action": "S",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "F",
+      "action": "F",
+      "to": "F"
+    },
+    {
+      "from": "B",
+      "event": "",
+      "action": "E",
+      "to": "E"
+    },
+    {
+      "from": "Initial State",
+      "event": "ftp (host) multics<CR>",
+      "action": "<---- 220 Service ready <CRLF>",
+      "to": "Connected State"
+    },
+    {
+      "from": "Connected State",
+      "event": "username Doe <CR>",
+      "action": "<---- 331 User name ok, need password<CRLF>",
+      "to": "Connected State"
+    },
+    {
+      "from": "Connected State",
+      "event": "password mumble <CR>",
+      "action": "<---- 230 User logged in<CRLF>",
+      "to": "User Logged In State"
+    },
+    {
+      "from": "User Logged In State",
+      "event": "retrieve (local type) ASCII<CR> (local pathname) test 1 <CR> (for. pathname) test.pl1<CR>",
+      "action": "RETR test.pl1<CRLF> ----> <---- 150 File status okay; about to open data connection<CRLF>",
+      "to": "Data Connection Established State"
+    },
+    {
+      "from": "Data Connection Established State",
+      "event": "",
+      "action": "<---- 226 Closing data connection, file transfer successful<CRLF>",
+      "to": "User Logged In State"
+    },
+    {
+      "from": "User Logged In State",
+      "event": "type Image<CR>",
+      "action": "<---- 200 Command OK<CRLF>",
+      "to": "Type Image State"
+    },
+    {
+      "from": "User Logged In State",
+      "event": "store (local type) image<CR> (local pathname) file dump<CR> (for.pathname) >udd>cn>fd<CR>",
+      "action": "<---- 550 Access denied<CRLF>",
+      "to": "Access Denied State"
+    },
+    {
+      "from": "User Logged In State",
+      "event": "terminate",
+      "action": "Server closes all connections.",
+      "to": "Closing Connections State"
+    }
+  ]
+}

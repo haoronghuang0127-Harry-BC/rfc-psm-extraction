@@ -1,0 +1,558 @@
+{
+  "states": [
+    "SMTP client",
+    "SMTP server",
+    "Mail transaction",
+    "Message transmission",
+    "Connection established",
+    "Initial handshaking completed",
+    "Mail data transmission",
+    "Connection shutdown",
+    "Ancillary services",
+    "Session Initiation",
+    "Client Initiation",
+    "Forwarding for Address Correction or Updating",
+    "Commands for Debugging Addresses",
+    "Relaying and Mail Routing",
+    "Mail Gatewaying",
+    "Terminating Sessions and Connections",
+    "Mailing Lists and Aliases",
+    "Initial state",
+    "Mail transaction in progress",
+    "Locating the Target Host",
+    "MX Record Found",
+    "MX Record Not Found",
+    "CNAME Record Found",
+    "Non-existent Domain Error",
+    "Temporary Error",
+    "Empty List of MXs",
+    "Usable MX Records",
+    "Unusable MX Records",
+    "Implicit MX",
+    "Address Resolution Successful",
+    "Address Resolution Failed",
+    "Message Queued",
+    "Message Retried",
+    "Message Relayed",
+    "Message Delivered",
+    "Message Handed Off",
+    "Message Returned as Undeliverable",
+    "Message Accepted",
+    "Delivery Failure",
+    "Loop Detection",
+    "Message Rejection",
+    "Message Dropping",
+    "Message Repair",
+    "SMTP Server",
+    "SMTP Client",
+    "Ready",
+    "Relayed Mail",
+    "Verifying and Sending"
+  ],
+  "transitions": [
+    {
+      "from": "SMTP client",
+      "event": "Message to transmit",
+      "action": "Establishes a two-way transmission channel to an SMTP server",
+      "to": "Connection established"
+    },
+    {
+      "from": "Connection established",
+      "event": "Initial handshaking completed",
+      "action": "SMTP client initiates a mail transaction",
+      "to": "Mail transaction"
+    },
+    {
+      "from": "Mail transaction",
+      "event": "Commands to specify originator and destination",
+      "action": "Transmission of the message content",
+      "to": "Message transmission"
+    },
+    {
+      "from": "Message transmission",
+      "event": "Mail data transmission",
+      "action": "Server responds with a reply",
+      "to": "Mail transaction"
+    },
+    {
+      "from": "Mail transaction",
+      "event": "Request connection shutdown",
+      "action": "Connection shutdown",
+      "to": "Connection shutdown"
+    },
+    {
+      "from": "Mail transaction",
+      "event": "Initiate other mail transactions",
+      "action": "Continue mail transactions",
+      "to": "Mail transaction"
+    },
+    {
+      "from": "Mail transaction",
+      "event": "Use connection for ancillary services",
+      "action": "Perform ancillary services",
+      "to": "Ancillary services"
+    },
+    {
+      "from": "Session Initiation",
+      "event": "QUIT",
+      "action": "close the connection",
+      "to": "Terminating Sessions and Connections"
+    },
+    {
+      "from": "Session Initiation",
+      "event": "EHLO",
+      "action": "respond with list of supported extensions",
+      "to": "Client Initiation"
+    },
+    {
+      "from": "Session Initiation",
+      "event": "HELO",
+      "action": "respond with greeting",
+      "to": "Client Initiation"
+    },
+    {
+      "from": "Client Initiation",
+      "event": "MAIL",
+      "action": "reset state tables and buffers",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RCPT",
+      "action": "store forward-path",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "DATA",
+      "action": "transfer mail data",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "VRFY",
+      "action": "verify user name or obtain content of mailing list",
+      "to": "Commands for Debugging Addresses"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "EXPN",
+      "action": "expand mailing list",
+      "to": "Commands for Debugging Addresses"
+    },
+    {
+      "from": "Commands for Debugging Addresses",
+      "event": "VRFY",
+      "action": "return user information",
+      "to": "Commands for Debugging Addresses"
+    },
+    {
+      "from": "Commands for Debugging Addresses",
+      "event": "EXPN",
+      "action": "return mailing list content",
+      "to": "Commands for Debugging Addresses"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "forwarding",
+      "action": "forward message",
+      "to": "Forwarding for Address Correction or Updating"
+    },
+    {
+      "from": "Forwarding for Address Correction or Updating",
+      "event": "forwarding",
+      "action": "forward message",
+      "to": "Forwarding for Address Correction or Updating"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "relaying",
+      "action": "relay message",
+      "to": "Relaying and Mail Routing"
+    },
+    {
+      "from": "Relaying and Mail Routing",
+      "event": "relaying",
+      "action": "relay message",
+      "to": "Relaying and Mail Routing"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "gatewaying",
+      "action": "gateway message",
+      "to": "Mail Gatewaying"
+    },
+    {
+      "from": "Mail Gatewaying",
+      "event": "gatewaying",
+      "action": "gateway message",
+      "to": "Mail Gatewaying"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "QUIT",
+      "action": "close the connection",
+      "to": "Terminating Sessions and Connections"
+    },
+    {
+      "from": "Mailing Lists and Aliases",
+      "event": "MAIL",
+      "action": "change return address in the envelope",
+      "to": "Mailing Lists and Aliases"
+    },
+    {
+      "from": "Initial state",
+      "event": "EHLO",
+      "action": "250 OK",
+      "to": "Initial state"
+    },
+    {
+      "from": "Initial state",
+      "event": "HELO",
+      "action": "250 OK",
+      "to": "Initial state"
+    },
+    {
+      "from": "Initial state",
+      "event": "MAIL",
+      "action": "250 OK",
+      "to": "Mail transaction in progress"
+    },
+    {
+      "from": "Mail transaction in progress",
+      "event": "RCPT",
+      "action": "250 OK",
+      "to": "Mail transaction in progress"
+    },
+    {
+      "from": "Mail transaction in progress",
+      "event": "DATA",
+      "action": "354 Start mail input",
+      "to": "Mail transaction in progress"
+    },
+    {
+      "from": "Mail transaction in progress",
+      "event": "<CRLF>.<CRLF>",
+      "action": "250 OK",
+      "to": "Initial state"
+    },
+    {
+      "from": "Mail transaction in progress",
+      "event": "RSET",
+      "action": "250 OK",
+      "to": "Initial state"
+    },
+    {
+      "from": "Mail transaction in progress",
+      "event": "QUIT",
+      "action": "221 OK",
+      "to": "Initial state"
+    },
+    {
+      "from": "Initial state",
+      "event": "QUIT",
+      "action": "221 OK",
+      "to": "Initial state"
+    },
+    {
+      "from": "Locating the Target Host",
+      "event": "MX record found",
+      "action": "Process MX record",
+      "to": "MX Record Found"
+    },
+    {
+      "from": "Locating the Target Host",
+      "event": "CNAME record found",
+      "action": "Process CNAME record",
+      "to": "CNAME Record Found"
+    },
+    {
+      "from": "Locating the Target Host",
+      "event": "Non-existent domain error",
+      "action": "Report error",
+      "to": "Non-existent Domain Error"
+    },
+    {
+      "from": "Locating the Target Host",
+      "event": "Temporary error",
+      "action": "Queue message",
+      "to": "Temporary Error"
+    },
+    {
+      "from": "Locating the Target Host",
+      "event": "Empty list of MXs",
+      "action": "Treat as implicit MX",
+      "to": "Empty List of MXs"
+    },
+    {
+      "from": "MX Record Found",
+      "event": "MX records are usable",
+      "action": "Use MX records",
+      "to": "Usable MX Records"
+    },
+    {
+      "from": "MX Record Found",
+      "event": "MX records are not usable",
+      "action": "Report error",
+      "to": "Unusable MX Records"
+    },
+    {
+      "from": "Empty List of MXs",
+      "event": "Implicit MX is usable",
+      "action": "Use implicit MX",
+      "to": "Implicit MX"
+    },
+    {
+      "from": "Empty List of MXs",
+      "event": "Implicit MX is not usable",
+      "action": "Report error",
+      "to": "Unusable MX Records"
+    },
+    {
+      "from": "Usable MX Records",
+      "event": "Address resolution successful",
+      "action": "Proceed with delivery",
+      "to": "Address Resolution Successful"
+    },
+    {
+      "from": "Usable MX Records",
+      "event": "Address resolution failed",
+      "action": "Report error",
+      "to": "Address Resolution Failed"
+    },
+    {
+      "from": "Temporary Error",
+      "event": "Retry attempt",
+      "action": "Retry delivery",
+      "to": "Message Retried"
+    },
+    {
+      "from": "Message Retried",
+      "event": "Delivery successful",
+      "action": "Proceed with delivery",
+      "to": "Message Delivered"
+    },
+    {
+      "from": "Message Retried",
+      "event": "Delivery failed",
+      "action": "Report error",
+      "to": "Address Resolution Failed"
+    },
+    {
+      "from": "Address Resolution Successful",
+      "event": "Message relayed",
+      "action": "Relay message",
+      "to": "Message Relayed"
+    },
+    {
+      "from": "Address Resolution Successful",
+      "event": "Message delivered",
+      "action": "Deliver message",
+      "to": "Message Delivered"
+    },
+    {
+      "from": "Address Resolution Successful",
+      "event": "Message handed off",
+      "action": "Hand off message",
+      "to": "Message Handed Off"
+    },
+    {
+      "from": "Unusable MX Records",
+      "event": "",
+      "action": "Return message as undeliverable",
+      "to": "Message Returned as Undeliverable"
+    },
+    {
+      "from": "Address Resolution Failed",
+      "event": "",
+      "action": "Return message as undeliverable",
+      "to": "Message Returned as Undeliverable"
+    },
+    {
+      "from": "Message Accepted",
+      "event": "Delivery Failure",
+      "action": "Formulate and mail a notification message",
+      "to": "Delivery Failure"
+    },
+    {
+      "from": "Message Accepted",
+      "event": "Loop Detection",
+      "action": "Reject the message",
+      "to": "Loop Detection"
+    },
+    {
+      "from": "Message Accepted",
+      "event": "Message contains hostile content",
+      "action": "Do not send non-delivery messages",
+      "to": "Message Rejection"
+    },
+    {
+      "from": "Message Accepted",
+      "event": "Message is unwanted or unsolicited",
+      "action": "Drop the message without notification",
+      "to": "Message Dropping"
+    },
+    {
+      "from": "Message Accepted",
+      "event": "Message is ill-formed",
+      "action": "Attempt to repair the message",
+      "to": "Message Repair"
+    },
+    {
+      "from": "SMTP Server",
+      "event": "VRFY or EXPN disabled",
+      "action": "return 252 response",
+      "to": "SMTP Server"
+    },
+    {
+      "from": "SMTP Server",
+      "event": "VRFY or EXPN enabled",
+      "action": "return 250 or 550 response",
+      "to": "SMTP Server"
+    },
+    {
+      "from": "SMTP Server",
+      "event": "RCPT command with multiple addresses",
+      "action": "do not copy full set of RCPT command arguments into the header section",
+      "to": "SMTP Server"
+    },
+    {
+      "from": "SMTP Server",
+      "event": "RCPT command with blind copies",
+      "action": "send each blind copy as a separate message transaction",
+      "to": "SMTP Server"
+    },
+    {
+      "from": "SMTP Server",
+      "event": "251 or 551 reply codes",
+      "action": "update future behavior",
+      "to": "SMTP Server"
+    },
+    {
+      "from": "SMTP Server",
+      "event": "large number of RCPT TO commands with invalid addresses",
+      "action": "close the connection",
+      "to": "SMTP Server"
+    },
+    {
+      "from": "SMTP Server",
+      "event": "policy reasons",
+      "action": "use 550 code in response to EHLO, MAIL, or RCPT",
+      "to": "SMTP Server"
+    },
+    {
+      "from": "SMTP Client",
+      "event": "251 or 551 reply codes",
+      "action": "verify server's authenticity",
+      "to": "SMTP Client"
+    },
+    {
+      "from": "Ready",
+      "event": "EHLO",
+      "action": "250-foo.com greets bar.com\n250-8BITMIME\n250-SIZE\n250-DSN\n250 HELP",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "MAIL FROM",
+      "action": "250 OK",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RCPT TO",
+      "action": "250 OK",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RCPT TO",
+      "action": "550 No such user here",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "DATA",
+      "action": "354 Start mail input; end with <CRLF>.<CRLF>",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "QUIT",
+      "action": "221 foo.com Service closing transmission channel",
+      "to": "Ready"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RSET",
+      "action": "250 OK",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "EHLO",
+      "action": "250 xyz.com is on the air",
+      "to": "Relayed Mail"
+    },
+    {
+      "from": "Relayed Mail",
+      "event": "MAIL FROM",
+      "action": "250 OK",
+      "to": "Relayed Mail"
+    },
+    {
+      "from": "Relayed Mail",
+      "event": "RCPT TO",
+      "action": "250 OK",
+      "to": "Relayed Mail"
+    },
+    {
+      "from": "Relayed Mail",
+      "event": "DATA",
+      "action": "354 Start mail input; end with <CRLF>.<CRLF>",
+      "to": "Relayed Mail"
+    },
+    {
+      "from": "Relayed Mail",
+      "event": "QUIT",
+      "action": "221 foo.com Service closing transmission channel",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "EHLO",
+      "action": "250-foo.com greets bar.com\n250-8BITMIME\n250-SIZE\n250-DSN\n250-VRFY\n250 HELP",
+      "to": "Verifying and Sending"
+    },
+    {
+      "from": "Verifying and Sending",
+      "event": "VRFY",
+      "action": "250 Mark Crispin <Admin.MRC@foo.com>",
+      "to": "Verifying and Sending"
+    },
+    {
+      "from": "Verifying and Sending",
+      "event": "MAIL FROM",
+      "action": "250 OK",
+      "to": "Verifying and Sending"
+    },
+    {
+      "from": "Verifying and Sending",
+      "event": "RCPT TO",
+      "action": "250 OK",
+      "to": "Verifying and Sending"
+    },
+    {
+      "from": "Verifying and Sending",
+      "event": "DATA",
+      "action": "354 Start mail input; end with <CRLF>.<CRLF>",
+      "to": "Verifying and Sending"
+    },
+    {
+      "from": "Verifying and Sending",
+      "event": "QUIT",
+      "action": "221 foo.com Service closing transmission channel",
+      "to": "Ready"
+    }
+  ]
+}

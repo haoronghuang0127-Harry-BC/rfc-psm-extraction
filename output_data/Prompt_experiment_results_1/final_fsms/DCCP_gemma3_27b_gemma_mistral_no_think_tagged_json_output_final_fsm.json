@@ -1,0 +1,443 @@
+{
+  "states": [
+    "connection setup",
+    "connection teardown",
+    "already-finished connections",
+    "DCCP A",
+    "DCCP B",
+    "HC-Sender",
+    "HC-Receiver",
+    "CLOSED",
+    "LISTEN",
+    "REQUEST",
+    "RESPOND",
+    "PARTOPEN",
+    "OPEN",
+    "CLOSEREQ",
+    "CLOSING",
+    "TIMEWAIT",
+    "Aborted",
+    "No Connection",
+    "STABLE",
+    "CHANGING",
+    "UNSTABLE",
+    "receiving packets with Checksum Coverage set to 1",
+    "fully covered application data accepted",
+    "New connection",
+    "Established connection",
+    "ECN capable",
+    "ECN incapable",
+    "PMTU Discovery",
+    "Upward Probing"
+  ],
+  "transitions": [
+    {
+      "from": "connection setup",
+      "event": "reliable handshakes",
+      "action": "",
+      "to": "connection teardown"
+    },
+    {
+      "from": "connection setup",
+      "event": "negotiation of options",
+      "action": "",
+      "to": "connection setup"
+    },
+    {
+      "from": "already-finished connections",
+      "event": "",
+      "action": "avoid holding state",
+      "to": "already-finished connections"
+    },
+    {
+      "from": "CLOSED",
+      "event": "DCCP-Request",
+      "action": "",
+      "to": "REQUEST"
+    },
+    {
+      "from": "LISTEN",
+      "event": "DCCP-Request",
+      "action": "",
+      "to": "RESPOND"
+    },
+    {
+      "from": "REQUEST",
+      "event": "DCCP-Response",
+      "action": "",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "DCCP-Ack or DCCP-DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "DCCP-Ack or DCCP-DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "DCCP-Data, DCCP-Ack, DCCP-DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "DCCP-CloseReq",
+      "action": "",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "DCCP-Close",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "DCCP-Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "REQUEST",
+      "event": "DCCP-Response",
+      "action": "",
+      "to": "Closed"
+    },
+    {
+      "from": "Closed",
+      "event": "DCCP-Close",
+      "action": "elicit a DCCP-Reset packet",
+      "to": "Closed"
+    },
+    {
+      "from": "Closed",
+      "event": "DCCP-Reset",
+      "action": "",
+      "to": "Closed"
+    },
+    {
+      "from": "Aborted",
+      "event": "",
+      "action": "",
+      "to": "Aborted"
+    },
+    {
+      "from": "No Connection",
+      "event": "DCCP-Request",
+      "action": "",
+      "to": "No Connection"
+    },
+    {
+      "from": "REQUEST",
+      "event": "DCCP-Reset with Reset Code 4",
+      "action": "",
+      "to": "No Connection"
+    },
+    {
+      "from": "REQUEST",
+      "event": "DCCP-Reset with Reset Code 5",
+      "action": "",
+      "to": "No Connection"
+    },
+    {
+      "from": "REQUEST",
+      "event": "DCCP-Reset with Reset Code 6",
+      "action": "",
+      "to": "No Connection"
+    },
+    {
+      "from": "STABLE",
+      "event": "app/protocol evt : snd Change L",
+      "action": "Set F.state := STABLE",
+      "to": "CHANGING"
+    },
+    {
+      "from": "CHANGING",
+      "event": "rcv Change R",
+      "action": "calculate new value, Send Confirm L",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "rcv Confirm R",
+      "action": "Set F.value := new value",
+      "to": "STABLE"
+    },
+    {
+      "from": "STABLE",
+      "event": "pref list changes",
+      "action": "",
+      "to": "UNSTABLE"
+    },
+    {
+      "from": "UNSTABLE",
+      "event": "snd Change L",
+      "action": "",
+      "to": "CHANGING"
+    },
+    {
+      "from": "receiving packets with Checksum Coverage set to 1",
+      "event": "Data Dropped options (Drop Code 0, Protocol Constraints)",
+      "action": "report the packet",
+      "to": "fully covered application data accepted"
+    },
+    {
+      "from": "fully covered application data accepted",
+      "event": "Change R(Minimum Checksum Coverage, 1)",
+      "action": "check whether B is willing to accept packets with Checksum Coverage set to 1",
+      "to": "receiving packets with Checksum Coverage set to 1"
+    },
+    {
+      "from": "New connection",
+      "event": "Mandatory Change(CCID) options on first packets",
+      "action": "negotiate CCID",
+      "to": "Established connection"
+    },
+    {
+      "from": "bidirectional connection",
+      "event": "DCCP B goes quiescent",
+      "action": "DCCP B stops sending data and sends only DCCP-Ack packets to DCCP A",
+      "to": "unidirectional connection"
+    },
+    {
+      "from": "unidirectional connection",
+      "event": "DCCP B sends a single DCCP-Data or DCCP-DataAck packet",
+      "action": "DCCP A switches ack pattern",
+      "to": "bidirectional connection"
+    },
+    {
+      "from": "ECN capable",
+      "event": "Change L(ECN Inapable, 1)",
+      "action": "inform receiver that A cannot read ECN bits",
+      "to": "ECN incapable"
+    },
+    {
+      "from": "ECN incapable",
+      "event": "Confirm R(ECN Incapable, 1)",
+      "action": "MUST NOT accept any data",
+      "to": "ECN incapable"
+    },
+    {
+      "from": "ECN incapable",
+      "event": "Data Dropped options",
+      "action": "with Drop Code 0 (\"protocol constraints\")",
+      "to": "ECN incapable"
+    },
+    {
+      "from": "ECN capable",
+      "event": "ECN Incapable/A is one",
+      "action": "all of DCCP B's packets MUST be sent as ECN incapable",
+      "to": "ECN incapable"
+    },
+    {
+      "from": "ECN incapable",
+      "event": "packets to an ECN-incapable receiver",
+      "action": "MUST send its packets as ECN incapable",
+      "to": "ECN incapable"
+    },
+    {
+      "from": "ECN capable",
+      "event": "ECN Incapable feature is unimplemented",
+      "action": "acting as if all connections were ECN capable",
+      "to": "ECN capable"
+    },
+    {
+      "from": "PMTU Discovery",
+      "event": "Datagram Too Big message received",
+      "action": "decrease PMTU to Next-Hop MTU value",
+      "to": "PMTU Discovery"
+    },
+    {
+      "from": "PMTU Discovery",
+      "event": "Datagram Too Big message with MTU = 0",
+      "action": "choose PMTU using RFC1191 Section 7 algorithm",
+      "to": "PMTU Discovery"
+    },
+    {
+      "from": "PMTU Discovery",
+      "event": "Datagram Too Big message with MTU > current PMTU",
+      "action": "ignore message",
+      "to": "PMTU Discovery"
+    },
+    {
+      "from": "PMTU Discovery",
+      "event": "application requests PMTU discovery",
+      "action": "reset PMTU to outgoing interface's MTU, rate limit requests",
+      "to": "PMTU Discovery"
+    },
+    {
+      "from": "PMTU Discovery",
+      "event": "ICMP Datagram Too Big message received",
+      "action": "MAY ignore packet arrival indication, check ECN bits",
+      "to": "PMTU Discovery"
+    },
+    {
+      "from": "PMTU Discovery",
+      "event": "incorrect/missing Sequence Number in ICMP message",
+      "action": "MAY ignore message or temporarily lower PMTU",
+      "to": "PMTU Discovery"
+    },
+    {
+      "from": "PMTU Discovery",
+      "event": "more than three odd Datagram Too Big messages and more than three lost packets",
+      "action": "assume confused router, obey ICMP messages or switch to fragmentation",
+      "to": "PMTU Discovery"
+    },
+    {
+      "from": "Upward Probing",
+      "event": "DCCP-Sync probe sent",
+      "action": "insert arbitrary data, pad packet, expect DCCP-SyncAck",
+      "to": "Upward Probing"
+    },
+    {
+      "from": "HC-Receiver",
+      "event": "Packet with Sequence Number greater than buf_ackno arrives",
+      "action": "updates buf_head, buf_ackno, and possibly buf_nonce, in addition to the buffer itself",
+      "to": "HC-Receiver"
+    },
+    {
+      "from": "HC-Receiver",
+      "event": "Packet with Sequence Number <= buf_ackno arrives",
+      "action": "scan the table for the byte corresponding to S",
+      "to": "HC-Receiver"
+    },
+    {
+      "from": "HC-Receiver",
+      "event": "HC-Sender packet arrives ECN marked",
+      "action": "updates buffer state",
+      "to": "HC-Receiver"
+    },
+    {
+      "from": "HC-Receiver",
+      "event": "HC-Sender packet arrives without ECN marking and with ECN Nonce 0",
+      "action": "updates buffer state",
+      "to": "HC-Receiver"
+    },
+    {
+      "from": "HC-Receiver",
+      "event": "HC-Sender packet arrives with ECN Nonce 1",
+      "action": "updates buffer state",
+      "to": "HC-Receiver"
+    },
+    {
+      "from": "HC-Sender",
+      "event": "receives an acknowledgement",
+      "action": "reads off the number of packets that were dropped and/or ECN marked, check the ECN Nonce for correctness",
+      "to": "HC-Sender"
+    },
+    {
+      "from": "HC-Receiver",
+      "event": "HC-Receiver needs to generate an acknowledgement",
+      "action": "buffer's contents can simply be copied into one or more Ack Vector options",
+      "to": "HC-Receiver"
+    },
+    {
+      "from": "HC-Receiver",
+      "event": "receives acknowledgement from HC-Sender with Acknowledgement Number",
+      "action": "adjusts the run length, sets buf_tail, flips buf_nonce, throws away R and every preceding ack record",
+      "to": "HC-Receiver"
+    },
+    {
+      "from": "LISTEN",
+      "event": "Request",
+      "action": "Set S := new socket for this port pair; S.state = RESPOND; Choose S.ISS; Initialize S.GAR; Set S.ISR, S.GSR, S.SWL, S.SWH",
+      "to": "RESPOND"
+    },
+    {
+      "from": "REQUEST",
+      "event": "Response",
+      "action": "Set sequence number variables",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "Reset",
+      "action": "",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "Request",
+      "action": "Send Response",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "Request",
+      "action": "Destroy S and return",
+      "to": "LISTEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "",
+      "action": "S.OSR := P.seqno; S.state := OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "Response",
+      "action": "Send Ack",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "",
+      "action": "S.OSR := P.seqno; S.state := OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "CloseReq",
+      "action": "Generate Close; S.state := CLOSING; Set CLOSING timer",
+      "to": "CLOSING"
+    },
+    {
+      "from": "OPEN",
+      "event": "Close",
+      "action": "Generate Reset(Closed)",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "DCCP-Sync",
+      "action": "send DCCP-Reset",
+      "to": "REQUEST"
+    },
+    {
+      "from": "OPEN",
+      "event": "sequence-invalid DCCP-Sync",
+      "action": "ignore",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "sequence-invalid DCCP-SyncAck",
+      "action": "ignore",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "sequence-invalid packet",
+      "action": "send DCCP-Sync",
+      "to": "OPEN"
+    }
+  ]
+}

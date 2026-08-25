@@ -61,9 +61,12 @@ def extract_direct_json_content(response: str) -> str | None:
 # Parse the json returned by the model.
 def parse_json_from_response(response: str, allow_direct_json: bool = False) -> object | None:
 
+    # extract content in <json> tag
     json_text: str | None = extract_json_content(response)
 
+    # if can not find <json> tag
     if json_text is None:
+        # check the response if have json tages
         has_json_tags: bool = re.search(r"<json>.*?</json>", response, re.DOTALL | re.IGNORECASE) is not None
 
         if not allow_direct_json or has_json_tags:
@@ -82,4 +85,42 @@ def parse_json_from_response(response: str, allow_direct_json: bool = False) -> 
         return json_text
 
     return parsed_output
-    
+
+
+# in gemma 12b model some time will return the json tag in the markdown block
+# the content in the markdown block is correct, so I make it valid json to continue emaining experimental procedure
+def parse_json_from_responses_include_markdown(response: str, allow_direct_json: bool = False) -> object | None:
+    # extract content in <json> tag
+    json_text: str | None = extract_json_content(response)
+
+    # if can not find <json> tag
+    if json_text is None:
+        # check the response if have json tages
+        has_json_tags: bool = re.search(r"<json>.*?</json>", response, re.DOTALL | re.IGNORECASE) is not None
+
+        # if do not have the json tag return None
+        if has_json_tags:
+            return None
+
+        # chekc if response have markdown tag
+        markdown_match: re.Match[str] | None = re.fullmatch(r"\s*```json\s*(.*?)\s*```\s*", response, re.DOTALL | re.IGNORECASE)
+
+        # if have markdown tag extraction the json content
+        if markdown_match is not None:  
+            json_text = markdown_match.group(1).strip()
+        elif allow_direct_json:
+            # if direct json is allowed, try to extract direct json.
+            json_text = extract_direct_json_content(response)
+        else:
+            return None
+
+        # none, null, empty are not alllow
+        if not json_text or json_text.lower() in ("none", "null"):
+            return None
+
+    try:
+        parsed_output: object = json.loads(json_text)
+    except json.JSONDecodeError:
+        return json_text
+
+    return parsed_output

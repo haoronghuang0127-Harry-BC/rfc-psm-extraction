@@ -1,0 +1,346 @@
+{
+  "states": [
+    "Transit mode",
+    "Reading mode",
+    "Initial Connection",
+    "Service Available, Posting Allowed",
+    "Service Available, Posting Prohibited",
+    "Service Temporarily Unavailable",
+    "Service Permanently Unavailable",
+    "Reader Mode",
+    "Session End",
+    "Invalid",
+    "Group Selected",
+    "Article Retrieved",
+    "Article Posting Allowed",
+    "Article Posting Prohibited",
+    "Article Transfer Allowed",
+    "Article Transfer Prohibited",
+    "Client sends command-line",
+    "Client sends command-datastream",
+    "Server sends response",
+    "Client sends command-continuation",
+    "initial connection",
+    "MODE READER"
+  ],
+  "transitions": [
+    {
+      "from": "Transit mode",
+      "event": "MODE READER",
+      "action": "200 Server ready, posting allowed",
+      "to": "Reading mode"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "200 Service available, posting allowed",
+      "to": "Service Available, Posting Allowed"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "201 Service available, posting prohibited",
+      "to": "Service Available, Posting Prohibited"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "400 Service temporarily unavailable",
+      "to": "Service Temporarily Unavailable"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "502 Service permanently unavailable",
+      "to": "Service Permanently Unavailable"
+    },
+    {
+      "from": "Service Available, Posting Allowed",
+      "event": "QUIT",
+      "action": "205 Connection closing",
+      "to": "Session End"
+    },
+    {
+      "from": "Service Available, Posting Prohibited",
+      "event": "QUIT",
+      "action": "205 Connection closing",
+      "to": "Session End"
+    },
+    {
+      "from": "Service Temporarily Unavailable",
+      "event": "",
+      "action": "",
+      "to": "Session End"
+    },
+    {
+      "from": "Service Permanently Unavailable",
+      "event": "",
+      "action": "",
+      "to": "Session End"
+    },
+    {
+      "from": "Transit Mode",
+      "event": "MODE READER",
+      "action": "200 Reader mode, posting permitted",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Transit Mode",
+      "event": "MODE READER",
+      "action": "502 Transit service only",
+      "to": "Session End"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "QUIT",
+      "action": "205 Connection closing",
+      "to": "Session End"
+    },
+    {
+      "from": "Invalid",
+      "event": "GROUP",
+      "action": "211 number low high group",
+      "to": "Group Selected"
+    },
+    {
+      "from": "Invalid",
+      "event": "GROUP",
+      "action": "411",
+      "to": "Invalid"
+    },
+    {
+      "from": "Group Selected",
+      "event": "ARTICLE",
+      "action": "220 n message-id",
+      "to": "Article Retrieved"
+    },
+    {
+      "from": "Group Selected",
+      "event": "ARTICLE",
+      "action": "423",
+      "to": "Group Selected"
+    },
+    {
+      "from": "Group Selected",
+      "event": "ARTICLE",
+      "action": "412",
+      "to": "Invalid"
+    },
+    {
+      "from": "Group Selected",
+      "event": "ARTICLE",
+      "action": "420",
+      "to": "Invalid"
+    },
+    {
+      "from": "Group Selected",
+      "event": "HEAD",
+      "action": "221 n message-id",
+      "to": "Article Retrieved"
+    },
+    {
+      "from": "Group Selected",
+      "event": "HEAD",
+      "action": "423",
+      "to": "Group Selected"
+    },
+    {
+      "from": "Group Selected",
+      "event": "HEAD",
+      "action": "412",
+      "to": "Invalid"
+    },
+    {
+      "from": "Group Selected",
+      "event": "HEAD",
+      "action": "420",
+      "to": "Invalid"
+    },
+    {
+      "from": "Group Selected",
+      "event": "BODY",
+      "action": "222 n message-id",
+      "to": "Article Retrieved"
+    },
+    {
+      "from": "Group Selected",
+      "event": "BODY",
+      "action": "423",
+      "to": "Group Selected"
+    },
+    {
+      "from": "Group Selected",
+      "event": "BODY",
+      "action": "412",
+      "to": "Invalid"
+    },
+    {
+      "from": "Group Selected",
+      "event": "BODY",
+      "action": "420",
+      "to": "Invalid"
+    },
+    {
+      "from": "Group Selected",
+      "event": "STAT",
+      "action": "223 n message-id",
+      "to": "Group Selected"
+    },
+    {
+      "from": "Group Selected",
+      "event": "STAT",
+      "action": "423",
+      "to": "Group Selected"
+    },
+    {
+      "from": "Group Selected",
+      "event": "STAT",
+      "action": "412",
+      "to": "Invalid"
+    },
+    {
+      "from": "Group Selected",
+      "event": "STAT",
+      "action": "420",
+      "to": "Invalid"
+    },
+    {
+      "from": "Group Selected",
+      "event": "LAST",
+      "action": "223 n message-id",
+      "to": "Group Selected"
+    },
+    {
+      "from": "Group Selected",
+      "event": "LAST",
+      "action": "422",
+      "to": "Group Selected"
+    },
+    {
+      "from": "Group Selected",
+      "event": "LAST",
+      "action": "420",
+      "to": "Invalid"
+    },
+    {
+      "from": "Group Selected",
+      "event": "LAST",
+      "action": "412",
+      "to": "Invalid"
+    },
+    {
+      "from": "Group Selected",
+      "event": "NEXT",
+      "action": "223 n message-id",
+      "to": "Group Selected"
+    },
+    {
+      "from": "Group Selected",
+      "event": "NEXT",
+      "action": "421",
+      "to": "Group Selected"
+    },
+    {
+      "from": "Group Selected",
+      "event": "NEXT",
+      "action": "420",
+      "to": "Invalid"
+    },
+    {
+      "from": "Group Selected",
+      "event": "NEXT",
+      "action": "412",
+      "to": "Invalid"
+    },
+    {
+      "from": "Invalid",
+      "event": "POST",
+      "action": "340",
+      "to": "Article Posting Allowed"
+    },
+    {
+      "from": "Invalid",
+      "event": "POST",
+      "action": "440",
+      "to": "Article Posting Prohibited"
+    },
+    {
+      "from": "Article Posting Allowed",
+      "event": "Article Sent",
+      "action": "240",
+      "to": "Invalid"
+    },
+    {
+      "from": "Article Posting Allowed",
+      "event": "Article Sent",
+      "action": "441",
+      "to": "Invalid"
+    },
+    {
+      "from": "Invalid",
+      "event": "IHAVE",
+      "action": "335",
+      "to": "Article Transfer Allowed"
+    },
+    {
+      "from": "Invalid",
+      "event": "IHAVE",
+      "action": "435",
+      "to": "Article Transfer Prohibited"
+    },
+    {
+      "from": "Invalid",
+      "event": "IHAVE",
+      "action": "436",
+      "to": "Article Transfer Prohibited"
+    },
+    {
+      "from": "Article Transfer Allowed",
+      "event": "Article Sent",
+      "action": "235",
+      "to": "Invalid"
+    },
+    {
+      "from": "Article Transfer Allowed",
+      "event": "Article Sent",
+      "action": "436",
+      "to": "Invalid"
+    },
+    {
+      "from": "Article Transfer Allowed",
+      "event": "Article Sent",
+      "action": "437",
+      "to": "Invalid"
+    },
+    {
+      "from": "Client sends command-line",
+      "event": "command-line",
+      "action": "Server sends response",
+      "to": "Server sends response"
+    },
+    {
+      "from": "Client sends command-datastream",
+      "event": "command-datastream",
+      "action": "Server sends response",
+      "to": "Server sends response"
+    },
+    {
+      "from": "Server sends response",
+      "event": "3xx response",
+      "action": "Client sends command-continuation",
+      "to": "Client sends command-continuation"
+    },
+    {
+      "from": "Client sends command-continuation",
+      "event": "command-continuation",
+      "action": "Server sends response",
+      "to": "Server sends response"
+    },
+    {
+      "from": "initial connection",
+      "event": "MODE READER",
+      "action": "service available, posting allowed or service available, posting prohibited",
+      "to": "MODE READER"
+    }
+  ]
+}

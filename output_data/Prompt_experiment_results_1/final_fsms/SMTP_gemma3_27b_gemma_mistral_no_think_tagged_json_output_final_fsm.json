@@ -1,0 +1,382 @@
+{
+  "states": [
+    "SMTP client",
+    "SMTP server",
+    "Session Initiation",
+    "Client Initiation",
+    "Mail Transactions",
+    "DATA",
+    "initial state",
+    "transaction in progress",
+    "no transaction in progress",
+    "Locating Target Host",
+    "MX Record Lookup",
+    "Address Resolution",
+    "Relaying Message",
+    "Error Condition",
+    "Initial",
+    "Connected",
+    "MailFromSent",
+    "RcptToSent",
+    "DataSent",
+    "Aborted",
+    "RelayHostConnected",
+    "Verifying"
+  ],
+  "transitions": [
+    {
+      "from": "SMTP client",
+      "event": "establishes a two-way transmission channel",
+      "action": "",
+      "to": "SMTP server"
+    },
+    {
+      "from": "SMTP server",
+      "event": "receives commands",
+      "action": "sends replies",
+      "to": "SMTP server"
+    },
+    {
+      "from": "SMTP server",
+      "event": "issues a success response at the end of the mail data",
+      "action": "handoff of responsibility for the message",
+      "to": "SMTP server"
+    },
+    {
+      "from": "SMTP client",
+      "event": "initiates a mail transaction",
+      "action": "",
+      "to": "SMTP server"
+    },
+    {
+      "from": "SMTP client",
+      "event": "requests that the connection be shut down",
+      "action": "",
+      "to": "SMTP client"
+    },
+    {
+      "from": "SMTP client",
+      "event": "initiates other mail transactions",
+      "action": "",
+      "to": "SMTP client"
+    },
+    {
+      "from": "Session Initiation",
+      "event": "server responds with an opening message",
+      "action": "",
+      "to": "Client Initiation"
+    },
+    {
+      "from": "Client Initiation",
+      "event": "EHLO command",
+      "action": "server provides a list of the extensions it supports",
+      "to": "Mail Transactions"
+    },
+    {
+      "from": "Client Initiation",
+      "event": "HELO command",
+      "action": "server MUST NOT return the extended EHLO-style response",
+      "to": "Mail Transactions"
+    },
+    {
+      "from": "Mail Transactions",
+      "event": "MAIL command",
+      "action": "reset all its state tables and buffers",
+      "to": "Mail Transactions"
+    },
+    {
+      "from": "Mail Transactions",
+      "event": "RCPT command",
+      "action": "stores the forward-path",
+      "to": "Mail Transactions"
+    },
+    {
+      "from": "Mail Transactions",
+      "event": "DATA command",
+      "action": "returns a 354 Intermediate reply",
+      "to": "DATA"
+    },
+    {
+      "from": "DATA",
+      "event": "end of mail data indicator",
+      "action": "returns a \"250 OK\" reply",
+      "to": "Mail Transactions"
+    },
+    {
+      "from": "no transaction in progress",
+      "event": "EHLO",
+      "action": "clear all buffers and reset the state",
+      "to": "initial state"
+    },
+    {
+      "from": "initial state",
+      "event": "MAIL",
+      "action": "clear the reverse-path buffer, the forward-path buffer, and the mail data buffer, and it inserts the reverse-path information",
+      "to": "transaction in progress"
+    },
+    {
+      "from": "transaction in progress",
+      "event": "RCPT",
+      "action": "appends its forward-path argument to the forward-path buffer",
+      "to": "transaction in progress"
+    },
+    {
+      "from": "transaction in progress",
+      "event": "DATA",
+      "action": "appends the mail data to the mail data buffer",
+      "to": "transaction in progress"
+    },
+    {
+      "from": "transaction in progress",
+      "event": "<CRLF>.<CRLF>",
+      "action": "process the stored mail transaction information, clear the buffers",
+      "to": "no transaction in progress"
+    },
+    {
+      "from": "transaction in progress",
+      "event": "RSET",
+      "action": "discard any stored sender, recipients, and mail data, and clear all buffers and state tables",
+      "to": "no transaction in progress"
+    },
+    {
+      "from": "transaction in progress",
+      "event": "EHLO",
+      "action": "clear all buffers and reset the state exactly as if a RSET command had been issued",
+      "to": "initial state"
+    },
+    {
+      "from": "initial state",
+      "event": "NOOP",
+      "action": "no effect",
+      "to": "initial state"
+    },
+    {
+      "from": "transaction in progress",
+      "event": "NOOP",
+      "action": "no effect",
+      "to": "transaction in progress"
+    },
+    {
+      "from": "initial state",
+      "event": "QUIT",
+      "action": "send a \"221 OK\" reply, and then close the transmission channel",
+      "to": "initial state"
+    },
+    {
+      "from": "transaction in progress",
+      "event": "QUIT",
+      "action": "send a \"221 OK\" reply, and then close the transmission channel",
+      "to": "initial state"
+    },
+    {
+      "from": "Locating Target Host",
+      "event": "DNS lookup",
+      "action": "resolve domain name",
+      "to": "MX Record Lookup"
+    },
+    {
+      "from": "MX Record Lookup",
+      "event": "CNAME record found",
+      "action": "process as initial name",
+      "to": "MX Record Lookup"
+    },
+    {
+      "from": "MX Record Lookup",
+      "event": "Non-existent domain error",
+      "action": "report as error",
+      "to": "Error Condition"
+    },
+    {
+      "from": "MX Record Lookup",
+      "event": "Temporary error",
+      "action": "queue and retry",
+      "to": "MX Record Lookup"
+    },
+    {
+      "from": "MX Record Lookup",
+      "event": "Empty list of MXs",
+      "action": "treat as implicit MX with preference 0",
+      "to": "Address Resolution"
+    },
+    {
+      "from": "MX Record Lookup",
+      "event": "MX records present, but unusable, or implicit MX unusable",
+      "action": "report as error",
+      "to": "Error Condition"
+    },
+    {
+      "from": "MX Record Lookup",
+      "event": "MX records found",
+      "action": "do not utilize address RRs",
+      "to": "Address Resolution"
+    },
+    {
+      "from": "Address Resolution",
+      "event": "MX record data field contains domain name",
+      "action": "query for address record",
+      "to": "Address Resolution"
+    },
+    {
+      "from": "Address Resolution",
+      "event": "Invalid response (e.g., CNAME)",
+      "action": "",
+      "to": "Error Condition"
+    },
+    {
+      "from": "Address Resolution",
+      "event": "Lookup succeeds",
+      "action": "map to delivery addresses",
+      "to": "Locating Target Host"
+    },
+    {
+      "from": "Relaying Message",
+      "event": "Designated Mail eXchanger",
+      "action": "relay, deliver, or handoff",
+      "to": "Relaying Message"
+    },
+    {
+      "from": "Relaying Message",
+      "event": "Determine to relay without rewriting",
+      "action": "sort MX records",
+      "to": "Relaying Message"
+    },
+    {
+      "from": "Relaying Message",
+      "event": "Matching record found",
+      "action": "discard records at preference level and higher",
+      "to": "Relaying Message"
+    },
+    {
+      "from": "Relaying Message",
+      "event": "No records left",
+      "action": "return as undeliverable",
+      "to": "Error Condition"
+    },
+    {
+      "from": "Initial",
+      "event": "EHLO",
+      "action": "250 OK",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "MAIL FROM",
+      "action": "250 OK",
+      "to": "MailFromSent"
+    },
+    {
+      "from": "MailFromSent",
+      "event": "RCPT TO",
+      "action": "250 OK",
+      "to": "RcptToSent"
+    },
+    {
+      "from": "MailFromSent",
+      "event": "RCPT TO",
+      "action": "550 No such user here",
+      "to": "MailFromSent"
+    },
+    {
+      "from": "RcptToSent",
+      "event": "DATA",
+      "action": "354 Start mail input",
+      "to": "DataSent"
+    },
+    {
+      "from": "DataSent",
+      "event": ".",
+      "action": "250 OK",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "QUIT",
+      "action": "221 Service closing transmission channel",
+      "to": "Initial"
+    },
+    {
+      "from": "Connected",
+      "event": "RSET",
+      "action": "250 OK",
+      "to": "Connected"
+    },
+    {
+      "from": "Initial",
+      "event": "EHLO",
+      "action": "250 OK",
+      "to": "RelayHostConnected"
+    },
+    {
+      "from": "RelayHostConnected",
+      "event": "MAIL FROM",
+      "action": "250 OK",
+      "to": "MailFromSent"
+    },
+    {
+      "from": "MailFromSent",
+      "event": "RCPT TO",
+      "action": "250 OK",
+      "to": "RcptToSent"
+    },
+    {
+      "from": "MailFromSent",
+      "event": "RCPT TO",
+      "action": "550 No such user here",
+      "to": "MailFromSent"
+    },
+    {
+      "from": "RcptToSent",
+      "event": "DATA",
+      "action": "354 Start mail input",
+      "to": "DataSent"
+    },
+    {
+      "from": "DataSent",
+      "event": ".",
+      "action": "250 OK",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "QUIT",
+      "action": "221 Service closing transmission channel",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "EHLO",
+      "action": "250 OK",
+      "to": "Verifying"
+    },
+    {
+      "from": "Verifying",
+      "event": "VRFY",
+      "action": "250 OK",
+      "to": "MailFromSent"
+    },
+    {
+      "from": "MailFromSent",
+      "event": "RCPT TO",
+      "action": "250 OK",
+      "to": "RcptToSent"
+    },
+    {
+      "from": "RcptToSent",
+      "event": "DATA",
+      "action": "354 Start mail input",
+      "to": "DataSent"
+    },
+    {
+      "from": "DataSent",
+      "event": ".",
+      "action": "250 OK",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "QUIT",
+      "action": "221 Service closing transmission channel",
+      "to": "Initial"
+    }
+  ]
+}

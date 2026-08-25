@@ -1,0 +1,352 @@
+{
+  "states": [
+    "Session Initiation",
+    "Mail Transactions",
+    "Forwarding for Address Correction or Updating",
+    "Commands for Debugging Addresses",
+    "Relaying and Mail Routing",
+    "Mail Gatewaying",
+    "Terminating Sessions and Connections",
+    "Mailing Lists and Aliases",
+    "Initial State",
+    "Mail Transaction in Progress",
+    "Locating the Target Host",
+    "Resolving the Domain Name",
+    "Queued and Retried",
+    "Error Condition",
+    "Server Receiving Source Route",
+    "Server Forwarding with Route Modification",
+    "Idle",
+    "Connected",
+    "Data Input",
+    "Closing",
+    "Authenticated State",
+    "Unauthenticated State"
+  ],
+  "transitions": [
+    {
+      "from": "Session Initiation",
+      "event": "client opens a connection",
+      "action": "server responds with an opening message",
+      "to": "Session Initiation"
+    },
+    {
+      "from": "Session Initiation",
+      "event": "554 response in initial connection opening message",
+      "action": "MUST wait for client to send a QUIT",
+      "to": "Session Initiation"
+    },
+    {
+      "from": "Session Initiation",
+      "event": "client sends a QUIT",
+      "action": "server closes the connection",
+      "to": "Terminating Sessions and Connections"
+    },
+    {
+      "from": "Mail Transactions",
+      "event": "MAIL command",
+      "action": "SMTP-receiver resets state tables and buffers",
+      "to": "Mail Transactions"
+    },
+    {
+      "from": "Mail Transactions",
+      "event": "RCPT command",
+      "action": "SMTP server stores the forward-path",
+      "to": "Mail Transactions"
+    },
+    {
+      "from": "Mail Transactions",
+      "event": "DATA command",
+      "action": "SMTP server returns a 354 Intermediate reply",
+      "to": "Mail Transactions"
+    },
+    {
+      "from": "Forwarding for Address Correction or Updating",
+      "event": "",
+      "action": "",
+      "to": "Forwarding for Address Correction or Updating"
+    },
+    {
+      "from": "Commands for Debugging Addresses",
+      "event": "VRFY command",
+      "action": "MAY include full name and mailbox",
+      "to": "Commands for Debugging Addresses"
+    },
+    {
+      "from": "Commands for Debugging Addresses",
+      "event": "EXPN command",
+      "action": "MAY include full name and mailboxes",
+      "to": "Commands for Debugging Addresses"
+    },
+    {
+      "from": "Relaying and Mail Routing",
+      "event": "explicit source routes",
+      "action": "SMTP servers MAY decline to act as mail relays",
+      "to": "Relaying and Mail Routing"
+    },
+    {
+      "from": "Mail Gatewaying",
+      "event": "message is gatewayed",
+      "action": "header fields MAY be rewritten",
+      "to": "Mail Gatewaying"
+    },
+    {
+      "from": "Terminating Sessions and Connections",
+      "event": "client sends a QUIT command",
+      "action": "server responds with a positive reply code",
+      "to": "Terminating Sessions and Connections"
+    },
+    {
+      "from": "Terminating Sessions and Connections",
+      "event": "SMTP server detects need to shut down",
+      "action": "returns a 421 response code",
+      "to": "Terminating Sessions and Connections"
+    },
+    {
+      "from": "Mailing Lists and Aliases",
+      "event": "message is delivered to an expanded list",
+      "action": "return address in the envelope MUST be changed",
+      "to": "Mailing Lists and Aliases"
+    },
+    {
+      "from": "Initial State",
+      "event": "EHLO or HELO",
+      "action": "Clear state tables and buffers",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "MAIL",
+      "action": "Clear reverse-path, forward-path, and mail data buffers; insert reverse-path information",
+      "to": "Mail Transaction in Progress"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "RSET",
+      "action": "Abort transaction; clear buffers and state tables",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "QUIT",
+      "action": "Send OK reply and close transmission channel",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "DATA",
+      "action": "Append mail data to mail data buffer",
+      "to": "Mail Transaction in Progress"
+    },
+    {
+      "from": "Locating the Target Host",
+      "event": "DNS lookup",
+      "action": "resolve domain name (RFC 1035 [2])",
+      "to": "Resolving the Domain Name"
+    },
+    {
+      "from": "Resolving the Domain Name",
+      "event": "non-existent domain error",
+      "action": "report as an error",
+      "to": "Error Condition"
+    },
+    {
+      "from": "Resolving the Domain Name",
+      "event": "temporary error",
+      "action": "queue and retry later (see Section 4.5.4.1)",
+      "to": "Queued and Retried"
+    },
+    {
+      "from": "Resolving the Domain Name",
+      "event": "empty list of MXs",
+      "action": "treat as implicit MX RR, preference 0",
+      "to": "Resolving the Domain Name"
+    },
+    {
+      "from": "Resolving the Domain Name",
+      "event": "no usable MX records",
+      "action": "report as an error",
+      "to": "Error Condition"
+    },
+    {
+      "from": "Resolving the Domain Name",
+      "event": "MX records present",
+      "action": "MUST NOT utilize any address RRs associated with that name unless they are located using the MX RRs",
+      "to": "Resolving the Domain Name"
+    },
+    {
+      "from": "Resolving the Domain Name",
+      "event": "domain name associated with an MX RR is looked up",
+      "action": "MUST contain a domain name",
+      "to": "Resolving the Domain Name"
+    },
+    {
+      "from": "Resolving the Domain Name",
+      "event": "domain name queried",
+      "action": "MUST return at least one address record (e.g., A or AAAA RR)",
+      "to": "Resolving the Domain Name"
+    },
+    {
+      "from": "Initial State",
+      "event": "MAIL command",
+      "action": "SHOULD NOT appear in the reverse-path",
+      "to": "Server Receiving Source Route"
+    },
+    {
+      "from": "Server Receiving Source Route",
+      "event": "Forwarding",
+      "action": "MUST remove its domain name from any forward-paths and MAY remove all other source routing information",
+      "to": "Server Forwarding with Route Modification"
+    },
+    {
+      "from": "Idle",
+      "event": "220 foo.com Simple Mail Transfer Service Ready",
+      "action": "220 foo.com Simple Mail Transfer Service Ready",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "EHLO bar.com",
+      "action": "250-foo.com greets bar.com\n250-8BITMIME\n250-SIZE\n250-DSN\n250 HELP",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "MAIL FROM:<Smith@bar.com>",
+      "action": "250 OK",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "RCPT TO:<Jones@foo.com>",
+      "action": "250 OK",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "RCPT TO:<Green@foo.com>",
+      "action": "550 No such user here",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "RCPT TO:<Brown@foo.com>",
+      "action": "250 OK",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "DATA",
+      "action": "354 Start mail input; end with <CRLF>.<CRLF>",
+      "to": "Data Input"
+    },
+    {
+      "from": "Data Input",
+      "event": "Blah blah blah... ...etc. etc. etc.\n.",
+      "action": "250 OK",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "QUIT",
+      "action": "221 foo.com Service closing transmission channel",
+      "to": "Idle"
+    },
+    {
+      "from": "Connected",
+      "event": "RSET",
+      "action": "250 OK",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "220 foo.com Simple Mail Transfer Service Ready",
+      "action": "220 foo.com Simple Mail Transfer Service Ready",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "EHLO bar.com",
+      "action": "250-foo.com greets bar.com\n250-8BITMIME\n250-SIZE\n250-DSN\n250 HELP",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "MAIL FROM:<JQP@bar.com>",
+      "action": "250 OK",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "RCPT TO:<Jones@XYZ.COM>",
+      "action": "250 OK",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "DATA",
+      "action": "354 Start mail input; end with <CRLF>.<CRLF>",
+      "to": "Data Input"
+    },
+    {
+      "from": "Data Input",
+      "event": "Date: Thu, 21 May 1998 05:33:29 -0700\nFrom: John Q. Public <JQP@bar.com>\nSubject: The Next Meeting of the Board\nTo: Jones@xyz.com\n\nBill:\nThe next meeting of the board of directors will be\non Tuesday.\nJohn.\n.",
+      "action": "250 OK",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "QUIT",
+      "action": "221 foo.com Service closing transmission channel",
+      "to": "Idle"
+    },
+    {
+      "from": "Connected",
+      "event": "EHLO bar.com",
+      "action": "250-foo.com greets bar.com\n250-8BITMIME\n250-SIZE\n250-DSN\n250-VRFY\n250 HELP",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "VRFY Crispin",
+      "action": "250 Mark Crispin <Admin.MRC@foo.com>",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "MAIL FROM:<EAK@bar.com>",
+      "action": "250 OK",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "RCPT TO:<Admin.MRC@foo.com>",
+      "action": "250 OK",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "DATA",
+      "action": "354 Start mail input; end with <CRLF>.<CRLF>",
+      "to": "Data Input"
+    },
+    {
+      "from": "Data Input",
+      "event": "Blah blah blah... ...etc. etc. etc.\n.",
+      "action": "250 OK",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "QUIT",
+      "action": "221 foo.com Service closing transmission channel",
+      "to": "Idle"
+    },
+    {
+      "from": "Unauthenticated State",
+      "event": "EHLO",
+      "action": "MUST continue to accept and process HELO",
+      "to": "Authenticated State"
+    }
+  ]
+}

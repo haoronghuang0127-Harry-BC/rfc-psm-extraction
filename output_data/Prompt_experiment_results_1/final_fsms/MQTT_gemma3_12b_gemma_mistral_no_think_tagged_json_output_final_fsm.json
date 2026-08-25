@@ -1,0 +1,144 @@
+{
+  "states": [
+    "Connected",
+    "Reauthenticating",
+    "Disconnected",
+    "Session Present",
+    "Session Not Present",
+    "mqtt_tls",
+    "AIF",
+    "Token Validation",
+    "Session Expiry Interval",
+    "Broker",
+    "Initial State",
+    "Connected State"
+  ],
+  "transitions": [
+    {
+      "from": "Connected",
+      "event": "CONNECT, PUBLISH, or SUBSCRIBE packet received or sent",
+      "action": "check for token expiration",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "PINGREQ packet received",
+      "action": "SHOULD check for token expiration",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "Token expiration",
+      "action": "send PUBACK, SUBACK, or DISCONNECT with return code 'Not authorized', close Network Connection",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "PUBACK and SUBACK",
+      "action": "MAY reauthenticate",
+      "to": "Reauthenticating"
+    },
+    {
+      "from": "Reauthenticating",
+      "event": "AUTH packet",
+      "action": "accepts reauthentication requests if Client has already submitted a token",
+      "to": "Connected"
+    },
+    {
+      "from": "Reauthenticating",
+      "event": "",
+      "action": "MUST deny the request, send DISCONNECT packet with reason code 0x87 (Not Authorized)",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "Client DISCONNECT",
+      "action": "Broker doesn't store the Session State but MUST keep the retained messages if Session Expiry Interval is 0",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Disconnected",
+      "event": "network errors or server disconnection due to a protocol error",
+      "action": "The Will Message is sent if the Client supplied a Will in the CONNECT packet",
+      "to": "Connected"
+    },
+    {
+      "from": "Disconnected",
+      "event": "CONNECT",
+      "action": "Broker returns CONNACK packet with reason code 0x84 (Unsupported Protocol Version) if it does not support MQTT v3.1.1 Clients",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Disconnected",
+      "event": "CONNECT",
+      "action": "Broker MAY implement interactions for MQTT v3.1.1 Clients",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "Clean flag is set to 1",
+      "action": "Broker sets the Session Present flag in the CONNACK packet to 0",
+      "to": "Session Not Present"
+    },
+    {
+      "from": "Connected",
+      "event": "Clean flag is set to 0",
+      "action": "Broker MUST resume communications with the Client based on the state from the current Session",
+      "to": "Session Present"
+    },
+    {
+      "from": "Connected",
+      "event": "Client-Broker PUBLISH authorization failure",
+      "action": "Broker MUST ignore the PUBLISH packet and disconnect the Client",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "SUBSCRIBE authorization failure",
+      "action": "Broker returns code 0x80 in the SUBACK packet",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "Broker-Client PUBLISH authorization failure",
+      "action": "Broker MUST disconnect the Client",
+      "to": "Disconnected"
+    },
+    {
+      "from": "mqtt_tls",
+      "event": "",
+      "action": "",
+      "to": "AIF"
+    },
+    {
+      "from": "Connected",
+      "event": "access token validation",
+      "action": "cache the token",
+      "to": "Token Validation"
+    },
+    {
+      "from": "Token Validation",
+      "event": "Client's permissions revoked",
+      "action": "may still grant publish/subscribe",
+      "to": "Token Validation"
+    },
+    {
+      "from": "Token Validation",
+      "event": "reasonable cache timeout",
+      "action": "introspect tokens regularly",
+      "to": "Token Validation"
+    },
+    {
+      "from": "Connected",
+      "event": "long Session Expiry Interval",
+      "action": "maintain Client's MQTT Session State",
+      "to": "Session Expiry Interval"
+    },
+    {
+      "from": "Initial State",
+      "event": "",
+      "action": "Establish TLS connection",
+      "to": "Connected State"
+    }
+  ]
+}

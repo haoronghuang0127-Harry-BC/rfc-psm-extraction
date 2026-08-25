@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from utils.files_util import load_json_file, save_json_file
-from utils.llm_output_parser import parse_json_from_response
+from utils.llm_output_parser import parse_json_from_response, parse_json_from_responses_include_markdown
 
 """
 process extraction responses
@@ -85,7 +85,7 @@ def parse_partial_fsms(partial_responses: list[str], allow_direct_json: bool = T
     partial_fsms: list[dict[str, object]] = []
 
     for partial_response in partial_responses:
-        parsed_response: object | None = parse_json_from_response(response=partial_response, allow_direct_json=allow_direct_json)
+        parsed_response: object | None = parse_json_from_responses_include_markdown(response=partial_response, allow_direct_json=allow_direct_json)
 
         # ignore None, invalid JSON text, lists, and other invalid structures.
         # 忽略 None、非法 JSON 文本、列表和其他错误结构。
@@ -110,7 +110,7 @@ def extract_final_fsm_from_response(combination_response: dict[str, object], all
     if not isinstance(response_value, str):
         return None
 
-    parsed_response: object | None = parse_json_from_response(response=response_value, allow_direct_json=allow_direct_json)
+    parsed_response: object | None = parse_json_from_responses_include_markdown(response=response_value, allow_direct_json=allow_direct_json)
 
     # invalid JSON, lists, strings, and other structures are not valid FSM objects.
     if not isinstance(parsed_response, dict):

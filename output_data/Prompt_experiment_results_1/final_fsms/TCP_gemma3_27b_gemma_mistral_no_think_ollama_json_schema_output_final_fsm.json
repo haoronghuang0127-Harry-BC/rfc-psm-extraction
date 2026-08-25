@@ -1,0 +1,203 @@
+{
+  "states": [
+    "CLOSED",
+    "LISTEN",
+    "SYN-SENT",
+    "SYN-RECEIVED",
+    "ESTABLISHED",
+    "FIN-WAIT-1",
+    "FIN-WAIT-2",
+    "CLOSE-WAIT",
+    "CLOSING",
+    "LAST-ACK",
+    "TIME-WAIT",
+    "TCB",
+    "Robust against shrinking window",
+    "Receive TCP Option in any segment",
+    "Process RST and URG even with zero window",
+    "Send max size segment when possible",
+    "Handle as 32-bit number",
+    "Treat as unsigned number",
+    "Send keep-alive Packets",
+    "Closing Connections",
+    "Opening Connections",
+    "Sending Data",
+    "Receiving ICMP messages from IP",
+    "TCP Checksums",
+    "ISN Selection",
+    "TCP Options",
+    "Urgent Data",
+    "Window",
+    "Aggregate or queue un-pushed data"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "OPEN",
+      "action": "create TCB",
+      "to": "LISTEN"
+    },
+    {
+      "from": "CLOSED",
+      "event": "OPEN",
+      "action": "create TCB, send SYN segment",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "LISTEN",
+      "event": "OPEN",
+      "action": "create TCB, send SYN segment",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "SYN-ACK received",
+      "action": "enter ESTABLISHED state",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "RST",
+      "action": "signal \"connection refused\", delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "SEND",
+      "action": "queue data",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "ACK received",
+      "action": "enter ESTABLISHED state",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "SEND",
+      "action": "segmentize and send",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "RECEIVE",
+      "action": "reassemble and deliver data",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "ACK received",
+      "action": "enter FIN-WAIT-2",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "ACK received",
+      "action": "enter TIME-WAIT",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "FIN received",
+      "action": "send FIN segment",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "CLOSING",
+      "event": "ACK received",
+      "action": "enter TIME-WAIT",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "ACK received",
+      "action": "delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "TIME-WAIT timeout",
+      "action": "delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "SYN received",
+      "action": "restart 2 MSL timeout",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "Accept SYN",
+      "action": "",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "Opening Connections",
+      "event": "Ask IP for src address for SYN if necessary",
+      "action": "",
+      "to": "Opening Connections"
+    },
+    {
+      "from": "Opening Connections",
+      "event": "Otherwise, use local addr of connection",
+      "action": "",
+      "to": "Opening Connections"
+    },
+    {
+      "from": "Closing Connections",
+      "event": "Send RST to indicate data lost",
+      "action": "",
+      "to": "Closing Connections"
+    },
+    {
+      "from": "Closing Connections",
+      "event": "",
+      "action": "inform application of aborted conn",
+      "to": "Closing Connections"
+    },
+    {
+      "from": "Sending Data",
+      "event": "Application can disable Nagle algorithm",
+      "action": "",
+      "to": "Sending Data"
+    },
+    {
+      "from": "Receiving ICMP messages from IP",
+      "event": "Dest Unreach (0,1,5) => inform ALP",
+      "action": "",
+      "to": "Receiving ICMP messages from IP"
+    },
+    {
+      "from": "Receiving ICMP messages from IP",
+      "event": "Dest Unreach (0,1,5)",
+      "action": "abort on",
+      "to": "Receiving ICMP messages from IP"
+    },
+    {
+      "from": "Receiving ICMP messages from IP",
+      "event": "Dest Unreach (2-4)",
+      "action": "abort conn",
+      "to": "Receiving ICMP messages from IP"
+    },
+    {
+      "from": "Receiving ICMP messages from IP",
+      "event": "Source Quench => silent discard",
+      "action": "",
+      "to": "Receiving ICMP messages from IP"
+    },
+    {
+      "from": "Receiving ICMP messages from IP",
+      "event": "Time Exceeded",
+      "action": "abort on",
+      "to": "Receiving ICMP messages from IP"
+    },
+    {
+      "from": "Receiving ICMP messages from IP",
+      "event": "Param Problem",
+      "action": "abort on",
+      "to": "Receiving ICMP messages from IP"
+    }
+  ]
+}

@@ -1,0 +1,223 @@
+{
+  "states": [
+    "PAC",
+    "PNS",
+    "Control Connection Established",
+    "Tunnel Established",
+    "Start-Control-Connection-Request Sent",
+    "Start-Control-Connection-Reply Received",
+    "Stop-Control-Connection-Request Sent",
+    "Stop-Control-Connection-Reply Received",
+    "Echo-Request Sent",
+    "Echo-Reply Received",
+    "Outgoing-Call-Request Sent",
+    "Outgoing-Call-Reply Received",
+    "Incoming-Call-Request Received",
+    "Incoming-Call-Reply Received",
+    "Incoming-Call-Connected Received",
+    "Call-Clear-Request Sent",
+    "Call-Disconnect-Notify Received",
+    "WAN-Error-Notify Received",
+    "Set-Link-Info Sent",
+    "idle",
+    "wait_ctl_reply",
+    "established",
+    "wait_stop_reply",
+    "wait_reply",
+    "wait_connect"
+  ],
+  "transitions": [
+    {
+      "from": "PAC",
+      "event": "Outgoing-Call-Request",
+      "action": "request outbound calls",
+      "to": "PNS"
+    },
+    {
+      "from": "PNS",
+      "event": "Incoming-Call-Request",
+      "action": "responding to inbound requests",
+      "to": "PAC"
+    },
+    {
+      "from": "PAC",
+      "event": "Start-Control-Connection-Request",
+      "action": "establish the control connection",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "PNS",
+      "event": "Start-Control-Connection-Reply",
+      "action": "establish the control connection",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "Control Connection Established",
+      "event": "",
+      "action": "maintain the tunnel and sessions",
+      "to": "Tunnel Established"
+    },
+    {
+      "from": "PNS",
+      "event": "WAN-Error-Notify",
+      "action": "report connectivity failures",
+      "to": "PAC"
+    },
+    {
+      "from": "Control Connection Established",
+      "event": "Start-Control-Connection-Request",
+      "action": "Send Start-Control-Connection-Request",
+      "to": "Start-Control-Connection-Request Sent"
+    },
+    {
+      "from": "Start-Control-Connection-Request Sent",
+      "event": "Start-Control-Connection-Reply",
+      "action": "Receive Start-Control-Connection-Reply",
+      "to": "Start-Control-Connection-Reply Received"
+    },
+    {
+      "from": "Start-Control-Connection-Reply Received",
+      "event": "Stop-Control-Connection-Request",
+      "action": "Send Stop-Control-Connection-Request",
+      "to": "Stop-Control-Connection-Request Sent"
+    },
+    {
+      "from": "Stop-Control-Connection-Request Sent",
+      "event": "Stop-Control-Connection-Reply",
+      "action": "Receive Stop-Control-Connection-Reply",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "Control Connection Established",
+      "event": "Echo-Request",
+      "action": "Send Echo-Request",
+      "to": "Echo-Request Sent"
+    },
+    {
+      "from": "Echo-Request Sent",
+      "event": "Echo-Reply",
+      "action": "Receive Echo-Reply",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "Control Connection Established",
+      "event": "Outgoing-Call-Request",
+      "action": "Send Outgoing-Call-Request",
+      "to": "Outgoing-Call-Request Sent"
+    },
+    {
+      "from": "Outgoing-Call-Request Sent",
+      "event": "Outgoing-Call-Reply",
+      "action": "Receive Outgoing-Call-Reply",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "Control Connection Established",
+      "event": "Incoming-Call-Request",
+      "action": "Receive Incoming-Call-Request",
+      "to": "Incoming-Call-Request Received"
+    },
+    {
+      "from": "Incoming-Call-Request Received",
+      "event": "Incoming-Call-Reply",
+      "action": "Receive Incoming-Call-Reply",
+      "to": "Incoming-Call-Connected Received"
+    },
+    {
+      "from": "Incoming-Call-Connected Received",
+      "event": "Call-Clear-Request",
+      "action": "Send Call-Clear-Request",
+      "to": "Call-Clear-Request Sent"
+    },
+    {
+      "from": "Call-Clear-Request Sent",
+      "event": "Call-Disconnect-Notify",
+      "action": "Receive Call-Disconnect-Notify",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "Control Connection Established",
+      "event": "WAN-Error-Notify",
+      "action": "Receive WAN-Error-Notify",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "Control Connection Established",
+      "event": "Set-Link-Info",
+      "action": "Send Set-Link-Info",
+      "to": "Set-Link-Info Sent"
+    },
+    {
+      "from": "Set-Link-Info Sent",
+      "event": "",
+      "action": "",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "idle",
+      "event": "TCP Open Indication",
+      "action": "Send Start Control Connection Request",
+      "to": "wait_ctl_reply"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Receive Start Ctl Connection Reply",
+      "action": "Version OK",
+      "to": "established"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Receive Start Ctl Connection Reply",
+      "action": "Version Not OK",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "established",
+      "event": "Receive Stop Control Connection Request",
+      "action": "Send Stop Control Request",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "established",
+      "event": "Local Terminate",
+      "action": "Send Stop Control Request",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "wait_stop_reply",
+      "event": "Receive Stop-Control-Connection-Reply",
+      "action": "Close TCP",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Start Control Connection Request",
+      "action": "Version Not OK/Send Start Control Connection Reply",
+      "to": "wait_reply"
+    },
+    {
+      "from": "wait_reply",
+      "event": "Receive Start Ctl Connection Request",
+      "action": "Version OK",
+      "to": "established"
+    },
+    {
+      "from": "wait_reply",
+      "event": "Receive Start Ctl Connection Request",
+      "action": "Send Stop Reply",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Stop Control Connection Reply",
+      "action": "Close TCP",
+      "to": "idle"
+    },
+    {
+      "from": "wait_connect",
+      "event": "Receive Incoming Call Connect",
+      "action": "Send Outgoing Call Reply",
+      "to": "established"
+    }
+  ]
+}

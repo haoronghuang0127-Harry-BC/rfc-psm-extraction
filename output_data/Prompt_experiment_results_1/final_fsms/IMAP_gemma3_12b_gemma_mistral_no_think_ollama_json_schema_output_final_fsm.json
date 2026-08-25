@@ -1,0 +1,296 @@
+{
+  "states": [
+    "Connection",
+    "Session",
+    "Link Level",
+    "Initial Greeting",
+    "Client/Server Interactions",
+    "Command Continuation Pending",
+    "Command Completion Pending",
+    "Not Authenticated State",
+    "Authenticated State",
+    "Selected State",
+    "Logout State",
+    "Pre-Authentication Session",
+    "Authenticated Session",
+    "Any State",
+    "Authenticated Session",
+    "TLS negotiation",
+    "SCRAM-SHA-256 authentication",
+    "IMAP4rev2",
+    "ENABLED",
+    "SELECT completed",
+    "READ-WRITE",
+    "FETCH completed",
+    "FETCH body[header]",
+    "LOGOUT completed",
+    "Cleartext Port",
+    "Authenticated"
+  ],
+  "transitions": [
+    {
+      "from": "Link Level",
+      "event": "",
+      "action": "server listens on port 143 (cleartext port) or port 993 (Implicit TLS port)",
+      "to": "Initial Greeting"
+    },
+    {
+      "from": "Initial Greeting",
+      "event": "client command",
+      "action": "server data, server completion result response",
+      "to": "Client/Server Interactions"
+    },
+    {
+      "from": "Client/Server Interactions",
+      "event": "command continuation request response",
+      "action": "sends a command continuation request response if it is ready for the octets (if appropriate) and the remainder of the command",
+      "to": "Command Continuation Pending"
+    },
+    {
+      "from": "Client/Server Interactions",
+      "event": "BAD completion response",
+      "action": "reject the command and prevent the client from sending any more of the command",
+      "to": "Command Completion Pending"
+    },
+    {
+      "from": "Client/Server Interactions",
+      "event": "server completion response",
+      "action": "takes the appropriate action for the response and reads another response from the server",
+      "to": "Command Completion Pending"
+    },
+    {
+      "from": "Command Continuation Pending",
+      "event": "command continuations for the command",
+      "action": "initiating a new command",
+      "to": "Client/Server Interactions"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "",
+      "action": "",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "successful SELECT or EXAMINE command",
+      "action": "",
+      "to": "Selected State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "CLOSE or UNSELECT command, unsolicited CLOSED response code, or failed SELECT or EXAMINE command",
+      "action": "",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Selected State",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "send an untagged BYE response and a tagged OK response to the LOGOUT command",
+      "to": "Logout State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "send an untagged BYE response and a tagged OK response to the LOGOUT command",
+      "to": "Logout State"
+    },
+    {
+      "from": "Pre-Authentication Session",
+      "event": "receipt of any command",
+      "action": "resets the autologout timer",
+      "to": "Authenticated Session"
+    },
+    {
+      "from": "Authenticated Session",
+      "event": "receipt of any command",
+      "action": "resets the autologout timer",
+      "to": "Authenticated Session"
+    },
+    {
+      "from": "Any State",
+      "event": "CAPABILITY",
+      "action": "no specific responses for this command",
+      "to": "Any State"
+    },
+    {
+      "from": "Any State",
+      "event": "NOOP",
+      "action": "no specific responses for this command",
+      "to": "Any State"
+    },
+    {
+      "from": "Any State",
+      "event": "LOGOUT",
+      "action": "REQUIRED untagged response: BYE",
+      "to": "Any State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "AUTHENTICATE",
+      "action": "enters the authenticated state",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "LOGIN",
+      "action": "establishes authentication and enters the authenticated state",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "STARTTLS",
+      "action": "no specific response for this command",
+      "to": "Not Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "SELECT",
+      "action": "selects a mailbox so that messages in the mailbox can be accessed",
+      "to": "Selected State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "EXAMINE",
+      "action": "examines a mailbox",
+      "to": "Selected State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "NAMESPACE",
+      "action": "causes a single untagged NAMESPACE response to be returned",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "CREATE",
+      "action": "creates a mailbox",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "DELETE",
+      "action": "permanently removes the mailbox",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "RENAME",
+      "action": "changes the name of a mailbox",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "SUBSCRIBE",
+      "action": "adds the specified mailbox name to the server’s set of “active” mailboxes",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "UNSUBSCRIBE",
+      "action": "removes the specified mailbox name from the server’s set of “active” mailboxes",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "LIST",
+      "action": "returns a subset of mailbox names",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "STATUS",
+      "action": "requests the status of the indicated mailbox",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "APPEND",
+      "action": "appends the literal argument as a new message",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "IDLE",
+      "action": "client is ready to accept unsolicited update messages",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Selected State",
+      "event": "CLOSE",
+      "action": "permanently removes all messages that have the \\Deleted flag set",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Selected State",
+      "event": "UNSELECT",
+      "action": "frees a session’s resources associated with the selected mailbox",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Selected State",
+      "event": "EXPUNGE",
+      "action": "permanently removes all messages that have the \\Deleted flag set",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "SEARCH",
+      "action": "searches the mailbox for messages that match the given searching criteria",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "FETCH",
+      "action": "retrieves data associated with a message in the mailbox",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "STORE",
+      "action": "alters data associated with a message in the mailbox",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "COPY",
+      "action": "copies the specified message(s) to the end of the specified destination mailbox",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "MOVE",
+      "action": "moves the specified message(s) to the end of the specified destination mailbox",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "UID",
+      "action": "UID command",
+      "to": "Selected State"
+    },
+    {
+      "from": "Cleartext Port",
+      "event": "STARTTLS",
+      "action": "Negotiate TLS",
+      "to": "TLS Negotiation"
+    },
+    {
+      "from": "Cleartext Port",
+      "event": "Authentication",
+      "action": "Authenticate",
+      "to": "Authenticated"
+    },
+    {
+      "from": "TLS Negotiation",
+      "event": "TLS Negotiation Successful",
+      "action": "Continue",
+      "to": "Authenticated"
+    },
+    {
+      "from": "TLS Negotiation",
+      "event": "TLS Negotiation Failed",
+      "action": "Return to Cleartext Port",
+      "to": "Cleartext Port"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+[
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\n  \"states\": [\n    \"Transit mode\",\n    \"Reading mode\"\n  ],\n  \"transitions\": [\n    {\n      \"from\": \"Transit mode\",\n      \"event\": \"MODE READER command\",\n      \"action\": \"advertise READER capability, cease advertising MODE-READER capability\",\n      \"to\": \"Reading mode\"\n    },\n    {\n      \"from\": \"Reading mode\",\n      \"event\": \"\",\n      \"action\": \"\",\n      \"to\": \"Reading mode\"\n    }\n  ]\n}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\n  \"states\": [\n    \"Initial Connection\",\n    \"Reader Mode\"\n  ],\n  \"transitions\": [\n    {\n      \"from\": \"Initial Connection\",\n      \"event\": \"\",\n      \"action\": \"200 Service available, posting allowed\",\n      \"to\": \"Reader Mode\"\n    },\n    {\n      \"from\": \"Initial Connection\",\n      \"event\": \"\",\n      \"action\": \"201 Service available, posting prohibited\",\n      \"to\": \"Reader Mode\"\n    },\n    {\n      \"from\": \"Initial Connection\",\n      \"event\": \"\",\n      \"action\": \"400 or 502 greeting code\",\n      \"to\": \"Closed\"\n    },\n    {\n      \"from\": \"Reader Mode\",\n      \"event\": \"MODE READER\",\n      \"action\": \"200 or 201 response\",\n      \"to\": \"Reader Mode\"\n    },\n    {\n      \"from\": \"Reader Mode\",\n      \"event\": \"MODE READER\",\n      \"action\": \"502 response\",\n      \"to\": \"Closed\"\n    },\n    {\n      \"from\": \"Reader Mode\",\n      \"event\": \"QUIT\",\n      \"action\": \"205 Connection closing\",\n      \"to\": \"Closed\"\n    }\n  ]\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}"
+]

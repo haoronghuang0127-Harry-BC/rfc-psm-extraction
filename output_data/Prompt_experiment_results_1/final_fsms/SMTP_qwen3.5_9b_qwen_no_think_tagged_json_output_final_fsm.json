@@ -1,0 +1,105 @@
+{
+  "states": [
+    "Session Initiated",
+    "Mail Transaction In Progress",
+    "Initial State"
+  ],
+  "transitions": [
+    {
+      "from": "",
+      "event": "client opens connection",
+      "action": "server responds with opening message (220)",
+      "to": "Session Initiated"
+    },
+    {
+      "from": "Session Initiated",
+      "event": "client sends EHLO or HELO",
+      "action": "session opened, extensions requested/provided",
+      "to": "Session Initiated"
+    },
+    {
+      "from": "Session Initiated",
+      "event": "server returns 554 on connection opening",
+      "action": "reject mail session",
+      "to": "Session Initiated"
+    },
+    {
+      "from": "Session Initiated",
+      "event": "client sends MAIL command",
+      "action": "reset state tables/buffers, accept or reject reverse-path",
+      "to": "Mail Transaction In Progress"
+    },
+    {
+      "from": "Mail Transaction In Progress",
+      "event": "client sends RCPT command",
+      "action": "store forward-path, accept or reject recipient",
+      "to": "Mail Transaction In Progress"
+    },
+    {
+      "from": "Mail Transaction In Progress",
+      "event": "client sends DATA command",
+      "action": "initiate transfer of mail data",
+      "to": "Mail Transaction In Progress"
+    },
+    {
+      "from": "Mail Transaction In Progress",
+      "event": "end of mail data indicator received",
+      "action": "confirm transaction, process stored recipients and data",
+      "to": "Session Initiated"
+    },
+    {
+      "from": "Initial State",
+      "event": "EHLO",
+      "action": "clear buffers, reset state",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "HELO",
+      "action": "clear buffers, reset state",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "",
+      "action": "connection greeting received (220)",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "MAIL",
+      "action": "clear reverse-path, forward-path, mail data buffers; insert reverse-path",
+      "to": "Mail Transaction in Progress"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "RCPT",
+      "action": "append forward-path to buffer",
+      "to": "Mail Transaction in Progress"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "DATA",
+      "action": "append mail data to buffer; wait for end of data indication",
+      "to": "Mail Transaction in Progress"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "RSET",
+      "action": "discard stored sender, recipients, and mail data; clear all buffers and state tables",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "EHLO",
+      "action": "clear all buffers and reset state",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "QUIT",
+      "action": "abort current transaction; send 221 OK reply; close connection",
+      "to": "Initial State"
+    }
+  ]
+}

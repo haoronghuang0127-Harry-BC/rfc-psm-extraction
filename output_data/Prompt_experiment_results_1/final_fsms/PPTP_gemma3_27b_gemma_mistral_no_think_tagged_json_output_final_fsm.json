@@ -1,0 +1,217 @@
+{
+  "states": [
+    "Established Control Connection",
+    "Control Connection Closed",
+    "Session Established",
+    "Tunnel Established",
+    "idle",
+    "wait_ctl_reply",
+    "established",
+    "wait_stop_reply",
+    "Wait-Connect",
+    "Wait-Disconnect",
+    "session startup",
+    "transmitting data",
+    "window overflow"
+  ],
+  "transitions": [
+    {
+      "from": "Control Connection Closed",
+      "event": "Start-Control-Connection-Request",
+      "action": "Reply with Start-Control-Connection-Reply",
+      "to": "Established Control Connection"
+    },
+    {
+      "from": "Established Control Connection",
+      "event": "Stop-Control-Connection-Request",
+      "action": "Reply with Stop-Control-Connection-Reply",
+      "to": "Control Connection Closed"
+    },
+    {
+      "from": "Established Control Connection",
+      "event": "Echo-Request",
+      "action": "Reply with Echo-Reply",
+      "to": "Established Control Connection"
+    },
+    {
+      "from": "Established Control Connection",
+      "event": "Outgoing-Call-Request",
+      "action": "Reply with Outgoing-Call-Reply",
+      "to": "Session Established"
+    },
+    {
+      "from": "Established Control Connection",
+      "event": "Incoming-Call-Request",
+      "action": "Reply with Incoming-Call-Reply",
+      "to": "Session Established"
+    },
+    {
+      "from": "Established Control Connection",
+      "event": "Incoming-Call-Connected",
+      "action": "",
+      "to": "Session Established"
+    },
+    {
+      "from": "Established Control Connection",
+      "event": "Call-Clear-Request",
+      "action": "",
+      "to": "Control Connection Closed"
+    },
+    {
+      "from": "Established Control Connection",
+      "event": "Call-Disconnect-Notify",
+      "action": "",
+      "to": "Control Connection Closed"
+    },
+    {
+      "from": "Established Control Connection",
+      "event": "WAN-Error-Notify",
+      "action": "",
+      "to": "Established Control Connection"
+    },
+    {
+      "from": "Established Control Connection",
+      "event": "Set-Link-Info",
+      "action": "",
+      "to": "Established Control Connection"
+    },
+    {
+      "from": "Control Connection Closed",
+      "event": "",
+      "action": "Establish Tunnel",
+      "to": "Tunnel Established"
+    },
+    {
+      "from": "Tunnel Established",
+      "event": "",
+      "action": "",
+      "to": "Tunnel Established"
+    },
+    {
+      "from": "idle",
+      "event": "TCP Open Indication",
+      "action": "Send Start Control Connection Request",
+      "to": "wait_ctl_reply"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Collision",
+      "action": "Close TCP",
+      "to": "idle"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Start Ctl Connection Reply",
+      "action": "examine for compatible version",
+      "to": "established"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Start Ctl Connection Reply Version Not OK",
+      "action": "Send Stop-Control-Connection-Request",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "established",
+      "event": "Receive Stop Control Connection Request",
+      "action": "Send Stop-Control-Connection-Reply",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "wait_stop_reply",
+      "event": "Stop-Control-Connection-Reply",
+      "action": "Close TCP",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Start Ctl Connection Request",
+      "action": "/Send Start Control Connection Reply",
+      "to": "established"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Start Ctl Connection Request Version Not OK",
+      "action": "/Send Start Control Connection Reply with Error",
+      "to": "idle"
+    },
+    {
+      "from": "established",
+      "event": "Receive Stop Control Connection Request",
+      "action": "Send Stop-Control-Connection-Reply",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "established",
+      "event": "Local Terminate",
+      "action": "/Send Stop Control Request",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "Wait-Connect",
+      "event": "Receive Incoming Call Reply",
+      "action": "not accepting",
+      "to": "Idle"
+    },
+    {
+      "from": "Wait-Connect",
+      "event": "Receive Incoming Call Reply Accept",
+      "action": "Answer call; Send Call Connected",
+      "to": "Established"
+    },
+    {
+      "from": "Idle",
+      "event": "Receive Incoming Call Request",
+      "action": "/Send Incoming Call Reply",
+      "to": "Wait-Connect"
+    },
+    {
+      "from": "Idle",
+      "event": "Receive Outgoing Call Request",
+      "action": "/Send Outgoing Call Reply",
+      "to": "Wait-Reply"
+    },
+    {
+      "from": "session startup",
+      "event": "session startup",
+      "action": "set sequence number to zero",
+      "to": "transmitting data"
+    },
+    {
+      "from": "transmitting data",
+      "event": "packet sent with payload",
+      "action": "assign next consecutive sequence number",
+      "to": "transmitting data"
+    },
+    {
+      "from": "transmitting data",
+      "event": "window full",
+      "action": "stop sending packets",
+      "to": "transmitting data"
+    },
+    {
+      "from": "transmitting data",
+      "event": "packet timeout",
+      "action": "adjust window size to one half",
+      "to": "transmitting data"
+    },
+    {
+      "from": "transmitting data",
+      "event": "window's worth of packets acknowledged",
+      "action": "increase window size by one packet",
+      "to": "transmitting data"
+    },
+    {
+      "from": "transmitting data",
+      "event": "receiver's window overflows",
+      "action": "discard excess packets",
+      "to": "window overflow"
+    },
+    {
+      "from": "window overflow",
+      "event": "",
+      "action": "packets are discarded",
+      "to": "transmitting data"
+    }
+  ]
+}

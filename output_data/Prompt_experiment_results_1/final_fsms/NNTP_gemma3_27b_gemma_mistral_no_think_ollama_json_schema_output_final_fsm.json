@@ -1,0 +1,268 @@
+{
+  "states": [
+    "Transit mode",
+    "Reading mode",
+    "Initial Connection",
+    "Reader Mode",
+    "Connected",
+    "invalid",
+    "group selected",
+    "empty group",
+    "Initial connection set-up completed",
+    "Encrypted link established"
+  ],
+  "transitions": [
+    {
+      "from": "Transit mode",
+      "event": "MODE READER command",
+      "action": "",
+      "to": "Reading mode"
+    },
+    {
+      "from": "Reading mode",
+      "event": "",
+      "action": "",
+      "to": "Reading mode"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "Initial connection",
+      "action": "200",
+      "to": "Connected"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "Initial connection",
+      "action": "201",
+      "to": "Connected"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "Initial connection",
+      "action": "400, close connection",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "Initial connection",
+      "action": "502, close connection",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Connected",
+      "event": "MODE READER",
+      "action": "200 or 201",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Connected",
+      "event": "MODE READER",
+      "action": "502, close connection",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "IHAVE",
+      "action": "500",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Connected",
+      "event": "QUIT",
+      "action": "205",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "invalid",
+      "event": "GROUP",
+      "action": "Group successfully selected",
+      "to": "group selected"
+    },
+    {
+      "from": "invalid",
+      "event": "LISTGROUP",
+      "action": "No newsgroup selected",
+      "to": "invalid"
+    },
+    {
+      "from": "group selected",
+      "event": "NEXT",
+      "action": "Article found",
+      "to": "group selected"
+    },
+    {
+      "from": "group selected",
+      "event": "LAST",
+      "action": "Article found",
+      "to": "group selected"
+    },
+    {
+      "from": "group selected",
+      "event": "ARTICLE",
+      "action": "Article follows",
+      "to": "group selected"
+    },
+    {
+      "from": "group selected",
+      "event": "HEAD",
+      "action": "Headers follow",
+      "to": "group selected"
+    },
+    {
+      "from": "group selected",
+      "event": "BODY",
+      "action": "Body follows",
+      "to": "group selected"
+    },
+    {
+      "from": "group selected",
+      "event": "STAT",
+      "action": "Article exists",
+      "to": "group selected"
+    },
+    {
+      "from": "group selected",
+      "event": "GROUP",
+      "action": "Group successfully selected",
+      "to": "group selected"
+    },
+    {
+      "from": "group selected",
+      "event": "POST",
+      "action": "Send article to be posted",
+      "to": "group selected"
+    },
+    {
+      "from": "group selected",
+      "event": "IHAVE",
+      "action": "Send article to be transferred",
+      "to": "group selected"
+    },
+    {
+      "from": "group selected",
+      "event": "411",
+      "action": "No such newsgroup",
+      "to": "invalid"
+    },
+    {
+      "from": "group selected",
+      "event": "412",
+      "action": "No newsgroup selected",
+      "to": "invalid"
+    },
+    {
+      "from": "group selected",
+      "event": "420",
+      "action": "Current article number is invalid",
+      "to": "group selected"
+    },
+    {
+      "from": "group selected",
+      "event": "421",
+      "action": "No next article in this group",
+      "to": "group selected"
+    },
+    {
+      "from": "group selected",
+      "event": "422",
+      "action": "No previous article in this group",
+      "to": "group selected"
+    },
+    {
+      "from": "group selected",
+      "event": "423",
+      "action": "No article with that number",
+      "to": "group selected"
+    },
+    {
+      "from": "group selected",
+      "event": "430",
+      "action": "No article with that message-id",
+      "to": "group selected"
+    },
+    {
+      "from": "group selected",
+      "event": "435",
+      "action": "Article not wanted",
+      "to": "group selected"
+    },
+    {
+      "from": "group selected",
+      "event": "436",
+      "action": "Transfer not possible",
+      "to": "group selected"
+    },
+    {
+      "from": "group selected",
+      "event": "437",
+      "action": "Transfer rejected",
+      "to": "group selected"
+    },
+    {
+      "from": "group selected",
+      "event": "440",
+      "action": "Posting not permitted",
+      "to": "group selected"
+    },
+    {
+      "from": "group selected",
+      "event": "441",
+      "action": "Posting failed",
+      "to": "group selected"
+    },
+    {
+      "from": "invalid",
+      "event": "POST",
+      "action": "Posting not permitted",
+      "to": "invalid"
+    },
+    {
+      "from": "invalid",
+      "event": "IHAVE",
+      "action": "Article not wanted",
+      "to": "invalid"
+    },
+    {
+      "from": "group selected",
+      "event": "empty group",
+      "action": "empty group",
+      "to": "empty group"
+    },
+    {
+      "from": "empty group",
+      "event": "GROUP",
+      "action": "Group successfully selected",
+      "to": "group selected"
+    },
+    {
+      "from": "Initial connection set-up completed",
+      "event": "CAPABILITIES",
+      "action": "101 Capability list: VERSION 2 READER NEWNEWS POST XENCRYPT LIST ACTIVE NEWSGROUPS .",
+      "to": "Initial connection set-up completed"
+    },
+    {
+      "from": "Initial connection set-up completed",
+      "event": "XENCRYPT",
+      "action": "negotiate encryption on the link",
+      "to": "Encrypted link established"
+    },
+    {
+      "from": "Encrypted link established",
+      "event": "CAPABILITIES",
+      "action": "101 Capability list: VERSION 2 READER NEWNEWS POST XSECRET LIST ACTIVE NEWSGROUPS .",
+      "to": "Encrypted link established"
+    },
+    {
+      "from": "Encrypted link established",
+      "event": "XSECRET",
+      "action": "290 Password for fred accepted",
+      "to": "Encrypted link established"
+    },
+    {
+      "from": "Encrypted link established",
+      "event": "XSECRET",
+      "action": "483 Only permitted on secure links",
+      "to": "Encrypted link established"
+    }
+  ]
+}

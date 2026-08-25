@@ -1,0 +1,20 @@
+{
+  "states": [
+    "PPP connection",
+    "tunnel"
+  ],
+  "transitions": [
+    {
+      "from": "PPP connection",
+      "event": "",
+      "action": "addressed by PPP",
+      "to": "PPP connection"
+    },
+    {
+      "from": "tunnel",
+      "event": "",
+      "action": "not cryptographically protected",
+      "to": "tunnel"
+    }
+  ]
+}

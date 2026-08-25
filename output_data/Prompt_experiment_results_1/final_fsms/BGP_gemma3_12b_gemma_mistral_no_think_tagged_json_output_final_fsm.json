@@ -1,0 +1,23 @@
+{
+  "states": [
+    "BGP FSM",
+    "Operational",
+    "BGP-4",
+    "BGP message transmission",
+    "TCP connection establishment"
+  ],
+  "transitions": [
+    {
+      "from": "BGP message transmission",
+      "event": "local system TCP user interface supports the TCP PUSH function",
+      "action": "transmit BGP message with PUSH flag set",
+      "to": "BGP message transmission"
+    },
+    {
+      "from": "TCP connection establishment",
+      "event": "local system TCP user interface supports setting the DSCP field",
+      "action": "open TCP connection with bits 0-2 of the DSCP field set to 110 (binary)",
+      "to": "TCP connection establishment"
+    }
+  ]
+}

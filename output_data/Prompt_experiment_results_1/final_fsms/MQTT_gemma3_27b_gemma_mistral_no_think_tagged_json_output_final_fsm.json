@@ -1,0 +1,204 @@
+{
+  "states": [
+    "Connected",
+    "Not Connected",
+    "Client",
+    "Broker",
+    "Client Authorization Server",
+    "RS-AS interface",
+    "TLS:Anon,MQTT:None",
+    "TLS:Anon,MQTT:ace",
+    "TLS:Known(RPK/PSK),MQTT:none",
+    "TLS:Known(RPK/PSK),MQTT:ace",
+    "Authorized",
+    "Not authorized",
+    "Disconnected",
+    "Retained Message Active",
+    "New Session",
+    "Existing Session",
+    "Client connected",
+    "Session ongoing"
+  ],
+  "transitions": [
+    {
+      "from": "Not Connected",
+      "event": "CONNECT",
+      "action": "CONNACK",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "DISCONNECT",
+      "action": "",
+      "to": "Not Connected"
+    },
+    {
+      "from": "Client",
+      "event": "Token request",
+      "action": "",
+      "to": "Client Authorization Server"
+    },
+    {
+      "from": "Client Authorization Server",
+      "event": "Access token",
+      "action": "",
+      "to": "Client"
+    },
+    {
+      "from": "Client",
+      "event": "Connection request + access token",
+      "action": "",
+      "to": "Broker"
+    },
+    {
+      "from": "Broker",
+      "event": "Connection response",
+      "action": "",
+      "to": "Client"
+    },
+    {
+      "from": "Client",
+      "event": "Introspection request (optional)",
+      "action": "",
+      "to": "RS-AS interface"
+    },
+    {
+      "from": "RS-AS interface",
+      "event": "Introspection response (optional)",
+      "action": "",
+      "to": "Broker"
+    },
+    {
+      "from": "Broker",
+      "event": "Unauthorized request",
+      "action": "CONNACK reason code 0x87 (Not Authorized)",
+      "to": "Client"
+    },
+    {
+      "from": "Broker",
+      "event": "Authorization Success",
+      "action": "CONNACK reason code 0x00 (Success)",
+      "to": "Client"
+    },
+    {
+      "from": "Authorized",
+      "event": "CONNECT, PUBLISH, or SUBSCRIBE packet received or sent",
+      "action": "check for token expiration",
+      "to": "Authorized"
+    },
+    {
+      "from": "Authorized",
+      "event": "PINGREQ packet received",
+      "action": "check for token expiration",
+      "to": "Authorized"
+    },
+    {
+      "from": "Authorized",
+      "event": "token expiration",
+      "action": "send PUBACK, SUBACK, and DISCONNECT packets with the return code set to \"Not authorized\"",
+      "to": "Not authorized"
+    },
+    {
+      "from": "Not authorized",
+      "event": "AUTH packet with reason code 0x19 (Reauthentication)",
+      "action": "perform proof of possession",
+      "to": "Authorized"
+    },
+    {
+      "from": "Not authorized",
+      "event": "AUTH packet with reason code 0x19 (Reauthentication) - request denied",
+      "action": "send a DISCONNECT packet with reason code 0x87 (Not Authorized)",
+      "to": "Not authorized"
+    },
+    {
+      "from": "Connected",
+      "event": "Client DISCONNECT",
+      "action": "keep retained messages",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "network errors",
+      "action": "send Will Message",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "server disconnection due to a protocol error",
+      "action": "send Will Message",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Disconnected",
+      "event": "RETAIN flag in PUBLISH packet",
+      "action": "store message",
+      "to": "Retained Message Active"
+    },
+    {
+      "from": "Retained Message Active",
+      "event": "token expiry or message expiry interval",
+      "action": "discard retained message",
+      "to": "Disconnected"
+    },
+    {
+      "from": "New Session",
+      "event": "CONNECT packet with valid token",
+      "action": "resume communications",
+      "to": "Existing Session"
+    },
+    {
+      "from": "New Session",
+      "event": "CONNECT packet without token",
+      "action": "fail",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Existing Session",
+      "event": "CONNECT packet with valid token",
+      "action": "resume communications",
+      "to": "Existing Session"
+    },
+    {
+      "from": "Existing Session",
+      "event": "CONNECT packet with valid token",
+      "action": "create a new Session",
+      "to": "New Session"
+    },
+    {
+      "from": "Connected",
+      "event": "PUBLISH authorization failure",
+      "action": "ignore PUBLISH packet and disconnect Client",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "SUBSCRIBE authorization failure",
+      "action": "return 0x80 in SUBACK packet",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "token expiration",
+      "action": "disconnect Client",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Client connected",
+      "event": "permissions revoked",
+      "action": "may grant publish/subscribe to revoked topics",
+      "to": "Session ongoing"
+    },
+    {
+      "from": "Session ongoing",
+      "event": "reasonable cache timeout",
+      "action": "introspect tokens regularly",
+      "to": "Session ongoing"
+    },
+    {
+      "from": "Client connected",
+      "event": "abnormal behavior",
+      "action": "monitor Client behavior",
+      "to": "Client connected"
+    }
+  ]
+}

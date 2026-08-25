@@ -1,0 +1,355 @@
+{
+  "states": [
+    "User location",
+    "User availability",
+    "User capabilities",
+    "Session setup",
+    "Session management",
+    "client transaction",
+    "server transaction",
+    "Client",
+    "Server",
+    "Proxy, Proxy Server",
+    "Redirect Server",
+    "Registrar",
+    "User Agent Client (UAC)",
+    "User Agent Server (UAS)",
+    "User Agent (UA)",
+    "UAC Behavior",
+    "UAS Behavior",
+    "Redirect Servers",
+    "Client waiting for provisional response",
+    "Client has received a final response",
+    "Server processing CANCEL request",
+    "UAS processing CANCEL request",
+    "UA",
+    "Location Service",
+    "Proxy",
+    "Idle",
+    "Established Dialog",
+    "early",
+    "confirmed",
+    "UAC Processing",
+    "UAS Processing",
+    "Early Dialog",
+    "Confirmed Dialog",
+    "Dialog Established",
+    "INVITE Transaction in Progress (Client)",
+    "INVITE Transaction in Progress (Server)",
+    "Timer Active (491)",
+    "UAC Core",
+    "UAS Core",
+    "Dialog Exists",
+    "Dialog Does Not Exist",
+    "Stateless",
+    "Stateful",
+    "calling",
+    "Proceeding",
+    "Completed",
+    "Terminated",
+    "1xx",
+    "2xx",
+    "3xx",
+    "4xx",
+    "5xx",
+    "6xx",
+    "100 Trying",
+    "180 Ringing",
+    "181 Call Is Being Forwarded",
+    "182 Queued",
+    "183 Session Progress",
+    "200 OK",
+    "300 Multiple Choices",
+    "301 Moved Permanently",
+    "302 Moved Temporarily",
+    "305 Use Proxy",
+    "400 Bad Request",
+    "401 Unauthorized",
+    "404 Not Found",
+    "405 Method Not Allowed",
+    "407 Proxy Authentication Required",
+    "408 Request Timeout",
+    "409 Conflict",
+    "410 Gone",
+    "413 Request Entity Too Large",
+    "414 Request-URI Too Long",
+    "415 Unsupported Media Type",
+    "416 Unsupported URI Scheme",
+    "420 Bad Extension",
+    "421 Extension Required",
+    "480 Temporarily Unavailable",
+    "481 Call/Transaction Does Not Exist",
+    "482 Loop Detected",
+    "483 Too Many Hops",
+    "484 Address Incomplete",
+    "485 Ambiguous",
+    "486 Busy Here",
+    "487 Request Terminated",
+    "488 Not Acceptable Here",
+    "491 Request Pending",
+    "493 Undecipherable",
+    "500 Server Internal Error",
+    "501 Not Implemented",
+    "502 Bad Gateway",
+    "503 Service Unavailable",
+    "504 Server Time-out",
+    "505 Version Not Supported",
+    "513 Message Too Large",
+    "600 Busy Everywhere",
+    "603 Decline",
+    "604 Does Not Exist Anywhere",
+    "606 Not Acceptable",
+    "Registered",
+    "Session Setup",
+    "Established",
+    "Terminating"
+  ],
+  "transitions": [
+    {
+      "from": "Client waiting for provisional response",
+      "event": "no provisional response received",
+      "action": "wait for provisional response",
+      "to": "Client waiting for provisional response"
+    },
+    {
+      "from": "Client waiting for provisional response",
+      "event": "final response received",
+      "action": "do not send CANCEL",
+      "to": "Client has received a final response"
+    },
+    {
+      "from": "Client has received a final response",
+      "event": "",
+      "action": "no-op",
+      "to": "Client has received a final response"
+    },
+    {
+      "from": "UAS processing CANCEL request",
+      "event": "matching transaction found",
+      "action": "respond with 200 OK, same To tag as original request",
+      "to": "UAS processing CANCEL request"
+    },
+    {
+      "from": "UAS processing CANCEL request",
+      "event": "no matching transaction found",
+      "action": "respond with 481",
+      "to": "UAS processing CANCEL request"
+    },
+    {
+      "from": "UAS processing CANCEL request",
+      "event": "original request was INVITE",
+      "action": "respond to INVITE with 487",
+      "to": "UAS processing CANCEL request"
+    },
+    {
+      "from": "Idle",
+      "event": "OPTIONS",
+      "action": "send OPTIONS request",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "timeout",
+      "action": "return timeout error",
+      "to": "Idle"
+    },
+    {
+      "from": "Established Dialog",
+      "event": "OPTIONS",
+      "action": "send OPTIONS request",
+      "to": "Established Dialog"
+    },
+    {
+      "from": "early",
+      "event": "2xx final response",
+      "action": "transition to confirmed",
+      "to": "confirmed"
+    },
+    {
+      "from": "UAC Processing",
+      "event": "INVITE",
+      "action": "formulate INVITE request",
+      "to": "UAC Processing"
+    },
+    {
+      "from": "UAC Processing",
+      "event": "2xx response",
+      "action": "send ACK",
+      "to": "UAC Processing"
+    },
+    {
+      "from": "UAC Processing",
+      "event": "3xx, 4xx, 5xx or 6xx response",
+      "action": "handle rejection",
+      "to": "UAC Processing"
+    },
+    {
+      "from": "UAS Processing",
+      "event": "INVITE",
+      "action": "generate 2xx response",
+      "to": "Early Dialog"
+    },
+    {
+      "from": "UAS Processing",
+      "event": "INVITE",
+      "action": "generate 3xx response",
+      "to": "UAS Processing"
+    },
+    {
+      "from": "UAS Processing",
+      "event": "INVITE",
+      "action": "generate 4xx, 5xx or 6xx response",
+      "to": "UAS Processing"
+    },
+    {
+      "from": "Early Dialog",
+      "event": "2xx response",
+      "action": "transition to confirmed state",
+      "to": "Confirmed Dialog"
+    },
+    {
+      "from": "Early Dialog",
+      "event": "provisional response",
+      "action": "indicate progress",
+      "to": "Early Dialog"
+    },
+    {
+      "from": "Confirmed Dialog",
+      "event": "2xx response",
+      "action": "recompute route set",
+      "to": "Confirmed Dialog"
+    },
+    {
+      "from": "Dialog Established",
+      "event": "re-INVITE",
+      "action": "process re-INVITE",
+      "to": "INVITE Transaction in Progress (Client)"
+    },
+    {
+      "from": "INVITE Transaction in Progress (Client)",
+      "event": "non-2xx final response to re-INVITE",
+      "action": "remain unchanged",
+      "to": "Dialog Established"
+    },
+    {
+      "from": "INVITE Transaction in Progress (Client)",
+      "event": "491 response to re-INVITE",
+      "action": "start timer",
+      "to": "Timer Active (491)"
+    },
+    {
+      "from": "Timer Active (491)",
+      "event": "timer fires",
+      "action": "re-attempt re-INVITE",
+      "to": "INVITE Transaction in Progress (Client)"
+    },
+    {
+      "from": "UAC Core",
+      "event": "BYE request",
+      "action": "create non-INVITE client transaction",
+      "to": "UAC Core"
+    },
+    {
+      "from": "UAS Core",
+      "event": "BYE request",
+      "action": "check if it matches an existing dialog",
+      "to": "Dialog Exists"
+    },
+    {
+      "from": "Dialog Exists",
+      "event": "BYE request",
+      "action": "process the request according to Section 12.2.2",
+      "to": "UAS Core"
+    },
+    {
+      "from": "Dialog Exists",
+      "event": "BYE request",
+      "action": "generate 2xx response",
+      "to": "UAS Core"
+    },
+    {
+      "from": "Dialog Does Not Exist",
+      "event": "BYE request",
+      "action": "generate 481 response",
+      "to": "UAS Core"
+    },
+    {
+      "from": "calling",
+      "event": "INVITE sent",
+      "action": "reset timer A, INVITE sent",
+      "to": "calling"
+    },
+    {
+      "from": "calling",
+      "event": "timer A fires",
+      "action": "retransmit the request",
+      "to": "calling"
+    },
+    {
+      "from": "calling",
+      "event": "timer B fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "calling",
+      "event": "provisional response",
+      "action": "transition to Proceeding",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "response with status code from 300-699",
+      "action": "pass response to TU, generate ACK, send ACK",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "timer E fires",
+      "action": "retransmit request",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Completed",
+      "event": "timer D fires",
+      "action": "move to Terminated",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "retransmission of the final response",
+      "action": "re-pass ACK to transport layer",
+      "to": "Completed"
+    },
+    {
+      "from": "Registered",
+      "event": "REGISTER",
+      "action": "200 OK",
+      "to": "Registered"
+    },
+    {
+      "from": "Session Setup",
+      "event": "INVITE",
+      "action": "100 Trying",
+      "to": "Session Setup"
+    },
+    {
+      "from": "Session Setup",
+      "event": "INVITE",
+      "action": "180 Ringing",
+      "to": "Session Setup"
+    },
+    {
+      "from": "Session Setup",
+      "event": "INVITE",
+      "action": "200 OK",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "BYE",
+      "action": "200 OK",
+      "to": "Terminating"
+    }
+  ]
+}

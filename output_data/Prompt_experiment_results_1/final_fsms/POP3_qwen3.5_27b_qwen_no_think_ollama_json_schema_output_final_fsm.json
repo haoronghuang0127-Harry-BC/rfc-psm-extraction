@@ -1,0 +1,101 @@
+{
+  "states": [
+    "AUTHORIZATION",
+    "TRANSACTION",
+    "UPDATE",
+    "AUTHORIZATION state",
+    "TRANSACTION state"
+  ],
+  "transitions": [
+    {
+      "from": "AUTHORIZATION",
+      "event": "successful identification",
+      "action": "server acquires resources associated with the client's maildrop",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "QUIT command",
+      "action": "POP3 server releases any resources acquired during the TRANSACTION state and says goodbye",
+      "to": "UPDATE"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "authentication command",
+      "action": "acquires an exclusive-access lock on the maildrop; responds with a positive status indicator",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "authentication command",
+      "action": "responds with a negative status indicator",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "QUIT",
+      "action": "+OK",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "STAT",
+      "action": "+OK nn mm",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "LIST",
+      "action": "+OK scan listing follows or -ERR no such message",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "RETR",
+      "action": "+OK message follows or -ERR no such message",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "DELE",
+      "action": "+OK message deleted or -ERR no such message",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "NOOP",
+      "action": "+OK",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "RSET",
+      "action": "+OK",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "QUIT",
+      "action": "",
+      "to": "UPDATE"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "QUIT",
+      "action": "The POP3 server removes all messages marked as deleted from the maildrop and replies as to the status of this operation. Whether the removal was successful or not, the server then releases any exclusive-access lock on the maildrop and closes the TCP connection.",
+      "to": "UPDATE"
+    },
+    {
+      "from": "AUTHORIZATION state",
+      "event": "APOP name digest (correct digest)",
+      "action": "+OK maildrop locked and ready",
+      "to": "TRANSACTION state"
+    },
+    {
+      "from": "AUTHORIZATION state",
+      "event": "APOP name digest (incorrect digest)",
+      "action": "-ERR permission denied",
+      "to": "AUTHORIZATION state"
+    }
+  ]
+}

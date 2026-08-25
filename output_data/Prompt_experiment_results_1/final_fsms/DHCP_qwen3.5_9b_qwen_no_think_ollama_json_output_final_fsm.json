@@ -1,0 +1,164 @@
+{
+  "states": [
+    "INIT",
+    "INIT-REBOOT",
+    "SELECTING",
+    "REQUESTING",
+    "BOUND",
+    "RENEWING",
+    "REBINDING",
+    "RENEW"
+  ],
+  "transitions": [
+    {
+      "from": "INIT",
+      "event": "",
+      "action": "Broadcasts DHCPDISCOVER",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "Receives DHCPOFFER",
+      "action": "Selects server and broadcasts DHCPREQUEST",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "Times out or receives no DHCPOFFER",
+      "action": "Retransmits DHCPDISCOVER",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "Receives DHCPACK",
+      "action": "Configures and notes lease duration",
+      "to": "BOUND"
+    },
+    {
+      "from": "INIT",
+      "event": "Receives DHCPNAK",
+      "action": "Restarts configuration process",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "Retransmits DHCPREQUEST and times out without ACK/NAK",
+      "action": "Reverts to INIT state",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "Sends DHCPRELEASE",
+      "action": "Relinquishes lease",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "Detects address already in use (ARP)",
+      "action": "Sends DHCPDECLINE and restarts configuration process",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "Receives DHCPNAK",
+      "action": "Cannot reuse address, requests new address",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "Times out retransmitting DHCPREQUEST without ACK/NAK",
+      "action": "May choose to use previously allocated address",
+      "to": "BOUND"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "",
+      "action": "Send DHCPREQUEST",
+      "to": "REQUESTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPOFFER",
+      "action": "Collect replies",
+      "to": "SELECTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPNAK",
+      "action": "",
+      "to": "INIT-REBOOT"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPNAK",
+      "action": "",
+      "to": "INIT-REBOOT"
+    },
+    {
+      "from": "BOUND",
+      "event": "T1 expires",
+      "action": "Send DHCPREQUEST to leasing server",
+      "to": "RENEWING"
+    },
+    {
+      "from": "BOUND",
+      "event": "T2 expires",
+      "action": "Broadcast DHCPREQUEST",
+      "to": "REBINDING"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "BOUND",
+      "event": "Lease expired",
+      "action": "",
+      "to": "INIT"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPNAK",
+      "action": "",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPNAK",
+      "action": "",
+      "to": "INIT-REBOOT"
+    },
+    {
+      "from": "BOUND",
+      "event": "",
+      "action": "client is in BOUND state and can respond to ARP requests",
+      "to": "RENEW"
+    },
+    {
+      "from": "RENEW",
+      "event": "",
+      "action": "client continues renewal process",
+      "to": "REBINDING"
+    }
+  ]
+}

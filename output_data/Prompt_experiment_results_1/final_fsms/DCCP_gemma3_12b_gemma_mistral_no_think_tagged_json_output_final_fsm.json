@@ -1,0 +1,45 @@
+{
+  "states": [
+    "Unreliable flows of datagrams",
+    "Reliable handshakes for connection setup and teardown",
+    "Reliable negotiation of options",
+    "Mechanisms allowing servers to avoid holding state for unacknowledged connection attempts and already-finished connections",
+    "Congestion control incorporating Explicit Congestion Notification (ECN)",
+    "Acknowledgement mechanisms communicating packet loss and ECN information",
+    "Optional mechanisms that tell the sending application which data packets reached the receiver",
+    "Path Maximum Transmission Unit (PMTU) discovery",
+    "TCP-like Congestion Control",
+    "TCP-Friendly Rate Control",
+    "Congestion Manager state",
+    "DCCP processor",
+    "Init Cookie",
+    "Application Not Listening Drop Code",
+    "Sequence number validity checks"
+  ],
+  "transitions": [
+    {
+      "from": "TCP-like Congestion Control state",
+      "event": "packet drop or mark",
+      "action": "halves the congestion window",
+      "to": "TCP-like Congestion Control state"
+    },
+    {
+      "from": "TCP-Friendly Rate Control state",
+      "event": "",
+      "action": "minimizes abrupt changes in the sending rate while maintaining longer-term fairness with TCP",
+      "to": "TCP-Friendly Rate Control state"
+    },
+    {
+      "from": "Sequence number validity checks",
+      "event": "",
+      "action": "servers avoid extensive computation or packet generation",
+      "to": "Init Cookie"
+    },
+    {
+      "from": "Sequence number validity checks",
+      "event": "",
+      "action": "servers avoid extensive computation or packet generation",
+      "to": "Application Not Listening Drop Code"
+    }
+  ]
+}

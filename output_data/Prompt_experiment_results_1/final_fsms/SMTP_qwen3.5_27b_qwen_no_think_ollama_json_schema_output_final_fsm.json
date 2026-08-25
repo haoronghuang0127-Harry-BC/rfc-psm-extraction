@@ -1,0 +1,96 @@
+{
+  "states": [
+    "Connection Established",
+    "Mail Transaction",
+    "Session Initiated",
+    "Mail Transaction in Progress",
+    "initial state",
+    "mail transaction in progress"
+  ],
+  "transitions": [
+    {
+      "from": "Connection Established",
+      "event": "initial handshaking is completed",
+      "action": "",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "server issues a success response at the end of the mail data",
+      "action": "formal handoff of responsibility for the message occurs",
+      "to": "Connection Established"
+    },
+    {
+      "from": "Session Initiated",
+      "event": "MAIL command",
+      "action": "reset state tables and buffers; return 250 OK or error reply",
+      "to": "Mail Transaction in Progress"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "RCPT command",
+      "action": "store forward-path; return 250 OK or 550 reply",
+      "to": "Mail Transaction in Progress"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "DATA command",
+      "action": "return 354 Intermediate reply",
+      "to": "Mail Transaction in Progress"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "end of mail data indicator",
+      "action": "process stored recipients and mail data; return 250 OK or error reply",
+      "to": "Session Initiated"
+    },
+    {
+      "from": "initial state",
+      "event": "EHLO or HELO",
+      "action": "250 OK reply; confirm initial state; clear state tables and buffers",
+      "to": "initial state"
+    },
+    {
+      "from": "initial state",
+      "event": "RSET",
+      "action": "discard stored sender, recipients, and mail data; clear all buffers and state tables; 250 OK reply",
+      "to": "initial state"
+    },
+    {
+      "from": "initial state",
+      "event": "EHLO (issued later in session)",
+      "action": "clear all buffers and reset state exactly as if RSET had been issued",
+      "to": "initial state"
+    },
+    {
+      "from": "initial state",
+      "event": "MAIL",
+      "action": "clear reverse-path, forward-path, and mail data buffers; insert reverse-path into reverse-path buffer",
+      "to": "mail transaction in progress"
+    },
+    {
+      "from": "mail transaction in progress",
+      "event": "RSET",
+      "action": "abort current mail transaction; discard stored sender, recipients, and mail data; clear all buffers and state tables; 250 OK reply",
+      "to": "initial state"
+    },
+    {
+      "from": "mail transaction in progress",
+      "event": "EHLO",
+      "action": "clear all buffers and reset state exactly as if RSET had been issued",
+      "to": "initial state"
+    },
+    {
+      "from": "mail transaction in progress",
+      "event": "QUIT",
+      "action": "abort current uncompleted mail transaction; 221 OK reply; close transmission channel",
+      "to": "initial state"
+    },
+    {
+      "from": "mail transaction in progress",
+      "event": "DATA",
+      "action": "append mail data to mail data buffer; process stored mail transaction information on end of mail data indication; clear buffers",
+      "to": "initial state"
+    }
+  ]
+}

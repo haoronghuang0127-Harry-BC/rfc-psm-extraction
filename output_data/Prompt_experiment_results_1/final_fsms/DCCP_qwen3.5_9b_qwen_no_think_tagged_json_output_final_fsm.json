@@ -1,0 +1,222 @@
+{
+  "states": [
+    "CLOSED",
+    "LISTEN",
+    "REQUEST",
+    "RESPOND",
+    "PARTOPEN",
+    "OPEN",
+    "CLOSEREQ",
+    "CLOSING",
+    "TIMEWAIT",
+    "STABLE",
+    "CHANGING",
+    "UNSTABLE"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "DCCP-Response",
+      "action": "",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "DCCP-Request",
+      "action": "",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "DCCP-Ack or DCCP-DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "DCCP-CloseReq",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "DCCP-Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "DCCP-Close",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "2MSL timeout",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "STABLE",
+      "event": "",
+      "action": "snd Change L/R",
+      "to": "CHANGING"
+    },
+    {
+      "from": "CHANGING",
+      "event": "rcv Confirm R/L",
+      "action": "accept value, Set F.state := STABLE",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "pref list changes",
+      "action": "",
+      "to": "UNSTABLE"
+    },
+    {
+      "from": "UNSTABLE",
+      "event": "snd Change L/R (with new pref list)",
+      "action": "",
+      "to": "CHANGING"
+    },
+    {
+      "from": "CHANGING",
+      "event": "rcv empty Confirm R/L",
+      "action": "revert to old value",
+      "to": "STABLE"
+    },
+    {
+      "from": "UNSTABLE",
+      "event": "",
+      "action": "",
+      "to": "CHANGING"
+    },
+    {
+      "from": "REQUEST",
+      "event": "",
+      "action": "",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "CLOSED",
+      "event": "",
+      "action": "snd Request",
+      "to": "REQUEST"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv Request",
+      "action": "snd Response",
+      "to": "RESPOND"
+    },
+    {
+      "from": "LISTEN",
+      "event": "",
+      "action": "Generate Reset(No Connection)",
+      "to": "CLOSED"
+    },
+    {
+      "from": "REQUEST",
+      "event": "rcv Response",
+      "action": "Move to PARTOPEN, snd Ack",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "",
+      "action": "Generate Reset(Packet Error)",
+      "to": "CLOSED"
+    },
+    {
+      "from": "RESPOND",
+      "event": "rcv Ack/DataAck",
+      "action": "Move to OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "",
+      "action": "Generate Reset(No Connection)",
+      "to": "CLOSED"
+    },
+    {
+      "from": "RESPOND",
+      "event": "timeout >= 4MSL",
+      "action": "snd Reset(Aborted), Move to CLOSED",
+      "to": "CLOSED"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "rcv packet (not Response, Reset, Sync)",
+      "action": "Move to OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "",
+      "action": "snd Ack",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "timeout >= 4MSL",
+      "action": "Reset connection(Aborted)",
+      "to": "CLOSED"
+    },
+    {
+      "from": "OPEN",
+      "event": "",
+      "action": "snd CloseReq",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "OPEN",
+      "event": "rcv CloseReq",
+      "action": "Move to CLOSING, snd Close",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "rcv Close",
+      "action": "snd Reset(Closed)",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "",
+      "action": "snd CloseReq",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "CLOSING",
+      "event": "rcv Reset",
+      "action": "Move to TIMEWAIT",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "",
+      "action": "snd Close",
+      "to": "CLOSING"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "2MSL timer expires",
+      "action": "Move to CLOSED",
+      "to": "CLOSED"
+    }
+  ]
+}
