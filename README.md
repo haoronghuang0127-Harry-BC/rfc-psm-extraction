@@ -2,19 +2,21 @@
 
 ## Project Description
 
-This project selects useful sections from RFC documents before sending them to a large language model (LLM).
+This project reproduces the PSMBench extraction workflow using local LLMs and compares different prompt output control and FSM evaluation methods.
 
 This project uses PSMBench data and runs local LLMs with Ollama.
 
 ## Project Structure
 
-- `config/`: protocol, model, profile, output-format, Ollama, and path configuration.
-- `rfc/`: rfc types, roadling and related functions.
+- `config/`: protocol, model, profile, Ollama, and path configuration.
+- `rfc/`: RFC types, loading, and related functions.
 - `utils/`: shared helper functions.
-- `method_1_section_selection/`: section selection, prompt generation, and LLM experiments.
-- `method_2_long_section_splitting/`: experimental long-section splitting method; **currently under development.**
-- `evaluation/`: PSM validation, PSMBench-based evaluation, and CSV summary generation.
-- `PSMBench/`: third-party benchmark data and code.
+- `evaluation/`: original PSMBench evaluation, one-to-one evaluation, and CSV summary generation.
+- `psmbench_local_baseline/`: original PSMBench extraction workflow using local Ollama models.
+- `prompt_experiment/`: prompt and JSON output control experiments.
+- `research_pipeline/`: shared model selection and response processing functions.
+- `output_data/`: saved experiment and evaluation results.
+- `RFC_PSM_Benchmark-main/`: third-party benchmark data and code.
 
 ## Setup
 
@@ -28,137 +30,292 @@ pip install -r requirements.txt
 
 Copy `.env.example` to `.env`, and then set the local or remote Ollama URL.
 
+For a local Ollama test, pull the model used by the quick examples:
+
+```powershell
+ollama pull qwen3.5:9b
+```
+
+Make sure Ollama is running before starting an LLM experiment.
+
+On Windows, use `py` instead of `python` if the `python` command is not available.
+
 ## Run the Project
 
 Run all commands from the project root folder.
 
-### Method 1 section_selection
+### Original PSMBench evaluation
 
-#### 1.Select RFC sections:
+These commands evaluate the saved FSM files in `RFC_PSM_Benchmark-main/fsm/`.
 
-```powershell
-python -m method_1_section_selection.hybrid_section_selection
-```
+Ollama is not required for these commands.
 
-#### 2.Generate LLM prompts:
+The first evaluation run may download the `all-MiniLM-L6-v2` sentence-transformer model.
 
-```powershell
-python -m method_1_section_selection.generate_llm_prompts
-```
-
-#### 3.Run LLM extration experiment 
-
-Run a quick test:
-```powershell
-python -m method_1_section_selection.run_llm_extraction --protocol POP3 --max-sections 1
-```
-
-Run a complete experiment:
+#### 1.Run the original PSMBench evaluation:
 
 ```powershell
-python -m method_1_section_selection.run_llm_extraction --protocol POP3 --scoring-method keyword_density --input-version hybrid_high --model qwen3.5:9b --profile P0 --connection auto --output-format F0 --seed 42 --max-sections all
+python -m evaluation.run_original_psmbench_evaluation
 ```
 
-Show the LLM experiment command line options:
+The generated CSV files are saved in `output_data/PSMBench_original_evaluation_results/`.
+
+#### 2.Run the new one to one PSMBench evaluation:
 
 ```powershell
-python -m method_1_section_selection.run_llm_extraction --help
+python -m evaluation.run_original_psmbench_new_evaluation
 ```
-The program supports these options:
-- `--protocol`: Select a protocol, such as `POP3` or `TCP`.
-- `--scoring-method`: Select a method for scoring RFC sections.
-- `--input-version`: Select which RFC sections are used.
-- `--model`: Select an Ollama model.
-- `--profile`: Select the model parameter settings.
+
+The generated CSV files are saved in `output_data/PSMBench_new_evaluation_results/`.
+
+#### 3.Compare the two evaluation methods:
+
+Run Steps 1 and 2 first.
+
+```powershell
+python -m evaluation.analyze_evaluation_results
+```
+
+The summary is saved in `output_data/psmbench_original_vs_new_evaluation_summary.csv`.
+
+These evaluation scripts do not have command line options. The protocols, models, and matching threshold are defined in the Python files.
+
+
+### PSMBench local Ollama baseline
+
+Run the following commands in order.
+
+The quick example uses `PPP` because it contains only 6 RFC segments.
+
+#### 1.Generate the original PSMBench extraction prompts:
+
+```powershell
+python -m psmbench_local_baseline.generate_extraction_prompts
+```
+
+#### 2.Run a quick extraction test:
+
+```powershell
+python -m psmbench_local_baseline.llm_extraction --protocol PPP --model qwen3.5:9b --connection auto
+```
+
+#### 3.Process extraction responses:
+
+```powershell
+python -m psmbench_local_baseline.process_extraction_responses
+```
+
+#### 4.Generate combination prompts:
+
+```powershell
+python -m psmbench_local_baseline.generate_combination_prompts
+```
+
+#### 5.Run LLM combination:
+
+```powershell
+python -m psmbench_local_baseline.llm_combination
+```
+
+#### 6.Extract final FSMs:
+
+```powershell
+python -m psmbench_local_baseline.extract_final_fsms
+```
+
+#### 7.Evaluate the final FSMs:
+
+```powershell
+python -m psmbench_local_baseline.run_evaluation
+```
+
+Show the baseline extraction command line options:
+
+Run Step 1 before using this help command.
+
+```powershell
+python -m psmbench_local_baseline.llm_extraction --help
+```
+
+The extraction stage supports these options:
+
+- `--protocol`: Select one protocol or `all`.
+- `--model`: Select an Ollama model or `all`.
 - `--connection`: Use a local or remote Ollama server.
-- `--output-format`: Select the JSON output method.
-- `--seed`: Set the random seed.
-- `--max-sections`: Select how many RFC sections are processed.
+- `--thinking`: Enable optional thinking for supported Qwen models.
 
-#### 4.Evaluate completed Method 1 experiments
+The current complete baseline workflow supports `qwen3.5:9b` and `qwen3.5:27b` without thinking, Gemma, and Mistral.
+
+Qwen thinking and QwQ combination are currently not enabled.
+
+Generated files are saved in `psmbench_local_baseline/outputs/`.
+
+
+### Prompt output control experiment
+
+This experiment compares different methods for controlling the LLM JSON output.
+
+Run the following commands in order.
+
+The quick example uses one protocol, one model, and one output control method.
+
+#### 1.Generate extraction prompts:
+
 ```powershell
-python -m method_1_section_selection.run_evaluation
+python -m prompt_experiment.output_format.generate_extraction_prompts --protocol PPP --output-control ollama_json_output
 ```
+
+#### 2.Run LLM extraction:
+
+```powershell
+python -m prompt_experiment.output_format.llm_extraction --protocol PPP --model qwen3.5:9b --profile default --output-control ollama_json_output --connection auto
+```
+
+#### 3.Process extraction responses:
+
+```powershell
+python -m prompt_experiment.output_format.process_extraction_responses
+```
+
+#### 4.Generate combination prompts:
+
+```powershell
+python -m prompt_experiment.output_format.generate_combination_prompts
+```
+
+#### 5.Run LLM combination:
+
+```powershell
+python -m prompt_experiment.output_format.llm_combination --protocol PPP --model qwen3.5:9b --profile default --output-control ollama_json_output --connection auto
+```
+
+#### 6.Extract final FSMs:
+
+```powershell
+python -m prompt_experiment.output_format.extract_final_fsms
+```
+
+#### 7.Evaluate the final FSMs:
+
+```powershell
+python -m prompt_experiment.output_format.run_evaluation
+```
+
+Show the shared command line options:
+
+```powershell
+python -m prompt_experiment.output_format.llm_extraction --help
+```
+
+The LLM experiment commands support these options:
+
+- `--protocol`: Select one protocol or `all`.
+- `--model`: Select an Ollama model or `all`.
+- `--profile`: Select a model profile, `default`, or `all`.
+- `--output-control`: Select a JSON output control method or `all`.
+- `--connection`: Use a local or remote Ollama server.
+
+Use `default` to automatically select a profile supported by the selected model.
+
+Do not omit the selection options for a quick test. The default LLM settings select all protocols, models, and output control methods.
+
+Generated files are saved in `prompt_experiment/outputs/`.
+
+
+### Compare PSMBench and the local Ollama baseline
+
+Run the new PSMBench evaluation and the local baseline evaluation first.
+
+```powershell
+python -m psmbench_local_baseline.analyze_psmbench_saved_vs_local_ollama_results
+```
+
+The summary is saved in `psmbench_local_baseline/outputs/psmbench_saved_vs_local_ollama_model_summary.csv`.
 
 
 ## Experiment Configuration
+
 ### Protocol
+
 Available protocols:
+
 `BGP`, `DCCP`, `DHCP`, `FTP`, `IMAP`, `MQTT`, `NNTP`, `POP3`, `PPP`, `PPTP`, `RTSP`, `SIP`, `SMTP`, and `TCP`.
 
-Default: `POP3`
+The local baseline requires `--protocol`.
 
-### Scoring Method
-- `legacy_count`: Uses the total number of weighted keywords.
-- `keyword_density`: Calculates the keyword score for every 1000 words.
+The prompt output control experiment uses `all` by default.
 
-Default: `keyword_density`
+Quick example: `PPP`
 
-### Input Versions
-- `baseline_all`: Use all RFC sections.
-- `hybrid_high`: Use only high priority sections.
-- `hybrid_high_medium`: Use high and medium priority sections.
-
-Default: `hybrid_high`
 
 ### Model
 
 Available models:
-##### Small Models
-- `qwen3.5:9b`, `ministral-3:8b`, `llama3.1:8b`, `gemma3:12b`, `deepseek-r1:8b`
 
-##### Medium Models
-- `qwen3.5:27b`, `qwen3.5:35b`, `mistral-small3.2:24b`, `gemma3:27b`, `deepseek-r1:32b`, `gpt-oss:20b`
+#### Small Models
 
-##### Large Models
-- `llama3.3:70b`, `deepseek-r1:70b`, `qwen3-next:80b-a3b-instruct-q4_K_M`
+- `qwen3.5:9b`
+- `gemma3:12b`
 
-##### Extra Large Models
-- `qwen3.5:122b`, `gpt-oss:120b`
+#### Medium Models
 
-Default: `qwen3.5:9b`
+- `qwen3.5:27b`
+- `gemma3:27b`
+- `mistral-small3.1:24b`
+- `qwq:32b`
+
+The local baseline requires `--model`.
+
+The prompt output control experiment uses `all` by default.
+
+Quick example: `qwen3.5:9b`
+
 
 ### Profile
-- `default`: Use the default settings of the selected model.
-- `P0`: Basic settings.
-- `P1`: Use a larger context and output limit.
-- `P2`: Use a small amount of randomness to test result stability.
-- `P3`: Enable thinking mode.
-- `P4-low`: Use low reasoning for GPT-OSS models.
-- `P4-medium`: Use medium reasoning for GPT-OSS models.
 
-[View the Model Profile configuration](config/model_profiles.py)
+The profile option is used by the prompt output control experiment.
+
+- `default`: Use the default profile supported by the selected model.
+- `qwen-no-think`: Run a Qwen model without thinking.
+- `qwen-think`: Run a supported Qwen model with thinking.
+- `gemma-mistral-no-think`: Run Gemma or Mistral without thinking.
+- `qwq-reasoning`: Use the intrinsic QwQ reasoning mode.
+- `all`: Run all profiles supported by the selected model.
+
+Default: `default`
+
+[View the Model Profile configuration](config/models/model_profiles.py)
+
+
+### Output Control
+
+The output control option is used by the prompt output control experiment.
+
+- `tagged_json_output`: Ask the model to return JSON inside tags.
+- `ollama_json_output`: Use the Ollama JSON output mode.
+- `ollama_json_schema_output`: Use an Ollama JSON schema.
+- `all`: Run all output control methods.
+
+Default: `all`
+
 
 ### Connection
+
 - `local`: Use local Ollama.
 - `remote`: Use the remote Ollama server defined in `.env`.
 - `auto`: Try local Ollama first. If the local connection fails, try the remote Ollama server.
 
 Default: `auto`
 
-### Output Format
-- `F0`: Use the original PSMBench prompt and output format.
-- `F1`: Ask Ollama to return valid JSON.
-- `F2`: Ask Ollama to return JSON with the required structure.
-
-[View the output formats configuration](config/output_formats.py)
-
-### Seed
-Using the same seed makes experiments easier to repeat.
-
-Default: `42`
-
-### Max Sections
-Use `--max-sections 1` for a quick test.
-
-Use `--max-sections all` to process all selected sections.
-
-Default: `1`
-
-
 
 ## Data Storage Directory
-Generated files are saved in `method_1_section_selection/outputs/`. 
+
+Generated local baseline files are saved in `psmbench_local_baseline/outputs/`.
+
+Generated prompt experiment files are saved in `prompt_experiment/outputs/`.
+
+PSMBench evaluation results and saved experiment results are stored in `output_data/`.
+
 
 ## PSMBench
 
@@ -168,9 +325,9 @@ PSMBench is a third-party project. It is not my original work.
 - Authors: Zilin Shen, Xinyu Luo, Imtiaz Karim, and Elisa Bertino
 - License: Apache License 2.0
 
-The original license is kept in `PSMBench/LICENSE`.
+The original license is kept in `RFC_PSM_Benchmark-main/LICENSE`.
 
 
 ### PSMBench Evaluation Results
 
-The generated CSV files can be viewed here: [PSMBench Evaluation Results](PSMBench_evaluation_results/)
+The generated CSV files can be viewed here: [PSMBench Evaluation Results](output_data/)
