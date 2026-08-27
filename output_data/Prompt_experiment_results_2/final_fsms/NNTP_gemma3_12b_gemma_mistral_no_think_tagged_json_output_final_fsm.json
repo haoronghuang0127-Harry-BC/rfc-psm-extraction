@@ -1,0 +1,352 @@
+{
+  "states": [
+    "invalid newsgroup",
+    "Connected",
+    "Greeting Received",
+    "Command Exchange",
+    "Inactivity Timer Active",
+    "Multi-line Data Block Processing",
+    "Matching",
+    "Initial Connection",
+    "Reader Mode",
+    "Transit Mode",
+    "Invalid",
+    "Selected",
+    "Session Start",
+    "Idle",
+    "Overview Database Access",
+    "Command Line Received",
+    "Command Datastream Received",
+    "Response Sent",
+    "Multi-line Data Block Received",
+    "Command Continuation Received",
+    "US-ASCII",
+    "UTF-8",
+    "NNTP Service Ready",
+    "XENCRYPT Negotiation",
+    "XSECRET Negotiation",
+    "initial connection",
+    "service available, posting allowed",
+    "service available, posting prohibited"
+  ],
+  "transitions": [
+    {
+      "from": "Connected",
+      "event": "connection established",
+      "action": "MUST send a greeting",
+      "to": "Greeting Received"
+    },
+    {
+      "from": "Greeting Received",
+      "event": "command received",
+      "action": "exchange commands and responses",
+      "to": "Command Exchange"
+    },
+    {
+      "from": "Command Exchange",
+      "event": "inactivity",
+      "action": "reset the autologout timer",
+      "to": "Inactivity Timer Active"
+    },
+    {
+      "from": "Command Exchange",
+      "event": "significant amount of data received",
+      "action": "reset the autologout timer",
+      "to": "Command Exchange"
+    },
+    {
+      "from": "Command Exchange",
+      "event": "timer expires",
+      "action": "close the connection without sending any response",
+      "to": "Connected"
+    },
+    {
+      "from": "Command Exchange",
+      "event": "multi-line data block",
+      "action": "adhere to multi-line data block rules",
+      "to": "Multi-line Data Block Processing"
+    },
+    {
+      "from": "Matching",
+      "event": "",
+      "action": "",
+      "to": "Matching"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "200 Service available, posting allowed; 201 Service available, posting prohibited; 400 Service temporarily unavailable; 502 Service permanently unavailable",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "QUIT",
+      "action": "205 NNTP Service exits normally",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "MODE READER",
+      "action": "200 Reader mode, posting permitted; 201 NNTP Service Ready, posting prohibited; 502 Transit service only",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "CAPABILITIES",
+      "action": "101 Capability list follows",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "QUIT",
+      "action": "205 Connection closing",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "MODE READER",
+      "action": "200 Reader mode, posting permitted; 201 NNTP Service Ready, posting prohibited",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "CAPABILITIES",
+      "action": "101 Capability list follows",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Transit Mode",
+      "event": "MODE READER",
+      "action": "502 Transit service only",
+      "to": "Transit Mode"
+    },
+    {
+      "from": "Invalid",
+      "event": "GROUP",
+      "action": "set currently selected newsgroup and current article number",
+      "to": "Selected"
+    },
+    {
+      "from": "Invalid",
+      "event": "LISTGROUP",
+      "action": "set currently selected newsgroup and current article number",
+      "to": "Selected"
+    },
+    {
+      "from": "Invalid",
+      "event": "LAST",
+      "action": "MUST NOT be altered",
+      "to": "Invalid"
+    },
+    {
+      "from": "Invalid",
+      "event": "NEXT",
+      "action": "MUST NOT be altered",
+      "to": "Invalid"
+    },
+    {
+      "from": "Invalid",
+      "event": "ARTICLE",
+      "action": "MUST NOT be altered",
+      "to": "Invalid"
+    },
+    {
+      "from": "Invalid",
+      "event": "HEAD",
+      "action": "MUST NOT be altered",
+      "to": "Invalid"
+    },
+    {
+      "from": "Invalid",
+      "event": "BODY",
+      "action": "MUST NOT be altered",
+      "to": "Invalid"
+    },
+    {
+      "from": "Invalid",
+      "event": "STAT",
+      "action": "MUST NOT be altered",
+      "to": "Invalid"
+    },
+    {
+      "from": "Selected",
+      "event": "GROUP",
+      "action": "set currently selected newsgroup and current article number",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "LISTGROUP",
+      "action": "set currently selected newsgroup and current article number",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "LAST",
+      "action": "set current article number",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "NEXT",
+      "action": "set current article number",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "ARTICLE",
+      "action": "set current article number",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "HEAD",
+      "action": "set current article number",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "BODY",
+      "action": "set current article number",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "STAT",
+      "action": "set current article number",
+      "to": "Selected"
+    },
+    {
+      "from": "Session Start",
+      "event": "NEWGROUPS",
+      "action": "",
+      "to": "Idle"
+    },
+    {
+      "from": "Session Start",
+      "event": "NEWNEWS",
+      "action": "",
+      "to": "Idle"
+    },
+    {
+      "from": "Session Start",
+      "event": "DATE",
+      "action": "",
+      "to": "Idle"
+    },
+    {
+      "from": "Session Start",
+      "event": "HELP",
+      "action": "",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "NEWGROUPS",
+      "action": "",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "NEWNEWS",
+      "action": "",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "DATE",
+      "action": "",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "HELP",
+      "action": "",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "command-line",
+      "action": "",
+      "to": "Command Line Received"
+    },
+    {
+      "from": "Command Line Received",
+      "event": "command-datastream",
+      "action": "",
+      "to": "Command Datastream Received"
+    },
+    {
+      "from": "Command Line Received",
+      "event": "",
+      "action": "response",
+      "to": "Response Sent"
+    },
+    {
+      "from": "Command Datastream Received",
+      "event": "",
+      "action": "response",
+      "to": "Response Sent"
+    },
+    {
+      "from": "Response Sent",
+      "event": "3xx response",
+      "action": "",
+      "to": "Command Continuation Received"
+    },
+    {
+      "from": "Command Continuation Received",
+      "event": "",
+      "action": "response",
+      "to": "Response Sent"
+    },
+    {
+      "from": "NNTP Service Ready",
+      "event": "CAPABILITIES",
+      "action": "101 Capability list: VERSION 2, READER, NEWNEWS, POST, XENCRYPT, LIST ACTIVE NEWSGROUPS, .",
+      "to": "XENCRYPT Negotiation"
+    },
+    {
+      "from": "XENCRYPT Negotiation",
+      "event": "XENCRYPT",
+      "action": "283 Encrypted link established",
+      "to": "XENCRYPT Negotiation"
+    },
+    {
+      "from": "XENCRYPT Negotiation",
+      "event": "CAPABILITIES",
+      "action": "101 Capability list: VERSION 2, READER, NEWNEWS, POST, XSECRET, LIST ACTIVE NEWSGROUPS, .",
+      "to": "XSECRET Negotiation"
+    },
+    {
+      "from": "XSECRET Negotiation",
+      "event": "XSECRET fred flintstone",
+      "action": "290 Password for fred accepted",
+      "to": "XSECRET Negotiation"
+    },
+    {
+      "from": "initial connection",
+      "event": "CAPABILITIES",
+      "action": "capabilities list follows",
+      "to": "service available, posting allowed"
+    },
+    {
+      "from": "initial connection",
+      "event": "CAPABILITIES",
+      "action": "capabilities list follows",
+      "to": "service available, posting prohibited"
+    },
+    {
+      "from": "initial connection",
+      "event": "MODE READER",
+      "action": "service available, posting allowed",
+      "to": "service available, posting allowed"
+    },
+    {
+      "from": "initial connection",
+      "event": "MODE READER",
+      "action": "service available, posting prohibited",
+      "to": "service available, posting prohibited"
+    }
+  ]
+}

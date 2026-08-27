@@ -1,0 +1,201 @@
+{
+  "states": [
+    "INIT",
+    "BOUND",
+    "RENEWING",
+    "REBINDING",
+    "INIT-REBOOT",
+    "REBOOTING",
+    "SELECTING",
+    "T1",
+    "T2"
+  ],
+  "transitions": [
+    {
+      "from": "INIT",
+      "event": "DHCPDISCOVER",
+      "action": "broadcast DHCPDISCOVER",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPOFFER",
+      "action": "select server",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPREQUEST",
+      "action": "broadcast DHCPREQUEST",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPACK",
+      "action": "configure client",
+      "to": "BOUND"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPNAK",
+      "action": "restart configuration",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPDECLINE",
+      "action": "restart configuration",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPRELEASE",
+      "action": "relinquish lease",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPINFORM",
+      "action": "obtain local configuration",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPREQUEST",
+      "action": "request offered parameters",
+      "to": "RENEWING"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPACK",
+      "action": "commit configuration",
+      "to": "BOUND"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPNAK",
+      "action": "restart configuration",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPRELEASE",
+      "action": "relinquish lease",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPINFORM",
+      "action": "obtain local configuration",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPACK",
+      "action": "commit configuration",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPNAK",
+      "action": "restart configuration",
+      "to": "INIT"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPRELEASE",
+      "action": "relinquish lease",
+      "to": "INIT"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPINFORM",
+      "action": "obtain local configuration",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPACK",
+      "action": "commit configuration",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPNAK",
+      "action": "restart configuration",
+      "to": "INIT"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPRELEASE",
+      "action": "relinquish lease",
+      "to": "INIT"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPINFORM",
+      "action": "obtain local configuration",
+      "to": "BOUND"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPDISCOVER",
+      "action": "Broadcast DHCPDISCOVER",
+      "to": "INIT-REBOOT"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPNAK",
+      "action": "Restart",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPNAK",
+      "action": "Send DHCPREQUEST",
+      "to": "REBOOTING"
+    },
+    {
+      "from": "REBOOTING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "SELECTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPOFFER",
+      "action": "Collect replies",
+      "to": "SELECTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPACK",
+      "action": "Select offer/send DHCPREQUEST",
+      "to": "BOUND"
+    },
+    {
+      "from": "BOUND",
+      "event": "T1 expires",
+      "action": "Send DHCPREQUEST",
+      "to": "RENEWING"
+    },
+    {
+      "from": "BOUND",
+      "event": "T2 expires",
+      "action": "Broadcast DHCPREQUEST",
+      "to": "REBINDING"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    }
+  ]
+}

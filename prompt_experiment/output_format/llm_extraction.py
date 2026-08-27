@@ -11,8 +11,7 @@ from prompt_experiment.types import OutputControl, PromptExperimentArguments
 
 from research_pipeline.model_selection import get_selected_model_configs, get_selected_profile_names
 from utils.files_util import save_json_file, load_json_file
-from utils.ollama_client import call_ollama_generate
-
+from utils.ollama_client import call_ollama_with_model_routing
 
 # load extraction prompts for one output control from a local file.
 def _load_extraction_prompts(output_control_name: str) -> dict[str, list[str]]:
@@ -71,7 +70,7 @@ def _run_extraction_psm(protocol: str, prompts: list[str], model_config: ModelCo
     for index, prompt in enumerate(prompts, start=1):
         print(f"{protocol}: extraction Prompt {index}/{prompt_count}")
 
-        ollama_response: dict[str, object] = call_ollama_generate(ollama_url=connection["ollama_url"], model=model_config["name"].value,
+        ollama_response: dict[str, object] = call_ollama_with_model_routing(ollama_url=connection["ollama_url"], model=model_config["name"].value,
                                                                   prompt=prompt, options=model_profile["options"], request_timeout_seconds=connection["request_timeout_seconds"],
                                                                   think=model_profile["think"], output_format=output_control["request_format"], extra_headers=connection["extra_headers"])
 

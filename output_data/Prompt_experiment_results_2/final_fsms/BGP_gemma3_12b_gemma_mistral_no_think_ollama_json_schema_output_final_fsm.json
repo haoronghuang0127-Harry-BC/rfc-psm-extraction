@@ -1,0 +1,179 @@
+{
+  "states": [
+    "Adj-RIB-In",
+    "Adj-RIB-Out",
+    "Autonomous System (AS)",
+    "BGP Identifier",
+    "BGP speaker",
+    "EBGP",
+    "External peer",
+    "Feasible route",
+    "IBGP",
+    "Internal peer",
+    "IGP",
+    "Loc-RIB",
+    "NLRI",
+    "Route",
+    "RIB",
+    "Unfeasible route",
+    "BGP State Machine",
+    "TCP Connection Established",
+    "OPEN Message Sent",
+    "KEEPALIVE Message Sent",
+    "UPDATE Message Sent",
+    "NOTIFICATION Message Sent",
+    "Idle",
+    "Connect",
+    "Active",
+    "OpenSent",
+    "OpenConfirm",
+    "Established",
+    "BGP FSM"
+  ],
+  "transitions": [
+    {
+      "from": "BGP State Machine",
+      "event": "TCP Connection Established",
+      "action": "Send OPEN message",
+      "to": "OPEN Message Sent"
+    },
+    {
+      "from": "OPEN Message Sent",
+      "event": "Acceptable OPEN message received",
+      "action": "Send KEEPALIVE message",
+      "to": "KEEPALIVE Message Sent"
+    },
+    {
+      "from": "KEEPALIVE Message Sent",
+      "event": "Error condition detected",
+      "action": "Send NOTIFICATION message",
+      "to": "NOTIFICATION Message Sent"
+    },
+    {
+      "from": "UPDATE Message Sent",
+      "event": "Error condition detected",
+      "action": "Send NOTIFICATION message",
+      "to": "NOTIFICATION Message Sent"
+    },
+    {
+      "from": "Idle",
+      "event": "ManualStart",
+      "action": "initialize resources, set ConnectRetryCounter to zero, start ConnectRetryTimer, initiate TCP connection, listen for incoming connection, change state to Connect",
+      "to": "Connect"
+    },
+    {
+      "from": "Idle",
+      "event": "AutomaticStart",
+      "action": "initialize resources, set ConnectRetryCounter to zero, start ConnectRetryTimer, initiate TCP connection, listen for incoming connection, change state to Connect",
+      "to": "Connect"
+    },
+    {
+      "from": "Idle",
+      "event": "ManualStart_with_PassiveTcpEstablishment",
+      "action": "initialize resources, set ConnectRetryCounter to zero, start ConnectRetryTimer, listen for incoming connection, change state to Active",
+      "to": "Active"
+    },
+    {
+      "from": "Idle",
+      "event": "AutomaticStart_with_PassiveTcpEstablishment",
+      "action": "initialize resources, set ConnectRetryCounter to zero, start ConnectRetryTimer, listen for incoming connection, change state to Active",
+      "to": "Active"
+    },
+    {
+      "from": "Connect",
+      "event": "ManualStop",
+      "action": "drop TCP connection, release resources, set ConnectRetryCounter to zero, stop ConnectRetryTimer, change state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "ConnectRetryTimer_Expires",
+      "action": "drop TCP connection, restart ConnectRetryTimer, stop DelayOpenTimer, initiate TCP connection, listen for incoming connection, stay in Connect",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "DelayOpenTimer_Expires",
+      "action": "send OPEN message, set HoldTimer, change state to OpenSent",
+      "to": "OpenSent"
+    },
+    {
+      "from": "Connect",
+      "event": "TcpConnection_Valid",
+      "action": "process TCP connection flags, stay in Connect",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "Tcp_CR_Invalid",
+      "action": "reject TCP connection, stay in Connect",
+      "to": "Connect"
+    },
+    {
+      "from": "Active",
+      "event": "ManualStop",
+      "action": "drop TCP connection, release resources, set ConnectRetryCounter to zero, stop ConnectRetryTimer, change state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "ConnectRetryTimer_Expires",
+      "action": "restart ConnectRetryTimer, initiate TCP connection, listen for incoming connection, change state to Connect",
+      "to": "Connect"
+    },
+    {
+      "from": "Active",
+      "event": "DelayOpenTimer_Expires",
+      "action": "complete BGP initialization, send OPEN message, set HoldTimer, change state to OpenSent",
+      "to": "OpenSent"
+    },
+    {
+      "from": "OpenSent",
+      "event": "ManualStop",
+      "action": "send NOTIFICATION with Cease, release resources, drop TCP connection, set ConnectRetryCounter to zero, change state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "HoldTimer_Expires",
+      "action": "send NOTIFICATION with error code Hold Timer Expired, release resources, drop TCP connection, increment ConnectRetryCounter, change state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "TcpConnection_Valid",
+      "action": "track second connection, stay in Active",
+      "to": "Active"
+    },
+    {
+      "from": "OpenSent",
+      "event": "TcpConnectionFails",
+      "action": "restart ConnectRetryTimer, stop DelayOpenTimer, release resources, increment ConnectRetryCounter, change state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "HoldTimer_Expires",
+      "action": "send NOTIFICATION with error code Hold Timer Expired, release resources, drop TCP connection, increment ConnectRetryCounter, change state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "KeepaliveTimer_Expires",
+      "action": "send KEEPALIVE message, restart KeepaliveTimer",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "KEEPALIVE message",
+      "action": "restart HoldTimer",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "UPDATE message",
+      "action": "process message, restart HoldTimer",
+      "to": "OpenConfirm"
+    }
+  ]
+}

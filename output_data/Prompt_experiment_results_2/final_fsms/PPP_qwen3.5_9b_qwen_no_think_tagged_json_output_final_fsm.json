@@ -1,0 +1,694 @@
+{
+  "states": [
+    "Link Dead",
+    "Link Establishment",
+    "Opened",
+    "Authenticate",
+    "Network-Layer Protocol",
+    "Closing",
+    "Terminate",
+    "DOWN",
+    "Initial",
+    "Starting",
+    "Closed",
+    "Stopped",
+    "Stopping",
+    "Request-Sent",
+    "Ack-Received",
+    "Ack-Sent"
+  ],
+  "transitions": [
+    {
+      "from": "Link Dead",
+      "event": "",
+      "action": "physical-layer ready",
+      "to": "Link Establishment"
+    },
+    {
+      "from": "Link Establishment",
+      "event": "Configure-Ack sent and received",
+      "action": "LCP Opened state entered",
+      "to": "Opened"
+    },
+    {
+      "from": "Opened",
+      "event": "",
+      "action": "Authentication required",
+      "to": "Authenticate"
+    },
+    {
+      "from": "Opened",
+      "event": "",
+      "action": "Network-layer protocols configured",
+      "to": "Network-Layer Protocol"
+    },
+    {
+      "from": "Opened",
+      "event": "LCP Configure-Request received",
+      "action": "",
+      "to": "Link Establishment"
+    },
+    {
+      "from": "Authenticate",
+      "event": "",
+      "action": "Authentication completed",
+      "to": "Network-Layer Protocol"
+    },
+    {
+      "from": "Authenticate",
+      "event": "",
+      "action": "Authentication failed",
+      "to": "Terminate"
+    },
+    {
+      "from": "Network-Layer Protocol",
+      "event": "LCP Configure-Request received",
+      "action": "",
+      "to": "Link Establishment"
+    },
+    {
+      "from": "Network-Layer Protocol",
+      "event": "",
+      "action": "NCP Closed",
+      "to": "Closing"
+    },
+    {
+      "from": "Closing",
+      "event": "Terminate-Ack received or Restart counter expires",
+      "action": "disconnect",
+      "to": "DOWN"
+    },
+    {
+      "from": "Closing",
+      "event": "",
+      "action": "wait for peer to disconnect",
+      "to": "DOWN"
+    },
+    {
+      "from": "Terminate",
+      "event": "",
+      "action": "link closing",
+      "to": "DOWN"
+    },
+    {
+      "from": "Initial",
+      "event": "Up",
+      "action": "irc,scr",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Starting",
+      "event": "Down",
+      "action": "tls",
+      "to": "1"
+    },
+    {
+      "from": "Starting",
+      "event": "Up",
+      "action": "scr",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Closed",
+      "event": "Down",
+      "action": "tls",
+      "to": "1"
+    },
+    {
+      "from": "Closed",
+      "event": "Open",
+      "action": "irc,scr",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Closed",
+      "event": "RCR+",
+      "action": "sta",
+      "to": "2"
+    },
+    {
+      "from": "Closed",
+      "event": "RCR-",
+      "action": "sta",
+      "to": "2"
+    },
+    {
+      "from": "Closed",
+      "event": "RCA",
+      "action": "sta",
+      "to": "2"
+    },
+    {
+      "from": "Closed",
+      "event": "RCN",
+      "action": "sta",
+      "to": "2"
+    },
+    {
+      "from": "Closed",
+      "event": "RTR",
+      "action": "sta",
+      "to": "2"
+    },
+    {
+      "from": "Closed",
+      "event": "RTA",
+      "action": "",
+      "to": "2"
+    },
+    {
+      "from": "Closed",
+      "event": "RUC",
+      "action": "scj",
+      "to": "2"
+    },
+    {
+      "from": "Closed",
+      "event": "RXJ+",
+      "action": "",
+      "to": "2"
+    },
+    {
+      "from": "Closed",
+      "event": "RXJ-",
+      "action": "tlf",
+      "to": "2"
+    },
+    {
+      "from": "Closed",
+      "event": "RXR",
+      "action": "",
+      "to": "2"
+    },
+    {
+      "from": "Stopped",
+      "event": "Down",
+      "action": "tls",
+      "to": "1"
+    },
+    {
+      "from": "Stopped",
+      "event": "Open",
+      "action": "irc,scr",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Stopped",
+      "event": "RCR+",
+      "action": "sta",
+      "to": "2"
+    },
+    {
+      "from": "Stopped",
+      "event": "RCR-",
+      "action": "sta",
+      "to": "2"
+    },
+    {
+      "from": "Stopped",
+      "event": "RCA",
+      "action": "sta",
+      "to": "2"
+    },
+    {
+      "from": "Stopped",
+      "event": "RCN",
+      "action": "sta",
+      "to": "2"
+    },
+    {
+      "from": "Stopped",
+      "event": "RTR",
+      "action": "sta",
+      "to": "2"
+    },
+    {
+      "from": "Stopped",
+      "event": "RTA",
+      "action": "",
+      "to": "2"
+    },
+    {
+      "from": "Stopped",
+      "event": "RUC",
+      "action": "scj",
+      "to": "2"
+    },
+    {
+      "from": "Stopped",
+      "event": "RXJ+",
+      "action": "",
+      "to": "2"
+    },
+    {
+      "from": "Stopped",
+      "event": "RXJ-",
+      "action": "tlf",
+      "to": "2"
+    },
+    {
+      "from": "Stopped",
+      "event": "RXR",
+      "action": "",
+      "to": "2"
+    },
+    {
+      "from": "Closing",
+      "event": "TO+",
+      "action": "str",
+      "to": "4"
+    },
+    {
+      "from": "Closing",
+      "event": "TO-",
+      "action": "tlf",
+      "to": "2"
+    },
+    {
+      "from": "Closing",
+      "event": "RTR",
+      "action": "sta",
+      "to": "4"
+    },
+    {
+      "from": "Closing",
+      "event": "RTA",
+      "action": "",
+      "to": "2"
+    },
+    {
+      "from": "Closing",
+      "event": "RUC",
+      "action": "scj",
+      "to": "4"
+    },
+    {
+      "from": "Closing",
+      "event": "RXJ+",
+      "action": "",
+      "to": "4"
+    },
+    {
+      "from": "Closing",
+      "event": "RXJ-",
+      "action": "tlf",
+      "to": "2"
+    },
+    {
+      "from": "Closing",
+      "event": "RXR",
+      "action": "",
+      "to": "4"
+    },
+    {
+      "from": "Stopping",
+      "event": "TO+",
+      "action": "str",
+      "to": "5"
+    },
+    {
+      "from": "Stopping",
+      "event": "TO-",
+      "action": "tlf",
+      "to": "3"
+    },
+    {
+      "from": "Stopping",
+      "event": "RTR",
+      "action": "sta",
+      "to": "5"
+    },
+    {
+      "from": "Stopping",
+      "event": "RTA",
+      "action": "",
+      "to": "3"
+    },
+    {
+      "from": "Stopping",
+      "event": "RUC",
+      "action": "scj",
+      "to": "5"
+    },
+    {
+      "from": "Stopping",
+      "event": "RXJ+",
+      "action": "",
+      "to": "5"
+    },
+    {
+      "from": "Stopping",
+      "event": "RXJ-",
+      "action": "tlf",
+      "to": "3"
+    },
+    {
+      "from": "Stopping",
+      "event": "RXR",
+      "action": "",
+      "to": "5"
+    },
+    {
+      "from": "Request-Sent",
+      "event": "Down",
+      "action": "tld",
+      "to": "1"
+    },
+    {
+      "from": "Request-Sent",
+      "event": "Open",
+      "action": "",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Request-Sent",
+      "event": "Close",
+      "action": "irc,str",
+      "to": "4"
+    },
+    {
+      "from": "Request-Sent",
+      "event": "TO+",
+      "action": "scr",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Request-Sent",
+      "event": "TO-",
+      "action": "tlf",
+      "to": "3"
+    },
+    {
+      "from": "Request-Sent",
+      "event": "RCR+",
+      "action": "sca",
+      "to": "Ack-Received"
+    },
+    {
+      "from": "Request-Sent",
+      "event": "RCR-",
+      "action": "scn",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Request-Sent",
+      "event": "RCA",
+      "action": "irc",
+      "to": "Ack-Received"
+    },
+    {
+      "from": "Request-Sent",
+      "event": "RCN",
+      "action": "irc,scr",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Request-Sent",
+      "event": "RTR",
+      "action": "sta",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Request-Sent",
+      "event": "RTA",
+      "action": "",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Request-Sent",
+      "event": "RUC",
+      "action": "scj",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Request-Sent",
+      "event": "RXJ+",
+      "action": "",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Request-Sent",
+      "event": "RXJ-",
+      "action": "tlf",
+      "to": "3"
+    },
+    {
+      "from": "Request-Sent",
+      "event": "RXR",
+      "action": "",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Ack-Received",
+      "event": "Down",
+      "action": "tld",
+      "to": "1"
+    },
+    {
+      "from": "Ack-Received",
+      "event": "Open",
+      "action": "",
+      "to": "Ack-Received"
+    },
+    {
+      "from": "Ack-Received",
+      "event": "Close",
+      "action": "irc,str",
+      "to": "4"
+    },
+    {
+      "from": "Ack-Received",
+      "event": "TO+",
+      "action": "scr",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Ack-Received",
+      "event": "TO-",
+      "action": "tlf",
+      "to": "3"
+    },
+    {
+      "from": "Ack-Received",
+      "event": "RCR+",
+      "action": "sca,tlu",
+      "to": "Opened"
+    },
+    {
+      "from": "Ack-Received",
+      "event": "RCR-",
+      "action": "scn",
+      "to": "Ack-Received"
+    },
+    {
+      "from": "Ack-Received",
+      "event": "RCA",
+      "action": "scr",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Ack-Received",
+      "event": "RCN",
+      "action": "scr",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Ack-Received",
+      "event": "RTR",
+      "action": "sta",
+      "to": "Ack-Received"
+    },
+    {
+      "from": "Ack-Received",
+      "event": "RTA",
+      "action": "",
+      "to": "Ack-Received"
+    },
+    {
+      "from": "Ack-Received",
+      "event": "RUC",
+      "action": "scj",
+      "to": "Ack-Received"
+    },
+    {
+      "from": "Ack-Received",
+      "event": "RXJ+",
+      "action": "",
+      "to": "Ack-Received"
+    },
+    {
+      "from": "Ack-Received",
+      "event": "RXJ-",
+      "action": "tlf",
+      "to": "3"
+    },
+    {
+      "from": "Ack-Received",
+      "event": "RXR",
+      "action": "",
+      "to": "Ack-Received"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "Down",
+      "action": "tld",
+      "to": "1"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "Open",
+      "action": "",
+      "to": "Ack-Sent"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "Close",
+      "action": "irc,str",
+      "to": "4"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "TO+",
+      "action": "scr",
+      "to": "Ack-Sent"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "TO-",
+      "action": "tlf",
+      "to": "3"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "RCR+",
+      "action": "sca",
+      "to": "Ack-Sent"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "RCR-",
+      "action": "scn",
+      "to": "Ack-Sent"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "RCA",
+      "action": "irc,tlu",
+      "to": "Opened"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "RCN",
+      "action": "irc,scr",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "RTR",
+      "action": "sta",
+      "to": "Ack-Sent"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "RTA",
+      "action": "",
+      "to": "Ack-Sent"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "RUC",
+      "action": "scj",
+      "to": "Ack-Sent"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "RXJ+",
+      "action": "",
+      "to": "Ack-Sent"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "RXJ-",
+      "action": "tlf",
+      "to": "3"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "RXR",
+      "action": "",
+      "to": "Ack-Sent"
+    },
+    {
+      "from": "Opened",
+      "event": "Down",
+      "action": "tld",
+      "to": "1"
+    },
+    {
+      "from": "Opened",
+      "event": "Close",
+      "action": "irc,str",
+      "to": "4"
+    },
+    {
+      "from": "Opened",
+      "event": "RCR+",
+      "action": "sca",
+      "to": "Ack-Sent"
+    },
+    {
+      "from": "Opened",
+      "event": "RCR-",
+      "action": "scn",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Opened",
+      "event": "RCA",
+      "action": "tld,scr",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Opened",
+      "event": "RCN",
+      "action": "tld,scr",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Opened",
+      "event": "RTR",
+      "action": "tld,zrc,sta",
+      "to": "Stopping"
+    },
+    {
+      "from": "Opened",
+      "event": "RTA",
+      "action": "",
+      "to": "Ack-Sent"
+    },
+    {
+      "from": "Opened",
+      "event": "RUC",
+      "action": "scj",
+      "to": "Ack-Sent"
+    },
+    {
+      "from": "Opened",
+      "event": "RXJ+",
+      "action": "",
+      "to": "Opened"
+    },
+    {
+      "from": "Opened",
+      "event": "RXJ-",
+      "action": "tld,irc,str",
+      "to": "Stopping"
+    },
+    {
+      "from": "Opened",
+      "event": "RXR",
+      "action": "ser",
+      "to": "Opened"
+    }
+  ]
+}

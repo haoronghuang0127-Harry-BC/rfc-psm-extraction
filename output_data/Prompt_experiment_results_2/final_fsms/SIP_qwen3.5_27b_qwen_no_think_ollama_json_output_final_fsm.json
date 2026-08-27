@@ -1,0 +1,527 @@
+{
+  "states": [
+    "Session established",
+    "UAC",
+    "UAS",
+    "Stateless UAS",
+    "Pending Transaction",
+    "Final Response Sent",
+    "Binding Registered",
+    "Binding Removed",
+    "early",
+    "confirmed",
+    "Existing Dialog",
+    "INVITE client transaction in progress",
+    "INVITE server transaction in progress",
+    "Dialog terminated",
+    "Early Dialog",
+    "Confirmed Dialog",
+    "Stateless",
+    "Stateful",
+    "Calling",
+    "Proceeding",
+    "Completed",
+    "Terminated",
+    "Trying"
+  ],
+  "transitions": [
+    {
+      "from": "Session established",
+      "event": "re-INVITE",
+      "action": "send 200 (OK) to accept the change or send error response such as 488 (Not Acceptable Here)",
+      "to": "Session established"
+    },
+    {
+      "from": "Session established",
+      "event": "BYE",
+      "action": "send 200 (OK) response",
+      "to": "Dialog terminated"
+    },
+    {
+      "from": "UAC",
+      "event": "external stimulus",
+      "action": "generate request",
+      "to": "UAC"
+    },
+    {
+      "from": "UAC",
+      "event": "response",
+      "action": "process response",
+      "to": "UAC"
+    },
+    {
+      "from": "UAC",
+      "event": "3xx response",
+      "action": "formulate new request based on Contact header field",
+      "to": "UAC"
+    },
+    {
+      "from": "UAC",
+      "event": "401 or 407 response",
+      "action": "retry request with credentials",
+      "to": "UAC"
+    },
+    {
+      "from": "UAC",
+      "event": "413 response",
+      "action": "retry request omitting body or using smaller length",
+      "to": "UAC"
+    },
+    {
+      "from": "UAC",
+      "event": "415 response",
+      "action": "retry request using supported content types, encodings, and languages",
+      "to": "UAC"
+    },
+    {
+      "from": "UAC",
+      "event": "416 response",
+      "action": "retry request using SIP URI",
+      "to": "UAC"
+    },
+    {
+      "from": "UAC",
+      "event": "420 response",
+      "action": "retry request omitting unsupported extensions",
+      "to": "UAC"
+    },
+    {
+      "from": "UAS",
+      "event": "request outside of a dialog",
+      "action": "inspect method, header fields, and content; generate response",
+      "to": "UAS"
+    },
+    {
+      "from": "UAS",
+      "event": "request with unsupported method",
+      "action": "generate 405 (Method Not Allowed) response",
+      "to": "UAS"
+    },
+    {
+      "from": "UAS",
+      "event": "request with To header field not recognized or URI scheme not supported",
+      "action": "reject request with 403 (Forbidden) status code",
+      "to": "UAS"
+    },
+    {
+      "from": "UAS",
+      "event": "request with unsupported Request-URI scheme",
+      "action": "reject request with 416 (Unsupported URI Scheme) response",
+      "to": "UAS"
+    },
+    {
+      "from": "UAS",
+      "event": "request with Request-URI not identifying an address the UAS is willing to accept",
+      "action": "reject request with 404 (Not Found) response",
+      "to": "UAS"
+    },
+    {
+      "from": "UAS",
+      "event": "merged request matching ongoing transaction but not matching rules",
+      "action": "generate 482 (Loop Detected) response",
+      "to": "UAS"
+    },
+    {
+      "from": "UAS",
+      "event": "request with Require header field containing unsupported option-tag",
+      "action": "generate 420 (Bad Extension) response with Unsupported header field",
+      "to": "UAS"
+    },
+    {
+      "from": "UAS",
+      "event": "request with body type, language, or encoding not understood and not optional",
+      "action": "reject request with 415 (Unsupported Media Type) response",
+      "to": "UAS"
+    },
+    {
+      "from": "Stateless UAS",
+      "event": "request",
+      "action": "regenerate and resend response",
+      "to": "Stateless UAS"
+    },
+    {
+      "from": "Stateless UAS",
+      "event": "ACK request",
+      "action": "ignore",
+      "to": "Stateless UAS"
+    },
+    {
+      "from": "Stateless UAS",
+      "event": "CANCEL request",
+      "action": "ignore",
+      "to": "Stateless UAS"
+    },
+    {
+      "from": "Pending Transaction",
+      "event": "CANCEL request received for INVITE",
+      "action": "respond to original request with 487 (Request Terminated); respond to CANCEL with 200 (OK)",
+      "to": "Final Response Sent"
+    },
+    {
+      "from": "Pending Transaction",
+      "event": "CANCEL request received for non-INVITE",
+      "action": "respond to CANCEL with 200 (OK); no impact on original transaction processing",
+      "to": "Pending Transaction"
+    },
+    {
+      "from": "Final Response Sent",
+      "event": "CANCEL request received",
+      "action": "no effect on original request or session state; respond to CANCEL with 200 (OK)",
+      "to": "Final Response Sent"
+    },
+    {
+      "from": "Binding Registered",
+      "event": "REGISTER request with Contact header field and expiration interval = 0",
+      "action": "Registrar removes binding from location service; returns 200 OK with updated Contact list",
+      "to": "Binding Removed"
+    },
+    {
+      "from": "Binding Registered",
+      "event": "Expiration interval elapses without refresh",
+      "action": "Binding expires (soft state)",
+      "to": "Binding Removed"
+    },
+    {
+      "from": "Binding Registered",
+      "event": "REGISTER request with Contact header field and expiration interval > 0 before expiration",
+      "action": "Registrar updates expiration time of binding; returns 200 OK with Contact list",
+      "to": "Binding Registered"
+    },
+    {
+      "from": "early",
+      "event": "2xx final response",
+      "action": "",
+      "to": "confirmed"
+    },
+    {
+      "from": "early",
+      "event": "non-2xx final response or no response",
+      "action": "terminate dialog",
+      "to": "Dialog terminated"
+    },
+    {
+      "from": "early",
+      "event": "non-2xx final response",
+      "action": "terminate early dialogs",
+      "to": "Dialog terminated"
+    },
+    {
+      "from": "early",
+      "event": "2xx response with matching dialog identifier",
+      "action": "transition to confirmed state and recompute route set",
+      "to": "confirmed"
+    },
+    {
+      "from": "Existing Dialog",
+      "event": "re-INVITE with non-2xx final response",
+      "action": "session parameters remain unchanged",
+      "to": "Existing Dialog"
+    },
+    {
+      "from": "Existing Dialog",
+      "event": "re-INVITE with 481, 408, or timeout",
+      "action": "terminate the dialog",
+      "to": "Dialog terminated"
+    },
+    {
+      "from": "Existing Dialog",
+      "event": "re-INVITE with 491 response",
+      "action": "start timer T and attempt re-INVITE once more when timer fires",
+      "to": "Existing Dialog"
+    },
+    {
+      "from": "Existing Dialog",
+      "event": "second INVITE received before final response to first INVITE with lower CSeq",
+      "action": "return 500 (Server Internal Error) with Retry-After header",
+      "to": "Existing Dialog"
+    },
+    {
+      "from": "Existing Dialog",
+      "event": "INVITE received while sent INVITE is in progress",
+      "action": "return 491 (Request Pending)",
+      "to": "Existing Dialog"
+    },
+    {
+      "from": "Existing Dialog",
+      "event": "re-INVITE with changed session description accepted",
+      "action": "adjust session parameters accordingly",
+      "to": "Existing Dialog"
+    },
+    {
+      "from": "Existing Dialog",
+      "event": "re-INVITE with unacceptable session description",
+      "action": "return 488 (Not Acceptable Here) response",
+      "to": "Existing Dialog"
+    },
+    {
+      "from": "Existing Dialog",
+      "event": "2xx response generated without receiving ACK",
+      "action": "generate BYE to terminate the dialog",
+      "to": "Dialog terminated"
+    },
+    {
+      "from": "Early Dialog",
+      "event": "BYE request from caller's UA",
+      "action": "terminate session",
+      "to": "Dialog terminated"
+    },
+    {
+      "from": "Confirmed Dialog",
+      "event": "BYE request",
+      "action": "terminate session",
+      "to": "Dialog terminated"
+    },
+    {
+      "from": "Early Dialog",
+      "event": "non-2xx final response to INVITE",
+      "action": "terminate all sessions and dialogs",
+      "to": "Dialog terminated"
+    },
+    {
+      "from": "Confirmed Dialog",
+      "event": "CANCEL request resulting in 487",
+      "action": "terminate session",
+      "to": "Dialog terminated"
+    },
+    {
+      "from": "Stateful",
+      "event": "transition to stateless operation",
+      "action": "discard all state",
+      "to": "Stateless"
+    },
+    {
+      "from": "Calling",
+      "event": "INVITE from TU",
+      "action": "pass request to transport layer; start timer A (if unreliable); start timer B",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer A fires",
+      "action": "retransmit request; reset Timer A with 2*T1",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer B fires or Transport Error",
+      "action": "inform TU of timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "1xx response received",
+      "action": "pass response to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Calling",
+      "event": "2xx response received",
+      "action": "pass response to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "300-699 response received",
+      "action": "pass response to TU; generate and send ACK; start Timer D (if unreliable)",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "1xx response received",
+      "action": "pass response to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx response received",
+      "action": "pass response to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699 response received",
+      "action": "pass response to TU; generate and send ACK; start Timer D (if unreliable)",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer B fires or Transport Error",
+      "action": "inform TU of timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "retransmission of final response received",
+      "action": "re-pass ACK to transport layer",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer D fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Transport Error",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "Request from TU",
+      "action": "pass request to transport layer; set Timer F; set Timer E (if unreliable)",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer E fires",
+      "action": "retransmit request; reset Timer E with MIN(2*T1, T2)",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer F fires or Transport Error",
+      "action": "inform TU of timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "1xx response received",
+      "action": "pass response to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "200-699 response received",
+      "action": "pass response to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer E fires",
+      "action": "retransmit request; reset Timer E with T2",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "INVITE received",
+      "action": "pass INVITE to TU; send 100 (Trying) if TU won't respond in 200ms",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "101-199 from TU",
+      "action": "send response to transport layer",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "request retransmission received",
+      "action": "retransmit most recent provisional response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx from TU",
+      "action": "send response to transport layer",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699 from TU",
+      "action": "send response to transport layer; set Timer G (if unreliable); set Timer H",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Transport Error",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer G fires",
+      "action": "retransmit response; reset Timer G with MIN(2*T1, T2) or doubled value capped at T2",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "request retransmission received",
+      "action": "retransmit response",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "ACK received",
+      "action": "",
+      "to": "Confirmed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer H fires or Transport Error",
+      "action": "inform TU of transaction failure",
+      "to": "Terminated"
+    },
+    {
+      "from": "Confirmed",
+      "event": "ACK received",
+      "action": "",
+      "to": "Confirmed"
+    },
+    {
+      "from": "Confirmed",
+      "event": "Timer I fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "Request received",
+      "action": "pass request to TU",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "request retransmission received",
+      "action": "discard",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "1xx from TU",
+      "action": "send response to transport layer",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "200-699 from TU",
+      "action": "send response to transport layer",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "1xx from TU",
+      "action": "send response to transport layer",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "200-699 from TU",
+      "action": "send response to transport layer; set Timer J (if unreliable)",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "final response from TU",
+      "action": "discard",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer J fires",
+      "action": "",
+      "to": "Terminated"
+    }
+  ]
+}

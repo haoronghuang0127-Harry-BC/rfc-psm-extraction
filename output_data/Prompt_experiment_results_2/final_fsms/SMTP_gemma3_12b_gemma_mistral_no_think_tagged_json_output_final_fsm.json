@@ -1,0 +1,336 @@
+{
+  "states": [
+    "Initial State",
+    "Established Transmission Channel",
+    "Mail Transaction",
+    "Mail Data Transmission",
+    "Session Initiation",
+    "Mail Transactions",
+    "Forwarding for Address Correction or Updating",
+    "Mail Transaction in Progress",
+    "Mail Data Input",
+    "Locating the Target Host",
+    "Message Submission Server",
+    "Relay Host",
+    "Receiver-SMTP accepting a piece of mail",
+    "Receiver-SMTP after acceptance of a message",
+    "Receiver-SMTP when the address is null",
+    "Receiver-SMTP when the address is an explicit source route",
+    "Receiver-SMTP minimizing response time",
+    "Receiver-SMTP when messages are rejected due to hostile content",
+    "Authenticated Requestors",
+    "Administrative Domain",
+    "Submission Client State",
+    "MTA State",
+    "Server receiving source route",
+    "Server forwarding message",
+    "Ready",
+    "Connected",
+    "Mail",
+    "Data",
+    "Verifying",
+    "Authenticated State"
+  ],
+  "transitions": [
+    {
+      "from": "Initial State",
+      "event": "establish a two-way transmission channel",
+      "action": "accept responsibility for delivering the message or reporting failure",
+      "to": "Established Transmission Channel"
+    },
+    {
+      "from": "Established Transmission Channel",
+      "event": "initiate a mail transaction",
+      "action": "specify the originator and destination of the mail and transmission of the message content",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "end of the mail data",
+      "action": "handoff of responsibility for the message occurs",
+      "to": "Mail Data Transmission"
+    },
+    {
+      "from": "Session Initiation",
+      "event": "client opens a connection",
+      "action": "server responds with an opening message",
+      "to": "Session Initiation"
+    },
+    {
+      "from": "Session Initiation",
+      "event": "554 response in initial connection opening message",
+      "action": "MUST still wait for the client to send a QUIT",
+      "to": "Session Initiation"
+    },
+    {
+      "from": "Mail Transactions",
+      "event": "MAIL command",
+      "action": "reset all its state tables and buffers",
+      "to": "Mail Transactions"
+    },
+    {
+      "from": "Mail Transactions",
+      "event": "RCPT command",
+      "action": "stores the forward-path",
+      "to": "Mail Transactions"
+    },
+    {
+      "from": "Mail Transactions",
+      "event": "DATA command",
+      "action": "considers all succeeding lines up to but not including the end of mail data indicator to be the message text",
+      "to": "Mail Transactions"
+    },
+    {
+      "from": "Forwarding for Address Correction or Updating",
+      "event": "",
+      "action": "",
+      "to": "Forwarding for Address Correction or Updating"
+    },
+    {
+      "from": "Initial State",
+      "event": "EHLO or HELO",
+      "action": "Clear state tables and buffers",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "MAIL",
+      "action": "Clear reverse-path, forward-path, and mail data buffers",
+      "to": "Mail Transaction in Progress"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "RCPT",
+      "action": "Append forward-path to forward-path buffer",
+      "to": "Mail Transaction in Progress"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "DATA",
+      "action": "Append mail data to mail data buffer",
+      "to": "Mail Data Input"
+    },
+    {
+      "from": "Mail Data Input",
+      "event": "<CRLF>.<CRLF>",
+      "action": "Process stored mail transaction information; consume buffers; clear buffers",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "RSET",
+      "action": "Abort transaction; discard buffers; clear state tables",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "QUIT",
+      "action": "Send '221 OK' reply and close transmission channel",
+      "to": "Initial State"
+    },
+    {
+      "from": "Locating the Target Host",
+      "event": "non-existent domain error",
+      "action": "MUST be reported as an error",
+      "to": "Locating the Target Host"
+    },
+    {
+      "from": "Locating the Target Host",
+      "event": "temporary error",
+      "action": "MUST be queued and retried later",
+      "to": "Locating the Target Host"
+    },
+    {
+      "from": "Locating the Target Host",
+      "event": "empty list of MXs",
+      "action": "treated as if it was associated with an implicit MX RR",
+      "to": "Locating the Target Host"
+    },
+    {
+      "from": "Locating the Target Host",
+      "event": "no usable MX records",
+      "action": "MUST be reported as an error",
+      "to": "Locating the Target Host"
+    },
+    {
+      "from": "Locating the Target Host",
+      "event": "When a domain name associated with an MX RR is looked up",
+      "action": "MUST contain a domain name",
+      "to": "Locating the Target Host"
+    },
+    {
+      "from": "Locating the Target Host",
+      "event": "When the lookup succeeds",
+      "action": "MUST be able to try (and retry) each of the relevant addresses in order",
+      "to": "Locating the Target Host"
+    },
+    {
+      "from": "Relay Host",
+      "event": "",
+      "action": "MAY relay the message (potentially after having rewritten the MAIL FROM and/or RCPT TO addresses), make final delivery of the message, or hand it off using some mechanism outside the SMTP-provided transport environment",
+      "to": "Relay Host"
+    },
+    {
+      "from": "Relay Host",
+      "event": "If it determines that it should relay the message without rewriting the address",
+      "action": "MUST sort the MX records to determine candidates for delivery",
+      "to": "Relay Host"
+    },
+    {
+      "from": "Relay Host",
+      "event": "If there are no records left at that point",
+      "action": "MUST be returned as undeliverable",
+      "to": "Relay Host"
+    },
+    {
+      "from": "Receiver-SMTP accepting a piece of mail",
+      "event": "",
+      "action": "MUST take this responsibility seriously. MUST NOT lose the message for frivolous reasons.",
+      "to": "Receiver-SMTP after acceptance of a message"
+    },
+    {
+      "from": "Receiver-SMTP after acceptance of a message",
+      "event": "delivery failure",
+      "action": "MUST formulate and mail a notification message. Notification MUST be sent using a null (\"<>\") reverse-path in the envelope.",
+      "to": "Receiver-SMTP when the address is null"
+    },
+    {
+      "from": "Receiver-SMTP when the address is null",
+      "event": "",
+      "action": "MUST NOT send a notification.",
+      "to": "Receiver-SMTP when the address is null"
+    },
+    {
+      "from": "Receiver-SMTP after acceptance of a message",
+      "event": "address is an explicit source route",
+      "action": "MUST be stripped down to its final hop.",
+      "to": "Receiver-SMTP when the address is an explicit source route"
+    },
+    {
+      "from": "Receiver-SMTP after acceptance of a message",
+      "event": "",
+      "action": "MUST seek to minimize the time required to respond to the final <CRLF>.<CRLF> end of data indicator.",
+      "to": "Receiver-SMTP minimizing response time"
+    },
+    {
+      "from": "Receiver-SMTP after acceptance of a message",
+      "event": "message is rejected because it is found to contain hostile content",
+      "action": "SHOULD NOT be sent unless the receiving site is confident that those messages will be usefully delivered.",
+      "to": "Receiver-SMTP when messages are rejected due to hostile content"
+    },
+    {
+      "from": "Authenticated Requestors",
+      "event": "VRFY and EXPN",
+      "action": "available",
+      "to": "Authenticated Requestors"
+    },
+    {
+      "from": "Administrative Domain",
+      "event": "VRFY and EXPN",
+      "action": "useful",
+      "to": "Administrative Domain"
+    },
+    {
+      "from": "Submission Client State",
+      "event": "",
+      "action": "SHOULD be generated as follows: 1. Each recipient address from a TO, CC, or BCC header field SHOULD be copied to a RCPT command (generating multiple message copies if that is required for queuing or delivery). This includes any addresses listed in a RFC 822 \"group\". Any BCC header fields SHOULD then be removed from the header section. Once this process is completed, the remaining header fields SHOULD be checked to verify that at least one TO, CC, or BCC header field remains. If none do, then a BCC header field with no additional information SHOULD be inserted as specified in [4]. 2. The return address in the MAIL command SHOULD, if possible, be derived from the system’s identity for the submitting (local) user, and the \"From:\" header field otherwise.",
+      "to": "MTA State"
+    },
+    {
+      "from": "Initial state",
+      "event": "",
+      "action": "MUST be prepared to receive and handle source routes",
+      "to": "Server receiving source route"
+    },
+    {
+      "from": "Server receiving source route",
+      "event": "forwarding the message",
+      "action": "MUST remove its domain name from any forward-paths and MAY remove all other source routing information",
+      "to": "Server forwarding message"
+    },
+    {
+      "from": "Ready",
+      "event": "EHLO",
+      "action": "250-foo.com greets bar.com\n250-8BITMIME\n250-SIZE\n250-DSN\n250 HELP",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "MAIL FROM",
+      "action": "250 OK",
+      "to": "Mail"
+    },
+    {
+      "from": "Mail",
+      "event": "RCPT TO",
+      "action": "250 OK",
+      "to": "Mail"
+    },
+    {
+      "from": "Mail",
+      "event": "RCPT TO",
+      "action": "550 No such user here",
+      "to": "Mail"
+    },
+    {
+      "from": "Mail",
+      "event": "DATA",
+      "action": "354 Start mail input; end with <CRLF>.<CRLF>",
+      "to": "Data"
+    },
+    {
+      "from": "Data",
+      "event": ".",
+      "action": "250 OK",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "QUIT",
+      "action": "221 foo.com Service closing transmission channel",
+      "to": "Ready"
+    },
+    {
+      "from": "Connected",
+      "event": "RSET",
+      "action": "250 OK",
+      "to": "Connected"
+    },
+    {
+      "from": "Ready",
+      "event": "VRFY",
+      "action": "250 Mark Crispin <Admin.MRC@foo.com>",
+      "to": "Verifying"
+    },
+    {
+      "from": "Verifying",
+      "event": "MAIL FROM",
+      "action": "250 OK",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "MAIL FROM",
+      "action": "250 OK",
+      "to": "Mail"
+    },
+    {
+      "from": "Mail",
+      "event": "RCPT TO",
+      "action": "250 OK",
+      "to": "Mail"
+    },
+    {
+      "from": "Mail",
+      "event": "DATA",
+      "action": "354 Start mail input; end with <CRLF>.<CRLF>",
+      "to": "Data"
+    },
+    {
+      "from": "Initial State",
+      "event": "EHLO",
+      "action": "Servers MUST continue to accept and process HELO in order to support older clients.",
+      "to": "Authenticated State"
+    }
+  ]
+}

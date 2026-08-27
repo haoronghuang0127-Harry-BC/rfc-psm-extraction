@@ -1,0 +1,111 @@
+{
+  "states": [
+    "AUTHORIZATION",
+    "TRANSACTION",
+    "UPDATE"
+  ],
+  "transitions": [
+    {
+      "from": "AUTHORIZATION",
+      "event": "",
+      "action": "+OK POP3 server ready",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "USER and PASS command combination or APOP command",
+      "action": "positive status indicator",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "negative status indicator",
+      "action": "",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "QUIT command",
+      "action": "+OK",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "USER name",
+      "action": "+OK",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "PASS string",
+      "action": "+OK",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "APOP name digest",
+      "action": "+OK",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "QUIT",
+      "action": "",
+      "to": "UPDATE"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "STAT",
+      "action": "",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "LIST [msg]",
+      "action": "",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "RETR msg",
+      "action": "",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "DELE msg",
+      "action": "",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "NOOP",
+      "action": "",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "RSET",
+      "action": "",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "TOP msg n",
+      "action": "",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "UIDL [msg]",
+      "action": "",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "UPDATE",
+      "event": "",
+      "action": "TCP connection is closed",
+      "to": "CLOSED"
+    }
+  ]
+}

@@ -1,0 +1,305 @@
+{
+  "states": [
+    "Not Authenticated",
+    "Authenticated",
+    "Selected",
+    "Logout",
+    "Any State",
+    "Not Authenticated State",
+    "Authenticated State",
+    "Selected State",
+    "unauthenticated",
+    "authenticated",
+    "closed"
+  ],
+  "transitions": [
+    {
+      "from": "connection established",
+      "event": "",
+      "action": "",
+      "to": "Not Authenticated"
+    },
+    {
+      "from": "connection established",
+      "event": "",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "successful LOGIN or AUTHENTICATE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "successful SELECT or EXAMINE command",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "CLOSE or UNSELECT command, unsolicited CLOSED response code, or failed SELECT or EXAMINE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Authenticated",
+      "event": "rejected connection (BYE greeting)",
+      "action": "",
+      "to": "connection established"
+    },
+    {
+      "from": "Any State",
+      "event": "CAPABILITY",
+      "action": "OK - capability completed",
+      "to": "Any State"
+    },
+    {
+      "from": "Any State",
+      "event": "NOOP",
+      "action": "OK - noop completed",
+      "to": "Any State"
+    },
+    {
+      "from": "Any State",
+      "event": "LOGOUT",
+      "action": "OK - logout completed",
+      "to": "Any State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "AUTHENTICATE",
+      "action": "OK - authenticate completed",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "LOGIN",
+      "action": "OK - login completed",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "STARTTLS",
+      "action": "OK - starttls completed, begin TLS negotiation",
+      "to": "Not Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "ENABLE",
+      "action": "OK - Relevant capabilities enabled",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "SELECT",
+      "action": "OK - select completed",
+      "to": "Selected State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "EXAMINE",
+      "action": "OK - examine completed",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "CLOSE",
+      "action": "OK - close completed",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Selected State",
+      "event": "UNSELECT",
+      "action": "OK - unselect completed",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Selected State",
+      "event": "EXPUNGE",
+      "action": "OK - expunge completed",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "SEARCH",
+      "action": "OK - search completed",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "FETCH",
+      "action": "OK - fetch completed",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "STORE",
+      "action": "OK - store completed",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "COPY",
+      "action": "OK - copy completed",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "MOVE",
+      "action": "OK - move completed",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "UID",
+      "action": "OK - UID command completed",
+      "to": "Selected State"
+    },
+    {
+      "from": "unauthenticated",
+      "event": "",
+      "action": "greeting",
+      "to": "unauthenticated"
+    },
+    {
+      "from": "unauthenticated",
+      "event": "LOGIN",
+      "action": "OK response",
+      "to": "authenticated"
+    },
+    {
+      "from": "unauthenticated",
+      "event": "AUTHENTICATE",
+      "action": "OK response",
+      "to": "authenticated"
+    },
+    {
+      "from": "unauthenticated",
+      "event": "PREAUTH",
+      "action": "connection established",
+      "to": "authenticated"
+    },
+    {
+      "from": "unauthenticated",
+      "event": "BYE",
+      "action": "panic shutdown / autologout / refusal",
+      "to": "closed"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "login",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "authenticate",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "STARTTLS",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "select",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "create",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "examine",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "enable",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "logout",
+      "action": "",
+      "to": "Not Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "idle",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "close",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "unselect",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "expunge",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "copy",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "move",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "fetch",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "store",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "search",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "uid",
+      "action": "",
+      "to": "Selected"
+    }
+  ]
+}

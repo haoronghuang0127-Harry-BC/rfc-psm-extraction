@@ -1,0 +1,433 @@
+{
+  "states": [
+    "Adj-RIB-In",
+    "Adj-RIB-Out",
+    "Loc-RIB",
+    "BGP Speaker State",
+    "Connection Open",
+    "Incremental Updates",
+    "KEEPALIVE messages",
+    "NOTIFICATION messages",
+    "TCP Connection Established",
+    "BGP State Machine",
+    "OPEN Message Sent",
+    "KEEPALIVE Message Sent",
+    "NOTIFICATION Message Sent",
+    "BGP Peer",
+    "ORIGIN Attribute Generation",
+    "AS_PATH Modification (Internal Peer)",
+    "AS_PATH Modification (External Peer)",
+    "NEXT_HOP Calculation (Internal Peer)",
+    "NEXT_HOP Calculation (External Peer, One Hop)",
+    "NEXT_HOP Calculation (External Peer, Multihop)",
+    "MULTI_EXIT_DISC Handling",
+    "LOCAL_PREF Handling",
+    "AGGREGATOR Handling",
+    "Idle",
+    "Connect",
+    "Active",
+    "OpenSent",
+    "OpenConfirm",
+    "Established",
+    "BGP Version Negotiation",
+    "BGP-4",
+    "BGP message transmission",
+    "TCP connection establishment",
+    "BGP Speaker",
+    "Peering with a BGP implementation that does not compress multiple address prefixes",
+    "Operational",
+    "BGP FSM"
+  ],
+  "transitions": [
+    {
+      "from": "BGP Speaker State",
+      "event": "TCP connection formed",
+      "action": "exchange messages to open and confirm the connection parameters",
+      "to": "Connection Open"
+    },
+    {
+      "from": "Connection Open",
+      "event": "Adj-Ribs-Out",
+      "action": "initial data flow is the portion of the BGP routing table that is allowed by the export policy",
+      "to": "Incremental Updates"
+    },
+    {
+      "from": "Incremental Updates",
+      "event": "routing tables change",
+      "action": "send incremental updates",
+      "to": "Incremental Updates"
+    },
+    {
+      "from": "Incremental Updates",
+      "event": "periodically",
+      "action": "send KEEPALIVE messages to ensure that the connection is live",
+      "to": "KEEPALIVE messages"
+    },
+    {
+      "from": "Incremental Updates",
+      "event": "errors or special conditions",
+      "action": "send NOTIFICATION messages and close the connection",
+      "to": "NOTIFICATION messages"
+    },
+    {
+      "from": "TCP Connection Established",
+      "event": "",
+      "action": "Send OPEN message",
+      "to": "OPEN Message Sent"
+    },
+    {
+      "from": "OPEN Message Sent",
+      "event": "Acceptable OPEN message received",
+      "action": "Send KEEPALIVE message",
+      "to": "KEEPALIVE Message Sent"
+    },
+    {
+      "from": "KEEPALIVE Message Sent",
+      "event": "Error condition detected",
+      "action": "Send NOTIFICATION message and close connection",
+      "to": "NOTIFICATION Message Sent"
+    },
+    {
+      "from": "BGP State Machine",
+      "event": "Hold Timer expired",
+      "action": "Send NOTIFICATION message and close connection",
+      "to": "NOTIFICATION Message Sent"
+    },
+    {
+      "from": "BGP Peer",
+      "event": "UPDATE message received",
+      "action": "Process path attributes",
+      "to": "BGP Peer"
+    },
+    {
+      "from": "BGP Peer",
+      "event": "Route Origination",
+      "action": "Generate ORIGIN attribute",
+      "to": "ORIGIN Attribute Generation"
+    },
+    {
+      "from": "ORIGIN Attribute Generation",
+      "event": "",
+      "action": "Propagate route to internal peers",
+      "to": "BGP Peer"
+    },
+    {
+      "from": "BGP Peer",
+      "event": "Route Propagation to Internal Peer",
+      "action": "Do not modify AS_PATH",
+      "to": "AS_PATH Modification (Internal Peer)"
+    },
+    {
+      "from": "AS_PATH Modification (Internal Peer)",
+      "event": "",
+      "action": "Propagate route to other peers",
+      "to": "BGP Peer"
+    },
+    {
+      "from": "BGP Peer",
+      "event": "Route Propagation to External Peer",
+      "action": "Modify AS_PATH based on peer location",
+      "to": "AS_PATH Modification (External Peer)"
+    },
+    {
+      "from": "AS_PATH Modification (External Peer)",
+      "event": "",
+      "action": "Propagate route to other peers",
+      "to": "BGP Peer"
+    },
+    {
+      "from": "BGP Peer",
+      "event": "Route Advertisement to Internal Peer",
+      "action": "Calculate NEXT_HOP attribute",
+      "to": "NEXT_HOP Calculation (Internal Peer)"
+    },
+    {
+      "from": "NEXT_HOP Calculation (Internal Peer)",
+      "event": "",
+      "action": "Propagate route to other peers",
+      "to": "BGP Peer"
+    },
+    {
+      "from": "BGP Peer",
+      "event": "Route Advertisement to External Peer",
+      "action": "Calculate NEXT_HOP attribute",
+      "to": "NEXT_HOP Calculation (External Peer, One Hop)"
+    },
+    {
+      "from": "NEXT_HOP Calculation (External Peer, One Hop)",
+      "event": "",
+      "action": "Propagate route to other peers",
+      "to": "BGP Peer"
+    },
+    {
+      "from": "BGP Peer",
+      "event": "Route Advertisement to External Peer (Multihop)",
+      "action": "Calculate NEXT_HOP attribute",
+      "to": "NEXT_HOP Calculation (External Peer, Multihop)"
+    },
+    {
+      "from": "NEXT_HOP Calculation (External Peer, Multihop)",
+      "event": "",
+      "action": "Propagate route to other peers",
+      "to": "BGP Peer"
+    },
+    {
+      "from": "BGP Peer",
+      "event": "Route Received with MULTI_EXIT_DISC",
+      "action": "Handle MULTI_EXIT_DISC attribute",
+      "to": "MULTI_EXIT_DISC Handling"
+    },
+    {
+      "from": "MULTI_EXIT_DISC Handling",
+      "event": "",
+      "action": "Propagate route to other peers",
+      "to": "BGP Peer"
+    },
+    {
+      "from": "BGP Peer",
+      "event": "Route Advertisement to Internal Peer",
+      "action": "Include LOCAL_PREF attribute",
+      "to": "LOCAL_PREF Handling"
+    },
+    {
+      "from": "LOCAL_PREF Handling",
+      "event": "",
+      "action": "Propagate route to other peers",
+      "to": "BGP Peer"
+    },
+    {
+      "from": "BGP Peer",
+      "event": "Route Aggregation",
+      "action": "Add AGGREGATOR attribute",
+      "to": "AGGREGATOR Handling"
+    },
+    {
+      "from": "AGGREGATOR Handling",
+      "event": "",
+      "action": "Propagate route to other peers",
+      "to": "BGP Peer"
+    },
+    {
+      "from": "Connect",
+      "event": "",
+      "action": "sends an OPEN message",
+      "to": "Active"
+    },
+    {
+      "from": "Active",
+      "event": "reception of a KEEPALIVE, UPDATE, or NOTIFICATION message",
+      "action": "transitions to OpenConfirm",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "Active",
+      "event": "Hold Time expired",
+      "action": "sends a NOTIFICATION message with the Hold Timer Expired Error Code and closes the BGP connection",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "reception of a KEEPALIVE, UPDATE, or NOTIFICATION message",
+      "action": "transitions to Established",
+      "to": "Established"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "Hold Time expired",
+      "action": "sends a NOTIFICATION message with the Hold Timer Expired Error Code and closes the BGP connection",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "reception of a KEEPALIVE, UPDATE, or NOTIFICATION message",
+      "action": "remains in Established",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "Hold Time expired",
+      "action": "sends a NOTIFICATION message with the Hold Timer Expired Error Code and closes the BGP connection",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "ManualStart",
+      "action": "initialize resources, set ConnectRetryCounter to zero, start ConnectRetryTimer, initiate TCP connection, listen for incoming connection, change state to Connect",
+      "to": "Connect"
+    },
+    {
+      "from": "Idle",
+      "event": "AutomaticStart",
+      "action": "initialize resources, set ConnectRetryCounter to zero, start ConnectRetryTimer, initiate TCP connection, listen for incoming connection, change state to Connect",
+      "to": "Connect"
+    },
+    {
+      "from": "Idle",
+      "event": "ManualStart_with_PassiveTcpEstablishment",
+      "action": "initialize resources, set ConnectRetryCounter to zero, start ConnectRetryTimer, listen for incoming connection, change state to Active",
+      "to": "Active"
+    },
+    {
+      "from": "Idle",
+      "event": "AutomaticStart_with_PassiveTcpEstablishment",
+      "action": "initialize resources, set ConnectRetryCounter to zero, start ConnectRetryTimer, listen for incoming connection, change state to Active",
+      "to": "Active"
+    },
+    {
+      "from": "Connect",
+      "event": "ManualStop",
+      "action": "drop TCP connection, release resources, set ConnectRetryCounter to zero, stop ConnectRetryTimer, change state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "ConnectRetryTimer_Expires",
+      "action": "drop TCP connection, restart ConnectRetryTimer, stop DelayOpenTimer, initiate TCP connection, listen for incoming connection, remain in Connect state",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "DelayOpenTimer_Expires",
+      "action": "send OPEN message, set HoldTimer, change state to OpenSent",
+      "to": "OpenSent"
+    },
+    {
+      "from": "Connect",
+      "event": "TcpConnection_Valid",
+      "action": "process TCP connection flags, remain in Connect state",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "Tcp_CR_Invalid",
+      "action": "reject TCP connection, remain in Connect state",
+      "to": "Connect"
+    },
+    {
+      "from": "Active",
+      "event": "ManualStop",
+      "action": "drop TCP connection, release resources, set ConnectRetryCounter to zero, stop ConnectRetryTimer, change state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "ConnectRetryTimer_Expires",
+      "action": "restart ConnectRetryTimer, initiate TCP connection, listen for incoming connection, change state to Connect",
+      "to": "Connect"
+    },
+    {
+      "from": "Active",
+      "event": "DelayOpenTimer_Expires",
+      "action": "complete BGP initialization, send OPEN message, set HoldTimer, change state to OpenSent",
+      "to": "OpenSent"
+    },
+    {
+      "from": "OpenSent",
+      "event": "HoldTimer_Expires",
+      "action": "send NOTIFICATION with error code Hold Timer Expired, release resources, drop TCP connection, increment ConnectRetryCounter, change state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "KeepaliveTimer_Expires",
+      "action": "send KEEPALIVE message, restart KeepaliveTimer",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "HoldTimer_Expires",
+      "action": "send NOTIFICATION with error code Hold Timer Expired, release resources, drop TCP connection, increment ConnectRetryCounter, change state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "KeepaliveTimer_Expires",
+      "action": "send KEEPALIVE message, restart KeepaliveTimer",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "Established",
+      "event": "ManualStop",
+      "action": "send NOTIFICATION with Cease, release resources, drop TCP connection, set ConnectRetryCounter to zero, change state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "AutomaticStop",
+      "action": "send NOTIFICATION with Cease, release resources, drop TCP connection, increment ConnectRetryCounter, change state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "HoldTimer_Expires",
+      "action": "send NOTIFICATION with error code Hold Timer Expired, release resources, drop TCP connection, increment ConnectRetryCounter, change state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "KeepaliveTimer_Expires",
+      "action": "send KEEPALIVE message, restart KeepaliveTimer",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "UPDATE message",
+      "action": "check validity, process attributes, update Adj-RIB-In, run Decision Process",
+      "to": "Adj-RIB-In"
+    },
+    {
+      "from": "Adj-RIB-In",
+      "event": "WITHDRAWN ROUTES field",
+      "action": "remove routes from Adj-RIB-In, run Decision Process",
+      "to": "Adj-RIB-In"
+    },
+    {
+      "from": "Adj-RIB-In",
+      "event": "feasible route",
+      "action": "update Adj-RIB-In, run Decision Process",
+      "to": "Adj-RIB-In"
+    },
+    {
+      "from": "Adj-RIB-In",
+      "event": "",
+      "action": "apply policies in PIB to routes, update Adj-RIBs-Out, run Decision Process",
+      "to": "Adj-RIB-Out"
+    },
+    {
+      "from": "Loc-RIB",
+      "event": "changes",
+      "action": "advertise routes, run Update-Send process",
+      "to": "Adj-RIB-Out"
+    },
+    {
+      "from": "BGP Version Negotiation",
+      "event": "",
+      "action": "negotiate the version of the protocol by making multiple attempts at opening a BGP connection, starting with the highest version number each BGP speaker supports",
+      "to": "BGP Version Negotiation"
+    },
+    {
+      "from": "BGP message transmission",
+      "event": "local system TCP user interface supports the TCP PUSH function",
+      "action": "transmit BGP message with PUSH flag set",
+      "to": "BGP message transmission"
+    },
+    {
+      "from": "TCP connection establishment",
+      "event": "local system TCP user interface supports setting the DSCP field",
+      "action": "open TCP connection with bits 0-2 of the DSCP field set to 110 (binary)",
+      "to": "TCP connection establishment"
+    },
+    {
+      "from": "BGP Speaker",
+      "event": "",
+      "action": "combine them into the same UPDATE message",
+      "to": "BGP Speaker"
+    },
+    {
+      "from": "BGP Speaker",
+      "event": "When peering with a BGP implementation that does not compress multiple address prefixes",
+      "action": "take steps to reduce the overhead from the flood of data received when a peer is acquired or when a significant network topology change occurs",
+      "to": "Peering with a BGP implementation that does not compress multiple address prefixes"
+    }
+  ]
+}

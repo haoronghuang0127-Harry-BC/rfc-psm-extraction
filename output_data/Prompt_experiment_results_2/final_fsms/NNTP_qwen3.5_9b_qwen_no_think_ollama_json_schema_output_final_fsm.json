@@ -1,0 +1,65 @@
+{
+  "states": [
+    "Transit mode",
+    "Reading mode",
+    "Initial Connection",
+    "Reader Mode",
+    "Closed"
+  ],
+  "transitions": [
+    {
+      "from": "Transit mode",
+      "event": "MODE READER command",
+      "action": "Server advertises READER capability, stops advertising MODE-READER and IHAVE capabilities",
+      "to": "Reading mode"
+    },
+    {
+      "from": "Reading mode",
+      "event": "",
+      "action": "",
+      "to": "Reading mode"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "200 Service available, posting allowed",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "201 Service available, posting prohibited",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "400 or 502 greeting code",
+      "to": "Closed"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "MODE READER",
+      "action": "200 Reader mode, posting permitted",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "MODE READER",
+      "action": "201 NNTP Service Ready, posting prohibited",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "MODE READER",
+      "action": "502 Transit service only",
+      "to": "Closed"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "QUIT",
+      "action": "205 Connection closing",
+      "to": "Closed"
+    }
+  ]
+}

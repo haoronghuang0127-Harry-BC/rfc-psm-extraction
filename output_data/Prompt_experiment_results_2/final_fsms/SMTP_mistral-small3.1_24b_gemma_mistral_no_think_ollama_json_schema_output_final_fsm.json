@@ -1,0 +1,326 @@
+{
+  "states": [
+    "SMTP client",
+    "SMTP server",
+    "Mail transaction",
+    "Message submission server",
+    "Session Initiation",
+    "Client Initiation",
+    "Forwarding for Address Correction or Updating",
+    "Commands for Debugging Addresses",
+    "Relaying and Mail Routing",
+    "Mail Gatewaying",
+    "Terminating Sessions and Connections",
+    "Mailing Lists and Aliases",
+    "Initial state",
+    "Mail transaction in progress",
+    "Domain Name Resolution",
+    "MX Record Lookup",
+    "Address Record Lookup",
+    "Delivery Attempt",
+    "Message Queued",
+    "Error Reported",
+    "Message Relayed",
+    "Message Delivered",
+    "Message Handed Off",
+    "Ready",
+    "Data Input",
+    "Closing Transmission Channel"
+  ],
+  "transitions": [
+    {
+      "from": "SMTP client",
+      "event": "message to transmit",
+      "action": "establishes a two-way transmission channel to an SMTP server",
+      "to": "SMTP server"
+    },
+    {
+      "from": "SMTP server",
+      "event": "receives message",
+      "action": "accepts responsibility for either delivering the message or properly reporting the failure to do so",
+      "to": "SMTP server"
+    },
+    {
+      "from": "SMTP client",
+      "event": "message transmitted",
+      "action": "requests that the connection be shut down or initiates other mail transactions",
+      "to": "SMTP client"
+    },
+    {
+      "from": "SMTP client",
+      "event": "connection to an SMTP server",
+      "action": "uses a connection for ancillary services such as verification of email addresses or retrieval of mailing list subscriber addresses",
+      "to": "SMTP client"
+    },
+    {
+      "from": "SMTP client",
+      "event": "message submission",
+      "action": "submits the original message to an intermediate, message submission server",
+      "to": "Message submission server"
+    },
+    {
+      "from": "Session Initiation",
+      "event": "Client opens a connection",
+      "action": "Server responds with an opening message",
+      "to": "Client Initiation"
+    },
+    {
+      "from": "Client Initiation",
+      "event": "EHLO",
+      "action": "Server provides a list of the extensions it supports",
+      "to": "Mail transaction"
+    },
+    {
+      "from": "Client Initiation",
+      "event": "HELO",
+      "action": "Server does not return the extended EHLO-style response",
+      "to": "Mail transaction"
+    },
+    {
+      "from": "Mail transaction",
+      "event": "MAIL",
+      "action": "Server resets state tables and buffers",
+      "to": "Mail transaction"
+    },
+    {
+      "from": "Mail transaction",
+      "event": "RCPT",
+      "action": "Server stores the forward-path",
+      "to": "Mail transaction"
+    },
+    {
+      "from": "Mail transaction",
+      "event": "DATA",
+      "action": "Server returns a 354 Intermediate reply and considers all succeeding lines up to but not including the end of mail data indicator to be the message text",
+      "to": "Mail transaction"
+    },
+    {
+      "from": "Mail transaction",
+      "event": "End of mail data indicator",
+      "action": "Server processes the stored recipients and mail data",
+      "to": "Forwarding for Address Correction or Updating"
+    },
+    {
+      "from": "Forwarding for Address Correction or Updating",
+      "event": "Address change",
+      "action": "Server forwards messages",
+      "to": "Commands for Debugging Addresses"
+    },
+    {
+      "from": "Commands for Debugging Addresses",
+      "event": "VRFY",
+      "action": "Server verifies a user name or obtains the content of a mailing list",
+      "to": "Relaying and Mail Routing"
+    },
+    {
+      "from": "Commands for Debugging Addresses",
+      "event": "EXPN",
+      "action": "Server verifies a user name or obtains the content of a mailing list",
+      "to": "Relaying and Mail Routing"
+    },
+    {
+      "from": "Relaying and Mail Routing",
+      "event": "Source routes",
+      "action": "Server ignores the route information and simply sends to the final destination",
+      "to": "Mail Gatewaying"
+    },
+    {
+      "from": "Mail Gatewaying",
+      "event": "Message forwarding",
+      "action": "Gateway prepends a Received: line",
+      "to": "Terminating Sessions and Connections"
+    },
+    {
+      "from": "Terminating Sessions and Connections",
+      "event": "QUIT",
+      "action": "Server responds with a positive reply code and closes the connection",
+      "to": "Mailing Lists and Aliases"
+    },
+    {
+      "from": "Mailing Lists and Aliases",
+      "event": "Message delivery or forwarding",
+      "action": "Server changes the return address in the envelope",
+      "to": "Session Initiation"
+    },
+    {
+      "from": "Initial state",
+      "event": "EHLO",
+      "action": "250 OK",
+      "to": "Initial state"
+    },
+    {
+      "from": "Initial state",
+      "event": "HELO",
+      "action": "250 OK",
+      "to": "Initial state"
+    },
+    {
+      "from": "Initial state",
+      "event": "MAIL",
+      "action": "250 OK",
+      "to": "Mail transaction in progress"
+    },
+    {
+      "from": "Mail transaction in progress",
+      "event": "RCPT",
+      "action": "250 OK",
+      "to": "Mail transaction in progress"
+    },
+    {
+      "from": "Mail transaction in progress",
+      "event": "DATA",
+      "action": "354 Start mail input",
+      "to": "Mail transaction in progress"
+    },
+    {
+      "from": "Mail transaction in progress",
+      "event": "<CRLF>.<CRLF>",
+      "action": "250 OK",
+      "to": "Initial state"
+    },
+    {
+      "from": "Mail transaction in progress",
+      "event": "RSET",
+      "action": "250 OK",
+      "to": "Initial state"
+    },
+    {
+      "from": "Mail transaction in progress",
+      "event": "QUIT",
+      "action": "221 OK",
+      "to": "Initial state"
+    },
+    {
+      "from": "Initial state",
+      "event": "QUIT",
+      "action": "221 OK",
+      "to": "Initial state"
+    },
+    {
+      "from": "Domain Name Resolution",
+      "event": "DNS lookup performed",
+      "action": "Resolve domain name",
+      "to": "MX Record Lookup"
+    },
+    {
+      "from": "MX Record Lookup",
+      "event": "MX records found",
+      "action": "Use MX records for delivery",
+      "to": "Address Record Lookup"
+    },
+    {
+      "from": "MX Record Lookup",
+      "event": "No MX records found",
+      "action": "Treat as implicit MX with preference 0",
+      "to": "Address Record Lookup"
+    },
+    {
+      "from": "MX Record Lookup",
+      "event": "Non-existent domain error",
+      "action": "",
+      "to": "Error Reported"
+    },
+    {
+      "from": "MX Record Lookup",
+      "event": "Temporary error",
+      "action": "",
+      "to": "Message Queued"
+    },
+    {
+      "from": "Address Record Lookup",
+      "event": "Address records found",
+      "action": "Attempt delivery to addresses",
+      "to": "Delivery Attempt"
+    },
+    {
+      "from": "Address Record Lookup",
+      "event": "No usable address records",
+      "action": "",
+      "to": "Error Reported"
+    },
+    {
+      "from": "Delivery Attempt",
+      "event": "Delivery succeeds",
+      "action": "",
+      "to": "Message Delivered"
+    },
+    {
+      "from": "Delivery Attempt",
+      "event": "Delivery fails",
+      "action": "Retry with next address",
+      "to": "Delivery Attempt"
+    },
+    {
+      "from": "Message Queued",
+      "event": "Retry attempt",
+      "action": "Attempt delivery again",
+      "to": "Delivery Attempt"
+    },
+    {
+      "from": "Message Relayed",
+      "event": "Relay message",
+      "action": "Sort MX records for delivery",
+      "to": "Delivery Attempt"
+    },
+    {
+      "from": "Message Relayed",
+      "event": "Relay message without rewriting address",
+      "action": "Sort MX records for delivery",
+      "to": "Delivery Attempt"
+    },
+    {
+      "from": "Message Relayed",
+      "event": "Relay message with address rewriting",
+      "action": "",
+      "to": "Message Handed Off"
+    },
+    {
+      "from": "Ready",
+      "event": "EHLO",
+      "action": "250-foo.com greets bar.com\n250-8BITMIME\n250-SIZE\n250-DSN\n250 HELP",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "MAIL FROM",
+      "action": "250 OK",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RCPT TO",
+      "action": "250 OK",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RCPT TO",
+      "action": "550 No such user here",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "DATA",
+      "action": "354 Start mail input; end with <CRLF>.<CRLF>",
+      "to": "Data Input"
+    },
+    {
+      "from": "Data Input",
+      "event": ".",
+      "action": "250 OK",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RSET",
+      "action": "250 OK",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "QUIT",
+      "action": "221 foo.com Service closing transmission channel",
+      "to": "Closing Transmission Channel"
+    }
+  ]
+}

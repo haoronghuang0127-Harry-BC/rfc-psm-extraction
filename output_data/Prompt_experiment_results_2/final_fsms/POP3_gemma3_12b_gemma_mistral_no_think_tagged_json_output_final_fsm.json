@@ -1,0 +1,249 @@
+{
+  "states": [
+    "client host",
+    "server host",
+    "AUTHORIZATION",
+    "TRANSACTION",
+    "UPDATE",
+    "AUTHORIZATION state",
+    "TRANSACTION state",
+    "TRANSACTION State",
+    "UPDATE state",
+    "Logged in state",
+    "Download-and-delete policy state",
+    "APOP mrose c4c9334bac560ecc979e58001b3e22fb",
+    "STAT",
+    "LIST",
+    "RETR 1",
+    "DELE 1",
+    "RETR 2",
+    "DELE 2",
+    "QUIT",
+    "Unsecured State",
+    "APOP Secured State",
+    "APOP",
+    "DELE",
+    "LIST",
+    "NOOP",
+    "PASS",
+    "QUIT",
+    "RETR",
+    "RSET",
+    "STAT",
+    "TOP",
+    "UIDL",
+    "USER"
+  ],
+  "transitions": [
+    {
+      "from": "AUTHORIZATION",
+      "event": "",
+      "action": "acquires resources associated with the client’s maildrop",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "QUIT",
+      "action": "releases any resources acquired during the TRANSACTION state and says goodbye",
+      "to": "UPDATE"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "QUIT",
+      "action": "+OK",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "TRANSACTION State",
+      "event": "QUIT",
+      "action": "",
+      "to": "UPDATE state"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "QUIT",
+      "action": "remove deleted messages, release lock, close connection; Possible Responses: +OK, -ERR",
+      "to": "UPDATE"
+    },
+    {
+      "from": "AUTHORIZATION state",
+      "event": "USER name",
+      "action": "To authenticate using the USER and PASS command combination, the client must first issue the USER command.",
+      "to": "AUTHORIZATION state"
+    },
+    {
+      "from": "AUTHORIZATION state",
+      "event": "PASS string",
+      "action": "When the client issues the PASS command, the POP3 server uses the argument pair from the USER and PASS commands to determine if the client should be given access to the appropriate maildrop.",
+      "to": "TRANSACTION state"
+    },
+    {
+      "from": "TRANSACTION state",
+      "event": "TOP",
+      "action": "If the POP3 server issues a positive response, then the response given is multi-line.",
+      "to": "TRANSACTION state"
+    },
+    {
+      "from": "TRANSACTION state",
+      "event": "UIDL [msg]",
+      "action": "If an argument was given and the POP3 server issues a positive response with a line containing information for that message.",
+      "to": "TRANSACTION state"
+    },
+    {
+      "from": "AUTHORIZATION state",
+      "event": "APOP name digest",
+      "action": "Normally, each POP3 session starts with a USER/PASS exchange.",
+      "to": "TRANSACTION state"
+    },
+    {
+      "from": "Logged in state",
+      "event": "QUIT",
+      "action": "delete all messages downloaded during the session with the RETR command",
+      "to": "Logged in state"
+    },
+    {
+      "from": "AUTHORIZATION state",
+      "event": "USER",
+      "action": "+OK",
+      "to": "AUTHORIZATION state"
+    },
+    {
+      "from": "AUTHORIZATION state",
+      "event": "PASS",
+      "action": "+OK",
+      "to": "TRANSACTION state"
+    },
+    {
+      "from": "AUTHORIZATION state",
+      "event": "QUIT",
+      "action": "+OK",
+      "to": "TRANSACTION state"
+    },
+    {
+      "from": "TRANSACTION state",
+      "event": "STAT",
+      "action": "+OK",
+      "to": "TRANSACTION state"
+    },
+    {
+      "from": "TRANSACTION state",
+      "event": "LIST",
+      "action": "+OK",
+      "to": "TRANSACTION state"
+    },
+    {
+      "from": "TRANSACTION state",
+      "event": "RETR",
+      "action": "+OK",
+      "to": "TRANSACTION state"
+    },
+    {
+      "from": "TRANSACTION state",
+      "event": "DELE",
+      "action": "+OK",
+      "to": "TRANSACTION state"
+    },
+    {
+      "from": "TRANSACTION state",
+      "event": "NOOP",
+      "action": "+OK",
+      "to": "TRANSACTION state"
+    },
+    {
+      "from": "TRANSACTION state",
+      "event": "RSET",
+      "action": "+OK",
+      "to": "TRANSACTION state"
+    },
+    {
+      "from": "AUTHORIZATION state",
+      "event": "APOP",
+      "action": "+OK",
+      "to": "TRANSACTION state"
+    },
+    {
+      "from": "TRANSACTION state",
+      "event": "TOP",
+      "action": "+OK",
+      "to": "TRANSACTION state"
+    },
+    {
+      "from": "TRANSACTION state",
+      "event": "UIDL",
+      "action": "+OK",
+      "to": "TRANSACTION state"
+    },
+    {
+      "from": "wait for connection on TCP port 110",
+      "event": "",
+      "action": "wait for next connection",
+      "to": "wait for connection on TCP port 110"
+    },
+    {
+      "from": "open connection",
+      "event": "",
+      "action": "+OK POP3 server ready <1896.697170952@dbc.mtview.ca.us>",
+      "to": "APOP mrose c4c9334bac560ecc979e58001b3e22fb"
+    },
+    {
+      "from": "APOP mrose c4c9334bac560ecc979e58001b3e22fb",
+      "event": "STAT",
+      "action": "+OK 2 320",
+      "to": "STAT"
+    },
+    {
+      "from": "STAT",
+      "event": "LIST",
+      "action": "+OK 2 messages (320 octets)",
+      "to": "LIST"
+    },
+    {
+      "from": "LIST",
+      "event": "RETR 1",
+      "action": "+OK 120 octets\n<the POP3 server sends message 1>\n.",
+      "to": "RETR 1"
+    },
+    {
+      "from": "RETR 1",
+      "event": "DELE 1",
+      "action": "+OK message 1 deleted",
+      "to": "DELE 1"
+    },
+    {
+      "from": "DELE 1",
+      "event": "RETR 2",
+      "action": "+OK 200 octets\n<the POP3 server sends message 2>\n.",
+      "to": "RETR 2"
+    },
+    {
+      "from": "RETR 2",
+      "event": "DELE 2",
+      "action": "+OK message 2 deleted",
+      "to": "DELE 2"
+    },
+    {
+      "from": "DELE 2",
+      "event": "QUIT",
+      "action": "+OK dewey POP3 server signing off (maildrop empty)",
+      "to": "QUIT"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "",
+      "action": "calculate the size of each message in octets",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "Unsecured State",
+      "event": "USER/PASS command sequence",
+      "action": "allow access",
+      "to": "Unsecured State"
+    },
+    {
+      "from": "Unsecured State",
+      "event": "APOP command",
+      "action": "allow access",
+      "to": "APOP Secured State"
+    }
+  ]
+}

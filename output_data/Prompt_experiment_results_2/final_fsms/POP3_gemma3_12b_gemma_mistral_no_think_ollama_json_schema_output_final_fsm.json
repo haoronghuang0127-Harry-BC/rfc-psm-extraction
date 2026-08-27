@@ -1,0 +1,269 @@
+{
+  "states": [
+    "AUTHORIZATION",
+    "TRANSACTION",
+    "UPDATE",
+    "Initial",
+    "Connected",
+    "Apop",
+    "Listing",
+    "Retrieving",
+    "Deleting",
+    "Quitting",
+    "TRANSACTION State"
+  ],
+  "transitions": [
+    {
+      "from": "AUTHORIZATION",
+      "event": "",
+      "action": "acquires resources associated with the client’s maildrop",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "QUIT",
+      "action": "releases any resources acquired during the TRANSACTION state and says goodbye",
+      "to": "UPDATE"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "QUIT",
+      "action": "+OK",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "TRANSACTION State",
+      "event": "STAT",
+      "action": "+OK nn mm",
+      "to": "TRANSACTION State"
+    },
+    {
+      "from": "TRANSACTION State",
+      "event": "LIST",
+      "action": "+OK scan listing follows",
+      "to": "TRANSACTION State"
+    },
+    {
+      "from": "TRANSACTION State",
+      "event": "LIST",
+      "action": "-ERR no such message",
+      "to": "TRANSACTION State"
+    },
+    {
+      "from": "TRANSACTION State",
+      "event": "RETR msg",
+      "action": "+OK message follows",
+      "to": "TRANSACTION State"
+    },
+    {
+      "from": "TRANSACTION State",
+      "event": "RETR msg",
+      "action": "-ERR no such message",
+      "to": "TRANSACTION State"
+    },
+    {
+      "from": "TRANSACTION State",
+      "event": "DELE msg",
+      "action": "+OK message deleted",
+      "to": "TRANSACTION State"
+    },
+    {
+      "from": "TRANSACTION State",
+      "event": "DELE msg",
+      "action": "-ERR message 2 already deleted",
+      "to": "TRANSACTION State"
+    },
+    {
+      "from": "TRANSACTION State",
+      "event": "NOOP",
+      "action": "+OK",
+      "to": "TRANSACTION State"
+    },
+    {
+      "from": "TRANSACTION State",
+      "event": "RSET",
+      "action": "+OK maildrop has 2 messages (320 octets)",
+      "to": "TRANSACTION State"
+    },
+    {
+      "from": "TRANSACTION State",
+      "event": "",
+      "action": "",
+      "to": "UPDATE state"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "QUIT",
+      "action": "remove deleted messages, release lock, close connection",
+      "to": "UPDATE"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "QUIT",
+      "action": "terminate session",
+      "to": "UPDATE"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "USER",
+      "action": "+OK name is a valid mailbox\n-ERR never heard of mailbox name",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "PASS",
+      "action": "+OK maildrop locked and ready\n-ERR invalid password\n-ERR unable to lock maildrop",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "APOP",
+      "action": "+OK maildrop locked and ready\n-ERR permission denied",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "TOP",
+      "action": "If the POP3 server issues a positive response, then the response given is multi-line.  After the initial +OK, the POP3 server sends the headers of the message, the blank line separating the headers from the body, and then the number of lines of the indicated message's body, being careful to byte-stuff the termination character (as with all multi-line responses).",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "UIDL",
+      "action": "+OK unique-id listing follows\n-ERR no such message",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "USER",
+      "action": "+OK",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "PASS",
+      "action": "+OK",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "APOP",
+      "action": "+OK",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "QUIT",
+      "action": "+OK",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "STAT",
+      "action": "+OK",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "LIST",
+      "action": "+OK",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "RETR",
+      "action": "+OK",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "DELE",
+      "action": "+OK",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "NOOP",
+      "action": "+OK",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "RSET",
+      "action": "+OK",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "TOP",
+      "action": "+OK",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "UIDL",
+      "action": "+OK",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "QUIT",
+      "action": "+OK",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "Initial",
+      "event": "",
+      "action": "+OK POP3 server ready",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "APOP mrose c4c9334bac560ecc979e58001b3e22fb",
+      "action": "+OK mrose's maildrop has 2 messages (320 octets)",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "STAT",
+      "action": "+OK 2 320",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "LIST",
+      "action": "+OK 2 messages (320 octets)\n1 120\n2 200\n.",
+      "to": "Listing"
+    },
+    {
+      "from": "Listing",
+      "event": "RETR 1",
+      "action": "+OK 120 octets\n<the POP3 server sends message 1>\n.",
+      "to": "Retrieving"
+    },
+    {
+      "from": "Retrieving",
+      "event": "DELE 1",
+      "action": "+OK message 1 deleted",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "RETR 2",
+      "action": "+OK 200 octets\n<the POP3 server sends message 2>\n.",
+      "to": "Retrieving"
+    },
+    {
+      "from": "Retrieving",
+      "event": "DELE 2",
+      "action": "+OK message 2 deleted",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "QUIT",
+      "action": "+OK dewey POP3 server signing off (maildrop empty)",
+      "to": "Quitting"
+    }
+  ]
+}

@@ -1,0 +1,287 @@
+{
+  "states": [
+    "CONNECT",
+    "CONNACK",
+    "AUTH",
+    "PUBLISH",
+    "PUBACK",
+    "PINGREQ",
+    "PINGRESP",
+    "DISCONNECT",
+    "Client Token Request to the Authorization Server (AS)",
+    "Client Connection Request to the Broker (C)",
+    "TLS:Anon,MQTT:None",
+    "TLS:Anon,MQTT:ace",
+    "TLS:Known(RPK/PSK),MQTT:none",
+    "TLS:Known(RPK/PSK),MQTT:ace",
+    "Client Authentication over MQTT",
+    "Client Authentication over TLS",
+    "Raw Public Key Mode",
+    "Pre-Shared Key Mode",
+    "Broker Token Validation",
+    "Authorization Check",
+    "Publishing to Subscribers",
+    "Subscribing to Topics",
+    "Connected",
+    "Reauthenticating",
+    "Disconnected",
+    "Session Established",
+    "Token Validation",
+    "Permissions Revoked",
+    "Dynamic Permissions"
+  ],
+  "transitions": [
+    {
+      "from": "CONNECT",
+      "event": "connection requests",
+      "action": "sends",
+      "to": "CONNACK"
+    },
+    {
+      "from": "PUBLISH",
+      "event": "publish requests",
+      "action": "sends",
+      "to": "PUBACK"
+    },
+    {
+      "from": "PUBLISH",
+      "event": "",
+      "action": "sends",
+      "to": "PINGRESP"
+    },
+    {
+      "from": "PINGREQ",
+      "event": "",
+      "action": "sends",
+      "to": "PINGRESP"
+    },
+    {
+      "from": "DISCONNECT",
+      "event": "",
+      "action": "sends",
+      "to": "DISCONNECT"
+    },
+    {
+      "from": "Client Token Request to the Authorization Server (AS)",
+      "event": "",
+      "action": "The Client requests an access token from the AS",
+      "to": "Client Connection Request to the Broker (C)"
+    },
+    {
+      "from": "Client Connection Request to the Broker (C)",
+      "event": "Connection request",
+      "action": "The Client MUST authenticate to the Broker either over MQTT or TLS",
+      "to": "TLS:Anon,MQTT:None"
+    },
+    {
+      "from": "Client Connection Request to the Broker (C)",
+      "event": "Connection request",
+      "action": "The Client MUST authenticate to the Broker either over MQTT or TLS",
+      "to": "TLS:Anon,MQTT:ace"
+    },
+    {
+      "from": "Client Connection Request to the Broker (C)",
+      "event": "Connection request",
+      "action": "The Client MUST authenticate to the Broker either over MQTT or TLS",
+      "to": "TLS:Known(RPK/PSK),MQTT:none"
+    },
+    {
+      "from": "Client Connection Request to the Broker (C)",
+      "event": "Connection request",
+      "action": "The Client MUST authenticate to the Broker either over MQTT or TLS",
+      "to": "TLS:Known(RPK/PSK),MQTT:ace"
+    },
+    {
+      "from": "TLS:Anon,MQTT:None",
+      "event": "",
+      "action": "The Client can only publish or subscribe to public topics",
+      "to": "Client Authentication over MQTT"
+    },
+    {
+      "from": "TLS:Anon,MQTT:ace",
+      "event": "",
+      "action": "The token is transported inside the CONNECT packet",
+      "to": "Client Authentication over MQTT"
+    },
+    {
+      "from": "TLS:Known(RPK/PSK),MQTT:none",
+      "event": "",
+      "action": "The Client MUST authenticate to the Broker over MQTT",
+      "to": "Client Authentication over MQTT"
+    },
+    {
+      "from": "TLS:Known(RPK/PSK),MQTT:ace",
+      "event": "",
+      "action": "The token transported in the CONNECT packet overwrites any permissions passed during the TLS authentication",
+      "to": "Client Authentication over MQTT"
+    },
+    {
+      "from": "Client Authentication over MQTT",
+      "event": "Authentication Data",
+      "action": "The Broker MUST verify the validity of the token",
+      "to": "Broker Token Validation"
+    },
+    {
+      "from": "Client Authentication over TLS",
+      "event": "",
+      "action": "The Client MUST authenticate the Broker during the TLS handshake",
+      "to": "Raw Public Key Mode"
+    },
+    {
+      "from": "Client Authentication over TLS",
+      "event": "",
+      "action": "The Client MUST authenticate the Broker during the TLS handshake",
+      "to": "Pre-Shared Key Mode"
+    },
+    {
+      "from": "Raw Public Key Mode",
+      "event": "",
+      "action": "The Client MUST upload the access token to the Broker using the method specified in Section 2.2.2",
+      "to": "Client Authentication over MQTT"
+    },
+    {
+      "from": "Pre-Shared Key Mode",
+      "event": "",
+      "action": "The Client utilizes the PSK extension specified in [RFC8446]",
+      "to": "Client Authentication over MQTT"
+    },
+    {
+      "from": "Authorization Check",
+      "event": "PUBLISH packet",
+      "action": "match Topic Name against scope array; publish message to valid subscribers; return error if QoS >= 1",
+      "to": "Authorization Check"
+    },
+    {
+      "from": "Authorization Check",
+      "event": "QoS >= 1 and authorization failure",
+      "action": "return PUBACK or PUBREC with reason code 0x87",
+      "to": "Authorization Check"
+    },
+    {
+      "from": "Authorization Check",
+      "event": "QoS = 0 and authorization failure",
+      "action": "send DISCONNECT with reason code 0x87 and close Network Connection",
+      "to": "Authorization Check"
+    },
+    {
+      "from": "Authorization Check",
+      "event": "unspecified error condition",
+      "action": "return 0x80",
+      "to": "Authorization Check"
+    },
+    {
+      "from": "Authorization Check",
+      "event": "PUBLISH packet from Broker",
+      "action": "identify subscribers with valid matching Topic Subscriptions",
+      "to": "Publishing to Subscribers"
+    },
+    {
+      "from": "Publishing to Subscribers",
+      "event": "unauthorized subscriber",
+      "action": "close Network Connection and SHOULD inform affected subscribers with DISCONNECT packet with reason code 0x87",
+      "to": "Publishing to Subscribers"
+    },
+    {
+      "from": "Authorization Check",
+      "event": "SUBSCRIBE packet",
+      "action": "match Topic Filter against scope field",
+      "to": "Subscribing to Topics"
+    },
+    {
+      "from": "Subscribing to Topics",
+      "event": "Topic Filter match failure",
+      "action": "issue SUBACK with return code 0x87",
+      "to": "Subscribing to Topics"
+    },
+    {
+      "from": "Subscribing to Topics",
+      "event": "unspecified error condition",
+      "action": "return 0x80",
+      "to": "Subscribing to Topics"
+    },
+    {
+      "from": "Connected",
+      "event": "CONNECT, PUBLISH, or SUBSCRIBE packet received or sent",
+      "action": "check for token expiration",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "PINGREQ packet received",
+      "action": "SHOULD check for token expiration",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "Token expiration",
+      "action": "send PUBACK, SUBACK, or DISCONNECT with return code 'Not authorized', close Network Connection",
+      "to": "Reauthenticating"
+    },
+    {
+      "from": "Reauthenticating",
+      "event": "AUTH packet received",
+      "action": "accepts reauthentication requests if Client has already submitted a token, otherwise deny request",
+      "to": "Connected"
+    },
+    {
+      "from": "Reauthenticating",
+      "event": "Reauthentication fails",
+      "action": "send DISCONNECT packet with reason code 0x87 (Not Authorized)",
+      "to": "Reauthenticating"
+    },
+    {
+      "from": "Disconnected",
+      "event": "Client DISCONNECT",
+      "action": "Broker doesn't store Session State, keeps retained messages",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "Client DISCONNECT",
+      "action": "Broker MAY store Session State, including token and introspection result",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "network errors or server disconnection due to a protocol error",
+      "action": "Send Will Message",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "PUBLISH packet with RETAIN flag set",
+      "action": "Store the most recent message for the associated topic",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "access token validation",
+      "action": "cache token",
+      "to": "Session Established"
+    },
+    {
+      "from": "Session Established",
+      "event": "publish/subscribe requests",
+      "action": "authorize with cached token",
+      "to": "Session Established"
+    },
+    {
+      "from": "Session Established",
+      "event": "permissions revoked",
+      "action": "grant publish/subscribe to revoked topics",
+      "to": "Permissions Revoked"
+    },
+    {
+      "from": "Permissions Revoked",
+      "event": "reasonable cache timeout",
+      "action": "introspect tokens regularly",
+      "to": "Session Established"
+    },
+    {
+      "from": "Session Established",
+      "event": "dynamic permissions change",
+      "action": "reasonable expiration strategy for access tokens",
+      "to": "Dynamic Permissions"
+    }
+  ]
+}

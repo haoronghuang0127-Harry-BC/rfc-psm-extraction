@@ -1,0 +1,358 @@
+{
+  "states": [
+    "User-FTP",
+    "Server-FTP",
+    "Server-DTP",
+    "User-DTP",
+    "NVT",
+    "NVFS",
+    "DATA CONNECTION",
+    "control connection",
+    "user-DTP",
+    "server-DTP",
+    "user-PI",
+    "server-PI",
+    "Control Connection Established",
+    "USER State",
+    "PASSWORD State",
+    "ACCOUNT State",
+    "DATA Transfer in Progress",
+    "File Transfer Complete",
+    "Connection Establishment",
+    "Login",
+    "Logout",
+    "Transfer parameters",
+    "File action commands",
+    "Informational commands",
+    "Miscellaneous commands",
+    "B",
+    "W",
+    "S",
+    "F",
+    "E",
+    "Service ready",
+    "User logged in",
+    "File status okay; about to open data connection",
+    "Closing data connection, file transfer successful",
+    "Command OK",
+    "Access denied",
+    "Server closes all connections",
+    "Data Page State",
+    "FDB Page State",
+    "Connected"
+  ],
+  "transitions": [
+    {
+      "from": "control connection",
+      "event": "",
+      "action": "transfer of commands, which describe the functions to be performed, and the replies to these commands",
+      "to": "control connection"
+    },
+    {
+      "from": "user-DTP",
+      "event": "transfer request command",
+      "action": "initiate the data connection",
+      "to": "server-DTP"
+    },
+    {
+      "from": "server-DTP",
+      "event": "transfer request",
+      "action": "initiate the data connection",
+      "to": "user-DTP"
+    },
+    {
+      "from": "user-PI",
+      "event": "PORT command",
+      "action": "specify a non-default user side data port",
+      "to": "user-PI"
+    },
+    {
+      "from": "user-PI",
+      "event": "PASV command",
+      "action": "request the server side to identify a non-default server side data port",
+      "to": "user-PI"
+    },
+    {
+      "from": "server-PI",
+      "event": "restart command",
+      "action": "restart the data transfer",
+      "to": "server-PI"
+    },
+    {
+      "from": "Control Connection Established",
+      "event": "USER command",
+      "action": "Send USER command and interpret reply",
+      "to": "USER State"
+    },
+    {
+      "from": "USER State",
+      "event": "PASSWORD command",
+      "action": "Send PASSWORD command and interpret reply",
+      "to": "PASSWORD State"
+    },
+    {
+      "from": "PASSWORD State",
+      "event": "ACCOUNT command",
+      "action": "Send ACCOUNT command and interpret reply",
+      "to": "ACCOUNT State"
+    },
+    {
+      "from": "ACCOUNT State",
+      "event": "RETR command",
+      "action": "Initiate data transfer",
+      "to": "DATA Transfer in Progress"
+    },
+    {
+      "from": "ACCOUNT State",
+      "event": "STOR command",
+      "action": "Initiate data transfer",
+      "to": "DATA Transfer in Progress"
+    },
+    {
+      "from": "DATA Transfer in Progress",
+      "event": "Data transfer complete",
+      "action": "Complete file transfer",
+      "to": "File Transfer Complete"
+    },
+    {
+      "from": "Control Connection Established",
+      "event": "REIN command",
+      "action": "Reset parameters to default",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "Control Connection Established",
+      "event": "QUIT command",
+      "action": "Terminate USER and close control connection if no file transfer in progress",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "Connection Establishment",
+      "event": "Connect",
+      "action": "220",
+      "to": "Connection Establishment"
+    },
+    {
+      "from": "Connection Establishment",
+      "event": "120",
+      "action": "220",
+      "to": "Connection Establishment"
+    },
+    {
+      "from": "Login",
+      "event": "USER",
+      "action": "230",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "USER",
+      "action": "530",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "USER",
+      "action": "500, 501, 421",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "USER",
+      "action": "331, 332",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "PASS",
+      "action": "230",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "PASS",
+      "action": "202",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "PASS",
+      "action": "530",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "PASS",
+      "action": "500, 501, 503, 421",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "PASS",
+      "action": "332",
+      "to": "Login"
+    },
+    {
+      "from": "Logout",
+      "event": "REIN",
+      "action": "120",
+      "to": "Logout"
+    },
+    {
+      "from": "Logout",
+      "event": "REIN",
+      "action": "220",
+      "to": "Logout"
+    },
+    {
+      "from": "Logout",
+      "event": "REIN",
+      "action": "220",
+      "to": "Logout"
+    },
+    {
+      "from": "Logout",
+      "event": "REIN",
+      "action": "421",
+      "to": "Logout"
+    },
+    {
+      "from": "Transfer parameters",
+      "event": "PORT",
+      "action": "200",
+      "to": "Transfer parameters"
+    },
+    {
+      "from": "Transfer parameters",
+      "event": "PASV",
+      "action": "227",
+      "to": "Transfer parameters"
+    },
+    {
+      "from": "File action commands",
+      "event": "STOR",
+      "action": "125, 150",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "STOR",
+      "action": "226, 250",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "RETR",
+      "action": "125, 150",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "RETR",
+      "action": "226, 250",
+      "to": "File action commands"
+    },
+    {
+      "from": "B",
+      "event": "cmd",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "",
+      "action": "S",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "",
+      "action": "F",
+      "to": "F"
+    },
+    {
+      "from": "B",
+      "event": "RNFR",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "RNTO",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "B",
+      "event": "REST",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "B",
+      "event": "USER",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "PASS",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "ACCT",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "Service ready",
+      "event": "ftp (host) multics<CR>",
+      "action": "<CRLF>.",
+      "to": "User logged in"
+    },
+    {
+      "from": "User logged in",
+      "event": "username Doe <CR>",
+      "action": "<CRLF>----> <CRLF>",
+      "to": "User logged in"
+    },
+    {
+      "from": "User logged in",
+      "event": "password mumble <CR>",
+      "action": "<CRLF>----> <CRLF>",
+      "to": "User logged in"
+    },
+    {
+      "from": "User logged in",
+      "event": "retrieve (local type) ASCII<CR>\n(local pathname) test 1 <CR>\n(for. pathname) test.pl1<CR>",
+      "action": "User-FTP opens local file in ASCII.\nRETR test.pl1<CRLF> ---->",
+      "to": "File status okay; about to open data connection"
+    },
+    {
+      "from": "File status okay; about to open data connection",
+      "event": "",
+      "action": "Server makes data connection\nto port U.\n<---- 226 Closing data connection, \n          file transfer successful<CRLF>.",
+      "to": "Closing data connection, file transfer successful"
+    },
+    {
+      "from": "User logged in",
+      "event": "type Image<CR>",
+      "action": "TYPE I<CRLF> ---->",
+      "to": "Command OK"
+    },
+    {
+      "from": "User logged in",
+      "event": "store (local type) image<CR>\n(local pathname) file dump<CR>\nUser-FTP opens local file in Image.\n(for.pathname) >udd>cn>fd<CR>",
+      "action": "STOR >udd>cn>fd<CRLF> ---->",
+      "to": "Access denied"
+    },
+    {
+      "from": "User logged in",
+      "event": "terminate",
+      "action": "QUIT <CRLF> ---->",
+      "to": "Server closes all connections"
+    }
+  ]
+}

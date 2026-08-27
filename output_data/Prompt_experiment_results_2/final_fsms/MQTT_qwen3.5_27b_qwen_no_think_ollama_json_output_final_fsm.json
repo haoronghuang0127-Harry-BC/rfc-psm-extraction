@@ -1,0 +1,66 @@
+{
+  "states": [
+    "New Session",
+    "Existing Session",
+    "Session State stored",
+    "Session State discarded",
+    "Session with cached token",
+    "Session without cached token"
+  ],
+  "transitions": [
+    {
+      "from": "New Session",
+      "event": "CONNECT packet with Clean Start flag set to 1",
+      "action": "Broker starts a new Session and sets Session Present flag to 0 in CONNACK",
+      "to": "New Session"
+    },
+    {
+      "from": "Existing Session",
+      "event": "CONNECT packet with Clean Start flag set to 0 and existing Session associated with Client Identifier",
+      "action": "Broker resumes communications based on state from existing Session and sets Session Present flag to 1 in CONNACK",
+      "to": "Existing Session"
+    },
+    {
+      "from": "Existing Session",
+      "event": "Client Identifier collision with another Client already connected",
+      "action": "Broker sends DISCONNECT packet with reason code 0x8E (Session taken over) and closes connection",
+      "to": "New Session"
+    },
+    {
+      "from": "Session State stored",
+      "event": "Client DISCONNECT with Session Expiry Interval set to 0",
+      "action": "Broker doesn't store the Session State but MUST keep the retained messages",
+      "to": "Session State discarded"
+    },
+    {
+      "from": "New Session",
+      "event": "CONNECT with Clean flag = 1",
+      "action": "Broker creates a new Session; CONNACK Session Present = 0",
+      "to": "New Session"
+    },
+    {
+      "from": "New Session",
+      "event": "CONNECT with Clean flag = 0 and no existing Session",
+      "action": "Broker creates a new Session; CONNACK Session Present = 0",
+      "to": "New Session"
+    },
+    {
+      "from": "Existing Session",
+      "event": "CONNECT with Clean flag = 0 and existing Session",
+      "action": "Broker resumes communications based on current Session state; CONNACK Session Present = 1",
+      "to": "Existing Session"
+    },
+    {
+      "from": "Session without cached token",
+      "event": "Broker validates an access token and accepts a connection from a client",
+      "action": "caches the token to authorize a Client's publish and subscribe requests in an ongoing Session",
+      "to": "Session with cached token"
+    },
+    {
+      "from": "Session without cached token",
+      "event": "token cannot be validated",
+      "action": "Broker does not cache any tokens",
+      "to": "Session without cached token"
+    }
+  ]
+}

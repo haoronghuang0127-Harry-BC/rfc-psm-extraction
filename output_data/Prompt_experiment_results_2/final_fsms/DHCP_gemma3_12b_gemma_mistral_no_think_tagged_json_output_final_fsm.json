@@ -1,0 +1,129 @@
+{
+  "states": [
+    "DHCP client",
+    "DHCP server",
+    "INIT",
+    "BOUND",
+    "RENEWING",
+    "REBINDING",
+    "INIT-REBOOT",
+    "REBOOTING",
+    "SELECTING"
+  ],
+  "transitions": [
+    {
+      "from": "INIT",
+      "event": "DHCPDISCOVER",
+      "action": "broadcast DHCPDISCOVER",
+      "to": "BOUND"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPREQUEST",
+      "action": "broadcast DHCPREQUEST",
+      "to": "RENEWING"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPACK",
+      "action": "receive DHCPACK",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPNAK",
+      "action": "restart configuration process",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPRELEASE",
+      "action": "send DHCPRELEASE",
+      "to": "INIT"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPACK",
+      "action": "receive DHCPACK",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPNAK",
+      "action": "restart configuration process",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "",
+      "action": "sends a DHCPDISCOVER message",
+      "to": "INIT-REBOOT"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPNAK/Restart",
+      "action": "Discard offer",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPNAK",
+      "action": "Send DHCPDISCOVER",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPACK (not accept)",
+      "action": "Send DHCPDECLINE",
+      "to": "REBOOTING"
+    },
+    {
+      "from": "REBOOTING",
+      "event": "DHCPOFFER",
+      "action": "Collect replies",
+      "to": "SELECTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "Select offer/send DHCPREQUEST",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPNAK",
+      "action": "Halt network",
+      "to": ""
+    },
+    {
+      "from": "BOUND",
+      "event": "T1 expires",
+      "action": "Send DHCPREQUEST to leasing server",
+      "to": "RENEWING"
+    },
+    {
+      "from": "BOUND",
+      "event": "T2 expires",
+      "action": "Broadcast DHCPREQUEST",
+      "to": "REBINDING"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEWING",
+      "event": "no DHCPACK",
+      "action": "Wait, then retransmit DHCPREQUEST",
+      "to": "REBINDING"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    }
+  ]
+}

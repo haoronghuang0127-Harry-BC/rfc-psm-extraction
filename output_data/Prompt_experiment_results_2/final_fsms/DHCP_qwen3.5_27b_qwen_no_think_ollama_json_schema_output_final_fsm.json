@@ -1,0 +1,176 @@
+{
+  "states": [
+    "INIT",
+    "INIT-REBOOT",
+    "BOUND",
+    "RENEWING",
+    "REBINDING",
+    "SELECTING",
+    "REQUESTING",
+    "REBOOTING"
+  ],
+  "transitions": [
+    {
+      "from": "INIT",
+      "event": "DHCPDISCOVER broadcast",
+      "action": "Client broadcasts DHCPDISCOVER message to locate available servers",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPOFFER received",
+      "action": "Client selects server and broadcasts DHCPREQUEST",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPACK received",
+      "action": "Client performs final check (e.g., ARP) and notes lease duration; client is configured",
+      "to": "BOUND"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPDECLINE sent",
+      "action": "Client restarts configuration process",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPNAK received",
+      "action": "Client restarts configuration process",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "timeout after retransmission algorithm",
+      "action": "Client reverts to INIT state and restarts initialization process",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "Send DHCPDISCOVER",
+      "action": "",
+      "to": "SELECTING"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPRELEASE sent",
+      "action": "Client relinquishes lease and cancels remaining lease",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "T1 expires/Send DHCPREQUEST to leasing server",
+      "action": "",
+      "to": "RENEWING"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPOFFER, DHCPACK, DHCPNAK/Discard",
+      "action": "",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPREQUEST broadcast",
+      "action": "Client requests to reuse previously allocated address",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPNAK received",
+      "action": "Client moves to INIT state to request new address",
+      "to": "INIT"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPACK/Record lease, set timers T1,T2",
+      "action": "",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEWING",
+      "event": "T2 expires/Broadcast DHCPREQUEST",
+      "action": "",
+      "to": "REBINDING"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPREQUEST broadcast",
+      "action": "Client requests to reuse previously allocated address",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPNAK received",
+      "action": "Client moves to INIT state to request new address",
+      "to": "INIT"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPACK/Record lease, set timers T1,T2",
+      "action": "",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPNAK/Halt network",
+      "action": "",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "Send DHCPREQUEST",
+      "action": "",
+      "to": "REBOOTING"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPNAK/Restart",
+      "action": "",
+      "to": "INIT"
+    },
+    {
+      "from": "REBOOTING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBOOTING",
+      "event": "DHCPOFFER/Discard",
+      "action": "",
+      "to": "REBOOTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "Select offer/send DHCPREQUEST",
+      "action": "",
+      "to": "REQUESTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPOFFER/Collect replies",
+      "action": "",
+      "to": "SELECTING"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPOFFER/Discard",
+      "action": "",
+      "to": "REQUESTING"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPNAK, Lease expired/Halt network",
+      "action": "",
+      "to": "INIT"
+    }
+  ]
+}

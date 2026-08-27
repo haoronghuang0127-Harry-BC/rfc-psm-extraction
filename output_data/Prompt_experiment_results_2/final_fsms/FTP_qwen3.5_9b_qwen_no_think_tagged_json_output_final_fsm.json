@@ -1,0 +1,89 @@
+{
+  "states": [
+    "B",
+    "W",
+    "E",
+    "S",
+    "F"
+  ],
+  "transitions": [
+    {
+      "from": "B",
+      "event": "cmd",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "B",
+      "event": "1",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "B",
+      "event": "RNFR",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "B",
+      "event": "REST",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "B",
+      "event": "USER",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "B",
+      "event": "PASS",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "B",
+      "event": "ACCT",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "2",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "4,5",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "W",
+      "event": "1,3",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "W",
+      "event": "1,2",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "W",
+      "event": "3",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "1",
+      "action": "",
+      "to": "E"
+    }
+  ]
+}

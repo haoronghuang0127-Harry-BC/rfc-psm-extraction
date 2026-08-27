@@ -1,0 +1,430 @@
+{
+  "states": [
+    "Connection",
+    "Session",
+    "Link Level",
+    "Initial Greeting",
+    "Client/Server Interactions",
+    "Command Continuation Request Pending",
+    "Command Completion Response Pending",
+    "Not Authenticated State",
+    "Authenticated State",
+    "Selected State",
+    "Logout State",
+    "Synchronizing Literal State",
+    "Non-Synchronizing Literal State",
+    "Quoted String State",
+    "Parenthesized List State",
+    "NIL State",
+    "Authenticated Session",
+    "Pre-Authentication Session",
+    "Any State",
+    "Unauthenticated State",
+    "Cleartext port",
+    "Implicit TLS port"
+  ],
+  "transitions": [
+    {
+      "from": "Connection",
+      "event": "",
+      "action": "",
+      "to": "Session"
+    },
+    {
+      "from": "Link Level",
+      "event": "",
+      "action": "Establish client/server network connection, server listens on port 143 or 993",
+      "to": "Initial Greeting"
+    },
+    {
+      "from": "Initial Greeting",
+      "event": "Server sends initial greeting",
+      "action": "Client/server interactions begin",
+      "to": "Client/Server Interactions"
+    },
+    {
+      "from": "Client/Server Interactions",
+      "event": "Client command",
+      "action": "Server data, server completion result response",
+      "to": "Client/Server Interactions"
+    },
+    {
+      "from": "Client/Server Interactions",
+      "event": "Command argument is quoted or requires server feedback",
+      "action": "Server sends command continuation request response",
+      "to": "Command Continuation Request Pending"
+    },
+    {
+      "from": "Command Continuation Request Pending",
+      "event": "Server ready for octets and remainder of command",
+      "action": "Client sends command continuations",
+      "to": "Client/Server Interactions"
+    },
+    {
+      "from": "Client/Server Interactions",
+      "event": "Command syntax error",
+      "action": "Server sends BAD completion response",
+      "to": "Command Completion Response Pending"
+    },
+    {
+      "from": "Command Completion Response Pending",
+      "event": "Client takes action on response and reads another response",
+      "action": "Client sends complete command",
+      "to": "Client/Server Interactions"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "connection without pre-authentication (OK greeting)",
+      "action": "",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "pre-authenticated connection (PREAUTH greeting)",
+      "action": "",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "rejected connection (BYE greeting)",
+      "action": "",
+      "to": "Logout State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "successful LOGIN or AUTHENTICATE command",
+      "action": "",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "successful SELECT or EXAMINE command",
+      "action": "",
+      "to": "Selected State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "CLOSE or UNSELECT command, unsolicited CLOSED response code, or failed SELECT or EXAMINE command",
+      "action": "",
+      "to": "Not Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "LOGOUT command",
+      "action": "send an untagged BYE response and a tagged OK response to the LOGOUT command",
+      "to": "Logout State"
+    },
+    {
+      "from": "Selected State",
+      "event": "LOGOUT command",
+      "action": "send an untagged BYE response and a tagged OK response to the LOGOUT command",
+      "to": "Logout State"
+    },
+    {
+      "from": "Selected State",
+      "event": "server shutdown",
+      "action": "",
+      "to": "Logout State"
+    },
+    {
+      "from": "Selected State",
+      "event": "connection closed",
+      "action": "",
+      "to": "Logout State"
+    },
+    {
+      "from": "Logout State",
+      "event": "both sides close the connection",
+      "action": "",
+      "to": "Logout State"
+    },
+    {
+      "from": "Synchronizing Literal State",
+      "event": "command continuation request",
+      "action": "send octet data (and the remainder of the command)",
+      "to": "Synchronizing Literal State"
+    },
+    {
+      "from": "Non-Synchronizing Literal State",
+      "event": "client to server",
+      "action": "send octet data",
+      "to": "Non-Synchronizing Literal State"
+    },
+    {
+      "from": "Pre-Authentication Session",
+      "event": "inactivity timer",
+      "action": "autologout",
+      "to": "Pre-Authentication Session"
+    },
+    {
+      "from": "Pre-Authentication Session",
+      "event": "command",
+      "action": "reset autologout timer",
+      "to": "Authenticated Session"
+    },
+    {
+      "from": "Authenticated Session",
+      "event": "inactivity timer",
+      "action": "autologout",
+      "to": "Pre-Authentication Session"
+    },
+    {
+      "from": "Authenticated Session",
+      "event": "command",
+      "action": "reset autologout timer",
+      "to": "Authenticated Session"
+    },
+    {
+      "from": "Any State",
+      "event": "CAPABILITY",
+      "action": "no specific response",
+      "to": "Any State"
+    },
+    {
+      "from": "Any State",
+      "event": "NOOP",
+      "action": "no specific response",
+      "to": "Any State"
+    },
+    {
+      "from": "Any State",
+      "event": "LOGOUT",
+      "action": "REQUIRED untagged response: BYE",
+      "to": "Any State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "AUTHENTICATE",
+      "action": "enters the authenticated state",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "LOGIN",
+      "action": "enters the authenticated state",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "STARTTLS",
+      "action": "no specific response",
+      "to": "Not Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "SELECT",
+      "action": "selects a mailbox and enters the selected state",
+      "to": "Selected State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "EXAMINE",
+      "action": "selects a mailbox and enters the selected state",
+      "to": "Selected State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "ENABLE",
+      "action": "no specific response",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Selected State",
+      "event": "CLOSE",
+      "action": "returns to the authenticated state",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Selected State",
+      "event": "UNSELECT",
+      "action": "returns to the authenticated state",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Unauthenticated State",
+      "event": "STARTTLS",
+      "action": "Negotiate TLS",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Unauthenticated State",
+      "event": "LOGIN",
+      "action": "Authenticate user",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Unauthenticated State",
+      "event": "PREAUTH",
+      "action": "Move to authenticated state",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "NOOP",
+      "action": "Check for new messages",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "login",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "authenticate",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "STARTTLS",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "append",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "create",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "delete",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "enable",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "examine",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "list",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "namespace-command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "rename",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "select",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "status",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "subscribe",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "unsubscribe",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "idle",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "UNSELECT",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "EXPUNGE",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "copy",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "move",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "fetch",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "store",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "search",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "uid",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Cleartext port",
+      "event": "STARTTLS command",
+      "action": "Negotiate TLS",
+      "to": "Implicit TLS port"
+    },
+    {
+      "from": "Cleartext port",
+      "event": "STARTTLS command",
+      "action": "Negotiate TLS",
+      "to": "Authenticated state"
+    },
+    {
+      "from": "Implicit TLS port",
+      "event": "TLS negotiation",
+      "action": "Achieve acceptable authentication and/or privacy",
+      "to": "Authenticated state"
+    }
+  ]
+}

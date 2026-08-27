@@ -1,0 +1,13 @@
+[
+  "{\"states\": [], \"transitions\": []}",
+  "{\n  \"states\": [\n    \"TLS:Anon,MQTT:None\",\n    \"TLS:Anon,MQTT:ace\",\n    \"TLS:Known(RPK/PSK),MQTT:none\",\n    \"TLS:Known(RPK/PSK),MQTT:ace\",\n    \"CONNECT with Authentication Data (token only)\",\n    \"AUTH 0x18 (Continue Authentication) - Broker Challenge\",\n    \"AUTH 0x18 (Continue Authentication) - Client Response\",\n    \"CONNACK Success\",\n    \"CONNACK Not Authorized\"\n  ],\n  \"transitions\": [\n    {\n      \"from\": \"TLS:Anon,MQTT:None\",\n      \"event\": \"\",\n      \"action\": \"publish token to authz-info topic\",\n      \"to\": \"TLS:Known(RPK/PSK),MQTT:none\"\n    },\n    {\n      \"from\": \"TLS:Anon,MQTT:ace\",\n      \"event\": \"CONNECT with Authentication Data (token only)\",\n      \"action\": \"Broker validates token and responds with CONNACK\",\n      \"to\": \"CONNACK Success\"\n    },\n    {\n      \"from\": \"TLS:Known(RPK/PSK),MQTT:none\",\n      \"event\": \"\",\n      \"action\": \"initiate TLS handshake with RPK/PSK\",\n      \"to\": \"CONNACK Success\"\n    },\n    {\n      \"from\": \"TLS:Known(RPK/PSK),MQTT:ace\",\n      \"event\": \"\",\n      \"action\": \"token overwrites permissions passed during TLS auth\",\n      \"to\": \"CONNACK Not Authorized\"\n    },\n    {\n      \"from\": \"CONNECT with Authentication Data (token only)\",\n      \"event\": \"Broker sends AUTH 0x18\",\n      \"action\": \"Broker provides RS nonce challenge\",\n      \"to\": \"AUTH 0x18 (Continue Authentication) - Broker Challenge\"\n    },\n    {\n      \"from\": \"AUTH 0x18 (Continue Authentication) - Broker Challenge\",\n      \"event\": \"Client sends AUTH 0x18\",\n      \"action\": \"Client provides Client nonce and signature/MAC\",\n      \"to\": \"CONNACK Success\"\n    },\n    {\n      \"from\": \"AUTH 0x18 (Continue Authentication) - Broker Challenge\",\n      \"event\": \"\",\n      \"action\": \"Token validation fails or token not found\",\n      \"to\": \"CONNACK Not Authorized\"\n    },\n    {\n      \"from\": \"TLS:Anon,MQTT:ace\",\n      \"event\": \"Broker does not support profile\",\n      \"action\": \"send CONNACK with reason code 0x8C\",\n      \"to\": \"CONNACK Not Authorized\"\n    }\n  ]\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}"
+]

@@ -1,0 +1,616 @@
+{
+  "states": [
+    "Play state",
+    "Play Out",
+    "Session Establishment",
+    "RTSP session context",
+    "aggregated RTSP session",
+    "on-demand content",
+    "live content",
+    "live session with recording",
+    "RTSP session",
+    "RTSP Version",
+    "RTSP IRI and URI",
+    "Session Identifiers",
+    "Media-Time Formats",
+    "Feature Tags",
+    "Message Body Tags",
+    "Media Properties",
+    "On-demand",
+    "Dynamic On-demand",
+    "Live",
+    "Live with Recording",
+    "idle",
+    "request",
+    "response",
+    "Initial",
+    "Request Line",
+    "Header Section",
+    "Message Body",
+    "receiving",
+    "Message Body Present",
+    "Content-Type and Content-Length Required",
+    "406 (Not Acceptable) Error",
+    "415 (Unsupported Media Type)",
+    "Persistent Connection",
+    "Transient Connection",
+    "Established Connection",
+    "Overload Situation",
+    "Initial",
+    "OPTIONS Request Received",
+    "Request Received",
+    "RTSP session context",
+    "Processing Request",
+    "Init",
+    "Ready",
+    "Play",
+    "Idle",
+    "Playing",
+    "Caching Proxy",
+    "Translator Proxy",
+    "Access Proxy",
+    "Security Proxy",
+    "Auditing Proxy",
+    "SETUP",
+    "PLAY",
+    "PAUSE",
+    "DESCRIBE",
+    "GET_PARAMETER",
+    "100 Continue",
+    "200 OK",
+    "300",
+    "301 Moved Permanently",
+    "302 Found",
+    "303 See Other",
+    "304 Not Modified",
+    "305 Use Proxy",
+    "400 Bad Request",
+    "401 Unauthorized",
+    "402 Payment Required",
+    "403 Forbidden",
+    "404 Not Found",
+    "405 Method Not Allowed",
+    "406 Not Acceptable",
+    "407 Proxy Authentication Required",
+    "408 Request Timeout",
+    "410 Gone",
+    "412 Precondition Failed",
+    "413 Request Message Body Too Large",
+    "414 Request-URI Too Long",
+    "451 Parameter Not Understood",
+    "453 Not Enough Bandwidth",
+    "454 Session Not Found",
+    "455 Method Not Valid in This State",
+    "456 Header Field Not Valid for Resource",
+    "457 Invalid Range",
+    "458 Parameter Is Read-Only",
+    "459 Aggregate Operation Not Allowed",
+    "460 Only Aggregate Operation Allowed",
+    "461 Unsupported Transport",
+    "462 Destination Unreachable",
+    "463 Destination Prohibited",
+    "464 Data Transport Not Ready Yet",
+    "500 Internal Server Error",
+    "501 Not Implemented",
+    "502 Bad Gateway",
+    "503 Service Unavailable",
+    "504 Gateway Timeout",
+    "505 RTSP Version Not Supported",
+    "C -> S",
+    "S -> C",
+    "P,S",
+    "TLS Connection State",
+    "Proxy Connection State",
+    "RTSP agent",
+    "RTP session receiver",
+    "RTP session sender",
+    "Feature Tags",
+    "RTSP Methods",
+    "RTSP Status Codes",
+    "RTSP Headers",
+    "Accept-Credentials Policies",
+    "Accept-Credentials Hash Algorithms",
+    "Notify-Reason Values",
+    "Range Header Formats",
+    "Terminate-Reason Header",
+    "Transport Header Registries",
+    "Presentation Description",
+    "Setup",
+    "Control of Transmission",
+    "Synchronization",
+    "Termination",
+    "Sender",
+    "Receiver",
+    "RTSP 1.0",
+    "RTSP 2.0",
+    "Play state"
+  ],
+  "transitions": [
+    {
+      "from": "Play state",
+      "event": "PLAY method",
+      "action": "",
+      "to": "Play Out"
+    },
+    {
+      "from": "Session Establishment",
+      "event": "SETUP method",
+      "action": "create an RTSP session context and included in the response in the Session header",
+      "to": "RTSP session context"
+    },
+    {
+      "from": "RTSP session context",
+      "event": "SETUP request",
+      "action": "add that media resource under common control",
+      "to": "aggregated RTSP session"
+    },
+    {
+      "from": "aggregated RTSP session",
+      "event": "PLAY request",
+      "action": "deliver media from the closest random access point prior to the requested point",
+      "to": "on-demand content"
+    },
+    {
+      "from": "on-demand content",
+      "event": "PAUSE",
+      "action": "delivery will be halted and the point at which the server stopped will be reported back in the response",
+      "to": "on-demand content"
+    },
+    {
+      "from": "live content",
+      "event": "PLAY request",
+      "action": "receive the live media from the server",
+      "to": "live content"
+    },
+    {
+      "from": "live session with recording",
+      "event": "PLAY request",
+      "action": "client will learn the current duration of the recording from the Media-Range header",
+      "to": "live session with recording"
+    },
+    {
+      "from": "RTSP session",
+      "event": "SETUP request",
+      "action": "200 OK response",
+      "to": "RTSP session"
+    },
+    {
+      "from": "RTSP session",
+      "event": "TEARDOWN request",
+      "action": "",
+      "to": ""
+    },
+    {
+      "from": "idle",
+      "event": "",
+      "action": "",
+      "to": "request"
+    },
+    {
+      "from": "request",
+      "event": "",
+      "action": "",
+      "to": "response"
+    },
+    {
+      "from": "response",
+      "event": "",
+      "action": "",
+      "to": "idle"
+    },
+    {
+      "from": "Initial",
+      "event": "",
+      "action": "",
+      "to": "Request Line"
+    },
+    {
+      "from": "Request Line",
+      "event": "",
+      "action": "",
+      "to": "Header Section"
+    },
+    {
+      "from": "Header Section",
+      "event": "",
+      "action": "",
+      "to": "Message Body"
+    },
+    {
+      "from": "idle",
+      "event": "request",
+      "action": "respond with RTSP response message",
+      "to": "receiving"
+    },
+    {
+      "from": "receiving",
+      "event": "1xx response",
+      "action": "send one or more responses prior to the final response message",
+      "to": "receiving"
+    },
+    {
+      "from": "Message Body Present",
+      "event": "Content-Type and Content-Length headers",
+      "action": "Include Content-Type and Content-Length headers",
+      "to": "Content-Type and Content-Length Required"
+    },
+    {
+      "from": "Content-Type and Content-Length Required",
+      "event": "Responder does not support specified formats",
+      "action": "Respond with a 406 (Not Acceptable) error code",
+      "to": "406 (Not Acceptable) Error"
+    },
+    {
+      "from": "Content-Type and Content-Length Required",
+      "event": "Responder does not support the media type of the message body",
+      "action": "Respond with a 415 (Unsupported Media Type)",
+      "to": "415 (Unsupported Media Type)"
+    },
+    {
+      "from": "Persistent Connection",
+      "event": "request",
+      "action": "send request",
+      "to": "Persistent Connection"
+    },
+    {
+      "from": "Persistent Connection",
+      "event": "close connection",
+      "action": "close connection",
+      "to": "Transient Connection"
+    },
+    {
+      "from": "Transient Connection",
+      "event": "request",
+      "action": "send request",
+      "to": "Transient Connection"
+    },
+    {
+      "from": "Established Connection",
+      "event": "request",
+      "action": "respond to request",
+      "to": "Established Connection"
+    },
+    {
+      "from": "Established Connection",
+      "event": "timeout",
+      "action": "close connection",
+      "to": "Transient Connection"
+    },
+    {
+      "from": "Overload Situation",
+      "event": "",
+      "action": "send 503 response",
+      "to": "Overload Situation"
+    },
+    {
+      "from": "Initial",
+      "event": "OPTIONS",
+      "action": "Send Public header",
+      "to": "OPTIONS Request Received"
+    },
+    {
+      "from": "Initial",
+      "event": "Method Request",
+      "action": "Respond with 501 or 405",
+      "to": "Request Received"
+    },
+    {
+      "from": "Initial",
+      "event": "Require",
+      "action": "Respond with 551 and Unsupported header",
+      "to": "Request Received"
+    },
+    {
+      "from": "Processing Request",
+      "event": "",
+      "action": "MUST be sent in the order the requests were processed",
+      "to": "Processing Request"
+    },
+    {
+      "from": "Init",
+      "event": "SETUP",
+      "action": "",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PAUSE",
+      "action": "",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY",
+      "action": "",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP",
+      "action": "",
+      "to": "Ready"
+    },
+    {
+      "from": "Idle",
+      "event": "C->S: SETUP",
+      "action": "S->C: RTSP/2.0 200 OK",
+      "to": "Playing"
+    },
+    {
+      "from": "Playing",
+      "event": "C->S: PLAY",
+      "action": "S->C: RTSP/2.0 200 OK",
+      "to": "Playing"
+    },
+    {
+      "from": "Caching Proxy",
+      "event": "",
+      "action": "",
+      "to": ""
+    },
+    {
+      "from": "Translator Proxy",
+      "event": "",
+      "action": "",
+      "to": ""
+    },
+    {
+      "from": "Access Proxy",
+      "event": "",
+      "action": "",
+      "to": ""
+    },
+    {
+      "from": "Security Proxy",
+      "event": "",
+      "action": "",
+      "to": ""
+    },
+    {
+      "from": "Auditing Proxy",
+      "event": "",
+      "action": "",
+      "to": ""
+    },
+    {
+      "from": "SETUP",
+      "event": "",
+      "action": "modifies the SETUP transport parameters and forwards the request to the origin server",
+      "to": "PLAY"
+    },
+    {
+      "from": "PLAY",
+      "event": "",
+      "action": "pass the proxy unmodified",
+      "to": "PLAY"
+    },
+    {
+      "from": "PAUSE",
+      "event": "",
+      "action": "pass the proxy unmodified",
+      "to": "PAUSE"
+    },
+    {
+      "from": "DESCRIBE",
+      "event": "",
+      "action": "MUST answer any DESCRIBE requests",
+      "to": "DESCRIBE"
+    },
+    {
+      "from": "GET_PARAMETER",
+      "event": "",
+      "action": "pass the proxy unmodified",
+      "to": "GET_PARAMETER"
+    },
+    {
+      "from": "100 Continue",
+      "event": "",
+      "action": "MUST send a final response after the request has been completed.",
+      "to": ""
+    },
+    {
+      "from": "200 OK",
+      "event": "",
+      "action": "The information returned with the response is dependent on the method used in the request.",
+      "to": ""
+    },
+    {
+      "from": "302 Found",
+      "event": "",
+      "action": "The Location header MUST be included in any 3rr response.",
+      "to": ""
+    },
+    {
+      "from": "304 Not Modified",
+      "event": "",
+      "action": "SHOULD send a 304 response.",
+      "to": ""
+    },
+    {
+      "from": "401 Unauthorized",
+      "event": "",
+      "action": "The response MUST include a WWW-Authenticate header field containing a challenge applicable to the requested resource.",
+      "to": ""
+    },
+    {
+      "from": "404 Not Found",
+      "event": "",
+      "action": "The 410 (Gone) status code SHOULD be used if the agent knows, through some internally configurable mechanism, that an old resource is permanently unavailable and has no forwarding address.",
+      "to": ""
+    },
+    {
+      "from": "405 Method Not Allowed",
+      "event": "",
+      "action": "The response MUST include an Allow header containing a list of valid methods for the requested resource.",
+      "to": ""
+    },
+    {
+      "from": "407 Proxy Authentication Required",
+      "event": "",
+      "action": "The proxy MUST return a Proxy-Authenticate header field containing a challenge applicable to the proxy for the requested resource.",
+      "to": ""
+    },
+    {
+      "from": "503 Service Unavailable",
+      "event": "",
+      "action": "The agent MUST honor the length, if given, in the Retry-After header.",
+      "to": ""
+    },
+    {
+      "from": "C -> S",
+      "event": "DESCRIBE",
+      "action": "",
+      "to": "P,S"
+    },
+    {
+      "from": "C -> S",
+      "event": "GET_PARAMETER",
+      "action": "",
+      "to": "S -> C"
+    },
+    {
+      "from": "S -> C",
+      "event": "GET_PARAMETER",
+      "action": "",
+      "to": "C -> S"
+    },
+    {
+      "from": "C -> S",
+      "event": "OPTIONS",
+      "action": "",
+      "to": "S -> C"
+    },
+    {
+      "from": "S -> C",
+      "event": "OPTIONS",
+      "action": "",
+      "to": "C -> S"
+    },
+    {
+      "from": "C -> S",
+      "event": "PAUSE",
+      "action": "",
+      "to": "P,S"
+    },
+    {
+      "from": "C -> S",
+      "event": "PLAY",
+      "action": "",
+      "to": "P,S"
+    },
+    {
+      "from": "S -> C",
+      "event": "PLAY_NOTIFY",
+      "action": "",
+      "to": "P,S"
+    },
+    {
+      "from": "S -> C",
+      "event": "REDIRECT",
+      "action": "",
+      "to": "P,S"
+    },
+    {
+      "from": "C -> S",
+      "event": "SETUP",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "C -> S",
+      "event": "SET_PARAMETER",
+      "action": "",
+      "to": "S -> C"
+    },
+    {
+      "from": "S -> C",
+      "event": "SET_PARAMETER",
+      "action": "",
+      "to": "C -> S"
+    },
+    {
+      "from": "C -> S",
+      "event": "TEARDOWN",
+      "action": "",
+      "to": "P,S"
+    },
+    {
+      "from": "S -> C",
+      "event": "TEARDOWN",
+      "action": "",
+      "to": "P"
+    },
+    {
+      "from": "Client-to-Server Request State",
+      "event": "Authorization header using the Basic authentication scheme",
+      "action": "MUST be using a TLS connection with confidentiality protection enabled",
+      "to": "TLS Connection State"
+    },
+    {
+      "from": "TLS Connection State",
+      "event": "",
+      "action": "keep a TCP session up between the client and server",
+      "to": "Proxy Connection State"
+    },
+    {
+      "from": "Proxy Connection State",
+      "event": "RTSP request includes an \"rtsps\" URI",
+      "action": "MUST use TLS for the next hop",
+      "to": "TLS Connection State"
+    },
+    {
+      "from": "Proxy Connection State",
+      "event": "Accept-Credentials header is not included in the RTSP request from the client",
+      "action": "MUST use the \"Proxy\" method",
+      "to": "Proxy Connection State"
+    },
+    {
+      "from": "Proxy Connection State",
+      "event": "Accept-Credentials header is included in the RTSP request from the client",
+      "action": "apply the policy as defined for each method",
+      "to": "Proxy Connection State"
+    },
+    {
+      "from": "RTSP agent",
+      "event": "detecting instances of behavior that is deemed a security risk",
+      "action": "return error code 403 (Forbidden). RTSP servers SHOULD also be aware of attempts to probe the server for weaknesses and entry points and MAY arbitrarily disconnect and ignore further requests from clients that are deemed to be in violation of local security policy",
+      "to": "RTSP agent"
+    },
+    {
+      "from": "RTP session receiver",
+      "event": "Forged Feedback",
+      "action": "send RTCP feedback to the media sender indicating large amounts of packet loss and thus trigger a media bitrate adaptation response from the sender resulting in lowered media quality and potentially a shutdown of the media stream. Another attack is to perform a resource-exhaustion attack on the receiver by using many SSRC identifiers to create large state tables and increase the RTCP-related processing demands",
+      "to": "RTP session receiver"
+    },
+    {
+      "from": "RTP session sender",
+      "event": "Forged Feedback",
+      "action": "trigger a media bitrate adaptation response from the sender resulting in lowered media quality and potentially a shutdown of the media stream",
+      "to": "RTP session sender"
+    },
+    {
+      "from": "RTSP 1.0",
+      "event": "",
+      "action": "respond with a 505 (RTSP Version Not Supported) status code",
+      "to": "RTSP 2.0"
+    },
+    {
+      "from": "RTSP 2.0",
+      "event": "Play",
+      "action": "takes effect immediately replacing the previous request",
+      "to": "Play State"
+    },
+    {
+      "from": "Play state",
+      "event": "PLAY_NOTIFY",
+      "action": "asynchronously notify clients about session changes",
+      "to": "Play state"
+    }
+  ]
+}

@@ -1,0 +1,163 @@
+{
+  "states": [
+    "INIT",
+    "BOUND",
+    "RENEW",
+    "REBINDING",
+    "REBOOTING",
+    "SELECTING",
+    "RENEWING"
+  ],
+  "transitions": [
+    {
+      "from": "INIT",
+      "event": "DHCPDISCOVER",
+      "action": "",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPREQUEST",
+      "action": "",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPNAK",
+      "action": "restarts the configuration process",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "timeout",
+      "action": "restarts the initialization process",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPRELEASE",
+      "action": "",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "detects that the IP address is already in use",
+      "action": "send a DHCPDECLINE message",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPNAK",
+      "action": "restarts the configuration process",
+      "to": "INIT"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPACK",
+      "action": "",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPNAK",
+      "action": "restarts the configuration process",
+      "to": "INIT"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPACK",
+      "action": "",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPNAK",
+      "action": "restarts the configuration process",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPDISCOVER",
+      "action": "broadcast",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPOFFER",
+      "action": "select one",
+      "to": "SELECTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPREQUEST",
+      "action": "send",
+      "to": "BOUND"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPDECLINE",
+      "action": "send",
+      "to": "INIT"
+    },
+    {
+      "from": "REBOOTING",
+      "event": "DHCPREQUEST",
+      "action": "send",
+      "to": "BOUND"
+    },
+    {
+      "from": "BOUND",
+      "event": "T1",
+      "action": "send DHCPREQUEST",
+      "to": "RENEWING"
+    },
+    {
+      "from": "BOUND",
+      "event": "T2",
+      "action": "send DHCPREQUEST",
+      "to": "REBINDING"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPACK",
+      "action": "record lease, set timers",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEWING",
+      "event": "T2",
+      "action": "send DHCPREQUEST",
+      "to": "REBINDING"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPACK",
+      "action": "record lease, set timers",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPNAK",
+      "action": "Halt network",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "",
+      "action": "respond to ARP requests",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEW",
+      "event": "",
+      "action": "",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBINDING",
+      "event": "",
+      "action": "",
+      "to": "BOUND"
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "states": [
+    "TLS:Anon,MQTT:None",
+    "TLS:Anon,MQTT:ace",
+    "TLS:Known(RPK/PSK),MQTT:none",
+    "TLS:Known(RPK/PSK),MQTT:ace",
+    "CONNECT with Authentication Data (token only)",
+    "AUTH 0x18 (Continue Authentication) - Broker Challenge",
+    "AUTH 0x18 (Continue Authentication) - Client Response",
+    "CONNACK Success",
+    "CONNACK Not Authorized"
+  ],
+  "transitions": [
+    {
+      "from": "",
+      "event": "",
+      "action": "Client connects to Broker using TLS:Anon,MQTT:None",
+      "to": "TLS:Anon,MQTT:None"
+    },
+    {
+      "from": "",
+      "event": "",
+      "action": "Client connects to Broker using TLS:Anon,MQTT:ace",
+      "to": "TLS:Anon,MQTT:ace"
+    },
+    {
+      "from": "",
+      "event": "",
+      "action": "Client connects to Broker using TLS:Known(RPK/PSK),MQTT:none",
+      "to": "TLS:Known(RPK/PSK),MQTT:none"
+    },
+    {
+      "from": "",
+      "event": "",
+      "action": "Client connects to Broker using TLS:Known(RPK/PSK),MQTT:ace",
+      "to": "TLS:Known(RPK/PSK),MQTT:ace"
+    },
+    {
+      "from": "TLS:Anon,MQTT:None",
+      "event": "",
+      "action": "Client publishes token to authz-info topic",
+      "to": "TLS:Anon,MQTT:None"
+    },
+    {
+      "from": "TLS:Anon,MQTT:None",
+      "event": "",
+      "action": "Client disconnects and reconnects with TLS:Known(RPK/PSK),MQTT:none",
+      "to": "TLS:Known(RPK/PSK),MQTT:none"
+    },
+    {
+      "from": "TLS:Anon,MQTT:ace",
+      "event": "",
+      "action": "Client sends CONNECT with token inside Authentication Data",
+      "to": "CONNECT with Authentication Data (token only)"
+    },
+    {
+      "from": "CONNECT with Authentication Data (token only)",
+      "event": "",
+      "action": "Broker responds with AUTH 0x18 containing RS Nonce",
+      "to": "AUTH 0x18 (Continue Authentication) - Broker Challenge"
+    },
+    {
+      "from": "AUTH 0x18 (Continue Authentication) - Broker Challenge",
+      "event": "",
+      "action": "Client responds with AUTH 0x18 containing Client Nonce and signature/MAC",
+      "to": "AUTH 0x18 (Continue Authentication) - Client Response"
+    },
+    {
+      "from": "AUTH 0x18 (Continue Authentication) - Client Response",
+      "event": "",
+      "action": "Broker validates token and sends CONNACK with reason code 0x00",
+      "to": "CONNACK Success"
+    },
+    {
+      "from": "AUTH 0x18 (Continue Authentication) - Client Response",
+      "event": "",
+      "action": "Broker validates token and sends CONNACK with reason code 0x87",
+      "to": "CONNACK Not Authorized"
+    },
+    {
+      "from": "TLS:Known(RPK/PSK),MQTT:none",
+      "event": "",
+      "action": "Broker validates token and sends CONNACK with reason code 0x00",
+      "to": "CONNACK Success"
+    },
+    {
+      "from": "TLS:Known(RPK/PSK),MQTT:none",
+      "event": "",
+      "action": "Broker validates token and sends CONNACK with reason code 0x87",
+      "to": "CONNACK Not Authorized"
+    },
+    {
+      "from": "TLS:Known(RPK/PSK),MQTT:ace",
+      "event": "",
+      "action": "Broker validates token and sends CONNACK with reason code 0x00",
+      "to": "CONNACK Success"
+    },
+    {
+      "from": "TLS:Known(RPK/PSK),MQTT:ace",
+      "event": "",
+      "action": "Broker validates token and sends CONNACK with reason code 0x87",
+      "to": "CONNACK Not Authorized"
+    }
+  ]
+}

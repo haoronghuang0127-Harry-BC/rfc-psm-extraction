@@ -1,0 +1,387 @@
+{
+  "states": [
+    "USER-FTP",
+    "SERVER-FTP",
+    "USER-PI",
+    "SERVER-PI",
+    "user-DTP",
+    "server-DTP",
+    "Connection Establishment",
+    "Login",
+    "Logout",
+    "Transfer parameters",
+    "File action commands",
+    "Informational commands",
+    "Miscellaneous commands",
+    "B",
+    "W",
+    "S",
+    "F",
+    "E",
+    "Initial State",
+    "Connected State",
+    "User Logged In State",
+    "Data Connection Established State",
+    "File Transferring State",
+    "Type Image State",
+    "Access Denied State",
+    "Closing Connections State",
+    "Receiving Page Structure Data"
+  ],
+  "transitions": [
+    {
+      "from": "Connection Establishment",
+      "event": "Connect",
+      "action": "220",
+      "to": "Connection Establishment"
+    },
+    {
+      "from": "Connection Establishment",
+      "event": "120",
+      "action": "220",
+      "to": "Connection Establishment"
+    },
+    {
+      "from": "Connection Establishment",
+      "event": "220",
+      "action": "",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "USER",
+      "action": "230",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "USER",
+      "action": "530",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "USER",
+      "action": "500, 501, 421",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "USER",
+      "action": "331, 332",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "PASS",
+      "action": "230",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "PASS",
+      "action": "202",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "PASS",
+      "action": "530",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "PASS",
+      "action": "500, 501, 503, 421",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "PASS",
+      "action": "332",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "ACCT",
+      "action": "230",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "ACCT",
+      "action": "202",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "ACCT",
+      "action": "530",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "CWD",
+      "action": "250",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "CDUP",
+      "action": "200",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "SMNT",
+      "action": "202, 250",
+      "to": "Login"
+    },
+    {
+      "from": "Logout",
+      "event": "REIN",
+      "action": "120",
+      "to": "Logout"
+    },
+    {
+      "from": "Logout",
+      "event": "REIN",
+      "action": "220",
+      "to": "Logout"
+    },
+    {
+      "from": "Logout",
+      "event": "REIN",
+      "action": "220",
+      "to": "Logout"
+    },
+    {
+      "from": "Logout",
+      "event": "REIN",
+      "action": "421",
+      "to": "Logout"
+    },
+    {
+      "from": "Logout",
+      "event": "QUIT",
+      "action": "221",
+      "to": "Logout"
+    },
+    {
+      "from": "Transfer parameters",
+      "event": "PORT",
+      "action": "200",
+      "to": "Transfer parameters"
+    },
+    {
+      "from": "Transfer parameters",
+      "event": "PASV",
+      "action": "227",
+      "to": "Transfer parameters"
+    },
+    {
+      "from": "Transfer parameters",
+      "event": "MODE",
+      "action": "200",
+      "to": "Transfer parameters"
+    },
+    {
+      "from": "Transfer parameters",
+      "event": "TYPE",
+      "action": "200",
+      "to": "Transfer parameters"
+    },
+    {
+      "from": "Transfer parameters",
+      "event": "STRU",
+      "action": "200",
+      "to": "Transfer parameters"
+    },
+    {
+      "from": "File action commands",
+      "event": "ALLO",
+      "action": "200",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "REST",
+      "action": "350",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "STOR",
+      "action": "125, 150",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "STOR",
+      "action": "226, 250",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "RETR",
+      "action": "125, 150",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "LIST",
+      "action": "125, 150",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "NLST",
+      "action": "125, 150",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "APPE",
+      "action": "125, 150",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "RNFR",
+      "action": "450, 550",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "RNTO",
+      "action": "250",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "DELE",
+      "action": "250",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "RMD",
+      "action": "250",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "MKD",
+      "action": "257",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "PWD",
+      "action": "257",
+      "to": "File action commands"
+    },
+    {
+      "from": "Miscellaneous commands",
+      "event": "SYST",
+      "action": "215",
+      "to": "Miscellaneous commands"
+    },
+    {
+      "from": "Miscellaneous commands",
+      "event": "STAT",
+      "action": "211, 212, 213",
+      "to": "Miscellaneous commands"
+    },
+    {
+      "from": "Miscellaneous commands",
+      "event": "HELP",
+      "action": "211, 214",
+      "to": "Miscellaneous commands"
+    },
+    {
+      "from": "Miscellaneous commands",
+      "event": "SITE",
+      "action": "200",
+      "to": "Miscellaneous commands"
+    },
+    {
+      "from": "Miscellaneous commands",
+      "event": "NOOP",
+      "action": "200",
+      "to": "Miscellaneous commands"
+    },
+    {
+      "from": "B",
+      "event": "cmd",
+      "action": "W",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "S",
+      "action": "S",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "F",
+      "action": "F",
+      "to": "F"
+    },
+    {
+      "from": "B",
+      "event": "",
+      "action": "E",
+      "to": "E"
+    },
+    {
+      "from": "Initial State",
+      "event": "ftp (host) multics<CR>",
+      "action": "<---- 220 Service ready <CRLF>",
+      "to": "Connected State"
+    },
+    {
+      "from": "Connected State",
+      "event": "username Doe <CR>",
+      "action": "<---- 331 User name ok, need password<CRLF>",
+      "to": "Connected State"
+    },
+    {
+      "from": "Connected State",
+      "event": "password mumble <CR>",
+      "action": "<---- 230 User logged in<CRLF>",
+      "to": "User Logged In State"
+    },
+    {
+      "from": "User Logged In State",
+      "event": "retrieve (local type) ASCII<CR> (local pathname) test 1 <CR> (for. pathname) test.pl1<CR>",
+      "action": "RETR test.pl1<CRLF> ----> <---- 150 File status okay; about to open data connection<CRLF>",
+      "to": "Data Connection Established State"
+    },
+    {
+      "from": "Data Connection Established State",
+      "event": "",
+      "action": "<---- 226 Closing data connection, file transfer successful<CRLF>",
+      "to": "User Logged In State"
+    },
+    {
+      "from": "User Logged In State",
+      "event": "type Image<CR>",
+      "action": "<---- 200 Command OK<CRLF>",
+      "to": "Type Image State"
+    },
+    {
+      "from": "Type Image State",
+      "event": "store (local type) image<CR> (local pathname) file dump<CR> (for.pathname) >udd>cn>fd<CR>",
+      "action": "<---- 550 Access denied<CRLF>",
+      "to": "Access Denied State"
+    },
+    {
+      "from": "User Logged In State",
+      "event": "terminate",
+      "action": "Server closes all connections.",
+      "to": "Closing Connections State"
+    }
+  ]
+}

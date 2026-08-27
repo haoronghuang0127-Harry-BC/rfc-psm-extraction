@@ -1,0 +1,13 @@
+[
+  "<json>\n{\"states\": [], \"transitions\": []}\n</json>",
+  "<json>\n{\n  \"states\": [\n    \"TLS:Anon,MQTT:None\",\n    \"TLS:Anon,MQTT:ace\",\n    \"TLS:Known(RPK/PSK),MQTT:none\",\n    \"TLS:Known(RPK/PSK),MQTT:ace\"\n  ],\n  \"transitions\": [\n    {\n      \"from\": \"\",\n      \"event\": \"\",\n      \"action\": \"\",\n      \"to\": \"TLS:Anon,MQTT:None\"\n    },\n    {\n      \"from\": \"\",\n      \"event\": \"\",\n      \"action\": \"\",\n      \"to\": \"TLS:Anon,MQTT:ace\"\n    },\n    {\n      \"from\": \"\",\n      \"event\": \"\",\n      \"action\": \"\",\n      \"to\": \"TLS:Known(RPK/PSK),MQTT:none\"\n    },\n    {\n      \"from\": \"\",\n      \"event\": \"\",\n      \"action\": \"\",\n      \"to\": \"TLS:Known(RPK/PSK),MQTT:ace\"\n    }\n  ]\n}\n</json>",
+  "<json>\n{\"states\": [], \"transitions\": []}\n</json>",
+  "<json>\n{\"states\": [], \"transitions\": []}\n</json>",
+  "<json>\n{\"states\": [\"MQTT Session State\"], \"transitions\": [{\"from\": \"MQTT Session State\", \"event\": \"Client DISCONNECT\", \"action\": \"Broker doesn't store the Session State but MUST keep the retained messages OR Broker stores the Session State including token and its introspection result\", \"to\": \"\"}]}\n</json>",
+  "<json>\n{\"states\": [], \"transitions\": []}\n</json>",
+  "<json>\n{\"states\": [], \"transitions\": []}\n</json>",
+  "<json>\n{\"states\": [], \"transitions\": []}\n</json>",
+  "<json>\n{\"states\": [], \"transitions\": []}\n</json>",
+  "<json>\n{\"states\": [], \"transitions\": []}\n</json>",
+  "<json>\n{\"states\": [], \"transitions\": []}\n</json>"
+]

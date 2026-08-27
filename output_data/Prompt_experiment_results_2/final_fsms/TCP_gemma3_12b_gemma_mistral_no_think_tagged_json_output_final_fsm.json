@@ -1,0 +1,155 @@
+{
+  "states": [
+    "connection oriented",
+    "bidirectional data flow",
+    "CLOSED",
+    "LISTEN",
+    "SYN-SENT",
+    "SYN-RECEIVED",
+    "ESTABLISHED",
+    "FIN-WAIT-1",
+    "FIN-WAIT-2",
+    "CLOSE-WAIT",
+    "CLOSING",
+    "LAST-ACK",
+    "TIME-WAIT",
+    "ACK",
+    "connection",
+    "datagram",
+    "Destination Address",
+    "FIN",
+    "flush",
+    "fragment",
+    "header",
+    "host",
+    "Identification",
+    "internet address",
+    "internet datagram",
+    "internet fragment",
+    "IP",
+    "IRS",
+    "ISN",
+    "ISS",
+    "left sequence",
+    "module",
+    "MSL",
+    "octet",
+    "Options",
+    "packet",
+    "port",
+    "process",
+    "PUSH",
+    "RCV.NXT",
+    "RCV.UP",
+    "RCV.WND",
+    "receive next sequence number",
+    "receive window",
+    "RST",
+    "SEG.ACK",
+    "SEG.LEN",
+    "SEG.SEQ",
+    "SEG.UP",
+    "SEG.WND",
+    "segment",
+    "segment acknowledgment",
+    "segment length",
+    "segment sequence",
+    "send sequence",
+    "send window",
+    "SND.NXT",
+    "SND.UNA",
+    "SND.UP",
+    "SND.WL1",
+    "SND.WL2",
+    "SND.WND",
+    "socket",
+    "Source Address",
+    "SYN",
+    "TCB",
+    "TCP",
+    "TOS",
+    "Type of Service",
+    "URG",
+    "urgent pointer",
+    "Reserved for future use (Bit Offset 4)",
+    "Reserved for future use (Bit Offset 5)",
+    "Reserved for future use (Bit Offset 6)",
+    "Reserved for future use (Bit Offset 7)",
+    "CWR (Congestion Window Reduced)",
+    "ECE (ECN-Echo)"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "OPEN",
+      "action": "Create a new transmission control block (TCB) to hold connection state information.",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "SYN",
+      "action": "Set RCV.NXT to SEG.SEQ+1, IRS is set to SEG.SEQ.",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "ACK",
+      "action": "Enter ESTABLISHED state",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "SYN",
+      "action": "Enter ESTABLISHED state",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "SEND",
+      "action": "Segmentize the buffer and send it with a piggybacked acknowledgment",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "CLOSE",
+      "action": "Queue this until all preceding SENDs have been segmentized; then send a FIN segment, enter FIN-WAIT-1 state.",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "FIN",
+      "action": "Enter FIN-WAIT-2",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "CLOSE",
+      "action": "Enter TIME-WAIT",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "CLOSE",
+      "action": "Send a FIN segment, enter LAST-ACK state.",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "CLOSING",
+      "event": "ACK",
+      "action": "Enter TIME-WAIT",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "",
+      "action": "Delete the TCB, enter the CLOSED state, and return.",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "",
+      "action": "Delete the TCB, enter the CLOSED state, and return.",
+      "to": "CLOSED"
+    }
+  ]
+}

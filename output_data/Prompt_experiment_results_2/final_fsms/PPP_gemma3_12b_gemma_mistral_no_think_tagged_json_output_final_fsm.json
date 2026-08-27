@@ -1,0 +1,317 @@
+{
+  "states": [
+    "Link Control Protocol",
+    "Network Control Protocols",
+    "Padding Protocol",
+    "reserved (transparency inefficient)",
+    "reserved (Control Escape)",
+    "reserved (PPP NLPID)",
+    "reserved (compression inefficient)",
+    "unused",
+    "Password Authentication Protocol",
+    "Link Quality Report",
+    "Challenge Handshake Authentication Protocol",
+    "Link Dead",
+    "Link Establishment",
+    "Authentication",
+    "Network-Layer Protocol",
+    "Link Termination",
+    "Initial",
+    "Starting",
+    "Closed",
+    "Stopped",
+    "Closing",
+    "Stopping",
+    "Request-Sent",
+    "Ack-Received",
+    "Ack-Sent",
+    "Opened",
+    "Opened",
+    "Closed",
+    "Stopped"
+  ],
+  "transitions": [
+    {
+      "from": "Link Dead",
+      "event": "",
+      "action": "proceed to the Link Establishment phase",
+      "to": "Link Establishment"
+    },
+    {
+      "from": "Link Establishment",
+      "event": "Configure-Ack packet",
+      "action": "enter the LCP Opened state",
+      "to": "Authentication"
+    },
+    {
+      "from": "Authentication",
+      "event": "authentication completes",
+      "action": "advancement to the Network-Layer Protocol phase",
+      "to": "Network-Layer Protocol"
+    },
+    {
+      "from": "Network-Layer Protocol",
+      "event": "LCP Configure-Request",
+      "action": "return to the Link Establishment phase",
+      "to": "Link Establishment"
+    },
+    {
+      "from": "Network-Layer Protocol",
+      "event": "Terminate packets",
+      "action": "inform the network-layer protocols so that they may take appropriate action",
+      "to": "Link Termination"
+    },
+    {
+      "from": "Link Termination",
+      "event": "Terminate-Ack",
+      "action": "wait for the peer to disconnect",
+      "to": "Link Dead"
+    },
+    {
+      "from": "Initial",
+      "event": "Up",
+      "action": "irc,scr/6",
+      "to": "6"
+    },
+    {
+      "from": "Initial",
+      "event": "Down",
+      "action": "0",
+      "to": "0"
+    },
+    {
+      "from": "Initial",
+      "event": "Open",
+      "action": "tls/1",
+      "to": "1"
+    },
+    {
+      "from": "Initial",
+      "event": "Close",
+      "action": "0",
+      "to": "0"
+    },
+    {
+      "from": "Initial",
+      "event": "TO+",
+      "action": "str/4",
+      "to": "4"
+    },
+    {
+      "from": "Initial",
+      "event": "TO-",
+      "action": "tlf/2",
+      "to": "2"
+    },
+    {
+      "from": "Initial",
+      "event": "RCR+",
+      "action": "sta/2 irc,scr,sca/8",
+      "to": "8"
+    },
+    {
+      "from": "Initial",
+      "event": "RCR-",
+      "action": "sta/2 irc,scr,scn/6",
+      "to": "6"
+    },
+    {
+      "from": "Initial",
+      "event": "RCA",
+      "action": "sta/2",
+      "to": "2"
+    },
+    {
+      "from": "Initial",
+      "event": "RCN",
+      "action": "sta/2",
+      "to": "2"
+    },
+    {
+      "from": "Initial",
+      "event": "RTR",
+      "action": "sta/2",
+      "to": "2"
+    },
+    {
+      "from": "Initial",
+      "event": "RTA",
+      "action": "2",
+      "to": "2"
+    },
+    {
+      "from": "Initial",
+      "event": "RUC",
+      "action": "scj/2",
+      "to": "2"
+    },
+    {
+      "from": "Initial",
+      "event": "RXJ+",
+      "action": "2",
+      "to": "2"
+    },
+    {
+      "from": "Initial",
+      "event": "RXJ-",
+      "action": "tlf/2",
+      "to": "2"
+    },
+    {
+      "from": "Initial",
+      "event": "RXR",
+      "action": "2",
+      "to": "2"
+    },
+    {
+      "from": "Starting",
+      "event": "Up",
+      "action": "irc,scr/6",
+      "to": "6"
+    },
+    {
+      "from": "Starting",
+      "event": "Down",
+      "action": "0",
+      "to": "0"
+    },
+    {
+      "from": "Starting",
+      "event": "Open",
+      "action": "tls/1",
+      "to": "1"
+    },
+    {
+      "from": "Starting",
+      "event": "Close",
+      "action": "tlf/0",
+      "to": "0"
+    },
+    {
+      "from": "Closed",
+      "event": "Up",
+      "action": "2",
+      "to": "2"
+    },
+    {
+      "from": "Closed",
+      "event": "Down",
+      "action": "0",
+      "to": "0"
+    },
+    {
+      "from": "Closed",
+      "event": "Open",
+      "action": "irc,scr/6",
+      "to": "6"
+    },
+    {
+      "from": "Closed",
+      "event": "Close",
+      "action": "2",
+      "to": "2"
+    },
+    {
+      "from": "Stopped",
+      "event": "Up",
+      "action": "-",
+      "to": "-"
+    },
+    {
+      "from": "Stopped",
+      "event": "Down",
+      "action": "tls/1",
+      "to": "1"
+    },
+    {
+      "from": "Stopped",
+      "event": "Open",
+      "action": "irc,scr/6",
+      "to": "6"
+    },
+    {
+      "from": "Stopped",
+      "event": "Close",
+      "action": "4",
+      "to": "4"
+    },
+    {
+      "from": "Stopping",
+      "event": "Up",
+      "action": "-",
+      "to": "-"
+    },
+    {
+      "from": "Stopping",
+      "event": "Down",
+      "action": "1",
+      "to": "1"
+    },
+    {
+      "from": "Stopping",
+      "event": "Open",
+      "action": "6",
+      "to": "6"
+    },
+    {
+      "from": "Stopping",
+      "event": "Close",
+      "action": "tlf/3",
+      "to": "3"
+    },
+    {
+      "from": "Request-Sent",
+      "event": "Up",
+      "action": "-",
+      "to": "-"
+    },
+    {
+      "from": "Ack-Received",
+      "event": "Up",
+      "action": "-",
+      "to": "-"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "Up",
+      "action": "-",
+      "to": "-"
+    },
+    {
+      "from": "Opened",
+      "event": "Up",
+      "action": "-",
+      "to": "-"
+    },
+    {
+      "from": "Stopped",
+      "event": "Terminate-Request",
+      "action": "transmit a Terminate-Ack",
+      "to": "Stopped"
+    },
+    {
+      "from": "Opened",
+      "event": "Echo-Request",
+      "action": "transmit an Echo-Reply",
+      "to": "Opened"
+    },
+    {
+      "from": "Opened",
+      "event": "Protocol-Reject",
+      "action": "stop sending packets of the indicated protocol",
+      "to": "Opened"
+    },
+    {
+      "from": "Closed",
+      "event": "Terminate-Request",
+      "action": "transmit a Terminate-Ack",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "Terminate-Ack",
+      "action": "re-negotiate",
+      "to": "Stopped"
+    }
+  ]
+}

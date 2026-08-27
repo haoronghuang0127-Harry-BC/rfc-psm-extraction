@@ -1,0 +1,337 @@
+{
+  "states": [
+    "Unreliable flows of datagrams",
+    "Reliable handshakes for connection setup and teardown",
+    "Reliable negotiation of options",
+    "Mechanisms allowing servers to avoid holding state for unacknowledged connection attempts and already-finished connections",
+    "Congestion control incorporating Explicit Congestion Notification (ECN)",
+    "Acknowledgement mechanisms communicating packet loss and ECN information",
+    "Optional mechanisms that tell the sending application which data packets reached the receiver",
+    "Path Maximum Transmission Unit (PMTU) discovery",
+    "TCP-like Congestion Control",
+    "TCP-Friendly Rate Control (TFRC)",
+    "Congestion Manager state",
+    "TCP-like Congestion Control state",
+    "TCP-Friendly Rate Control state",
+    "DCCP A",
+    "DCCP B",
+    "HC-Sender",
+    "HC-Receiver",
+    "CLOSED",
+    "LISTEN",
+    "REQUEST",
+    "RESPOND",
+    "PARTOPEN",
+    "OPEN",
+    "CLOSEREQ",
+    "CLOSING",
+    "TIMEWAIT",
+    "DCCP-Request",
+    "DCCP-Response",
+    "DCCP-Data",
+    "DCCP-Ack",
+    "DCCP-DataAck",
+    "DCCP-CloseReq",
+    "DCCP-Close",
+    "DCCP-Reset",
+    "DCCP-Sync",
+    "DCCP-SyncAck",
+    "STABLE",
+    "CHANGING",
+    "UNSTABLE",
+    "DCCP Endpoint",
+    "PMTU Discovery",
+    "ECN Capable",
+    "ECN Incapable",
+    "Init Cookie",
+    "Application Not Listening Drop Code",
+    "Sequence number validity checks",
+    "Well Known Ports",
+    "Registered Ports",
+    "Dynamic and/or Private Ports",
+    "New connections",
+    "CCID-specific option processing",
+    "quiescent",
+    "bidirectional",
+    "unidirectional",
+    "New connections start with Minimum Checksum Coverage 0 for both endpoints"
+  ],
+  "transitions": [
+    {
+      "from": "TCP-like Congestion Control state",
+      "event": "packet drop or mark",
+      "action": "halves the congestion window",
+      "to": "TCP-like Congestion Control state"
+    },
+    {
+      "from": "TCP-Friendly Rate Control state",
+      "event": "",
+      "action": "minimizes abrupt changes in the sending rate while maintaining longer-term fairness with TCP",
+      "to": "TCP-Friendly Rate Control state"
+    },
+    {
+      "from": "CLOSED",
+      "event": "",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "DCCP-Request",
+      "action": "",
+      "to": "RESPOND"
+    },
+    {
+      "from": "REQUEST",
+      "event": "DCCP-Response",
+      "action": "",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "DCCP-Ack",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "DCCP-Ack or DCCP-DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "DCCP-CloseReq",
+      "action": "",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "DCCP-Close",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "DCCP-Reset",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "OPEN",
+      "event": "DCCP-Close",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "STABLE",
+      "event": "rcv Change R",
+      "action": "calc new value, snd Confirm L",
+      "to": "CHANGING"
+    },
+    {
+      "from": "STABLE",
+      "event": "rcv Confirm R",
+      "action": "ignore",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "rcv Confirm R",
+      "action": "Set F.state := STABLE",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "rcv Change R",
+      "action": "If the option's value is valid, Calculate new value, Send Confirm L on a future packet, Set F.state := STABLE; Otherwise, Send Empty Confirm L on a future packet",
+      "to": "STABLE"
+    },
+    {
+      "from": "UNSTABLE",
+      "event": "pref list changes",
+      "action": "MUST transition to CHANGING",
+      "to": "CHANGING"
+    },
+    {
+      "from": "CLOSED",
+      "event": "DCCP-Request",
+      "action": "transition to REQUEST",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "DCCP-Reset",
+      "action": "send DCCP-Sync",
+      "to": "REQUEST"
+    },
+    {
+      "from": "CLOSED",
+      "event": "rcv Request",
+      "action": "Set S := new socket for this port pair; S.state = RESPOND; Choose S.ISS; Initialize S.GAR := S.ISS; Set S.ISR, S.GSR, S.SWL, S.SWH from packet or Init Cookies; Continue with S.state == RESPOND",
+      "to": "RESPOND"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv Request",
+      "action": "Set S := new socket for this port pair; S.state = RESPOND; Choose S.ISS; Initialize S.GAR := S.ISS; Set S.ISR, S.GSR, S.SWL, S.SWH from packet or Init Cookies; Continue with S.state == RESPOND",
+      "to": "RESPOND"
+    },
+    {
+      "from": "REQUEST",
+      "event": "rcv Response",
+      "action": "Set sequence number variables corresponding to the other endpoint; S.state := PARTOPEN; Set PARTOPEN timer; Continue with S.state == PARTOPEN",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "rcv packet",
+      "action": "S.OSR := P.seqno; S.state := OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "rcv Ack/DataAck",
+      "action": "S.state := OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "snd CloseReq",
+      "action": "Generate Close; S.state := CLOSING; Set CLOSING timer",
+      "to": "CLOSING"
+    },
+    {
+      "from": "OPEN",
+      "event": "rcv Close",
+      "action": "Generate Reset(Closed); Tear down connection; Drop packet and return",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "OPEN",
+      "event": "rcv Reset",
+      "action": "Tear down connection; S.state := TIMEWAIT; Set TIMEWAIT timer; Drop packet and return",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "rcv Reset",
+      "action": "Tear down connection; Drop packet and return",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "",
+      "action": "2MSL timer expires",
+      "to": "CLOSED"
+    },
+    {
+      "from": "New connections",
+      "event": "first packets",
+      "action": "MUST send Mandatory Change(CCID) options",
+      "to": "CCID-specific option processing"
+    },
+    {
+      "from": "HC-Sender",
+      "event": "DCCP-Ack",
+      "action": "inform HC-Receiver that it has received an ack",
+      "to": "HC-Receiver"
+    },
+    {
+      "from": "HC-Receiver",
+      "event": "DCCP-Data",
+      "action": "resend complete Ack Vector information",
+      "to": "HC-Receiver"
+    },
+    {
+      "from": "bidirectional",
+      "event": "",
+      "action": "acks-of-acks are automatically contained in normal acknowledgements for data packets",
+      "to": "bidirectional"
+    },
+    {
+      "from": "unidirectional",
+      "event": "",
+      "action": "CCID in force on that half-connection must explicitly say whether, when, and how the HC-Sender should generate acks-of-acks",
+      "to": "unidirectional"
+    },
+    {
+      "from": "quiescent",
+      "event": "DCCP-Data",
+      "action": "switch from unidirectional to bidirectional",
+      "to": "bidirectional"
+    },
+    {
+      "from": "bidirectional",
+      "event": "DCCP-Data",
+      "action": "switch from bidirectional to unidirectional",
+      "to": "unidirectional"
+    },
+    {
+      "from": "ECN Capable",
+      "event": "Change L(ECN Inapable, 1)",
+      "action": "send option",
+      "to": "ECN Incapable"
+    },
+    {
+      "from": "ECN Incapable",
+      "event": "Confirm R(ECN Incapable, 1)",
+      "action": "transition to ECN Capable",
+      "to": "ECN Capable"
+    },
+    {
+      "from": "DCCP Endpoint",
+      "event": "Receives Timestamp option",
+      "action": "SHOULD respond with a Timestamp Echo option on the next packet it sends",
+      "to": "DCCP Endpoint"
+    },
+    {
+      "from": "DCCP Endpoint",
+      "event": "Receives Acknowledgement Number",
+      "action": "MUST ignore options received on other packet types",
+      "to": "DCCP Endpoint"
+    },
+    {
+      "from": "DCCP Endpoint",
+      "event": "Datagram Too Big message",
+      "action": "decrease PMTU to Next-Hop MTU value",
+      "to": "DCCP Endpoint"
+    },
+    {
+      "from": "DCCP Endpoint",
+      "event": "application requests PMTU discovery",
+      "action": "reset PMTU to outgoing interface's MTU",
+      "to": "DCCP Endpoint"
+    },
+    {
+      "from": "DCCP Endpoint",
+      "event": "reception of an ICMP Datagram Too Big message",
+      "action": "MAY ignore DCCP receiver’s indication that this packet did not arrive",
+      "to": "DCCP Endpoint"
+    },
+    {
+      "from": "DCCP Endpoint",
+      "event": "more than three odd Datagram Too Big messages and more than three lost packets",
+      "action": "assume the presence of a confused router",
+      "to": "DCCP Endpoint"
+    },
+    {
+      "from": "DCCP Endpoint",
+      "event": "DCCP-Sync probe lost",
+      "action": "determine packet loss",
+      "to": "DCCP Endpoint"
+    },
+    {
+      "from": "DCCP Endpoint",
+      "event": "application attempts to send a packet larger than the new MPS",
+      "action": "API MUST refuse to send the packet and return an appropriate error to the application",
+      "to": "DCCP Endpoint"
+    }
+  ]
+}

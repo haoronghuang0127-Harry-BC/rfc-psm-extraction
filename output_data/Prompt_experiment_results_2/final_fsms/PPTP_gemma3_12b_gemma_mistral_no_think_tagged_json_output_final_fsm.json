@@ -1,0 +1,227 @@
+{
+  "states": [
+    "PAC",
+    "PNS",
+    "Control Connection",
+    "Tunnel",
+    "Established Control Connection",
+    "Outgoing Call Request Sent",
+    "Incoming Call Request Received",
+    "Call Clear Request Sent",
+    "idle",
+    "wait_ctl_reply",
+    "established",
+    "wait_stop_reply",
+    "Call Control",
+    "Session Startup",
+    "Transmit Buffer Full",
+    "PPP connection",
+    "tunnel"
+  ],
+  "transitions": [
+    {
+      "from": "PAC",
+      "event": "Outgoing-Call-Request",
+      "action": "instructed to place an outgoing dial call",
+      "to": "PNS"
+    },
+    {
+      "from": "PNS",
+      "event": "Incoming-Call-Request",
+      "action": "notified of an incoming call",
+      "to": "PAC"
+    },
+    {
+      "from": "PAC",
+      "event": "Set-Link-Info",
+      "action": "communicate changes in operating characteristics of an individual user session",
+      "to": "PNS"
+    },
+    {
+      "from": "PNS",
+      "event": "Call-Clear-Request",
+      "action": "release individual sessions",
+      "to": "PAC"
+    },
+    {
+      "from": "PAC",
+      "event": "WAN-Error-Notify",
+      "action": "report connectivity failures",
+      "to": "PNS"
+    },
+    {
+      "from": "PNS",
+      "event": "Start-Control-Connection-Request",
+      "action": "establish the control connection",
+      "to": "PAC"
+    },
+    {
+      "from": "PAC",
+      "event": "Start-Control-Connection-Reply",
+      "action": "establish the control connection",
+      "to": "PNS"
+    },
+    {
+      "from": "PAC",
+      "event": "Echo-Request",
+      "action": "maintain connectivity",
+      "to": "PNS"
+    },
+    {
+      "from": "PNS",
+      "event": "Echo-Reply",
+      "action": "maintain connectivity",
+      "to": "PAC"
+    },
+    {
+      "from": "PAC",
+      "event": "",
+      "action": "establishment, release, and maintenance of sessions and of the tunnel itself",
+      "to": "Control Connection"
+    },
+    {
+      "from": "PNS",
+      "event": "",
+      "action": "establishment, release, and maintenance of sessions and of the tunnel itself",
+      "to": "Control Connection"
+    },
+    {
+      "from": "Control Connection",
+      "event": "",
+      "action": "establishment, release, and maintenance of sessions carried through the tunnel",
+      "to": "Tunnel"
+    },
+    {
+      "from": "Control Connection Established",
+      "event": "Start-Control-Connection-Request",
+      "action": "",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "Control Connection Established",
+      "event": "Stop-Control-Connection-Request",
+      "action": "Call-Disconnect-Notify",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "Control Connection Established",
+      "event": "Outgoing-Call-Request",
+      "action": "Outgoing-Call-Reply",
+      "to": "Outgoing Call Request Sent"
+    },
+    {
+      "from": "Outgoing Call Request Sent",
+      "event": "",
+      "action": "",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "Control Connection Established",
+      "event": "Incoming-Call-Request",
+      "action": "Incoming-Call-Reply",
+      "to": "Incoming Call Request Received"
+    },
+    {
+      "from": "Incoming Call Request Received",
+      "event": "",
+      "action": "",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "Control Connection Established",
+      "event": "Call-Clear-Request",
+      "action": "Call-Disconnect-Notify",
+      "to": "Call Clear Request Sent"
+    },
+    {
+      "from": "Call Clear Request Sent",
+      "event": "",
+      "action": "",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "idle",
+      "event": "TCP Open Indication",
+      "action": "Send Start Control Connection Request",
+      "to": "wait_ctl_reply"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Receive Start Ctl Connection Reply",
+      "action": "Version OK",
+      "to": "established"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Receive Start Ctl Connection Reply",
+      "action": "Version Not OK",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "established",
+      "event": "Receive Stop Control Connection Request",
+      "action": "Send Stop Control Request",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "wait_stop_reply",
+      "event": "Receive Stop-Control-Connection-Reply",
+      "action": "Close TCP",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Start Control Connection Request",
+      "action": "Version Not OK/Send Start Control Connection Reply",
+      "to": "established"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Start Control Connection Request",
+      "action": "Version OK",
+      "to": "established"
+    },
+    {
+      "from": "established",
+      "event": "Receive Stop-Control-Connection-Request",
+      "action": "SHOULD send a Stop-Control-Connection-Reply and close the TCP connection",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "PAC",
+      "event": "",
+      "action": "maintain and calculate time-outs for every active session",
+      "to": "PAC"
+    },
+    {
+      "from": "PNS",
+      "event": "",
+      "action": "maintain and calculate time-outs for every active session",
+      "to": "PNS"
+    },
+    {
+      "from": "Session Startup",
+      "event": "session startup",
+      "action": "sequence number is set to zero",
+      "to": "Session Startup"
+    },
+    {
+      "from": "Transmit Buffer Full",
+      "event": "transmit buffer fills",
+      "action": "no longer accepted from the packet source",
+      "to": "Transmit Buffer Full"
+    },
+    {
+      "from": "PPP connection",
+      "event": "",
+      "action": "addressed by PPP",
+      "to": "PPP connection"
+    },
+    {
+      "from": "tunnel",
+      "event": "",
+      "action": "not cryptographically protected",
+      "to": "tunnel"
+    }
+  ]
+}

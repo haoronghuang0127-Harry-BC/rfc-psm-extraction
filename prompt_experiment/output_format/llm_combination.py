@@ -13,7 +13,7 @@ from prompt_experiment.types import OutputControl, PromptExperimentArguments
 from research_pipeline.model_selection import get_selected_model_configs, get_selected_profile_names
 
 from utils.files_util import load_json_file, save_json_file
-from utils.ollama_client import call_ollama_generate
+from utils.ollama_client import call_ollama_with_model_routing
 
 # load all combination prompts from the local file.
 def _load_combination_prompts() -> dict[str, str]:
@@ -71,7 +71,7 @@ def _run_model_combination(combination_prompts: dict[str, str], protocol_names: 
 
             print(f"Running combination prompt: {prompt_name}")
 
-            ollama_response: dict[str, object] = call_ollama_generate(ollama_url=connection["ollama_url"], model=model_config["name"].value, prompt=prompt, 
+            ollama_response: dict[str, object] = call_ollama_with_model_routing(ollama_url=connection["ollama_url"], model=model_config["name"].value, prompt=prompt, 
                                                                       options=model_profile["options"], request_timeout_seconds=connection["request_timeout_seconds"], 
                                                                       think=model_profile["think"], output_format=output_control["request_format"], extra_headers=connection["extra_headers"])
 

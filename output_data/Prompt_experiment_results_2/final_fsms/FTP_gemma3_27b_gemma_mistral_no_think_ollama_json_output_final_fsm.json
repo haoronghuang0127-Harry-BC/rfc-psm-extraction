@@ -1,0 +1,779 @@
+{
+  "states": [
+    "active",
+    "passive",
+    "DATA TRANSFER",
+    "DATA REPRESENTATION",
+    "DATA STRUCTURES",
+    "Logged out",
+    "Logged in",
+    "Data connection open",
+    "Service in progress",
+    "Aborted",
+    "awaiting input",
+    "Entering Passive Mode",
+    "Okay",
+    "file transfer completed",
+    "data connection closed",
+    "B",
+    "W",
+    "S",
+    "E",
+    "F",
+    "Access Denied",
+    "Directory Created",
+    "Connected"
+  ],
+  "transitions": [
+    {
+      "from": "active",
+      "event": "",
+      "action": "",
+      "to": "active"
+    },
+    {
+      "from": "passive",
+      "event": "",
+      "action": "",
+      "to": "passive"
+    },
+    {
+      "from": "DATA TRANSFER",
+      "event": "commands",
+      "action": "describe functions",
+      "to": "DATA REPRESENTATION"
+    },
+    {
+      "from": "DATA REPRESENTATION",
+      "event": "NVT-ASCII differences",
+      "action": "convert characters",
+      "to": "DATA REPRESENTATION"
+    },
+    {
+      "from": "DATA REPRESENTATION",
+      "event": "binary data",
+      "action": "transformations",
+      "to": "DATA REPRESENTATION"
+    },
+    {
+      "from": "DATA REPRESENTATION",
+      "event": "TYPE command",
+      "action": "define byte size",
+      "to": "DATA REPRESENTATION"
+    },
+    {
+      "from": "DATA REPRESENTATION",
+      "event": "DATA TYPES",
+      "action": "specify representation type",
+      "to": "DATA STRUCTURES"
+    },
+    {
+      "from": "DATA STRUCTURES",
+      "event": "file-structure",
+      "action": "no internal structure",
+      "to": "DATA STRUCTURES"
+    },
+    {
+      "from": "DATA STRUCTURES",
+      "event": "record-structure",
+      "action": "sequential records",
+      "to": "DATA STRUCTURES"
+    },
+    {
+      "from": "DATA STRUCTURES",
+      "event": "page-structure",
+      "action": "discontinuous files",
+      "to": "DATA STRUCTURES"
+    },
+    {
+      "from": "DATA STRUCTURES",
+      "event": "STRUCTURE command",
+      "action": "define file structure",
+      "to": "DATA STRUCTURES"
+    },
+    {
+      "from": "Logged out",
+      "event": "USER",
+      "action": "331 User name okay, need password.",
+      "to": "Logged in"
+    },
+    {
+      "from": "Logged in",
+      "event": "PASS",
+      "action": "230 User logged in, proceed.",
+      "to": "Logged in"
+    },
+    {
+      "from": "Logged in",
+      "event": "PASS",
+      "action": "332 Need account for login.",
+      "to": "Logged in"
+    },
+    {
+      "from": "Logged in",
+      "event": "ACCT",
+      "action": "",
+      "to": "Logged in"
+    },
+    {
+      "from": "Logged in",
+      "event": "CWD",
+      "action": "",
+      "to": "Logged in"
+    },
+    {
+      "from": "Logged in",
+      "event": "CDUP",
+      "action": "",
+      "to": "Logged in"
+    },
+    {
+      "from": "Logged in",
+      "event": "SMNT",
+      "action": "",
+      "to": "Logged in"
+    },
+    {
+      "from": "Logged in",
+      "event": "REIN",
+      "action": "",
+      "to": "Logged in"
+    },
+    {
+      "from": "Logged in",
+      "event": "QUIT",
+      "action": "221 Service closing control connection.",
+      "to": "Logged out"
+    },
+    {
+      "from": "Logged in",
+      "event": "USER",
+      "action": "flushing any user, password, and account information",
+      "to": "Logged in"
+    },
+    {
+      "from": "Logged in",
+      "event": "PORT",
+      "action": "",
+      "to": "Logged in"
+    },
+    {
+      "from": "Logged in",
+      "event": "PASV",
+      "action": "",
+      "to": "Data connection open"
+    },
+    {
+      "from": "Logged in",
+      "event": "TYPE",
+      "action": "",
+      "to": "Logged in"
+    },
+    {
+      "from": "Logged in",
+      "event": "STRU",
+      "action": "",
+      "to": "Logged in"
+    },
+    {
+      "from": "Logged in",
+      "event": "MODE",
+      "action": "",
+      "to": "Logged in"
+    },
+    {
+      "from": "Logged in",
+      "event": "RETR",
+      "action": "",
+      "to": "Service in progress"
+    },
+    {
+      "from": "Logged in",
+      "event": "STOR",
+      "action": "",
+      "to": "Service in progress"
+    },
+    {
+      "from": "Logged in",
+      "event": "STOU",
+      "action": "",
+      "to": "Service in progress"
+    },
+    {
+      "from": "Logged in",
+      "event": "APPE",
+      "action": "",
+      "to": "Service in progress"
+    },
+    {
+      "from": "Logged in",
+      "event": "ALLO",
+      "action": "",
+      "to": "Logged in"
+    },
+    {
+      "from": "Logged in",
+      "event": "REST",
+      "action": "",
+      "to": "Service in progress"
+    },
+    {
+      "from": "Logged in",
+      "event": "RNFR",
+      "action": "",
+      "to": "Logged in"
+    },
+    {
+      "from": "Logged in",
+      "event": "RNTO",
+      "action": "",
+      "to": "Logged in"
+    },
+    {
+      "from": "Logged in",
+      "event": "ABOR",
+      "action": "close the data connection",
+      "to": "Aborted"
+    },
+    {
+      "from": "Logged in",
+      "event": "DELE",
+      "action": "",
+      "to": "Logged in"
+    },
+    {
+      "from": "Logged in",
+      "event": "RMD",
+      "action": "",
+      "to": "Logged in"
+    },
+    {
+      "from": "Logged in",
+      "event": "MKD",
+      "action": "",
+      "to": "Logged in"
+    },
+    {
+      "from": "Logged in",
+      "event": "PWD",
+      "action": "",
+      "to": "Logged in"
+    },
+    {
+      "from": "Logged in",
+      "event": "LIST",
+      "action": "",
+      "to": "Service in progress"
+    },
+    {
+      "from": "Logged in",
+      "event": "NLST",
+      "action": "",
+      "to": "Service in progress"
+    },
+    {
+      "from": "Logged in",
+      "event": "SITE",
+      "action": "",
+      "to": "Logged in"
+    },
+    {
+      "from": "Logged in",
+      "event": "SYST",
+      "action": "",
+      "to": "Logged in"
+    },
+    {
+      "from": "Logged in",
+      "event": "STAT",
+      "action": "",
+      "to": "Logged in"
+    },
+    {
+      "from": "Logged in",
+      "event": "HELP",
+      "action": "",
+      "to": "Logged in"
+    },
+    {
+      "from": "Logged in",
+      "event": "NOOP",
+      "action": "",
+      "to": "Logged in"
+    },
+    {
+      "from": "Data connection open",
+      "event": "RETR",
+      "action": "",
+      "to": "Service in progress"
+    },
+    {
+      "from": "Data connection open",
+      "event": "STOR",
+      "action": "",
+      "to": "Service in progress"
+    },
+    {
+      "from": "Data connection open",
+      "event": "ABOR",
+      "action": "close the data connection",
+      "to": "Aborted"
+    },
+    {
+      "from": "Service in progress",
+      "event": "ABOR",
+      "action": "close the data connection",
+      "to": "Aborted"
+    },
+    {
+      "from": "Service in progress",
+      "event": "",
+      "action": "226 Closing data connection.",
+      "to": "Logged in"
+    },
+    {
+      "from": "Aborted",
+      "event": "",
+      "action": "",
+      "to": "Logged out"
+    },
+    {
+      "from": "awaiting input",
+      "event": "USER",
+      "action": "230",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "PASS",
+      "action": "230",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "ACCT",
+      "action": "230",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "CWD",
+      "action": "250",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "CDUP",
+      "action": "200",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "SMNT",
+      "action": "202, 250",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "QUIT",
+      "action": "221",
+      "to": "data connection closed"
+    },
+    {
+      "from": "awaiting input",
+      "event": "REIN",
+      "action": "120",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "PORT",
+      "action": "200",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "PASV",
+      "action": "227",
+      "to": "Entering Passive Mode"
+    },
+    {
+      "from": "Entering Passive Mode",
+      "event": "PORT A1,A2,A3,A4,a1,a2",
+      "action": "200",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "MODE",
+      "action": "200",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "TYPE",
+      "action": "200",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "STRU",
+      "action": "200",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "ALLO",
+      "action": "200",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "REST",
+      "action": "500, 501, 502, 421, 530",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "STOR",
+      "action": "125, 150",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "STOU",
+      "action": "125, 150",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "RETR",
+      "action": "125, 150",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "LIST",
+      "action": "125, 150",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "NLST",
+      "action": "125, 150",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "APPE",
+      "action": "125, 150",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "RNFR",
+      "action": "450, 550",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "RNTO",
+      "action": "250",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "DELE",
+      "action": "250",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "RMD",
+      "action": "250",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "MKD",
+      "action": "257",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "PWD",
+      "action": "257",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "ABOR",
+      "action": "225, 226",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "SYST",
+      "action": "215",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "STAT",
+      "action": "211, 212, 213",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "HELP",
+      "action": "211, 214",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "SITE",
+      "action": "200",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "NOOP",
+      "action": "200",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "226",
+      "action": "",
+      "to": "file transfer completed"
+    },
+    {
+      "from": "awaiting input",
+      "event": "250",
+      "action": "",
+      "to": "file transfer completed"
+    },
+    {
+      "from": "file transfer completed",
+      "event": "",
+      "action": "",
+      "to": "data connection closed"
+    },
+    {
+      "from": "B",
+      "event": "cmd",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "2",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "4,5",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "W",
+      "event": "1,3",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "B",
+      "event": "cmd",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "2",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "4,5",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "W",
+      "event": "3",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "B",
+      "event": "RNFR",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "1,2",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "W",
+      "event": "3",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "4,5",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "B",
+      "event": "REST",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "1,2",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "W",
+      "event": "3",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "4,5",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "B",
+      "event": "USER",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "2",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "W",
+      "event": "3",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "4,5",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "W",
+      "event": "PASS",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "2",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "3",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "W",
+      "event": "ACCT",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "4,5",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "Connected",
+      "event": "USER Doe",
+      "action": "331 User name ok, need password",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "PASS mumble",
+      "action": "230 User logged in",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "RETR test.pl1",
+      "action": "150 File status okay; about to open data connection",
+      "to": "Transferring"
+    },
+    {
+      "from": "Transferring",
+      "event": "",
+      "action": "226 Closing data connection, file transfer successful",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "TYPE I",
+      "action": "200 Command OK",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "STOR >udd>cn>fd",
+      "action": "550 Access denied",
+      "to": "Access Denied"
+    },
+    {
+      "from": "Access Denied",
+      "event": "QUIT",
+      "action": "Server closes all connections",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "QUIT",
+      "action": "Server closes all connections",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "MKD pathname",
+      "action": "return 257 \"<directory-name>\" <commentary>",
+      "to": "Directory Created"
+    },
+    {
+      "from": "Connected",
+      "event": "MKD pathname",
+      "action": "return 521-\"/usr/dm/pathname\" directory already exists; 521 taking no action.",
+      "to": "Connected"
+    },
+    {
+      "from": "Directory Created",
+      "event": "CWD <directory-name>",
+      "action": "return 200 directory changed to <directory-name>",
+      "to": "Connected"
+    }
+  ]
+}

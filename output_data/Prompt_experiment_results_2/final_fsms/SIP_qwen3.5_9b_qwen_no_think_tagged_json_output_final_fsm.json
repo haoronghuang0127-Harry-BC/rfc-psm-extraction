@@ -1,0 +1,130 @@
+{
+  "states": [
+    "early",
+    "confirmed",
+    "Confirmed Dialog",
+    "Early Dialog",
+    "stateful",
+    "stateless",
+    "Calling",
+    "Proceeding",
+    "Completed",
+    "Terminated"
+  ],
+  "transitions": [
+    {
+      "from": "early",
+      "event": "",
+      "action": "2xx final response arrives",
+      "to": "confirmed"
+    },
+    {
+      "from": "early",
+      "event": "other responses or no response arrives",
+      "action": "terminate",
+      "to": ""
+    },
+    {
+      "from": "",
+      "event": "provisional response with tag in To field and new dialog ID",
+      "action": "construct early dialog",
+      "to": "early"
+    },
+    {
+      "from": "early",
+      "event": "2xx response with matching dialog identifier",
+      "action": "transition to confirmed state, recompute route set",
+      "to": "confirmed"
+    },
+    {
+      "from": "early",
+      "event": "non-2xx final response",
+      "action": "terminate early dialog",
+      "to": ""
+    },
+    {
+      "from": "early",
+      "event": "timeout of 64*T1 seconds after first 2xx response",
+      "action": "terminate remaining early dialogs",
+      "to": ""
+    },
+    {
+      "from": "Confirmed Dialog",
+      "event": "",
+      "action": "terminate session and dialog",
+      "to": ""
+    },
+    {
+      "from": "Early Dialog",
+      "event": "receive ACK for 2xx response",
+      "action": "transition to Confirmed Dialog",
+      "to": "Confirmed Dialog"
+    },
+    {
+      "from": "Early Dialog",
+      "event": "send BYE",
+      "action": "terminate session and dialog",
+      "to": ""
+    },
+    {
+      "from": "Confirmed Dialog",
+      "event": "receive BYE",
+      "action": "terminate session",
+      "to": ""
+    },
+    {
+      "from": "stateful",
+      "event": "",
+      "action": "transition to stateless operation",
+      "to": "stateless"
+    },
+    {
+      "from": "Calling",
+      "event": "",
+      "action": "receive 2xx response",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "receive provisional response",
+      "action": "pass response to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Calling",
+      "event": "receive response 300-699",
+      "action": "generate ACK, pass response to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer B fires",
+      "action": "inform TU timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive response 300-699",
+      "action": "generate ACK, pass response to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer D fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "receive response retransmission",
+      "action": "re-pass ACK to transport",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer D fires",
+      "action": "",
+      "to": "Terminated"
+    }
+  ]
+}

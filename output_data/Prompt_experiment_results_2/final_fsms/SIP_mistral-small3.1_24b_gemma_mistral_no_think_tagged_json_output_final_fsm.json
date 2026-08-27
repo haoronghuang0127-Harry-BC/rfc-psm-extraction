@@ -1,0 +1,2133 @@
+{
+  "states": [
+    "Session Establishment",
+    "Session Modification",
+    "Session Termination",
+    "Registration",
+    "client transaction",
+    "server transaction",
+    "Client Transaction State Machine",
+    "Server Transaction State Machine",
+    "Dialog",
+    "Call Stateful Proxy",
+    "Stateless Proxy",
+    "Transaction Stateful Proxy",
+    "Loose Router",
+    "Strict Router",
+    "Parallel Search",
+    "Sequential Search",
+    "Loop",
+    "Spiral",
+    "UAC Behavior",
+    "UAS Behavior",
+    "Stateless UAS Behavior",
+    "Redirect Server",
+    "Client Transaction",
+    "Server Transaction",
+    "Pending Transaction",
+    "Final Response Sent",
+    "Provisional Response Received",
+    "No Response Received",
+    "Binding Added",
+    "Binding Removed",
+    "Binding Fetched",
+    "Binding Refreshed",
+    "Binding Expiration",
+    "Error Response",
+    "UA",
+    "Proxy Server",
+    "early",
+    "confirmed",
+    "early dialog",
+    "established dialog",
+    "ongoing INVITE client transaction",
+    "ongoing INVITE server transaction",
+    "completed or terminated state",
+    "confirmed or terminated state",
+    "non-2xx final response",
+    "481 (Call/Transaction Does Not Exist)",
+    "408 (Request Timeout)",
+    "timeout",
+    "491 response",
+    "2xx response",
+    "500 (Server Internal Error)",
+    "491 (Request Pending)",
+    "488 (Not Acceptable Here)",
+    "ACK",
+    "BYE",
+    "Session",
+    "Early Dialog",
+    "Confirmed Dialog",
+    "Stateful Proxy",
+    "Proceeding",
+    "Terminated",
+    "calling",
+    "Trying",
+    "Completed",
+    "Unauthorized",
+    "Proxy Authentication Required",
+    "Authenticated",
+    "Forbidden",
+    "INVITE transaction",
+    "CANCEL transaction",
+    "BYE transaction",
+    "TCP connection",
+    "UDP connection",
+    "SIP transaction",
+    "Dialog",
+    "Registration",
+    "Multicast",
+    "Unicast",
+    "TLS connection",
+    "SCTP connection",
+    "SIP request",
+    "SIP response",
+    "SIP message",
+    "SIP call",
+    "SIP session",
+    "SIP dialog",
+    "SIP transaction state machine",
+    "Client transaction state machine",
+    "Server transaction state machine",
+    "SIP transaction layer",
+    "SIP protocol layer",
+    "SIP message processing",
+    "SIP message handling",
+    "SIP message forwarding",
+    "SIP message routing",
+    "SIP message construction",
+    "SIP message termination",
+    "SIP message retransmission",
+    "SIP message timeout",
+    "SIP message retransmit count",
+    "SIP message timeouts",
+    "SIP message retransmit counts",
+    "SIP message retransmission over TCP",
+    "SIP message retransmission over UDP",
+    "SIP message retransmission over TLS",
+    "SIP message retransmission over SCTP",
+    "SIP message retransmission over multicast",
+    "SIP message retransmission over unicast",
+    "SIP message retransmission over SIP transaction",
+    "SIP message retransmission over SIP response",
+    "SIP message retransmission over SIP request",
+    "SIP message retransmission over SIP call",
+    "SIP message retransmission over SIP session",
+    "SIP message retransmission over SIP dialog",
+    "SIP message retransmission over SIP transaction state machine",
+    "SIP message retransmission over Client transaction state machine",
+    "SIP message retransmission over Server transaction state machine",
+    "SIP message retransmission over SIP transaction layer",
+    "SIP message retransmission over SIP protocol layer",
+    "SIP message retransmission over SIP message processing",
+    "SIP message retransmission over SIP message handling",
+    "SIP message retransmission over SIP message forwarding",
+    "SIP message retransmission over SIP message routing",
+    "SIP message retransmission over SIP message construction",
+    "SIP message retransmission over SIP message termination",
+    "SIP message retransmission over SIP message timeout",
+    "SIP message retransmission over SIP message retransmit count",
+    "SIP message retransmission over SIP message timeouts",
+    "SIP message retransmission over SIP message retransmit counts",
+    "Trying",
+    "Ringing",
+    "Call Is Being Forwarded",
+    "Queued",
+    "Session Progress",
+    "Successful",
+    "Multiple Choices",
+    "Moved Permanently",
+    "Moved Temporarily",
+    "Use Proxy",
+    "Alternative Service",
+    "Bad Request",
+    "Unauthorized",
+    "Forbidden",
+    "Not Found",
+    "Method Not Allowed",
+    "Not Acceptable",
+    "Proxy Authentication Required",
+    "Request Timeout",
+    "Gone",
+    "Request Entity Too Large",
+    "Request-URI Too Long",
+    "Unsupported Media Type",
+    "Unsupported URI Scheme",
+    "Bad Extension",
+    "Extension Required",
+    "Interval Too Brief",
+    "Temporarily Unavailable",
+    "Call/Transaction Does Not Exist",
+    "Loop Detected",
+    "Too Many Hops",
+    "Address Incomplete",
+    "Ambiguous",
+    "Busy Here",
+    "Request Terminated",
+    "Not Acceptable Here",
+    "Request Pending",
+    "Undecipherable",
+    "Server Internal Error",
+    "Not Implemented",
+    "Bad Gateway",
+    "Service Unavailable",
+    "Server Time-out",
+    "Version Not Supported",
+    "Message Too Large",
+    "Busy Everywhere",
+    "Decline",
+    "Does Not Exist Anywhere"
+  ],
+  "transitions": [
+    {
+      "from": "Session Establishment",
+      "event": "INVITE",
+      "action": "100 Trying",
+      "to": "Session Establishment"
+    },
+    {
+      "from": "Session Establishment",
+      "event": "180 Ringing",
+      "action": "",
+      "to": "Session Establishment"
+    },
+    {
+      "from": "Session Establishment",
+      "event": "200 OK",
+      "action": "ACK",
+      "to": "Session Modification"
+    },
+    {
+      "from": "Session Modification",
+      "event": "re-INVITE",
+      "action": "200 OK",
+      "to": "Session Modification"
+    },
+    {
+      "from": "Session Modification",
+      "event": "BYE",
+      "action": "200 OK",
+      "to": "Session Termination"
+    },
+    {
+      "from": "Registration",
+      "event": "REGISTER",
+      "action": "",
+      "to": "Registration"
+    },
+    {
+      "from": "client transaction",
+      "event": "",
+      "action": "",
+      "to": "server transaction"
+    },
+    {
+      "from": "server transaction",
+      "event": "CANCEL request",
+      "action": "stop further processing, revert to the state that existed before the transaction was initiated, and generate a specific error response",
+      "to": "client transaction"
+    },
+    {
+      "from": "Client Transaction State Machine",
+      "event": "",
+      "action": "",
+      "to": "Server Transaction State Machine"
+    },
+    {
+      "from": "Server Transaction State Machine",
+      "event": "",
+      "action": "",
+      "to": "Client Transaction State Machine"
+    },
+    {
+      "from": "Client Transaction State Machine",
+      "event": "INVITE",
+      "action": "establishes Dialog",
+      "to": "Dialog"
+    },
+    {
+      "from": "Dialog",
+      "event": "BYE",
+      "action": "terminates Dialog",
+      "to": "Client Transaction State Machine"
+    },
+    {
+      "from": "Call Stateful Proxy",
+      "event": "",
+      "action": "",
+      "to": "Transaction Stateful Proxy"
+    },
+    {
+      "from": "Stateless Proxy",
+      "event": "",
+      "action": "",
+      "to": "Loose Router"
+    },
+    {
+      "from": "Stateless Proxy",
+      "event": "",
+      "action": "",
+      "to": "Strict Router"
+    },
+    {
+      "from": "Loose Router",
+      "event": "",
+      "action": "",
+      "to": "Parallel Search"
+    },
+    {
+      "from": "Loose Router",
+      "event": "",
+      "action": "",
+      "to": "Sequential Search"
+    },
+    {
+      "from": "Parallel Search",
+      "event": "Loop",
+      "action": "detects and handles Loop",
+      "to": "Loop"
+    },
+    {
+      "from": "Sequential Search",
+      "event": "Spiral",
+      "action": "processes Spiral",
+      "to": "Spiral"
+    },
+    {
+      "from": "UAC Behavior",
+      "event": "",
+      "action": "Generating the Request",
+      "to": "UAC Behavior"
+    },
+    {
+      "from": "UAC Behavior",
+      "event": "Generating the Request",
+      "action": "Sending the Request",
+      "to": "UAC Behavior"
+    },
+    {
+      "from": "UAC Behavior",
+      "event": "Sending the Request",
+      "action": "Processing Responses",
+      "to": "UAC Behavior"
+    },
+    {
+      "from": "UAC Behavior",
+      "event": "Processing Responses",
+      "action": "Processing 3xx Responses",
+      "to": "UAC Behavior"
+    },
+    {
+      "from": "UAC Behavior",
+      "event": "Processing Responses",
+      "action": "Processing 4xx Responses",
+      "to": "UAC Behavior"
+    },
+    {
+      "from": "UAS Behavior",
+      "event": "Method Inspection",
+      "action": "Header Inspection",
+      "to": "UAS Behavior"
+    },
+    {
+      "from": "UAS Behavior",
+      "event": "Header Inspection",
+      "action": "Content Processing",
+      "to": "UAS Behavior"
+    },
+    {
+      "from": "UAS Behavior",
+      "event": "Content Processing",
+      "action": "Applying Extensions",
+      "to": "UAS Behavior"
+    },
+    {
+      "from": "UAS Behavior",
+      "event": "Applying Extensions",
+      "action": "Processing the Request",
+      "to": "UAS Behavior"
+    },
+    {
+      "from": "UAS Behavior",
+      "event": "Processing the Request",
+      "action": "Generating the Response",
+      "to": "UAS Behavior"
+    },
+    {
+      "from": "UAS Behavior",
+      "event": "Generating the Response",
+      "action": "Sending a Provisional Response",
+      "to": "UAS Behavior"
+    },
+    {
+      "from": "UAS Behavior",
+      "event": "Generating the Response",
+      "action": "Headers and Tags",
+      "to": "UAS Behavior"
+    },
+    {
+      "from": "UAS Behavior",
+      "event": "",
+      "action": "Stateless UAS Behavior",
+      "to": "Stateless UAS Behavior"
+    },
+    {
+      "from": "Stateless UAS Behavior",
+      "event": "",
+      "action": "",
+      "to": "Stateless UAS Behavior"
+    },
+    {
+      "from": "UAS Behavior",
+      "event": "",
+      "action": "Redirect Server",
+      "to": "Redirect Server"
+    },
+    {
+      "from": "Redirect Server",
+      "event": "",
+      "action": "",
+      "to": "Redirect Server"
+    },
+    {
+      "from": "Client Transaction",
+      "event": "CANCEL request constructed",
+      "action": "Check for provisional or final response for the original request",
+      "to": "Provisional Response Received"
+    },
+    {
+      "from": "Client Transaction",
+      "event": "No provisional response received",
+      "action": "Wait for the arrival of a provisional response",
+      "to": "No Response Received"
+    },
+    {
+      "from": "Client Transaction",
+      "event": "Final response received",
+      "action": "Do not send CANCEL",
+      "to": "Final Response Sent"
+    },
+    {
+      "from": "Server Transaction",
+      "event": "CANCEL request received",
+      "action": "Determine the transaction to be cancelled",
+      "to": "Pending Transaction"
+    },
+    {
+      "from": "Pending Transaction",
+      "event": "Final response for the original request sent",
+      "action": "CANCEL request has no effect",
+      "to": "Final Response Sent"
+    },
+    {
+      "from": "Pending Transaction",
+      "event": "No final response for the original request sent",
+      "action": "Respond to the INVITE with a 487 (Request Terminated)",
+      "to": "Final Response Sent"
+    },
+    {
+      "from": "Registration",
+      "event": "REGISTER request",
+      "action": "Process REGISTER request",
+      "to": "Binding Added"
+    },
+    {
+      "from": "Registration",
+      "event": "REGISTER request with expiration interval of 0",
+      "action": "Remove binding",
+      "to": "Binding Removed"
+    },
+    {
+      "from": "Registration",
+      "event": "REGISTER request without Contact header field",
+      "action": "Fetch bindings",
+      "to": "Binding Fetched"
+    },
+    {
+      "from": "Binding Added",
+      "event": "Expiration interval elapsed",
+      "action": "Remove binding",
+      "to": "Binding Removed"
+    },
+    {
+      "from": "Binding Added",
+      "event": "REGISTER request to refresh bindings",
+      "action": "Refresh bindings",
+      "to": "Binding Refreshed"
+    },
+    {
+      "from": "Binding Refreshed",
+      "event": "Expiration interval elapsed",
+      "action": "Remove binding",
+      "to": "Binding Removed"
+    },
+    {
+      "from": "Registration",
+      "event": "Error in REGISTER request",
+      "action": "Send error response",
+      "to": "Error Response"
+    },
+    {
+      "from": "UA",
+      "event": "OPTIONS",
+      "action": "query capabilities",
+      "to": "UA"
+    },
+    {
+      "from": "UA",
+      "event": "OPTIONS",
+      "action": "query capabilities",
+      "to": "Proxy Server"
+    },
+    {
+      "from": "Proxy Server",
+      "event": "OPTIONS",
+      "action": "respond with capabilities",
+      "to": "Proxy Server"
+    },
+    {
+      "from": "UA",
+      "event": "OPTIONS",
+      "action": "query capabilities",
+      "to": "Dialog"
+    },
+    {
+      "from": "Dialog",
+      "event": "OPTIONS",
+      "action": "respond with capabilities",
+      "to": "Dialog"
+    },
+    {
+      "from": "early",
+      "event": "2xx final response",
+      "action": "transition to confirmed state",
+      "to": "confirmed"
+    },
+    {
+      "from": "early",
+      "event": "other responses or no response",
+      "action": "terminate early dialog",
+      "to": "early"
+    },
+    {
+      "from": "early dialog",
+      "event": "2xx response",
+      "action": "transition to confirmed state, recompute route set",
+      "to": "confirmed"
+    },
+    {
+      "from": "confirmed",
+      "event": "ACK",
+      "action": "terminate early dialogs",
+      "to": "established dialog"
+    },
+    {
+      "from": "confirmed",
+      "event": "BYE",
+      "action": "terminate dialog",
+      "to": "established dialog"
+    },
+    {
+      "from": "early dialog",
+      "event": "non-2xx final response",
+      "action": "terminate early dialogs",
+      "to": "early dialog"
+    },
+    {
+      "from": "ongoing INVITE client transaction",
+      "event": "transaction reaches the completed or terminated state",
+      "action": "",
+      "to": "completed or terminated state"
+    },
+    {
+      "from": "ongoing INVITE server transaction",
+      "event": "transaction reaches the confirmed or terminated state",
+      "action": "",
+      "to": "confirmed or terminated state"
+    },
+    {
+      "from": "ongoing INVITE client transaction",
+      "event": "non-2xx final response",
+      "action": "session parameters MUST remain unchanged",
+      "to": "non-2xx final response"
+    },
+    {
+      "from": "ongoing INVITE client transaction",
+      "event": "481 (Call/Transaction Does Not Exist)",
+      "action": "UAC will terminate the dialog",
+      "to": "481 (Call/Transaction Does Not Exist)"
+    },
+    {
+      "from": "ongoing INVITE client transaction",
+      "event": "408 (Request Timeout)",
+      "action": "UAC will terminate the dialog",
+      "to": "408 (Request Timeout)"
+    },
+    {
+      "from": "ongoing INVITE client transaction",
+      "event": "timeout",
+      "action": "UAC will terminate the dialog",
+      "to": "timeout"
+    },
+    {
+      "from": "ongoing INVITE client transaction",
+      "event": "491 response",
+      "action": "start a timer with a value T",
+      "to": "491 response"
+    },
+    {
+      "from": "491 response",
+      "event": "timer fires",
+      "action": "attempt the re-INVITE once more",
+      "to": "ongoing INVITE client transaction"
+    },
+    {
+      "from": "ongoing INVITE client transaction",
+      "event": "2xx response",
+      "action": "generate an ACK",
+      "to": "2xx response"
+    },
+    {
+      "from": "ongoing INVITE server transaction",
+      "event": "second INVITE with a lower CSeq sequence number",
+      "action": "return a 500 (Server Internal Error) response",
+      "to": "500 (Server Internal Error)"
+    },
+    {
+      "from": "ongoing INVITE server transaction",
+      "event": "INVITE on a dialog while an INVITE it had sent on that dialog is in progress",
+      "action": "return a 491 (Request Pending) response",
+      "to": "491 (Request Pending)"
+    },
+    {
+      "from": "ongoing INVITE server transaction",
+      "event": "re-INVITE for an existing dialog",
+      "action": "adjust the session parameters accordingly",
+      "to": "ongoing INVITE server transaction"
+    },
+    {
+      "from": "ongoing INVITE server transaction",
+      "event": "new session description is not acceptable",
+      "action": "return a 488 (Not Acceptable Here) response",
+      "to": "488 (Not Acceptable Here)"
+    },
+    {
+      "from": "ongoing INVITE server transaction",
+      "event": "2xx response",
+      "action": "generate a BYE if no ACK is received",
+      "to": "2xx response"
+    },
+    {
+      "from": "Session",
+      "event": "BYE",
+      "action": "terminate session",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "non-2xx final response to INVITE",
+      "action": "terminate session and dialog",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "CANCEL",
+      "action": "terminate session and dialog",
+      "to": "Session"
+    },
+    {
+      "from": "Early Dialog",
+      "event": "BYE",
+      "action": "",
+      "to": "Early Dialog"
+    },
+    {
+      "from": "Confirmed Dialog",
+      "event": "BYE",
+      "action": "terminate session",
+      "to": "Confirmed Dialog"
+    },
+    {
+      "from": "Confirmed Dialog",
+      "event": "ACK for 2xx response",
+      "action": "",
+      "to": "Confirmed Dialog"
+    },
+    {
+      "from": "Confirmed Dialog",
+      "event": "server transaction timeout",
+      "action": "",
+      "to": "Confirmed Dialog"
+    },
+    {
+      "from": "Stateful Proxy",
+      "event": "Receive Request",
+      "action": "Create Server Transaction, Validate Request, Preprocess Routing Information, Determine Targets, Forward Request, Process Responses",
+      "to": "Stateful Proxy"
+    },
+    {
+      "from": "Stateful Proxy",
+      "event": "Receive Response",
+      "action": "Locate Response Context, Update Timer C, Remove Topmost Via, Add Response to Context, Check for Immediate Forwarding, Choose Best Final Response, Aggregate Authorization Header Field Values, Rewrite Record-Route Header Field Values, Forward Response, Generate CANCEL Requests",
+      "to": "Stateful Proxy"
+    },
+    {
+      "from": "Stateful Proxy",
+      "event": "Timer C Fires",
+      "action": "Reset Timer or Terminate Client Transaction",
+      "to": "Stateful Proxy"
+    },
+    {
+      "from": "Stateful Proxy",
+      "event": "Receive Transport Error",
+      "action": "Behave as if 503 (Service Unavailable) Response Received",
+      "to": "Stateful Proxy"
+    },
+    {
+      "from": "Stateful Proxy",
+      "event": "Receive CANCEL Request",
+      "action": "Generate CANCEL Requests for Pending Client Transactions",
+      "to": "Stateful Proxy"
+    },
+    {
+      "from": "Stateless Proxy",
+      "event": "Receive Request",
+      "action": "Validate Request, Choose Target, Forward Request",
+      "to": "Stateless Proxy"
+    },
+    {
+      "from": "Stateless Proxy",
+      "event": "Receive Response",
+      "action": "Remove Topmost Via, Forward Response",
+      "to": "Stateless Proxy"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Receive Final Response",
+      "action": "Generate CANCEL Requests for Pending Client Transactions",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Receive 6xx Response",
+      "action": "Generate CANCEL Requests for Pending Client Transactions",
+      "to": "Terminated"
+    },
+    {
+      "from": "calling",
+      "event": "Timer A fires",
+      "action": "Reset A, INVITE sent",
+      "to": "calling"
+    },
+    {
+      "from": "calling",
+      "event": "Timer B fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "calling",
+      "event": "1xx",
+      "action": "1xx to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "calling",
+      "event": "300-699",
+      "action": "ACK sent, resp. to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "calling",
+      "event": "2xx",
+      "action": "2xx to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699",
+      "action": "ACK sent, resp. to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx",
+      "action": "2xx to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer D fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "300-699 retransmissions",
+      "action": "ACK re-passed to transport layer",
+      "to": "Completed"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer F fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "1xx",
+      "action": "resp. to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "200-699",
+      "action": "resp. to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer F fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "200-699",
+      "action": "resp. to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer K fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer E fires",
+      "action": "send request",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer E fires",
+      "action": "send request",
+      "to": "Trying"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Transport Err.",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "Transport Err.",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Transport Err.",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Unauthorized",
+      "event": "401 (Unauthorized)",
+      "action": "challenge the originator to provide credentials",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Unauthorized",
+      "event": "401 (Unauthorized)",
+      "action": "UAC re-originates the request with proper credentials",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Proxy Authentication Required",
+      "event": "407 (Proxy Authentication Required)",
+      "action": "challenge the originator to provide credentials",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Proxy Authentication Required",
+      "event": "407 (Proxy Authentication Required)",
+      "action": "UAC re-originates the request with proper credentials",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "credentials rejected",
+      "action": "server responds with 403 Forbidden",
+      "to": "Forbidden"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "CANCEL",
+      "action": "UAS responds with 487",
+      "to": "INVITE transaction"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "BYE",
+      "action": "UAS responds to original INVITE request",
+      "to": "INVITE transaction"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "UDP",
+      "action": "",
+      "to": "UDP connection"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "TCP",
+      "action": "",
+      "to": "TCP connection"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "TLS",
+      "action": "",
+      "to": "TLS connection"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SCTP",
+      "action": "",
+      "to": "SCTP connection"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP request",
+      "action": "",
+      "to": "SIP request"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP response",
+      "action": "",
+      "to": "SIP response"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message",
+      "action": "",
+      "to": "SIP message"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP call",
+      "action": "",
+      "to": "SIP call"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP session",
+      "action": "",
+      "to": "SIP session"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP dialog",
+      "action": "",
+      "to": "SIP dialog"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP transaction state machine",
+      "action": "",
+      "to": "SIP transaction state machine"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "Client transaction state machine",
+      "action": "",
+      "to": "Client transaction state machine"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "Server transaction state machine",
+      "action": "",
+      "to": "Server transaction state machine"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP transaction layer",
+      "action": "",
+      "to": "SIP transaction layer"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP protocol layer",
+      "action": "",
+      "to": "SIP protocol layer"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message processing",
+      "action": "",
+      "to": "SIP message processing"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message handling",
+      "action": "",
+      "to": "SIP message handling"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message forwarding",
+      "action": "",
+      "to": "SIP message forwarding"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message routing",
+      "action": "",
+      "to": "SIP message routing"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message construction",
+      "action": "",
+      "to": "SIP message construction"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message termination",
+      "action": "",
+      "to": "SIP message termination"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message timeout",
+      "action": "",
+      "to": "SIP message timeout"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmit count",
+      "action": "",
+      "to": "SIP message retransmit count"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message timeouts",
+      "action": "",
+      "to": "SIP message timeouts"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmit counts",
+      "action": "",
+      "to": "SIP message retransmit counts"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmission over TCP",
+      "action": "",
+      "to": "SIP message retransmission over TCP"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmission over UDP",
+      "action": "",
+      "to": "SIP message retransmission over UDP"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmission over TLS",
+      "action": "",
+      "to": "SIP message retransmission over TLS"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmission over SCTP",
+      "action": "",
+      "to": "SIP message retransmission over SCTP"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmission over multicast",
+      "action": "",
+      "to": "SIP message retransmission over multicast"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmission over unicast",
+      "action": "",
+      "to": "SIP message retransmission over unicast"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmission over SIP transaction",
+      "action": "",
+      "to": "SIP message retransmission over SIP transaction"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmission over SIP response",
+      "action": "",
+      "to": "SIP message retransmission over SIP response"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmission over SIP request",
+      "action": "",
+      "to": "SIP message retransmission over SIP request"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmission over SIP call",
+      "action": "",
+      "to": "SIP message retransmission over SIP call"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmission over SIP session",
+      "action": "",
+      "to": "SIP message retransmission over SIP session"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmission over SIP dialog",
+      "action": "",
+      "to": "SIP message retransmission over SIP dialog"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmission over SIP transaction state machine",
+      "action": "",
+      "to": "SIP message retransmission over SIP transaction state machine"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmission over Client transaction state machine",
+      "action": "",
+      "to": "SIP message retransmission over Client transaction state machine"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmission over Server transaction state machine",
+      "action": "",
+      "to": "SIP message retransmission over Server transaction state machine"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmission over SIP transaction layer",
+      "action": "",
+      "to": "SIP message retransmission over SIP transaction layer"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmission over SIP protocol layer",
+      "action": "",
+      "to": "SIP message retransmission over SIP protocol layer"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmission over SIP message processing",
+      "action": "",
+      "to": "SIP message retransmission over SIP message processing"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmission over SIP message handling",
+      "action": "",
+      "to": "SIP message retransmission over SIP message handling"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmission over SIP message forwarding",
+      "action": "",
+      "to": "SIP message retransmission over SIP message forwarding"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmission over SIP message routing",
+      "action": "",
+      "to": "SIP message retransmission over SIP message routing"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmission over SIP message construction",
+      "action": "",
+      "to": "SIP message retransmission over SIP message construction"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmission over SIP message termination",
+      "action": "",
+      "to": "SIP message retransmission over SIP message termination"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmission over SIP message timeout",
+      "action": "",
+      "to": "SIP message retransmission over SIP message timeout"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmission over SIP message retransmit count",
+      "action": "",
+      "to": "SIP message retransmission over SIP message retransmit count"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmission over SIP message timeouts",
+      "action": "",
+      "to": "SIP message retransmission over SIP message timeouts"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "SIP message retransmission over SIP message retransmit counts",
+      "action": "",
+      "to": "SIP message retransmission over SIP message retransmit counts"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "INVITE",
+      "action": "UAS responds with 487",
+      "to": "CANCEL transaction"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "BYE",
+      "action": "UAS responds to original INVITE request",
+      "to": "CANCEL transaction"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "UDP",
+      "action": "",
+      "to": "UDP connection"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "TCP",
+      "action": "",
+      "to": "TCP connection"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "TLS",
+      "action": "",
+      "to": "TLS connection"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SCTP",
+      "action": "",
+      "to": "SCTP connection"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP request",
+      "action": "",
+      "to": "SIP request"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP response",
+      "action": "",
+      "to": "SIP response"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message",
+      "action": "",
+      "to": "SIP message"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP call",
+      "action": "",
+      "to": "SIP call"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP session",
+      "action": "",
+      "to": "SIP session"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP dialog",
+      "action": "",
+      "to": "SIP dialog"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP transaction state machine",
+      "action": "",
+      "to": "SIP transaction state machine"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "Client transaction state machine",
+      "action": "",
+      "to": "Client transaction state machine"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "Server transaction state machine",
+      "action": "",
+      "to": "Server transaction state machine"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP transaction layer",
+      "action": "",
+      "to": "SIP transaction layer"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP protocol layer",
+      "action": "",
+      "to": "SIP protocol layer"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message processing",
+      "action": "",
+      "to": "SIP message processing"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message handling",
+      "action": "",
+      "to": "SIP message handling"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message forwarding",
+      "action": "",
+      "to": "SIP message forwarding"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message routing",
+      "action": "",
+      "to": "SIP message routing"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message construction",
+      "action": "",
+      "to": "SIP message construction"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message termination",
+      "action": "",
+      "to": "SIP message termination"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message timeout",
+      "action": "",
+      "to": "SIP message timeout"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmit count",
+      "action": "",
+      "to": "SIP message retransmit count"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message timeouts",
+      "action": "",
+      "to": "SIP message timeouts"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmit counts",
+      "action": "",
+      "to": "SIP message retransmit counts"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmission over TCP",
+      "action": "",
+      "to": "SIP message retransmission over TCP"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmission over UDP",
+      "action": "",
+      "to": "SIP message retransmission over UDP"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmission over TLS",
+      "action": "",
+      "to": "SIP message retransmission over TLS"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmission over SCTP",
+      "action": "",
+      "to": "SIP message retransmission over SCTP"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmission over multicast",
+      "action": "",
+      "to": "SIP message retransmission over multicast"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmission over unicast",
+      "action": "",
+      "to": "SIP message retransmission over unicast"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmission over SIP transaction",
+      "action": "",
+      "to": "SIP message retransmission over SIP transaction"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmission over SIP response",
+      "action": "",
+      "to": "SIP message retransmission over SIP response"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmission over SIP request",
+      "action": "",
+      "to": "SIP message retransmission over SIP request"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmission over SIP call",
+      "action": "",
+      "to": "SIP message retransmission over SIP call"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmission over SIP session",
+      "action": "",
+      "to": "SIP message retransmission over SIP session"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmission over SIP dialog",
+      "action": "",
+      "to": "SIP message retransmission over SIP dialog"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmission over SIP transaction state machine",
+      "action": "",
+      "to": "SIP message retransmission over SIP transaction state machine"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmission over Client transaction state machine",
+      "action": "",
+      "to": "SIP message retransmission over Client transaction state machine"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmission over Server transaction state machine",
+      "action": "",
+      "to": "SIP message retransmission over Server transaction state machine"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmission over SIP transaction layer",
+      "action": "",
+      "to": "SIP message retransmission over SIP transaction layer"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmission over SIP protocol layer",
+      "action": "",
+      "to": "SIP message retransmission over SIP protocol layer"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmission over SIP message processing",
+      "action": "",
+      "to": "SIP message retransmission over SIP message processing"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmission over SIP message handling",
+      "action": "",
+      "to": "SIP message retransmission over SIP message handling"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmission over SIP message forwarding",
+      "action": "",
+      "to": "SIP message retransmission over SIP message forwarding"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmission over SIP message routing",
+      "action": "",
+      "to": "SIP message retransmission over SIP message routing"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmission over SIP message construction",
+      "action": "",
+      "to": "SIP message retransmission over SIP message construction"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmission over SIP message termination",
+      "action": "",
+      "to": "SIP message retransmission over SIP message termination"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmission over SIP message timeout",
+      "action": "",
+      "to": "SIP message retransmission over SIP message timeout"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmission over SIP message retransmit count",
+      "action": "",
+      "to": "SIP message retransmission over SIP message retransmit count"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmission over SIP message timeouts",
+      "action": "",
+      "to": "SIP message retransmission over SIP message timeouts"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "SIP message retransmission over SIP message retransmit counts",
+      "action": "",
+      "to": "SIP message retransmission over SIP message retransmit counts"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "INVITE",
+      "action": "UAS responds with 487",
+      "to": "BYE transaction"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "CANCEL",
+      "action": "UAS responds to original INVITE request",
+      "to": "BYE transaction"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "UDP",
+      "action": "",
+      "to": "UDP connection"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "TCP",
+      "action": "",
+      "to": "TCP connection"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "TLS",
+      "action": "",
+      "to": "TLS connection"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SCTP",
+      "action": "",
+      "to": "SCTP connection"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP request",
+      "action": "",
+      "to": "SIP request"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP response",
+      "action": "",
+      "to": "SIP response"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message",
+      "action": "",
+      "to": "SIP message"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP call",
+      "action": "",
+      "to": "SIP call"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP session",
+      "action": "",
+      "to": "SIP session"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP dialog",
+      "action": "",
+      "to": "SIP dialog"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP transaction state machine",
+      "action": "",
+      "to": "SIP transaction state machine"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "Client transaction state machine",
+      "action": "",
+      "to": "Client transaction state machine"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "Server transaction state machine",
+      "action": "",
+      "to": "Server transaction state machine"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP transaction layer",
+      "action": "",
+      "to": "SIP transaction layer"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP protocol layer",
+      "action": "",
+      "to": "SIP protocol layer"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message processing",
+      "action": "",
+      "to": "SIP message processing"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message handling",
+      "action": "",
+      "to": "SIP message handling"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message forwarding",
+      "action": "",
+      "to": "SIP message forwarding"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message routing",
+      "action": "",
+      "to": "SIP message routing"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message construction",
+      "action": "",
+      "to": "SIP message construction"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message termination",
+      "action": "",
+      "to": "SIP message termination"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message timeout",
+      "action": "",
+      "to": "SIP message timeout"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmit count",
+      "action": "",
+      "to": "SIP message retransmit count"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message timeouts",
+      "action": "",
+      "to": "SIP message timeouts"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmit counts",
+      "action": "",
+      "to": "SIP message retransmit counts"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmission over TCP",
+      "action": "",
+      "to": "SIP message retransmission over TCP"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmission over UDP",
+      "action": "",
+      "to": "SIP message retransmission over UDP"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmission over TLS",
+      "action": "",
+      "to": "SIP message retransmission over TLS"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmission over SCTP",
+      "action": "",
+      "to": "SIP message retransmission over SCTP"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmission over multicast",
+      "action": "",
+      "to": "SIP message retransmission over multicast"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmission over unicast",
+      "action": "",
+      "to": "SIP message retransmission over unicast"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmission over SIP transaction",
+      "action": "",
+      "to": "SIP message retransmission over SIP transaction"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmission over SIP response",
+      "action": "",
+      "to": "SIP message retransmission over SIP response"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmission over SIP request",
+      "action": "",
+      "to": "SIP message retransmission over SIP request"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmission over SIP call",
+      "action": "",
+      "to": "SIP message retransmission over SIP call"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmission over SIP session",
+      "action": "",
+      "to": "SIP message retransmission over SIP session"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmission over SIP dialog",
+      "action": "",
+      "to": "SIP message retransmission over SIP dialog"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmission over SIP transaction state machine",
+      "action": "",
+      "to": "SIP message retransmission over SIP transaction state machine"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmission over Client transaction state machine",
+      "action": "",
+      "to": "SIP message retransmission over Client transaction state machine"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmission over Server transaction state machine",
+      "action": "",
+      "to": "SIP message retransmission over Server transaction state machine"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmission over SIP transaction layer",
+      "action": "",
+      "to": "SIP message retransmission over SIP transaction layer"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmission over SIP protocol layer",
+      "action": "",
+      "to": "SIP message retransmission over SIP protocol layer"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmission over SIP message processing",
+      "action": "",
+      "to": "SIP message retransmission over SIP message processing"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmission over SIP message handling",
+      "action": "",
+      "to": "SIP message retransmission over SIP message handling"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmission over SIP message forwarding",
+      "action": "",
+      "to": "SIP message retransmission over SIP message forwarding"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmission over SIP message routing",
+      "action": "",
+      "to": "SIP message retransmission over SIP message routing"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmission over SIP message construction",
+      "action": "",
+      "to": "SIP message retransmission over SIP message construction"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmission over SIP message termination",
+      "action": "",
+      "to": "SIP message retransmission over SIP message termination"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmission over SIP message timeout",
+      "action": "",
+      "to": "SIP message retransmission over SIP message timeout"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmission over SIP message retransmit count",
+      "action": "",
+      "to": "SIP message retransmission over SIP message retransmit count"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmission over SIP message timeouts",
+      "action": "",
+      "to": "SIP message retransmission over SIP message timeouts"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "SIP message retransmission over SIP message retransmit counts",
+      "action": "",
+      "to": "SIP message retransmission over SIP message retransmit counts"
+    },
+    {
+      "from": "Trying",
+      "event": "",
+      "action": "This response, like all other provisional responses, stops retransmissions of an INVITE by a UAC",
+      "to": "Trying"
+    },
+    {
+      "from": "Ringing",
+      "event": "",
+      "action": "This response MAY be used to initiate local ringback",
+      "to": "Ringing"
+    },
+    {
+      "from": "Call Is Being Forwarded",
+      "event": "",
+      "action": "A server MAY use this status code to indicate that the call is being forwarded to a different set of destinations",
+      "to": "Call Is Being Forwarded"
+    },
+    {
+      "from": "Queued",
+      "event": "",
+      "action": "The called party is temporarily unavailable, but the server has decided to queue the call rather than reject it",
+      "to": "Queued"
+    },
+    {
+      "from": "Session Progress",
+      "event": "",
+      "action": "The 183 (Session Progress) response is used to convey information about the progress of the call that is not otherwise classified",
+      "to": "Session Progress"
+    },
+    {
+      "from": "Successful",
+      "event": "",
+      "action": "The request was successful",
+      "to": "Successful"
+    },
+    {
+      "from": "Multiple Choices",
+      "event": "",
+      "action": "The address in the request resolved to several choices, each with its own specific location, and the user (or UA) can select a preferred communication end point and redirect its request to that location",
+      "to": "Multiple Choices"
+    },
+    {
+      "from": "Moved Permanently",
+      "event": "",
+      "action": "The user can no longer be found at the address in the Request-URI, and the requesting client SHOULD retry at the new address given by the Contact header field",
+      "to": "Moved Permanently"
+    },
+    {
+      "from": "Moved Temporarily",
+      "event": "",
+      "action": "The requesting client SHOULD retry the request at the new address(es) given by the Contact header field",
+      "to": "Moved Temporarily"
+    },
+    {
+      "from": "Use Proxy",
+      "event": "",
+      "action": "The requested resource MUST be accessed through the proxy given by the Contact field",
+      "to": "Use Proxy"
+    },
+    {
+      "from": "Alternative Service",
+      "event": "",
+      "action": "The call was not successful, but alternative services are possible",
+      "to": "Alternative Service"
+    },
+    {
+      "from": "Bad Request",
+      "event": "",
+      "action": "The request could not be understood due to malformed syntax",
+      "to": "Bad Request"
+    },
+    {
+      "from": "Unauthorized",
+      "event": "",
+      "action": "The request requires user authentication",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Forbidden",
+      "event": "",
+      "action": "The server understood the request, but is refusing to fulfill it",
+      "to": "Forbidden"
+    },
+    {
+      "from": "Not Found",
+      "event": "",
+      "action": "The server has definitive information that the user does not exist at the domain specified in the Request-URI",
+      "to": "Not Found"
+    },
+    {
+      "from": "Method Not Allowed",
+      "event": "",
+      "action": "The method specified in the Request-Line is understood, but not allowed for the address identified by the Request-URI",
+      "to": "Method Not Allowed"
+    },
+    {
+      "from": "Not Acceptable",
+      "event": "",
+      "action": "The resource identified by the request is only capable of generating response entities that have content characteristics not acceptable according to the Accept header field sent in the request",
+      "to": "Not Acceptable"
+    },
+    {
+      "from": "Proxy Authentication Required",
+      "event": "",
+      "action": "This code is similar to 401 (Unauthorized), but indicates that the client MUST first authenticate itself with the proxy",
+      "to": "Proxy Authentication Required"
+    },
+    {
+      "from": "Request Timeout",
+      "event": "",
+      "action": "The server could not produce a response within a suitable amount of time",
+      "to": "Request Timeout"
+    },
+    {
+      "from": "Gone",
+      "event": "",
+      "action": "The requested resource is no longer available at the server and no forwarding address is known",
+      "to": "Gone"
+    },
+    {
+      "from": "Request Entity Too Large",
+      "event": "",
+      "action": "The server is refusing to process a request because the request entity-body is larger than the server is willing or able to process",
+      "to": "Request Entity Too Large"
+    },
+    {
+      "from": "Request-URI Too Long",
+      "event": "",
+      "action": "The server is refusing to service the request because the Request-URI is longer than the server is willing to interpret",
+      "to": "Request-URI Too Long"
+    },
+    {
+      "from": "Unsupported Media Type",
+      "event": "",
+      "action": "The server is refusing to service the request because the message body of the request is in a format not supported by the server for the requested method",
+      "to": "Unsupported Media Type"
+    },
+    {
+      "from": "Unsupported URI Scheme",
+      "event": "",
+      "action": "The server cannot process the request because the scheme of the URI in the Request-URI is unknown to the server",
+      "to": "Unsupported URI Scheme"
+    },
+    {
+      "from": "Bad Extension",
+      "event": "",
+      "action": "The server did not understand the protocol extension specified in a Proxy-Require or Require header field",
+      "to": "Bad Extension"
+    },
+    {
+      "from": "Extension Required",
+      "event": "",
+      "action": "The UAS needs a particular extension to process the request, but this extension is not listed in a Supported header field in the request",
+      "to": "Extension Required"
+    },
+    {
+      "from": "Interval Too Brief",
+      "event": "",
+      "action": "The server is rejecting the request because the expiration time of the resource refreshed by the request is too short",
+      "to": "Interval Too Brief"
+    },
+    {
+      "from": "Temporarily Unavailable",
+      "event": "",
+      "action": "The callee's end system was contacted successfully but the callee is currently unavailable",
+      "to": "Temporarily Unavailable"
+    },
+    {
+      "from": "Call/Transaction Does Not Exist",
+      "event": "",
+      "action": "This status indicates that the UAS received a request that does not match any existing dialog or transaction",
+      "to": "Call/Transaction Does Not Exist"
+    },
+    {
+      "from": "Loop Detected",
+      "event": "",
+      "action": "The server has detected a loop",
+      "to": "Loop Detected"
+    },
+    {
+      "from": "Too Many Hops",
+      "event": "",
+      "action": "The server received a request that contains a Max-Forwards header field with the value zero",
+      "to": "Too Many Hops"
+    },
+    {
+      "from": "Address Incomplete",
+      "event": "",
+      "action": "The server received a request with a Request-URI that was incomplete",
+      "to": "Address Incomplete"
+    },
+    {
+      "from": "Ambiguous",
+      "event": "",
+      "action": "The Request-URI was ambiguous",
+      "to": "Ambiguous"
+    },
+    {
+      "from": "Busy Here",
+      "event": "",
+      "action": "The callee's end system was contacted successfully, but the callee is currently not willing or able to take additional calls at this end system",
+      "to": "Busy Here"
+    },
+    {
+      "from": "Request Terminated",
+      "event": "",
+      "action": "The request was terminated by a BYE or CANCEL request",
+      "to": "Request Terminated"
+    },
+    {
+      "from": "Not Acceptable Here",
+      "event": "",
+      "action": "The response has the same meaning as 606 (Not Acceptable), but only applies to the specific resource addressed by the Request-URI",
+      "to": "Not Acceptable Here"
+    },
+    {
+      "from": "Request Pending",
+      "event": "",
+      "action": "The request was received by a UAS that had a pending request within the same dialog",
+      "to": "Request Pending"
+    },
+    {
+      "from": "Undecipherable",
+      "event": "",
+      "action": "The request was received by a UAS that contained an encrypted MIME body for which the recipient does not possess or will not provide an appropriate decryption key",
+      "to": "Undecipherable"
+    },
+    {
+      "from": "Server Internal Error",
+      "event": "",
+      "action": "The server encountered an unexpected condition that prevented it from fulfilling the request",
+      "to": "Server Internal Error"
+    },
+    {
+      "from": "Not Implemented",
+      "event": "",
+      "action": "The server does not support the functionality required to fulfill the request",
+      "to": "Not Implemented"
+    },
+    {
+      "from": "Bad Gateway",
+      "event": "",
+      "action": "The server, while acting as a gateway or proxy, received an invalid response from the downstream server it accessed in attempting to fulfill the request",
+      "to": "Bad Gateway"
+    },
+    {
+      "from": "Service Unavailable",
+      "event": "",
+      "action": "The server is temporarily unable to process the request due to a temporary overloading or maintenance of the server",
+      "to": "Service Unavailable"
+    },
+    {
+      "from": "Server Time-out",
+      "event": "",
+      "action": "The server did not receive a timely response from an external server it accessed in attempting to process the request",
+      "to": "Server Time-out"
+    },
+    {
+      "from": "Version Not Supported",
+      "event": "",
+      "action": "The server does not support, or refuses to support, the SIP protocol version that was used in the request",
+      "to": "Version Not Supported"
+    },
+    {
+      "from": "Message Too Large",
+      "event": "",
+      "action": "The server was unable to process the request since the message length exceeded its capabilities",
+      "to": "Message Too Large"
+    },
+    {
+      "from": "Busy Everywhere",
+      "event": "",
+      "action": "The callee's end system was contacted successfully but the callee is busy and does not wish to take the call at this time",
+      "to": "Busy Everywhere"
+    },
+    {
+      "from": "Decline",
+      "event": "",
+      "action": "The callee's machine was successfully contacted but the user explicitly does not wish to or cannot participate",
+      "to": "Decline"
+    },
+    {
+      "from": "Does Not Exist Anywhere",
+      "event": "",
+      "action": "The server has authoritative information that the user indicated in the Request-URI does not exist anywhere",
+      "to": "Does Not Exist Anywhere"
+    },
+    {
+      "from": "Not Acceptable",
+      "event": "",
+      "action": "The user's agent was contacted successfully but some aspects of the session description such as the requested media, bandwidth, or addressing style were not acceptable",
+      "to": "Not Acceptable"
+    }
+  ]
+}

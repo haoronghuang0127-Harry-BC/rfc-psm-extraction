@@ -1,0 +1,16 @@
+[
+  "<json>\n{\"states\": [], \"transitions\": []}\n</json>",
+  "<json>\n{\"states\": [], \"transitions\": []}\n</json>",
+  "<json>\n{\"states\": [\"Transit Mode\", \"Reading Mode\"], \"transitions\": [{\"from\": \"Transit Mode\", \"event\": \"MODE READER command\", \"action\": \"advertise READER capability; cease advertising MODE-READER capability\", \"to\": \"Reading Mode\"}]}\n</json>",
+  "<json>\n{\"states\": [], \"transitions\": []}\n</json>",
+  "<json>\n{\"states\": [\"Initial Connection\", \"Reader Mode\"], \"transitions\": [{\"from\": \"Initial Connection\", \"event\": \"\", \"action\": \"200 Service available, posting allowed\", \"to\": \"Initial Connection\"}, {\"from\": \"Initial Connection\", \"event\": \"\", \"action\": \"201 Service available, posting prohibited\", \"to\": \"Initial Connection\"}, {\"from\": \"Initial Connection\", \"event\": \"\", \"action\": \"400 Service temporarily unavailable\", \"to\": \"Terminated\"}, {\"from\": \"Initial Connection\", \"event\": \"\", \"action\": \"502 Service permanently unavailable\", \"to\": \"Terminated\"}, {\"from\": \"Initial Connection\", \"event\": \"MODE READER\", \"action\": \"200 Posting allowed\", \"to\": \"Reader Mode\"}, {\"from\": \"Initial Connection\", \"event\": \"MODE READER\", \"action\": \"201 Posting prohibited\", \"to\": \"Reader Mode\"}, {\"from\": \"Initial Connection\", \"event\": \"MODE READER\", \"action\": \"502 Reading service permanently unavailable\", \"to\": \"Terminated\"}, {\"from\": \"Reader Mode\", \"event\": \"MODE READER\", \"action\": \"200 Posting allowed\", \"to\": \"Reader Mode\"}, {\"from\": \"Reader Mode\", \"event\": \"MODE READER\", \"action\": \"201 Posting prohibited\", \"to\": \"Reader Mode\"}, {\"from\": \"Reader Mode\", \"event\": \"MODE READER\", \"action\": \"502 Reading service permanently unavailable\", \"to\": \"Terminated\"}, {\"from\": \"Initial Connection\", \"event\": \"QUIT\", \"action\": \"205 Connection closing\", \"to\": \"Terminated\"}, {\"from\": \"Reader Mode\", \"event\": \"QUIT\", \"action\": \"205 Connection closing\", \"to\": \"Terminated\"}]}\n</json>",
+  "<json>\n{\n  \"states\": [],\n  \"transitions\": []\n}\n</json>",
+  "<json>\n{\"states\": [], \"transitions\": []}\n</json>",
+  "<json>\n{\"states\": [], \"transitions\": []}\n</json>",
+  "<json>\n{\"states\": [], \"transitions\": []}\n</json>",
+  "<json>\n{\"states\": [], \"transitions\": []}\n</json>",
+  "<json>\n{\"states\": [], \"transitions\": []}\n</json>",
+  "<json>\n{\"states\": [], \"transitions\": []}\n</json>",
+  "<json>\n{\"states\": [], \"transitions\": []}\n</json>",
+  "<json>\n{\"states\": [], \"transitions\": []}\n</json>"
+]

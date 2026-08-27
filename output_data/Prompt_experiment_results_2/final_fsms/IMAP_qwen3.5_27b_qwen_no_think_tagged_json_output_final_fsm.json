@@ -1,0 +1,220 @@
+{
+  "states": [
+    "Connection",
+    "Session",
+    "Not Authenticated",
+    "Authenticated",
+    "Selected",
+    "Logout",
+    "No Command in Progress",
+    "not authenticated state",
+    "authenticated state",
+    "selected state"
+  ],
+  "transitions": [
+    {
+      "from": "",
+      "event": "initial establishment of the network connection",
+      "action": "",
+      "to": "Connection"
+    },
+    {
+      "from": "Connection",
+      "event": "SELECT or EXAMINE command",
+      "action": "",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "SELECT or EXAMINE of another mailbox, CLOSE command, UNSELECT command, or connection termination",
+      "action": "",
+      "to": ""
+    },
+    {
+      "from": "connection established",
+      "event": "server greeting (OK)",
+      "action": "",
+      "to": "Not Authenticated"
+    },
+    {
+      "from": "connection established",
+      "event": "server greeting (PREAUTH)",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "connection established",
+      "event": "server greeting (BYE)",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "successful LOGIN or AUTHENTICATE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Authenticated",
+      "event": "successful SELECT or EXAMINE command",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "CLOSE or UNSELECT command, unsolicited CLOSED response code, or failed SELECT or EXAMINE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Selected",
+      "event": "CLOSE or UNSELECT command, unsolicited CLOSED response code, or failed SELECT or EXAMINE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Authenticated",
+      "event": "inactivity autologout timer expiration",
+      "action": "",
+      "to": ""
+    },
+    {
+      "from": "Authenticated",
+      "event": "receipt of any command",
+      "action": "reset the autologout timer",
+      "to": "Authenticated"
+    },
+    {
+      "from": "No Command in Progress",
+      "event": "server sends untagged response (except EXPUNGE)",
+      "action": "",
+      "to": "No Command in Progress"
+    },
+    {
+      "from": "not authenticated state",
+      "event": "AUTHENTICATE",
+      "action": "OK - authenticate completed",
+      "to": "authenticated state"
+    },
+    {
+      "from": "not authenticated state",
+      "event": "LOGIN",
+      "action": "OK - login completed",
+      "to": "authenticated state"
+    },
+    {
+      "from": "authenticated state",
+      "event": "SELECT",
+      "action": "OK - select completed",
+      "to": "selected state"
+    },
+    {
+      "from": "authenticated state",
+      "event": "EXAMINE",
+      "action": "OK - examine completed",
+      "to": "selected state"
+    },
+    {
+      "from": "selected state",
+      "event": "CLOSE",
+      "action": "OK - close completed",
+      "to": "authenticated state"
+    },
+    {
+      "from": "selected state",
+      "event": "UNSELECT",
+      "action": "OK - unselect completed",
+      "to": "authenticated state"
+    },
+    {
+      "from": "selected state",
+      "event": "SELECT",
+      "action": "OK - select completed",
+      "to": "selected state"
+    },
+    {
+      "from": "selected state",
+      "event": "EXAMINE",
+      "action": "OK - examine completed",
+      "to": "selected state"
+    },
+    {
+      "from": "selected state",
+      "event": "new messages found",
+      "action": "send untagged EXISTS response",
+      "to": "selected state"
+    },
+    {
+      "from": "selected state",
+      "event": "another agent changes message flags or expunges messages",
+      "action": "send unilateral untagged FETCH and EXPUNGE responses",
+      "to": "selected state"
+    },
+    {
+      "from": "authenticated state",
+      "event": "connection startup with PREAUTH response",
+      "action": "move connection directly to authenticated state",
+      "to": "authenticated state"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "login",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "authenticate",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "STARTTLS",
+      "action": "",
+      "to": "Not Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "select",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "examine",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "CLOSE",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "UNSELECT",
+      "action": "",
+      "to": "Authenticated"
+    }
+  ]
+}

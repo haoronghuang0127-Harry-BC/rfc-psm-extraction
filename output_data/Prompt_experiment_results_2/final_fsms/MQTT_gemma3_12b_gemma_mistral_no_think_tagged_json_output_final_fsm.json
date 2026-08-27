@@ -1,0 +1,313 @@
+{
+  "states": [
+    "CONNECT",
+    "CONNACK",
+    "AUTH",
+    "PUBLISH",
+    "PUBACK",
+    "PUBREC",
+    "SUBSCRIBE",
+    "SUBACK",
+    "PINGREQ",
+    "PINGRESP",
+    "DISCONNECT",
+    "Client Token Request to the Authorization Server (AS)",
+    "Client Connection Request to the Broker (C)",
+    "TLS:Anon,MQTT:None",
+    "TLS:Anon,MQTT:ace",
+    "TLS:Known(RPK/PSK),MQTT:none",
+    "TLS:Known(RPK/PSK),MQTT:ace",
+    "Client Authentication over MQTT",
+    "Proof of Possession Using a Challenge from the TLS Session",
+    "Proof of Possession via Broker-generated Challenge/Response",
+    "Broker Token Validation",
+    "Receiving PUBLISH Packet",
+    "Receiving SUBSCRIBE Packet",
+    "Forwarding PUBLISH Packets",
+    "Authorizing SUBSCRIBE Packets",
+    "Connected",
+    "Reauthenticating",
+    "Disconnected",
+    "Session Present",
+    "Session Not Present",
+    "mqtt_tls",
+    "AIF",
+    "Token Validation",
+    "Session Expiry Interval",
+    "Broker",
+    "Initial State",
+    "Connected State"
+  ],
+  "transitions": [
+    {
+      "from": "CONNECT",
+      "event": "",
+      "action": "",
+      "to": "CONNACK"
+    },
+    {
+      "from": "CONNACK",
+      "event": "",
+      "action": "",
+      "to": "AUTH"
+    },
+    {
+      "from": "AUTH",
+      "event": "",
+      "action": "",
+      "to": "PUBLISH"
+    },
+    {
+      "from": "PUBLISH",
+      "event": "",
+      "action": "",
+      "to": "PUBACK"
+    },
+    {
+      "from": "PUBLISH",
+      "event": "",
+      "action": "",
+      "to": "PUBREC"
+    },
+    {
+      "from": "PUBLISH",
+      "event": "",
+      "action": "",
+      "to": "SUBSCRIBE"
+    },
+    {
+      "from": "SUBSCRIBE",
+      "event": "",
+      "action": "",
+      "to": "SUBACK"
+    },
+    {
+      "from": "PINGREQ",
+      "event": "",
+      "action": "",
+      "to": "PINGRESP"
+    },
+    {
+      "from": "DISCONNECT",
+      "event": "",
+      "action": "",
+      "to": ""
+    },
+    {
+      "from": "Client Token Request to the Authorization Server (AS)",
+      "event": "Token request",
+      "action": "The Client requests an access token from the AS",
+      "to": "Client Connection Request to the Broker (C)"
+    },
+    {
+      "from": "Client Connection Request to the Broker (C)",
+      "event": "Connection request",
+      "action": "The Client requests an access token from the AS",
+      "to": "TLS:Anon,MQTT:None"
+    },
+    {
+      "from": "Client Connection Request to the Broker (C)",
+      "event": "Connection request",
+      "action": "The token is transported inside the CONNECT packet",
+      "to": "TLS:Anon,MQTT:ace"
+    },
+    {
+      "from": "Client Connection Request to the Broker (C)",
+      "event": "Connection request",
+      "action": "The Client and the Broker MUST perform mutual authentication",
+      "to": "TLS:Known(RPK/PSK),MQTT:none"
+    },
+    {
+      "from": "Client Connection Request to the Broker (C)",
+      "event": "Connection request",
+      "action": "The token transported in the CONNECT packet and overwrites any permissions",
+      "to": "TLS:Known(RPK/PSK),MQTT:ace"
+    },
+    {
+      "from": "TLS:Anon,MQTT:None",
+      "event": "",
+      "action": "The Client connects to the Broker to publish its token to the authz-info topic",
+      "to": "Client Authentication over MQTT"
+    },
+    {
+      "from": "TLS:Anon,MQTT:ace",
+      "event": "",
+      "action": "The token is transported inside the CONNECT packet",
+      "to": "Client Authentication over MQTT"
+    },
+    {
+      "from": "Client Authentication over MQTT",
+      "event": "Authentication Data",
+      "action": "The Broker responds with a CONNACK packet",
+      "to": "Proof of Possession Using a Challenge from the TLS Session"
+    },
+    {
+      "from": "Client Authentication over MQTT",
+      "event": "Authentication Data",
+      "action": "The Broker responds with an AUTH packet",
+      "to": "Proof of Possession via Broker-generated Challenge/Response"
+    },
+    {
+      "from": "Proof of Possession Using a Challenge from the TLS Session",
+      "event": "",
+      "action": "The Broker validates the token",
+      "to": "Broker Token Validation"
+    },
+    {
+      "from": "Proof of Possession via Broker-generated Challenge/Response",
+      "event": "",
+      "action": "The Broker validates the token",
+      "to": "Broker Token Validation"
+    },
+    {
+      "from": "Receiving PUBLISH Packet",
+      "event": "PUBLISH packet",
+      "action": "match against scope array items; publish message to valid subscribers; return error if QoS >= 1; respond with PUBACK/PUBREC 0x87; MAY reauthenticate; send DISCONNECT 0x87 for QoS 0; MAY return 0x80",
+      "to": "Receiving PUBLISH Packet"
+    },
+    {
+      "from": "Receiving PUBLISH Packet",
+      "event": "",
+      "action": "publish the message to all valid subscribers",
+      "to": "Forwarding PUBLISH Packets"
+    },
+    {
+      "from": "Forwarding PUBLISH Packets",
+      "event": "",
+      "action": "MUST NOT forward messages to unauthorized subscribers; close Network Connection; SHOULD send DISCONNECT 0x87",
+      "to": "Receiving PUBLISH Packet"
+    },
+    {
+      "from": "Receiving SUBSCRIBE Packet",
+      "event": "SUBSCRIBE packet",
+      "action": "match against scope field; issue SUBACK; return code 0x87 for failure; MAY return 0x80",
+      "to": "Authorizing SUBSCRIBE Packets"
+    },
+    {
+      "from": "Authorizing SUBSCRIBE Packets",
+      "event": "",
+      "action": "return codes for each Topic Filter",
+      "to": "Receiving SUBSCRIBE Packet"
+    },
+    {
+      "from": "Connected",
+      "event": "CONNECT, PUBLISH, or SUBSCRIBE packet received or sent",
+      "action": "check for token expiration",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "PINGREQ packet received",
+      "action": "SHOULD check for token expiration",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "Token expiration",
+      "action": "send PUBACK, SUBACK, or DISCONNECT with return code 'Not authorized', close Network Connection",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "PUBACK and SUBACK",
+      "action": "MAY reauthenticate",
+      "to": "Reauthenticating"
+    },
+    {
+      "from": "Reauthenticating",
+      "event": "AUTH packet",
+      "action": "accepts reauthentication requests if Client has already submitted a token",
+      "to": "Connected"
+    },
+    {
+      "from": "Reauthenticating",
+      "event": "",
+      "action": "MUST deny the request, send DISCONNECT packet with reason code 0x87 (Not Authorized)",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "Client DISCONNECT",
+      "action": "Broker doesn't store the Session State but MUST keep the retained messages if Session Expiry Interval is 0",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Disconnected",
+      "event": "network errors or server disconnection due to a protocol error",
+      "action": "The Will Message is sent if the Client supplied a Will in the CONNECT packet",
+      "to": "Connected"
+    },
+    {
+      "from": "Disconnected",
+      "event": "CONNECT",
+      "action": "Broker returns CONNACK packet with reason code 0x84 (Unsupported Protocol Version) if it does not support MQTT v3.1.1 Clients",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Disconnected",
+      "event": "CONNECT",
+      "action": "Broker MAY implement interactions for MQTT v3.1.1 Clients",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "Clean flag is set to 1",
+      "action": "Broker sets the Session Present flag in the CONNACK packet to 0",
+      "to": "Session Not Present"
+    },
+    {
+      "from": "Connected",
+      "event": "Clean flag is set to 0",
+      "action": "Broker MUST resume communications with the Client based on the state from the current Session",
+      "to": "Session Present"
+    },
+    {
+      "from": "Connected",
+      "event": "Client-Broker PUBLISH authorization failure",
+      "action": "Broker MUST ignore the PUBLISH packet and disconnect the Client",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "SUBSCRIBE authorization failure",
+      "action": "Broker returns code 0x80 in the SUBACK packet",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "Broker-Client PUBLISH authorization failure",
+      "action": "Broker MUST disconnect the Client",
+      "to": "Disconnected"
+    },
+    {
+      "from": "mqtt_tls",
+      "event": "",
+      "action": "",
+      "to": "AIF"
+    },
+    {
+      "from": "Connected",
+      "event": "access token validation",
+      "action": "cache the token",
+      "to": "Token Validation"
+    },
+    {
+      "from": "Token Validation",
+      "event": "Client's permissions revoked",
+      "action": "may still grant publish/subscribe",
+      "to": "Token Validation"
+    },
+    {
+      "from": "Token Validation",
+      "event": "reasonable cache timeout",
+      "action": "introspect tokens regularly",
+      "to": "Token Validation"
+    },
+    {
+      "from": "Connected",
+      "event": "long Session Expiry Interval",
+      "action": "maintain Client's MQTT Session State",
+      "to": "Session Expiry Interval"
+    }
+  ]
+}

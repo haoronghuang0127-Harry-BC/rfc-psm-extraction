@@ -1,0 +1,178 @@
+{
+  "states": [
+    "Logged Out",
+    "User Name Sent",
+    "Password Sent",
+    "Account Required for Login",
+    "Logged In",
+    "Account Required for Storing Files",
+    "Restart Marker Set",
+    "Rename From Specified",
+    "Connection Establishment",
+    "Login",
+    "Logout",
+    "Transfer parameters",
+    "File action commands",
+    "Informational commands",
+    "Miscellaneous commands",
+    "B",
+    "W",
+    "S",
+    "F",
+    "E",
+    "Control connection established",
+    "User logged in"
+  ],
+  "transitions": [
+    {
+      "from": "Logged Out",
+      "event": "USER",
+      "action": "Reply 331 (User name okay, need password)",
+      "to": "User Name Sent"
+    },
+    {
+      "from": "Logged Out",
+      "event": "USER",
+      "action": "Flush user/password/account info; begin login sequence again",
+      "to": "User Name Sent"
+    },
+    {
+      "from": "User Name Sent",
+      "event": "PASS",
+      "action": "Reply 332 (Need account for login)",
+      "to": "Account Required for Login"
+    },
+    {
+      "from": "User Name Sent",
+      "event": "PASS",
+      "action": "Reply 230 (User logged in, proceed)",
+      "to": "Logged In"
+    },
+    {
+      "from": "Account Required for Login",
+      "event": "ACCT",
+      "action": "Complete login sequence",
+      "to": "Logged In"
+    },
+    {
+      "from": "Logged In",
+      "event": "STOR or APPE",
+      "action": "Reply 332 (Need account for storing files) or 532",
+      "to": "Account Required for Storing Files"
+    },
+    {
+      "from": "Account Required for Storing Files",
+      "event": "ACCT",
+      "action": "Store pending command or proceed with transfer",
+      "to": "Logged In"
+    },
+    {
+      "from": "Logged In",
+      "event": "REST",
+      "action": "Skip to specified data checkpoint; wait for service command",
+      "to": "Restart Marker Set"
+    },
+    {
+      "from": "Restart Marker Set",
+      "event": "STOR or RETR",
+      "action": "Resume file transfer from marker",
+      "to": "Logged In"
+    },
+    {
+      "from": "Logged In",
+      "event": "RNFR",
+      "action": "Specify old pathname; wait for RNTO",
+      "to": "Rename From Specified"
+    },
+    {
+      "from": "Rename From Specified",
+      "event": "RNTO",
+      "action": "Rename file to new pathname",
+      "to": "Logged In"
+    },
+    {
+      "from": "Logged Out",
+      "event": "REIN",
+      "action": "Reset parameters to default; control connection remains open",
+      "to": "Logged Out"
+    },
+    {
+      "from": "Logged In",
+      "event": "QUIT",
+      "action": "Terminate USER; close control connection if no transfer in progress",
+      "to": "Logged Out"
+    },
+    {
+      "from": "B",
+      "event": "cmd",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "2",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "4,5",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "W",
+      "event": "1,3",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "W",
+      "event": "1",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "3",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "Control connection established",
+      "event": "USER Doe",
+      "action": "331 User name ok, need password",
+      "to": "Control connection established"
+    },
+    {
+      "from": "Control connection established",
+      "event": "PASS mumble",
+      "action": "230 User logged in",
+      "to": "User logged in"
+    },
+    {
+      "from": "User logged in",
+      "event": "RETR test.pl1",
+      "action": "150 File status okay; about to open data connection; 226 Closing data connection, file transfer successful",
+      "to": "User logged in"
+    },
+    {
+      "from": "User logged in",
+      "event": "TYPE I",
+      "action": "200 Command OK",
+      "to": "User logged in"
+    },
+    {
+      "from": "User logged in",
+      "event": "STOR >udd>cn>fd",
+      "action": "550 Access denied",
+      "to": "User logged in"
+    },
+    {
+      "from": "User logged in",
+      "event": "QUIT",
+      "action": "Server closes all connections",
+      "to": "Control connection established"
+    }
+  ]
+}

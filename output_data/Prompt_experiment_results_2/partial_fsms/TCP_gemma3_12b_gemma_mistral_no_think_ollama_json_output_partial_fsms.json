@@ -1,0 +1,12 @@
+[
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [\"LISTEN\", \"SYN-SENT\", \"SYN-RECEIVED\", \"ESTABLISHED\", \"FIN-WAIT-1\", \"FIN-WAIT-2\", \"CLOSE-WAIT\", \"CLOSING\", \"LAST-ACK\", \"TIME-WAIT\", \"CLOSED\"], \"transitions\": [\n    {\n      \"from\": \"CLOSED\",\n      \"event\": \"OPEN\",\n      \"action\": \"Create a new transmission control block (TCB) to hold connection state information.\",\n      \"to\": \"LISTEN\"\n    },\n    {\n      \"from\": \"LISTEN\",\n      \"event\": \"SYN\",\n      \"action\": \"Set RCV.NXT to SEG.SEQ+1, IRS is set to SEG.SEQ.\",\n      \"to\": \"SYN-RECEIVED\"\n    },\n    {\n      \"from\": \"SYN-SENT\",\n      \"event\": \"ACK\",\n      \"action\": \"Enter ESTABLISHED state\",\n      \"to\": \"ESTABLISHED\"\n    },\n    {\n      \"from\": \"SYN-RECEIVED\",\n      \"event\": \"SYN\",\n      \"action\": \"Enter ESTABLISHED state\",\n      \"to\": \"ESTABLISHED\"\n    },\n    {\n      \"from\": \"ESTABLISHED\",\n      \"event\": \"CLOSE\",\n      \"action\": \"Queue this until all preceding SENDs have been segmentized; then send a FIN segment, enter FIN-WAIT-1 state.\",\n      \"to\": \"FIN-WAIT-1\"\n    },\n    {\n      \"from\": \"FIN-WAIT-1\",\n      \"event\": \"FIN\",\n      \"action\": \"Enter FIN-WAIT-2\",\n      \"to\": \"FIN-WAIT-2\"\n    },\n    {\n      \"from\": \"FIN-WAIT-2\",\n      \"event\": \"ACK\",\n      \"action\": \"Enter TIME-WAIT\",\n      \"to\": \"TIME-WAIT\"\n    },\n    {\n      \"from\": \"CLOSE-WAIT\",\n      \"event\": \"CLOSE\",\n      \"action\": \"Send a FIN segment, enter LAST-ACK state.\",\n      \"to\": \"LAST-ACK\"\n    },\n    {\n      \"from\": \"LAST-ACK\",\n      \"event\": \"ACK\",\n      \"action\": \"Delete the TCB, enter the CLOSED state, and return.\",\n      \"to\": \"CLOSED\"\n    },\n    {\n      \"from\": \"TIME-WAIT\",\n      \"event\": \"Time-WAIT TIMEOUT\",\n      \"action\": \"Delete the TCB, enter the CLOSED state, and return.\",\n      \"to\": \"CLOSED\"\n    }\n  ]\n}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}"
+]

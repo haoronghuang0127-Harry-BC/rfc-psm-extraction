@@ -1,0 +1,163 @@
+{
+  "states": [
+    "client",
+    "server",
+    "CLOSED",
+    "LISTEN",
+    "REQUEST",
+    "RESPOND",
+    "PARTOPEN",
+    "OPEN",
+    "CLOSEREQ",
+    "CLOSING",
+    "TIMEWAIT",
+    "STABLE",
+    "CHANGING",
+    "UNSTABLE",
+    "ECN Capable",
+    "ECN Incapable",
+    "connection setup",
+    "general use",
+    "quiescent"
+  ],
+  "transitions": [
+    {
+      "from": "STABLE",
+      "event": "rcv Change R",
+      "action": "calc new value, snd Confirm L",
+      "to": "CHANGING"
+    },
+    {
+      "from": "STABLE",
+      "event": "rcv Confirm R",
+      "action": "ignore",
+      "to": "STABLE"
+    },
+    {
+      "from": "STABLE",
+      "event": "rcv Change R",
+      "action": "calc new value, snd Confirm L",
+      "to": "CHANGING"
+    },
+    {
+      "from": "CHANGING",
+      "event": "rcv Confirm R",
+      "action": "Set F.value := new value, Set F.state := STABLE",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "rcv Confirm R",
+      "action": "Reset connection and return",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "pref list changes",
+      "action": "transition to UNSTABLE",
+      "to": "UNSTABLE"
+    },
+    {
+      "from": "UNSTABLE",
+      "event": "pref list changes",
+      "action": "transition back to CHANGING",
+      "to": "CHANGING"
+    },
+    {
+      "from": "CLOSED",
+      "event": "",
+      "action": "snd Request",
+      "to": "REQUEST"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv Request",
+      "action": "snd Response",
+      "to": "RESPOND"
+    },
+    {
+      "from": "REQUEST",
+      "event": "rcv Response",
+      "action": "snd Ack",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "rcv packet",
+      "action": "snd Ack",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "rcv Ack/DataAck",
+      "action": "move to OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "rcv CloseReq",
+      "action": "generate Close",
+      "to": "CLOSING"
+    },
+    {
+      "from": "OPEN",
+      "event": "rcv Reset",
+      "action": "Tear down connection",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "rcv Reset",
+      "action": "Tear down connection",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "rcv Close",
+      "action": "generate Reset(Closed)",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "",
+      "action": "Set TIMEWAIT timer",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "connection setup",
+      "event": "Mandatory Change(CCID) options",
+      "action": "send Mandatory Change(CCID) options",
+      "to": "general use"
+    },
+    {
+      "from": "general use",
+      "event": "significant changes in the end-to-end path",
+      "action": "reset congestion state",
+      "to": "quiescent"
+    },
+    {
+      "from": "quiescent",
+      "event": "CCID changes",
+      "action": "reset congestion state",
+      "to": "quiescent"
+    },
+    {
+      "from": "ECN Capable",
+      "event": "Change L(ECN Inapable, 1)",
+      "action": "send option",
+      "to": "ECN Incapable"
+    },
+    {
+      "from": "ECN Incapable",
+      "event": "Confirm R(ECN Incapable, 1)",
+      "action": "transition to ECN Capable",
+      "to": "ECN Capable"
+    }
+  ]
+}

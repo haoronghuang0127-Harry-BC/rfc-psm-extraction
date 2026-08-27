@@ -1,0 +1,380 @@
+{
+  "states": [
+    "CLOSED",
+    "LISTEN",
+    "REQUEST",
+    "RESPOND",
+    "PARTOPEN",
+    "OPEN",
+    "CLOSEREQ",
+    "CLOSING",
+    "TIMEWAIT",
+    "STABLE",
+    "CHANGING",
+    "UNSTABLE",
+    "Received",
+    "Received ECN Marked",
+    "Delivered Corrupt",
+    "Corrupt",
+    "Congestion State",
+    "Bidirectional Connection",
+    "Unidirectional Connection",
+    "Quiescent",
+    "ECN capable",
+    "ECN Incapable",
+    "Packet Arrival",
+    "Sending Acknowledgements",
+    "Clearing State",
+    "Processing Acknowledgements"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "DCCP-Request",
+      "action": "",
+      "to": "REQUEST"
+    },
+    {
+      "from": "CLOSED",
+      "event": "DCCP-Request",
+      "action": "send DCCP-Sync",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSED",
+      "event": "",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "CLOSED",
+      "event": "",
+      "action": "",
+      "to": "REQUEST"
+    },
+    {
+      "from": "LISTEN",
+      "event": "DCCP-Request",
+      "action": "",
+      "to": "RESPOND"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv Request",
+      "action": "snd Response",
+      "to": "RESPOND"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv Request",
+      "action": "Generate Reset(No Connection)",
+      "to": "LISTEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "DCCP-Response",
+      "action": "",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "DCCP-Sync",
+      "action": "send DCCP-Reset",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "DCCP-Reset",
+      "action": "send DCCP-Request",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "rcv Response",
+      "action": "snd Ack",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "rcv Response",
+      "action": "",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "rcv Reset",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "RESPOND",
+      "event": "DCCP-Ack or DCCP-DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "rcv Ack",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "rcv DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "rcv packet",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "DCCP-Data, DCCP-Ack, DCCP-DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "rcv packet",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "rcv Response",
+      "action": "snd Ack",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "rcv Reset",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "OPEN",
+      "event": "DCCP-CloseReq",
+      "action": "",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "OPEN",
+      "event": "DCCP-Close",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "OPEN",
+      "event": "rcv CloseReq",
+      "action": "snd Close",
+      "to": "CLOSING"
+    },
+    {
+      "from": "OPEN",
+      "event": "rcv Close",
+      "action": "snd Reset",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "OPEN",
+      "event": "rcv Close",
+      "action": "snd Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "DCCP-Close",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "rcv Close",
+      "action": "snd Reset",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "DCCP-Reset",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "DCCP-Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "rcv Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "2MSL timer expires",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "STABLE",
+      "event": "rcv Change R",
+      "action": "calc new value, snd Confirm L",
+      "to": "CHANGING"
+    },
+    {
+      "from": "STABLE",
+      "event": "rcv Confirm R",
+      "action": "ignore",
+      "to": "STABLE"
+    },
+    {
+      "from": "STABLE",
+      "event": "app/protocol evt",
+      "action": "snd Change L",
+      "to": "CHANGING"
+    },
+    {
+      "from": "STABLE",
+      "event": "rcv non-ack",
+      "action": "snd Change L",
+      "to": "CHANGING"
+    },
+    {
+      "from": "CHANGING",
+      "event": "rcv Confirm R",
+      "action": "accept value, snd Confirm L",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "rcv empty Confirm R",
+      "action": "revert to old value",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "pref list changes",
+      "action": "",
+      "to": "UNSTABLE"
+    },
+    {
+      "from": "UNSTABLE",
+      "event": "snd Change L",
+      "action": "",
+      "to": "CHANGING"
+    },
+    {
+      "from": "UNSTABLE",
+      "event": "rcv Confirm/Change R",
+      "action": "ignore",
+      "to": "UNSTABLE"
+    },
+    {
+      "from": "Received",
+      "event": "",
+      "action": "report the packet as delivered corrupt using a Data Dropped option (Drop Code 7, Delivered Corrupt)",
+      "to": "Delivered Corrupt"
+    },
+    {
+      "from": "Received",
+      "event": "",
+      "action": "drop the application data and report that data as dropped due to corruption using a Data Dropped option (Drop Code 3, Corrupt)",
+      "to": "Corrupt"
+    },
+    {
+      "from": "Received ECN Marked",
+      "event": "",
+      "action": "report the packet as delivered corrupt using a Data Dropped option (Drop Code 7, Delivered Corrupt)",
+      "to": "Delivered Corrupt"
+    },
+    {
+      "from": "Received ECN Marked",
+      "event": "",
+      "action": "drop the application data and report that data as dropped due to corruption using a Data Dropped option (Drop Code 3, Corrupt)",
+      "to": "Corrupt"
+    },
+    {
+      "from": "Congestion State",
+      "event": "significant changes in the end-to-end path",
+      "action": "reset congestion state",
+      "to": "Congestion State"
+    },
+    {
+      "from": "Congestion State",
+      "event": "CCID changes",
+      "action": "reset congestion state",
+      "to": "Congestion State"
+    },
+    {
+      "from": "Bidirectional Connection",
+      "event": "DCCP B goes quiescent",
+      "action": "DCCP A switches its ack pattern from bidirectional to unidirectional",
+      "to": "Unidirectional Connection"
+    },
+    {
+      "from": "Unidirectional Connection",
+      "event": "DCCP B sends DCCP-Data or DCCP-DataAck packet",
+      "action": "DCCP A switches its ack pattern from unidirectional to bidirectional",
+      "to": "Bidirectional Connection"
+    },
+    {
+      "from": "Bidirectional Connection",
+      "event": "DCCP B stops sending data and sends only DCCP-Ack packets",
+      "action": "",
+      "to": "Quiescent"
+    },
+    {
+      "from": "ECN capable",
+      "event": "Change L(ECN Incapable, 1)",
+      "action": "send \"Confirm R(ECN Incapable, 1)\"",
+      "to": "ECN Incapable"
+    },
+    {
+      "from": "ECN Incapable",
+      "event": "Confirm R(ECN Incapable, 1)",
+      "action": "",
+      "to": "ECN Incapable"
+    },
+    {
+      "from": "Packet Arrival",
+      "event": "New Packets",
+      "action": "Update buf_head, buf_ackno, buf_nonce, and buffer",
+      "to": "Packet Arrival"
+    },
+    {
+      "from": "Packet Arrival",
+      "event": "Old Packets",
+      "action": "Scan table for byte corresponding to S, update state if necessary",
+      "to": "Packet Arrival"
+    },
+    {
+      "from": "Sending Acknowledgements",
+      "event": "Generate an acknowledgement",
+      "action": "Copy buffer contents into one or more Ack Vector options",
+      "to": "Sending Acknowledgements"
+    },
+    {
+      "from": "Clearing State",
+      "event": "Receive acknowledgement from HC-Sender",
+      "action": "Adjust buf_tail, flip buf_nonce, throw away old acknowledgement records",
+      "to": "Clearing State"
+    },
+    {
+      "from": "Processing Acknowledgements",
+      "event": "Receive acknowledgement",
+      "action": "Read off the Ack Vector, check ECN Nonce, acknowledge HC-Receiver's acknowledgements",
+      "to": "Processing Acknowledgements"
+    }
+  ]
+}

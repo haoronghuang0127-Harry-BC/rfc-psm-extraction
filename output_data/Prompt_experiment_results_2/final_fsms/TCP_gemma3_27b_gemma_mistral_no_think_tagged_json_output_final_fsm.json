@@ -1,0 +1,186 @@
+{
+  "states": [
+    "CLOSED",
+    "LISTEN",
+    "SYN-SENT",
+    "SYN-RECEIVED",
+    "ESTABLISHED",
+    "FIN-WAIT-1",
+    "FIN-WAIT-2",
+    "CLOSE-WAIT",
+    "CLOSING",
+    "LAST-ACK",
+    "TIME-WAIT",
+    "TCB"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "OPEN",
+      "action": "create TCB",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "OPEN",
+      "action": "create TCB, send SYN segment",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "SYN",
+      "action": "set RCV.NXT, IRS, enter SYN-RECEIVED",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "ACK",
+      "action": "send RST",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "RST",
+      "action": "signal \"connection refused\", delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "SYN",
+      "action": "set RCV.NXT, IRS, send SYN,ACK segment",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "ACK",
+      "action": "enter ESTABLISHED",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "SEND",
+      "action": "segmentize and send",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "RECEIVE",
+      "action": "reassemble and deliver",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "ACK",
+      "action": "enter FIN-WAIT-2",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "ACK",
+      "action": "enter TIME-WAIT",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "SEND",
+      "action": "segmentize and send",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "FIN",
+      "action": "send FIN, enter LAST-ACK",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "CLOSING",
+      "event": "ACK",
+      "action": "enter TIME-WAIT",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "ACK",
+      "action": "delete TCB, enter CLOSED",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "TIMEOUT",
+      "action": "delete TCB, enter CLOSED",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "RST",
+      "action": "ignore",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "ACK",
+      "action": "send RST",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "SYN",
+      "action": "set RCV.NXT, IRS, send SYN,ACK segment",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "",
+      "action": "",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "",
+      "action": "",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "",
+      "action": "",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "",
+      "action": "",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "",
+      "action": "",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "",
+      "action": "",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "",
+      "action": "",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "",
+      "action": "",
+      "to": "TIME-WAIT"
+    }
+  ]
+}

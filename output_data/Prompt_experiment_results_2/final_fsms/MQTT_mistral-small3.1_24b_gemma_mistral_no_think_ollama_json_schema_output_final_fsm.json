@@ -1,0 +1,316 @@
+{
+  "states": [
+    "Connected",
+    "Disconnected",
+    "Client",
+    "Authorization Server",
+    "Broker",
+    "Token Request",
+    "Token Response",
+    "Connection Request",
+    "Connection Response",
+    "Introspection Request",
+    "Introspection Response",
+    "authz-info Topic",
+    "TLS Connection Setup",
+    "MQTT Connection Setup",
+    "Token Validation",
+    "Authorization Success",
+    "Authorization Failure",
+    "Authorized",
+    "Unauthorized",
+    "Session State",
+    "Retained Messages",
+    "Will Message",
+    "Session Present",
+    "New Session",
+    "Authorization Error",
+    "Tokenless CONNECT",
+    "Session",
+    "Token Cached",
+    "Token Not Cached",
+    "Permissions Revoked",
+    "Token Introspection",
+    "Client Behavior Monitored",
+    "Session Expiry Interval",
+    "Session State Stored Indefinitely"
+  ],
+  "transitions": [
+    {
+      "from": "Disconnected",
+      "event": "CONNECT",
+      "action": "CONNACK",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "DISCONNECT",
+      "action": "",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Client",
+      "event": "Token request",
+      "action": "Client sends token request to Authorization Server",
+      "to": "Token Request"
+    },
+    {
+      "from": "Authorization Server",
+      "event": "Token request",
+      "action": "Authorization Server verifies token request",
+      "to": "Token Response"
+    },
+    {
+      "from": "Authorization Server",
+      "event": "Token Response",
+      "action": "Authorization Server sends access token to Client",
+      "to": "Client"
+    },
+    {
+      "from": "Client",
+      "event": "Connection request",
+      "action": "Client sends connection request with access token to Broker",
+      "to": "Connection Request"
+    },
+    {
+      "from": "Broker",
+      "event": "Connection request",
+      "action": "Broker verifies access token",
+      "to": "Token Validation"
+    },
+    {
+      "from": "Broker",
+      "event": "Token Validation",
+      "action": "Broker validates token",
+      "to": "Connection Response"
+    },
+    {
+      "from": "Broker",
+      "event": "Connection Response",
+      "action": "Broker sends connection response to Client",
+      "to": "Client"
+    },
+    {
+      "from": "Client",
+      "event": "Publish token to authz-info",
+      "action": "Client publishes token to authz-info topic",
+      "to": "authz-info Topic"
+    },
+    {
+      "from": "Broker",
+      "event": "Publish token to authz-info",
+      "action": "Broker stores and indexes token",
+      "to": "authz-info Topic"
+    },
+    {
+      "from": "Broker",
+      "event": "Introspection request",
+      "action": "Broker sends introspection request to Authorization Server",
+      "to": "Introspection Request"
+    },
+    {
+      "from": "Authorization Server",
+      "event": "Introspection request",
+      "action": "Authorization Server responds with introspection response",
+      "to": "Introspection Response"
+    },
+    {
+      "from": "Broker",
+      "event": "Introspection response",
+      "action": "Broker verifies introspection response",
+      "to": "Token Validation"
+    },
+    {
+      "from": "Broker",
+      "event": "Token Validation",
+      "action": "Broker validates token",
+      "to": "Authorization Success"
+    },
+    {
+      "from": "Broker",
+      "event": "Token Validation",
+      "action": "Broker discards invalid token",
+      "to": "Authorization Failure"
+    },
+    {
+      "from": "Client",
+      "event": "TLS Connection Setup",
+      "action": "Client and Broker perform TLS handshake",
+      "to": "TLS Connection Setup"
+    },
+    {
+      "from": "Client",
+      "event": "MQTT Connection Setup",
+      "action": "Client and Broker perform MQTT handshake",
+      "to": "MQTT Connection Setup"
+    },
+    {
+      "from": "Authorized",
+      "event": "PUBLISH packet with QoS >= 1",
+      "action": "return PUBACK or PUBREC packet with reason code 0x87 (Not authorized)",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Authorized",
+      "event": "PUBLISH packet with QoS 0",
+      "action": "send DISCONNECT packet with reason code 0x87 (Not authorized) and close Network Connection",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Authorized",
+      "event": "PUBLISH packet",
+      "action": "publish the message to all valid subscribers of the topic",
+      "to": "Authorized"
+    },
+    {
+      "from": "Authorized",
+      "event": "SUBSCRIBE packet",
+      "action": "issue SUBACK packet with return code 0x87 (Not authorized) for unauthorized Topic Filters",
+      "to": "Authorized"
+    },
+    {
+      "from": "Unauthorized",
+      "event": "PUBLISH packet",
+      "action": "return PUBACK or PUBREC packet with reason code 0x87 (Not authorized) or send DISCONNECT packet with reason code 0x87 (Not authorized) and close Network Connection",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Unauthorized",
+      "event": "SUBSCRIBE packet",
+      "action": "issue SUBACK packet with return code 0x87 (Not authorized) for unauthorized Topic Filters",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Authorized",
+      "event": "token expiration",
+      "action": "send PUBACK, SUBACK, or DISCONNECT with 'Not authorized'",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Unauthorized",
+      "event": "AUTH packet with reason code 0x19 (Reauthentication)",
+      "action": "send DISCONNECT with reason code 0x87 (Not Authorized)",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Session State",
+      "event": "Client DISCONNECT",
+      "action": "Broker keeps retained messages",
+      "to": "Retained Messages"
+    },
+    {
+      "from": "Session State",
+      "event": "Client DISCONNECT",
+      "action": "Broker discards Session State",
+      "to": "Retained Messages"
+    },
+    {
+      "from": "Session State",
+      "event": "Client DISCONNECT",
+      "action": "Broker stores Session State",
+      "to": "Session State"
+    },
+    {
+      "from": "Session State",
+      "event": "Session Expiry Interval expires",
+      "action": "Broker discards Session State",
+      "to": "Retained Messages"
+    },
+    {
+      "from": "Session State",
+      "event": "disconnections due to network errors or server disconnection due to a protocol error",
+      "action": "Broker publishes Will Message",
+      "to": "Will Message"
+    },
+    {
+      "from": "Disconnected",
+      "event": "CONNECT without a token",
+      "action": "fail",
+      "to": "Tokenless CONNECT"
+    },
+    {
+      "from": "Tokenless CONNECT",
+      "event": "",
+      "action": "disconnect",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Disconnected",
+      "event": "CONNECT with a token",
+      "action": "establish connection",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "Clean flag set to 1",
+      "action": "start a new Session",
+      "to": "New Session"
+    },
+    {
+      "from": "Connected",
+      "event": "Clean flag set to 0",
+      "action": "resume communications based on the state from the current Session",
+      "to": "Session Present"
+    },
+    {
+      "from": "Connected",
+      "event": "Client-Broker PUBLISH authorization failure",
+      "action": "ignore the PUBLISH packet and disconnect the Client",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "SUBSCRIBE authorization failure",
+      "action": "return code 0x80, indicating failure for the unauthorized topic(s)",
+      "to": "Authorization Error"
+    },
+    {
+      "from": "Connected",
+      "event": "Broker-Client PUBLISH authorization failure",
+      "action": "disconnect the Client",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Session",
+      "event": "Broker validates an access token and accepts a connection from a client",
+      "action": "Broker caches the token",
+      "to": "Token Cached"
+    },
+    {
+      "from": "Session",
+      "event": "Broker cannot validate an access token",
+      "action": "",
+      "to": "Token Not Cached"
+    },
+    {
+      "from": "Token Cached",
+      "event": "Client's permissions get revoked",
+      "action": "Broker may still grant publish/subscribe to revoked topics",
+      "to": "Permissions Revoked"
+    },
+    {
+      "from": "Token Cached",
+      "event": "Broker caches the token introspection responses",
+      "action": "Broker SHOULD use a reasonable cache timeout to introspect tokens regularly",
+      "to": "Token Introspection"
+    },
+    {
+      "from": "Session",
+      "event": "Broker monitors Client behavior",
+      "action": "Broker detects potential security problems",
+      "to": "Client Behavior Monitored"
+    },
+    {
+      "from": "Session",
+      "event": "Client connects with a long Session Expiry Interval",
+      "action": "Broker may need to maintain the Client's MQTT Session State",
+      "to": "Session Expiry Interval"
+    },
+    {
+      "from": "Session",
+      "event": "Client connects without a Session Expiry Interval feature",
+      "action": "Broker may need to store the Session State indefinitely",
+      "to": "Session State Stored Indefinitely"
+    }
+  ]
+}

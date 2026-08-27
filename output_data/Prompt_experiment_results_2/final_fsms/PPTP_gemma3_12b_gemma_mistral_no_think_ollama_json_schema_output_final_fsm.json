@@ -1,0 +1,141 @@
+{
+  "states": [
+    "PAC",
+    "PNS",
+    "Control Connection Established",
+    "Tunnel Established",
+    "idle",
+    "wait_ctl_reply",
+    "established",
+    "wait_stop_reply",
+    "wait_connect"
+  ],
+  "transitions": [
+    {
+      "from": "PAC",
+      "event": "Outgoing-Call-Request",
+      "action": "request outbound calls",
+      "to": "PNS"
+    },
+    {
+      "from": "PNS",
+      "event": "Incoming-Call-Request",
+      "action": "respond to inbound requests",
+      "to": "PAC"
+    },
+    {
+      "from": "PAC",
+      "event": "Start-Control-Connection-Request",
+      "action": "exchange information about basic operating capabilities",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "PNS",
+      "event": "Start-Control-Connection-Reply",
+      "action": "exchange information about basic operating capabilities",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "Control Connection Established",
+      "event": "WAN-Error-Notify",
+      "action": "report connectivity failures",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "Control Connection Established",
+      "event": "Echo-Request",
+      "action": "ensure connectivity",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "Control Connection Established",
+      "event": "Echo-Reply",
+      "action": "ensure connectivity",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "Control Connection Established",
+      "event": "Set-Link-Info",
+      "action": "communicate changes in operating characteristics",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "Control Connection Established",
+      "event": "Call-Clear-Request",
+      "action": "release sessions",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "Control Connection Established",
+      "event": "Call-Disconnect-Notify",
+      "action": "release sessions",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "Control Connection Established",
+      "event": "Establish Tunnel",
+      "action": "carry PPP datagrams",
+      "to": "Tunnel Established"
+    },
+    {
+      "from": "idle",
+      "event": "TCP Open Indication",
+      "action": "Send Start Control Connection Request",
+      "to": "wait_ctl_reply"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Receive Start Ctl Connection Reply",
+      "action": "Version OK",
+      "to": "established"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Receive Start Ctl Connection Reply",
+      "action": "Version Not OK",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "established",
+      "event": "Receive Stop Control Connection Request",
+      "action": "Send Stop Control Request",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "established",
+      "event": "Local Terminate",
+      "action": "Send Stop Control Request",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "wait_stop_reply",
+      "event": "Receive Stop Control Connection Reply",
+      "action": "Close TCP",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Start Control Connection Request",
+      "action": "Version Not OK/Send Start Control Connection Reply",
+      "to": "established"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Start Control Connection Request",
+      "action": "Version OK",
+      "to": "established"
+    },
+    {
+      "from": "wait_connect",
+      "event": "Receive Incoming Call Connect",
+      "action": "Send Outgoing Call Reply",
+      "to": "established"
+    },
+    {
+      "from": "established",
+      "event": "Receive Call Disconnect Notify",
+      "action": "Close TCP",
+      "to": "idle"
+    }
+  ]
+}

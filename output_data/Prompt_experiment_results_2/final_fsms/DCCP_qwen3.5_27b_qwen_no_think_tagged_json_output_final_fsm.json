@@ -1,0 +1,334 @@
+{
+  "states": [
+    "CLOSED",
+    "LISTEN",
+    "REQUEST",
+    "RESPOND",
+    "PARTOPEN",
+    "OPEN",
+    "CLOSEREQ",
+    "CLOSING",
+    "TIMEWAIT",
+    "STABLE",
+    "CHANGING",
+    "UNSTABLE",
+    "CCID 2",
+    "CCID 3",
+    "Slow start",
+    "Bidirectional",
+    "Unidirectional",
+    "ECN Incapable",
+    "Connection Closed",
+    "packet received",
+    "packet ECN marked",
+    "packet not yet received"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "send DCCP-Request",
+      "action": "",
+      "to": "REQUEST"
+    },
+    {
+      "from": "LISTEN",
+      "event": "receive DCCP-Request",
+      "action": "send DCCP-Response",
+      "to": "RESPOND"
+    },
+    {
+      "from": "REQUEST",
+      "event": "receive DCCP-Response",
+      "action": "",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "send DCCP-Ack or DCCP-DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "receive DCCP-Ack or DCCP-DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "send DCCP-CloseReq",
+      "action": "",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "OPEN",
+      "event": "send DCCP-Close",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "receive DCCP-Close",
+      "action": "send DCCP-Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "receive DCCP-Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "2MSL timeout",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "STABLE",
+      "event": "snd Change L",
+      "action": "",
+      "to": "CHANGING"
+    },
+    {
+      "from": "STABLE",
+      "event": "rcv Confirm R",
+      "action": "ignore",
+      "to": "STABLE"
+    },
+    {
+      "from": "STABLE",
+      "event": "rcv Change R",
+      "action": "calc new value, snd Confirm L",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "rcv Confirm R",
+      "action": "accept value",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "rcv empty Confirm R",
+      "action": "revert to old value",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "timeout/rcv non-ack",
+      "action": "snd Change L",
+      "to": "CHANGING"
+    },
+    {
+      "from": "CHANGING",
+      "event": "pref list changes",
+      "action": "",
+      "to": "UNSTABLE"
+    },
+    {
+      "from": "UNSTABLE",
+      "event": "snd Change L",
+      "action": "",
+      "to": "CHANGING"
+    },
+    {
+      "from": "UNSTABLE",
+      "event": "rcv Confirm/Change R",
+      "action": "ignore",
+      "to": "UNSTABLE"
+    },
+    {
+      "from": "REQUEST",
+      "event": "receive sequence-valid DCCP-Sync",
+      "action": "respond with DCCP-Reset",
+      "to": ""
+    },
+    {
+      "from": "CLOSED",
+      "event": "receive DCCP-Data",
+      "action": "generate DCCP-Sync (challenge)",
+      "to": ""
+    },
+    {
+      "from": "CLOSED",
+      "event": "passive open",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "CLOSED",
+      "event": "active open",
+      "action": "send DCCP-Request",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "receive DCCP-Response",
+      "action": "send DCCP-Ack or DCCP-DataAck",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "receive valid DCCP-Ack",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "timeout (not less than 4MSL)",
+      "action": "send DCCP-Reset with Reset Code 2, Aborted",
+      "to": "CLOSED"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "receive valid packet other than DCCP-Response, DCCP-Reset, or DCCP-Sync",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "timeout (more than 4MSL)",
+      "action": "send DCCP-Reset with Reset Code 2, Aborted",
+      "to": "CLOSED"
+    },
+    {
+      "from": "OPEN",
+      "event": "server decides to close connection",
+      "action": "send DCCP-CloseReq",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "OPEN",
+      "event": "client decides to close connection",
+      "action": "send DCCP-Close",
+      "to": "CLOSING"
+    },
+    {
+      "from": "OPEN",
+      "event": "receive DCCP-CloseReq",
+      "action": "send DCCP-Sync",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "receive DCCP-Close",
+      "action": "send DCCP-Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "REQUEST",
+      "event": "timeout (give up)",
+      "action": "send DCCP-Reset with Reset Code 2, Aborted",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "receive packet in LISTEN state without valid Init Cookie or Request",
+      "action": "send DCCP-Reset with Reset Code 3, No Connection",
+      "to": "LISTEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "receive invalid packet",
+      "action": "send DCCP-Reset with Reset Code 4, Packet Error",
+      "to": "REQUEST"
+    },
+    {
+      "from": "RESPOND",
+      "event": "receive DCCP-Request",
+      "action": "send DCCP-Response",
+      "to": "RESPOND"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "retransmit timer expires",
+      "action": "retransmit DCCP-CloseReq",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "CLOSING",
+      "event": "retransmit timer expires",
+      "action": "retransmit DCCP-Close",
+      "to": "CLOSING"
+    },
+    {
+      "from": "",
+      "event": "New connection start",
+      "action": "Start with CCID 2 for both endpoints",
+      "to": "CCID 2"
+    },
+    {
+      "from": "CCID 2",
+      "event": "Mandatory Change(CCID) option",
+      "action": "Negotiate new CCID",
+      "to": "CCID 3"
+    },
+    {
+      "from": "",
+      "event": "Significant changes in the end-to-end path",
+      "action": "Reset congestion state",
+      "to": "Slow start"
+    },
+    {
+      "from": "",
+      "event": "CCID change negotiation completes successfully",
+      "action": "Reset congestion state",
+      "to": "Slow start"
+    },
+    {
+      "from": "Bidirectional",
+      "event": "DCCP B goes quiescent",
+      "action": "",
+      "to": "Unidirectional"
+    },
+    {
+      "from": "Unidirectional",
+      "event": "receive DCCP-Data or DCCP-DataAck packet from DCCP B",
+      "action": "",
+      "to": "Bidirectional"
+    },
+    {
+      "from": "ECN Incapable",
+      "event": "other endpoint sends Confirm R(ECN Incapable, 1)",
+      "action": "accept data",
+      "to": "ECN Incapable"
+    },
+    {
+      "from": "ECN Incapable",
+      "event": "connection closes",
+      "action": "",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "packet not yet received",
+      "event": "Packet arrival with Sequence Number S <= buf_ackno",
+      "action": "Change byte's state to packet received or packet ECN marked; flip ack_nonce for every acknowledgement with ack_ackno >= S if ECN Nonce is 1 and state becomes packet received",
+      "to": "packet received"
+    },
+    {
+      "from": "packet not yet received",
+      "event": "Packet arrival with Sequence Number S <= buf_ackno",
+      "action": "Change byte's state to packet ECN marked; flip ack_nonce for every acknowledgement with ack_ackno >= S if ECN Nonce is 1 and state becomes packet received (not applicable here as target is ECN marked)",
+      "to": "packet ECN marked"
+    },
+    {
+      "from": "packet not yet received",
+      "event": "Packet arrival with Sequence Number greater than buf_ackno",
+      "action": "Enter intervening packets as State 3 (packet not yet received) if sequence number is not expected; update buf_head, buf_ackno, and possibly buf_nonce",
+      "to": "packet not yet received"
+    },
+    {
+      "from": "packet not yet received",
+      "event": "Packet arrival with Sequence Number greater than buf_ackno",
+      "action": "Update buf_head, buf_ackno, and possibly buf_nonce; increment run length if state matches head",
+      "to": "packet received"
+    },
+    {
+      "from": "packet not yet received",
+      "event": "Packet arrival with Sequence Number greater than buf_ackno",
+      "action": "Update buf_head, buf_ackno, and possibly buf_nonce; increment run length if state matches head",
+      "to": "packet ECN marked"
+    }
+  ]
+}

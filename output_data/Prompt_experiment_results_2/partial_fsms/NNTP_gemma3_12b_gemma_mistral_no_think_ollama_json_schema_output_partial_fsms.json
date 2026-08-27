@@ -1,0 +1,16 @@
+[
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [\"Initial Connection\", \"Session Established\", \"Reader Mode\", \"Transit Mode\"], \"transitions\": [{\"from\": \"Initial Connection\", \"event\": \"\", \"action\": \"200 Service available, posting allowed\", \"to\": \"Session Established\"}, {\"from\": \"Initial Connection\", \"event\": \"\", \"action\": \"201 Service available, posting prohibited\", \"to\": \"Session Established\"}, {\"from\": \"Initial Connection\", \"event\": \"\", \"action\": \"400 Service temporarily unavailable\", \"to\": \"Initial Connection\"}, {\"from\": \"Initial Connection\", \"event\": \"\", \"action\": \"502 Service permanently unavailable\", \"to\": \"Initial Connection\"}, {\"from\": \"Session Established\", \"event\": \"MODE READER\", \"action\": \"200 Posting allowed\", \"to\": \"Reader Mode\"}, {\"from\": \"Session Established\", \"event\": \"MODE READER\", \"action\": \"201 Posting prohibited\", \"to\": \"Reader Mode\"}, {\"from\": \"Session Established\", \"event\": \"QUIT\", \"action\": \"205 Connection closing\", \"to\": \"Initial Connection\"}, {\"from\": \"Reader Mode\", \"event\": \"QUIT\", \"action\": \"205 Connection closing\", \"to\": \"Initial Connection\"}, {\"from\": \"Transit Mode\", \"event\": \"MODE READER\", \"action\": \"502 Transit service only\", \"to\": \"Initial Connection\"}]}",
+  "{\"states\": [\"Invalid\", \"Selected\"], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [\"Overview Database State\"], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}"
+]

@@ -1,0 +1,63 @@
+{
+  "states": [
+    "TLS:Anon,MQTT:None",
+    "TLS:Anon,MQTT:ace",
+    "TLS:Known(RPK/PSK),MQTT:none",
+    "TLS:Known(RPK/PSK),MQTT:ace",
+    "CONNECT with Authentication Data (token only)",
+    "AUTH 0x18 (Continue Authentication) - Broker Challenge",
+    "AUTH 0x18 (Continue Authentication) - Client Response",
+    "CONNACK Success",
+    "CONNACK Not Authorized"
+  ],
+  "transitions": [
+    {
+      "from": "TLS:Anon,MQTT:None",
+      "event": "",
+      "action": "publish token to authz-info topic",
+      "to": "TLS:Known(RPK/PSK),MQTT:none"
+    },
+    {
+      "from": "TLS:Anon,MQTT:ace",
+      "event": "CONNECT with Authentication Data (token only)",
+      "action": "Broker validates token and responds with CONNACK",
+      "to": "CONNACK Success"
+    },
+    {
+      "from": "TLS:Known(RPK/PSK),MQTT:none",
+      "event": "",
+      "action": "initiate TLS handshake with RPK/PSK",
+      "to": "CONNACK Success"
+    },
+    {
+      "from": "TLS:Known(RPK/PSK),MQTT:ace",
+      "event": "",
+      "action": "token overwrites permissions passed during TLS auth",
+      "to": "CONNACK Not Authorized"
+    },
+    {
+      "from": "CONNECT with Authentication Data (token only)",
+      "event": "Broker sends AUTH 0x18",
+      "action": "Broker provides RS nonce challenge",
+      "to": "AUTH 0x18 (Continue Authentication) - Broker Challenge"
+    },
+    {
+      "from": "AUTH 0x18 (Continue Authentication) - Broker Challenge",
+      "event": "Client sends AUTH 0x18",
+      "action": "Client provides Client nonce and signature/MAC",
+      "to": "CONNACK Success"
+    },
+    {
+      "from": "AUTH 0x18 (Continue Authentication) - Broker Challenge",
+      "event": "",
+      "action": "Token validation fails or token not found",
+      "to": "CONNACK Not Authorized"
+    },
+    {
+      "from": "TLS:Anon,MQTT:ace",
+      "event": "Broker does not support profile",
+      "action": "send CONNACK with reason code 0x8C",
+      "to": "CONNACK Not Authorized"
+    }
+  ]
+}

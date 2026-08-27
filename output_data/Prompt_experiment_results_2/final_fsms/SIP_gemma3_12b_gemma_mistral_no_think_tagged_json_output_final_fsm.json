@@ -1,0 +1,364 @@
+{
+  "states": [
+    "User location",
+    "User availability",
+    "User capabilities",
+    "Session setup",
+    "Session management",
+    "Softphone Idle",
+    "Softphone Ringing",
+    "Softphone Established",
+    "Softphone Disconnecting",
+    "client transaction",
+    "server transaction",
+    "client transaction instance",
+    "UAC",
+    "UAS",
+    "registrar",
+    "stateless proxy",
+    "stateful proxy",
+    "transaction layer",
+    "User Agent Client (UAC)",
+    "User Agent Server (UAS)",
+    "Proxy, Proxy Server",
+    "Redirect Server",
+    "Stateful Proxy",
+    "Stateless Proxy",
+    "Request",
+    "Response",
+    "UAC Behavior",
+    "UAS Behavior",
+    "Redirect Servers",
+    "Client waiting for provisional response",
+    "Client has received a final response",
+    "Server processing CANCEL request",
+    "UAS has not sent a final response",
+    "UAS has sent a final response",
+    "UA",
+    "Location Service",
+    "Established dialog",
+    "Not established dialog",
+    "early",
+    "confirmed",
+    "UAC Processing",
+    "UAS Processing",
+    "INVITE client transaction",
+    "early dialog",
+    "Established Dialog and Session",
+    "INVITE Transaction in Progress (Client)",
+    "INVITE Transaction in Progress (Server)",
+    "Timer Active (491 Response)",
+    "Client Transport State",
+    "Server Transport State",
+    "UAC Core State",
+    "UAS Core State",
+    "Dialog State",
+    "Server Transaction State",
+    "Client Transaction State",
+    "Stateless",
+    "Stateful",
+    "calling",
+    "Proceeding",
+    "Completed",
+    "Terminated",
+    "Unauthenticated",
+    "Authenticated",
+    "UAC sending a request containing an S/MIME body",
+    "UAS receiving a request containing an S/MIME CMS body",
+    "UAC receiving a response containing an S/MIME CMS body",
+    "Registered",
+    "Option Tags sub-registry",
+    "Warn-codes sub-registry",
+    "Header Fields sub-registry",
+    "Method and Response-Code sub-registries",
+    "message/sip MIME type registry",
+    "Content-Disposition header registry",
+    "UAC wishing to terminate a call",
+    "Existing call leg (dialog)",
+    "CANCEL and INVITE transactions",
+    "CANCEL and BYE transactions",
+    "forking proxy",
+    "UA authentication",
+    "multicast",
+    "request merging",
+    "initially T1",
+    "64*T1",
+    "> 3min",
+    "> 32s for UDP",
+    "0s for TCP/SCTP",
+    "T4 for UDP",
+    "0s for TCP/SCTP"
+  ],
+  "transitions": [
+    {
+      "from": "Softphone Idle",
+      "event": "INVITE",
+      "action": "Send INVITE request",
+      "to": "Softphone Ringing"
+    },
+    {
+      "from": "Softphone Ringing",
+      "event": "200 OK",
+      "action": "Stop ringback tone, indicate call answered",
+      "to": "Softphone Established"
+    },
+    {
+      "from": "Softphone Established",
+      "event": "BYE",
+      "action": "Send BYE message",
+      "to": "Softphone Disconnecting"
+    },
+    {
+      "from": "Softphone Disconnecting",
+      "event": "200 OK",
+      "action": "Terminate session",
+      "to": "Softphone Idle"
+    },
+    {
+      "from": "client transaction",
+      "event": "",
+      "action": "constructed to process a particular request",
+      "to": "server transaction"
+    },
+    {
+      "from": "UAC",
+      "event": "sends a request",
+      "action": "creates a client transaction instance and passes it the request along with the destination IP address, port, and transport",
+      "to": "client transaction instance"
+    },
+    {
+      "from": "UAC",
+      "event": "wishes to send a request",
+      "action": "creates a client transaction instance and passes it the request along with the destination IP address, port, and transport to which to send the request",
+      "to": "client transaction instance"
+    },
+    {
+      "from": "UAC",
+      "event": "CANCEL request",
+      "action": "requests that the server stop further processing, revert to the state that existed before the transaction was initiated, and generate a specific error response to that transaction",
+      "to": "client transaction instance"
+    },
+    {
+      "from": "UAS",
+      "event": "",
+      "action": "given the special name registrar",
+      "to": "registrar"
+    },
+    {
+      "from": "stateful proxy",
+      "event": "",
+      "action": "",
+      "to": "transaction layer"
+    },
+    {
+      "from": "User Agent Client (UAC)",
+      "event": "generates a request",
+      "action": "acts as a UAS",
+      "to": "User Agent Server (UAS)"
+    },
+    {
+      "from": "User Agent Server (UAS)",
+      "event": "generates a request",
+      "action": "acts as a UAC",
+      "to": "User Agent Client (UAC)"
+    },
+    {
+      "from": "Proxy, Proxy Server",
+      "event": "",
+      "action": "acts as a UAC",
+      "to": "User Agent Client (UAC)"
+    },
+    {
+      "from": "Proxy, Proxy Server",
+      "event": "receives a request",
+      "action": "acts as a UAS",
+      "to": "User Agent Server (UAS)"
+    },
+    {
+      "from": "Redirect Server",
+      "event": "receives a request",
+      "action": "generates 3xx responses",
+      "to": "User Agent Server (UAS)"
+    },
+    {
+      "from": "Registrar",
+      "event": "receives REGISTER requests",
+      "action": "places information into the location service",
+      "to": "Registrar"
+    },
+    {
+      "from": "Stateful Proxy",
+      "event": "",
+      "action": "maintains client and server transaction state machines",
+      "to": "Stateful Proxy"
+    },
+    {
+      "from": "Stateless Proxy",
+      "event": "receives a request",
+      "action": "forwards every request it receives downstream",
+      "to": "Stateless Proxy"
+    },
+    {
+      "from": "Stateless Proxy",
+      "event": "receives a response",
+      "action": "forwards every response it receives upstream",
+      "to": "Stateless Proxy"
+    },
+    {
+      "from": "Request",
+      "event": "Request-Line",
+      "action": "",
+      "to": "Response"
+    },
+    {
+      "from": "Response",
+      "event": "Status-Line",
+      "action": "",
+      "to": "Request"
+    },
+    {
+      "from": "calling",
+      "event": "timer A fires",
+      "action": "retransmit INVITE",
+      "to": "calling"
+    },
+    {
+      "from": "calling",
+      "event": "timer B fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "calling",
+      "event": "provisional response",
+      "action": "pass to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "calling",
+      "event": "response (300-699)",
+      "action": "pass response to TU, generate ACK, send ACK",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "timer A fires",
+      "action": "cease retransmissions",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "response (300-699)",
+      "action": "pass response to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "timer B fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "timer D fires",
+      "action": "move to Terminated",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "retransmission of final response",
+      "action": "re-pass ACK to transport",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx response",
+      "action": "pass response to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "UAC wishing to terminate a call",
+      "event": "wishes to terminate a call before it has been answered",
+      "action": "sends CANCEL. If the original INVITE still returns a 2xx, the UAC then sends BYE.",
+      "to": "Existing call leg (dialog)"
+    },
+    {
+      "from": "UAC",
+      "event": "BYE request",
+      "action": "create new non-INVITE client transaction, pass BYE request",
+      "to": "Client Transaction State"
+    },
+    {
+      "from": "Client Transaction State",
+      "event": "481 or 408 or timeout",
+      "action": "consider session and dialog terminated",
+      "to": "UAC Core State"
+    },
+    {
+      "from": "UAS Core State",
+      "event": "BYE request",
+      "action": "process BYE request according to Section 8.2, check if it matches an existing dialog",
+      "to": "Dialog State"
+    },
+    {
+      "from": "Dialog State",
+      "event": "BYE request matches existing dialog",
+      "action": "follow procedures of Section 12.2.2 to process the request, terminate session, generate 2xx response",
+      "to": "UAS Core State"
+    },
+    {
+      "from": "Dialog State",
+      "event": "BYE request does not match existing dialog",
+      "action": "generate 481 response, pass to server transaction",
+      "to": "Server Transaction State"
+    },
+    {
+      "from": "Server Transaction State",
+      "event": "",
+      "action": "respond to any pending requests, RECOMMENDED generate 487 response",
+      "to": "UAS Core State"
+    },
+    {
+      "from": "Registered",
+      "event": "REGISTER",
+      "action": "200 OK",
+      "to": "Registered"
+    },
+    {
+      "from": "Registered",
+      "event": "",
+      "action": "Expires",
+      "to": "Registered"
+    },
+    {
+      "from": "Registered",
+      "event": "INVITE",
+      "action": "100 Trying, 180 Ringing, 200 OK",
+      "to": "Session Established"
+    },
+    {
+      "from": "Session Established",
+      "event": "BYE",
+      "action": "200 OK",
+      "to": "Session Established"
+    },
+    {
+      "from": "UAC sending a request containing an S/MIME body",
+      "event": "initiates a dialog",
+      "action": "SHOULD structure the body as an S/MIME 'multipart/signed' CMS SignedData body",
+      "to": "UAC sending a request containing an S/MIME body"
+    },
+    {
+      "from": "UAS receiving a request containing an S/MIME CMS body",
+      "event": "certificate cannot be verified",
+      "action": "MUST notify its user of the status of the certificate",
+      "to": "UAS receiving a request containing an S/MIME CMS body"
+    },
+    {
+      "from": "UAC receiving a response containing an S/MIME CMS body",
+      "event": "certificate was successfully verified and the subject of the certificate corresponds to the To header field in the response",
+      "action": "SHOULD add this certificate to a local keyring, indexed by the address-of-record of the holder of the certificate",
+      "to": "UAC receiving a response containing an S/MIME CMS body"
+    }
+  ]
+}

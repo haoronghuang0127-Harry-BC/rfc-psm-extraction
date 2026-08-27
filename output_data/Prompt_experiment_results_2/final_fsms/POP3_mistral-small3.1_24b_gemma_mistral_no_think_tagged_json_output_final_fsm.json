@@ -1,0 +1,181 @@
+{
+  "states": [
+    "AUTHORIZATION",
+    "TRANSACTION",
+    "UPDATE",
+    "Waiting for connection",
+    "Connected",
+    "Authenticated",
+    "Closing"
+  ],
+  "transitions": [
+    {
+      "from": "AUTHORIZATION",
+      "event": "Client identifies itself",
+      "action": "Server acquires resources associated with the client's maildrop",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "QUIT",
+      "action": "Server releases any resources acquired during the TRANSACTION state and says goodbye",
+      "to": "UPDATE"
+    },
+    {
+      "from": "UPDATE",
+      "event": "",
+      "action": "",
+      "to": "TCP connection closed"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "Successful authentication",
+      "action": "Acquires an exclusive-access lock on the maildrop, responds with a positive status indicator",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "Failed authentication",
+      "action": "Responds with a negative status indicator",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "QUIT",
+      "action": "+OK",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "QUIT",
+      "action": "",
+      "to": "UPDATE"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "QUIT",
+      "action": "The POP3 server removes all messages marked as deleted from the maildrop and replies as to the status of this operation. If there is an error, such as a resource shortage, encountered while removing messages, the maildrop may result in having some or none of the messages marked as deleted be removed. In no case may the server remove any messages not marked as deleted. Whether the removal was successful or not, the server then releases any exclusive-access lock on the maildrop and closes the TCP connection.",
+      "to": "UPDATE"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "USER",
+      "action": "name is a valid mailbox",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "USER",
+      "action": "never heard of mailbox name",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "PASS",
+      "action": "maildrop locked and ready",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "PASS",
+      "action": "invalid password",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "PASS",
+      "action": "unable to lock maildrop",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "APOP",
+      "action": "maildrop locked and ready",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "APOP",
+      "action": "permission denied",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "TOP",
+      "action": "top of message follows",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "TOP",
+      "action": "no such message",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "UIDL",
+      "action": "unique-id listing follows",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "UIDL",
+      "action": "no such message",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "Waiting for connection",
+      "event": "<open connection>",
+      "action": "+OK POP3 server ready",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "APOP",
+      "action": "+OK mrose's maildrop has 2 messages (320 octets)",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "STAT",
+      "action": "+OK 2 320",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "Authenticated",
+      "event": "LIST",
+      "action": "+OK 2 messages (320 octets)",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "RETR 1",
+      "action": "+OK 120 octets",
+      "to": "UPDATE"
+    },
+    {
+      "from": "UPDATE",
+      "event": "DELE 1",
+      "action": "+OK message 1 deleted",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "RETR 2",
+      "action": "+OK 200 octets",
+      "to": "UPDATE"
+    },
+    {
+      "from": "UPDATE",
+      "event": "DELE 2",
+      "action": "+OK message 2 deleted",
+      "to": "Closing"
+    },
+    {
+      "from": "Closing",
+      "event": "QUIT",
+      "action": "+OK dewey POP3 server signing off (maildrop empty)",
+      "to": "Waiting for connection"
+    }
+  ]
+}
