@@ -3,13 +3,13 @@ from typing import cast
 
 from config.paths import PROMPT_EXPERIMENT_PARTIAL_FSMS_DIR, PROMPT_EXPERIMENT_PROMPTS_DIR
 
-from prompt_experiment.output_format.output_controls import get_output_control, get_output_control_name_from_experiment_name
-from prompt_experiment.output_format.prompt_builder import build_fsm_combination_prompt
-from prompt_experiment.types import OutputControl, ResearchStateMachine
+from research_pipeline.output_controls import get_output_control, get_output_control_name_from_experiment_name
+from research_pipeline.prompt_builder import build_fsm_combination_prompt
+from research_pipeline.response_processing import parse_partial_fsms
+from research_pipeline.types import OutputControl, ResearchStateMachine
 
 from utils.files_util import load_json_file, save_json_file
 
-from research_pipeline.response_processing import parse_partial_fsms
 
 def _get_combination_prompt_name(partial_fsms_file_path: Path) -> str:
     partial_fsms_suffix: str = "_partial_fsms"

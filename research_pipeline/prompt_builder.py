@@ -1,7 +1,6 @@
 import json
 
-from prompt_experiment.types import ResearchStateMachine
-
+from research_pipeline.types import ResearchStateMachine
 
 # build the output instruction for one output style.
 def _build_output_format_instruction(prompt_output_style: str) -> str:

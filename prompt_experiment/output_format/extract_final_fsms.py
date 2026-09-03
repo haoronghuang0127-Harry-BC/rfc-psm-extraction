@@ -2,9 +2,8 @@ from pathlib import Path
 
 from config.paths import PROMPT_EXPERIMENT_COMBINATION_RESPONSES_DIR, PROMPT_EXPERIMENT_FINAL_FSMS_DIR
 
-from prompt_experiment.output_format.output_controls import get_output_control, get_output_control_name_from_experiment_name
-from prompt_experiment.types import OutputControl
-
+from research_pipeline.output_controls import get_output_control, get_output_control_name_from_experiment_name
+from research_pipeline.types import OutputControl
 from research_pipeline.response_processing import extract_final_fsm_from_response
 
 from utils.files_util import load_json_file, save_json_file

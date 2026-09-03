@@ -6,10 +6,12 @@ from config.ollama_settings import OllamaConnection, get_ollama_connection
 from config.paths import PROMPT_EXPERIMENT_ORIGINAL_RESPONSES_DIR, PROMPT_EXPERIMENT_PROMPTS_DIR
 
 from prompt_experiment.output_format.command_line import read_command_line_to_value
-from prompt_experiment.output_format.output_controls import get_output_control, get_selected_output_controls
-from prompt_experiment.types import OutputControl, PromptExperimentArguments
+from prompt_experiment.types import PromptExperimentArguments
 
 from research_pipeline.model_selection import get_selected_model_configs, get_selected_profile_names
+from research_pipeline.output_controls import get_output_control, get_selected_output_controls
+from research_pipeline.types import OutputControl
+
 from utils.files_util import save_json_file, load_json_file
 from utils.ollama_client import call_ollama_with_model_routing
 

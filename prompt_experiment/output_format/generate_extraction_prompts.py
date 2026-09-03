@@ -4,9 +4,11 @@ from config.paths import PROMPT_EXPERIMENT_PROMPTS_DIR
 from config.protocol.protocol_util import get_all_protocol_files, get_protocol_file
 
 from prompt_experiment.output_format.command_line import read_command_line_to_value
-from prompt_experiment.output_format.output_controls import get_selected_output_controls
-from prompt_experiment.output_format.prompt_builder import build_fsm_extraction_prompt
-from prompt_experiment.types import OutputControl, PromptExperimentArguments
+from prompt_experiment.types import PromptExperimentArguments
+
+from research_pipeline.output_controls import get_selected_output_controls
+from research_pipeline.prompt_builder import build_fsm_extraction_prompt
+from research_pipeline.types import OutputControl
 
 from rfc.rfc_io import load_rfc_segments
 from rfc.rfc_service import get_rfc_segment_values

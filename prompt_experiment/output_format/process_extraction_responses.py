@@ -6,7 +6,6 @@ from research_pipeline.response_processing import process_extraction_response_fi
 
 
 # Process all extraction responses from the output format experiment.
-# 处理输出形式实验中的全部 extraction responses。
 def process_extraction_responses() -> list[Path]:
     output_files: list[Path] = process_extraction_response_files(input_directory=PROMPT_EXPERIMENT_ORIGINAL_RESPONSES_DIR, 
                                                                  output_directory=PROMPT_EXPERIMENT_PARTIAL_FSMS_DIR, 

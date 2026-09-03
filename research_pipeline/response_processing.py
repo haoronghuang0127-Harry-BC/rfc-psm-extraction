@@ -46,7 +46,6 @@ def _build_output_file_path(input_file: Path, output_directory: Path, input_suff
 
 
 # Process all extraction response files in one experiment directory.
-# 处理一个实验目录中的全部 extraction response 文件。
 def process_extraction_response_files(input_directory: Path, output_directory: Path, input_pattern: str, input_suffix: str, output_suffix: str, allow_direct_json: bool = True) -> list[Path]:
     input_files: list[Path] = sorted(input_directory.glob(input_pattern))
 
@@ -78,17 +77,14 @@ def process_extraction_response_files(input_directory: Path, output_directory: P
 
 """
 # parse partial response strings into FSM objects.
-# 将 partial response 字符串解析成 FSM 对象。
 def parse_partial_fsms(partial_responses: list[str], allow_direct_json: bool = True) -> list[dict[str, object]]:
     # init the partial FSM list.
-    # 初始化 partial FSM 列表。
     partial_fsms: list[dict[str, object]] = []
 
     for partial_response in partial_responses:
         parsed_response: object | None = parse_json_from_responses_include_markdown(response=partial_response, allow_direct_json=allow_direct_json)
 
         # ignore None, invalid JSON text, lists, and other invalid structures.
-        # 忽略 None、非法 JSON 文本、列表和其他错误结构。
         if not isinstance(parsed_response, dict):
             continue
 

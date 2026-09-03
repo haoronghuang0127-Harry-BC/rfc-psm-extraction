@@ -107,27 +107,27 @@ def combination_psm(combination_prompts_dict: dict[str, str]) -> None:
                                 profile_name=ProfileName.QWEN_NO_THINK,
                                 prompt_suffix="qwen3.5_27b_no_think")
 
-    # # qwen3.5_9b_think
-    # _run_model_combination(combination_prompts_dict=combination_prompts_dict,
-    #                             connection=connection,
-    #                             model_name=ModelName.QWEN3_5_9B,
-    #                             profile_name=ProfileName.QWEN_THINK,
-    #                             prompt_suffix="qwen3.5_9b_think")
+    # qwen3.5_9b_think
+    _run_model_combination(combination_prompts_dict=combination_prompts_dict,
+                                connection=connection,
+                                model_name=ModelName.QWEN3_5_9B,
+                                profile_name=ProfileName.QWEN_THINK,
+                                prompt_suffix="qwen3.5_9b_think")
 
-    # # qwen3.5_27b_think
-    # _run_model_combination(combination_prompts_dict=combination_prompts_dict,
-    #                                 connection=connection,
-    #                                 model_name=ModelName.QWEN3_5_27B,
-    #                                 profile_name=ProfileName.QWEN_THINK,
-    #                                 prompt_suffix="qwen3.5_27b_think")
+    # qwen3.5_27b_think
+    _run_model_combination(combination_prompts_dict=combination_prompts_dict,
+                                    connection=connection,
+                                    model_name=ModelName.QWEN3_5_27B,
+                                    profile_name=ProfileName.QWEN_THINK,
+                                    prompt_suffix="qwen3.5_27b_think")
 
 
-    # # qwq_32b
-    # _run_model_combination(combination_prompts_dict=combination_prompts_dict,
-    #                             connection=connection,
-    #                             model_name=ModelName.QWQ_32B,
-    #                             profile_name=ProfileName.QWQ_REASONING,
-    #                             prompt_suffix="qwq_32b")
+    # qwq_32b
+    _run_model_combination(combination_prompts_dict=combination_prompts_dict,
+                                connection=connection,
+                                model_name=ModelName.QWQ_32B,
+                                profile_name=ProfileName.QWQ_REASONING,
+                                prompt_suffix="qwq_32b")
     return
 
 
@@ -138,7 +138,6 @@ def main() -> None:
 
 
     # Run the Ollama combination process.
-    # 运行 Ollama 合并过程。
     combination_psm(combination_prompts_dict=combination_prompts_dict)
 
 

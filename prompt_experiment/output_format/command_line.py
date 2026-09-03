@@ -7,7 +7,7 @@ from config.models.model_types import ProfileName
 from config.ollama_settings import ConnectionMode
 from config.protocol.protocol_util import get_all_protocol_files
 
-from prompt_experiment.output_format.output_controls import get_output_control_names
+from research_pipeline.output_controls import get_output_control_names
 
 
 def read_command_line_to_value():
@@ -32,7 +32,6 @@ def read_command_line_to_value():
     output_control_names.extend(get_output_control_names())
 
     # get all Ollama connection modes.
-    # 获取全部 Ollama 连接方式。
     connection_names = []
     for connection_name in ConnectionMode:
         connection_names.append(connection_name.value)
