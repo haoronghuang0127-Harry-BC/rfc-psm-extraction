@@ -1,0 +1,317 @@
+﻿Split Method,Protocol,Model,Common Condition,State Precision,State Recall,State F1,Exact Transition Precision,Exact Transition Recall,Exact Transition F1,Partial Transition Precision,Partial Transition Recall,Partial Transition F1
+Whole Document,BGP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.467,0.269,0.341,0.667,0.385,0.488
+Whole Document,BGP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.615,0.615,0.615,0.615,0.615,0.615
+Whole Document,BGP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.278,0.962,0.431,0.267,0.923,0.414
+Whole Document,BGP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.375,0.923,0.533,0.391,0.962,0.556
+Whole Document,BGP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.364,0.923,0.522,0.379,0.962,0.543
+Whole Document,BGP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.352,0.962,0.515,0.352,0.962,0.515
+Whole Document,BGP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.44,0.846,0.579,0.48,0.923,0.632
+Whole Document,DCCP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.444,0.16,0.235,0.556,0.2,0.294
+Whole Document,DCCP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.6,0.24,0.343,0.7,0.28,0.4
+Whole Document,DCCP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.222,0.16,0.186,0.5,0.36,0.419
+Whole Document,DCCP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.727,0.32,0.444,0.909,0.4,0.556
+Whole Document,DCCP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.562,0.36,0.439,0.562,0.36,0.439
+Whole Document,DCCP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.286,0.16,0.205,0.643,0.36,0.462
+Whole Document,DCCP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.333,0.16,0.216,0.583,0.28,0.378
+Whole Document,DHCP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,1.0,0.625,0.769,0.889,0.421,0.571,0.889,0.421,0.571
+Whole Document,DHCP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,1.0,0.75,0.857,0.6,0.316,0.414,0.6,0.316,0.414
+Whole Document,DHCP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,1.0,0.875,0.933,0.846,0.579,0.688,0.846,0.579,0.688
+Whole Document,DHCP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.882,0.789,0.833,0.765,0.684,0.722
+Whole Document,DHCP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.846,0.579,0.688,0.923,0.632,0.75
+Whole Document,DHCP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,1.0,0.875,0.933,0.75,0.474,0.581,0.75,0.474,0.581
+Whole Document,DHCP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,1.0,0.875,0.933,0.818,0.474,0.6,0.636,0.368,0.467
+Whole Document,FTP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Whole Document,FTP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Whole Document,FTP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Whole Document,FTP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.5,0.3,0.375,0.037,0.042,0.039,0.037,0.042,0.039
+Whole Document,FTP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Whole Document,FTP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Whole Document,FTP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Whole Document,IMAP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,1.0,0.6,0.75,0.0,0.0,0.0,0.333,0.182,0.235
+Whole Document,IMAP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,1.0,0.8,0.889,0.222,0.182,0.2,0.333,0.273,0.3
+Whole Document,IMAP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,1.0,0.8,0.889,0.5,0.455,0.476,0.5,0.455,0.476
+Whole Document,IMAP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,1.0,0.8,0.889,0.889,0.727,0.8,0.778,0.636,0.7
+Whole Document,IMAP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,1.0,0.8,0.889,1.0,0.545,0.706,1.0,0.545,0.706
+Whole Document,IMAP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,1.0,0.8,0.889,0.429,0.545,0.48,0.429,0.545,0.48
+Whole Document,IMAP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Whole Document,MQTT,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.2,0.5,0.286,0.0,0.0,0.0,0.0,0.0,0.0
+Whole Document,MQTT,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,1.0,0.5,0.667,0.0,0.0,0.0,0.091,0.059,0.071
+Whole Document,MQTT,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.438,0.583,0.5,0.0,0.0,0.0,0.0,0.0,0.0
+Whole Document,MQTT,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,1.0,0.25,0.4,0.071,0.059,0.065,0.071,0.059,0.065
+Whole Document,MQTT,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.8,0.333,0.471,0.0,0.0,0.0,0.0,0.0,0.0
+Whole Document,MQTT,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.5,0.083,0.143,0.0,0.0,0.0,0.0,0.0,0.0
+Whole Document,MQTT,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Whole Document,NNTP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,1.0,0.2,0.333,0.0,0.0,0.0,0.0,0.0,0.0
+Whole Document,NNTP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.667,0.2,0.308,0.0,0.0,0.0,0.0,0.0,0.0
+Whole Document,NNTP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.5,0.5,0.5,0.25,0.25,0.25,0.25,0.25,0.25
+Whole Document,NNTP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.5,0.1,0.167,0.0,0.0,0.0,0.0,0.0,0.0
+Whole Document,NNTP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.556,0.5,0.526,0.0,0.0,0.0,0.143,0.125,0.133
+Whole Document,NNTP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.667,0.2,0.308,0.0,0.0,0.0,0.0,0.0,0.0
+Whole Document,NNTP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Whole Document,POP3,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.0,0.0,0.0,0.75,0.167,0.273
+Whole Document,POP3,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.25,0.167,0.2,0.75,0.5,0.6
+Whole Document,POP3,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.0,0.0,0.0,0.5,0.167,0.25
+Whole Document,POP3,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.667,0.111,0.19,0.667,0.111,0.19
+Whole Document,POP3,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,1.0,0.111,0.2,0.5,0.056,0.1
+Whole Document,POP3,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.0,0.0,0.0,0.5,0.111,0.182
+Whole Document,POP3,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.0,0.0,0.0,0.5,0.056,0.1
+Whole Document,PPP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.8,0.8,0.8,0.0,0.0,0.0,0.0,0.0,0.0
+Whole Document,PPP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.6,0.9,0.72,0.0,0.0,0.0,0.037,0.037,0.037
+Whole Document,PPP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.667,1.0,0.8,0.01,0.037,0.015,0.115,0.444,0.183
+Whole Document,PPP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.667,1.0,0.8,0.022,0.111,0.037,0.125,0.63,0.209
+Whole Document,PPP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.025,0.111,0.041,0.142,0.63,0.231
+Whole Document,PPP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.8,0.8,0.8,0.0,0.0,0.0,0.179,0.37,0.241
+Whole Document,PPP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.9,0.9,0.9,0.024,0.074,0.036,0.12,0.37,0.182
+Whole Document,PPTP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.571,0.889,0.696,0.706,0.632,0.667,0.765,0.684,0.722
+Whole Document,PPTP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,1.0,0.667,0.8,0.818,0.474,0.6,0.818,0.474,0.6
+Whole Document,PPTP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.875,0.778,0.824,0.464,0.684,0.553,0.464,0.684,0.553
+Whole Document,PPTP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.889,0.889,0.889,0.424,0.737,0.538,0.394,0.684,0.5
+Whole Document,PPTP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.667,0.889,0.762,0.455,0.789,0.577,0.424,0.737,0.538
+Whole Document,PPTP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.875,0.778,0.824,0.571,0.632,0.6,0.429,0.474,0.45
+Whole Document,PPTP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.875,0.778,0.824,0.52,0.684,0.591,0.52,0.684,0.591
+Whole Document,RTSP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.885,0.697,0.78,0.846,0.667,0.746
+Whole Document,RTSP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,1.0,1.0,1.0,0.939,0.939,0.939
+Whole Document,RTSP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.773,0.515,0.618,0.773,0.515,0.618
+Whole Document,RTSP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.812,0.788,0.8,0.812,0.788,0.8
+Whole Document,SIP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.833,1.0,0.909,0.545,0.9,0.679,0.576,0.95,0.717
+Whole Document,SIP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.053,0.2,0.083,0.0,0.0,0.0,0.0,0.0,0.0
+Whole Document,SIP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,1.0,0.8,0.889,0.636,0.35,0.452,0.818,0.45,0.581
+Whole Document,SIP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.833,1.0,0.909,0.611,0.55,0.579,0.722,0.65,0.684
+Whole Document,SMTP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.273,0.429,0.333,0.0,0.0,0.0,0.0,0.0,0.0
+Whole Document,SMTP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.286,0.286,0.286,0.0,0.0,0.0,0.0,0.0,0.0
+Whole Document,SMTP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.4,0.286,0.333,0.167,0.091,0.118,0.167,0.091,0.118
+Whole Document,SMTP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.5,0.143,0.222,0.0,0.0,0.0,0.0,0.0,0.0
+Whole Document,SMTP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.6,0.429,0.5,0.0,0.0,0.0,0.1,0.045,0.063
+Whole Document,SMTP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.5,0.143,0.222,0.1,0.045,0.063,0.1,0.045,0.063
+Whole Document,SMTP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Whole Document,TCP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.909,0.909,0.909,0.364,0.2,0.258,0.727,0.4,0.516
+Whole Document,TCP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.909,0.909,0.909,0.174,0.2,0.186,0.348,0.4,0.372
+Whole Document,TCP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Whole Document,TCP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.909,0.909,0.909,0.65,0.65,0.65,0.7,0.7,0.7
+Whole Document,TCP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.909,0.909,0.909,0.233,0.5,0.317,0.349,0.75,0.476
+Whole Document,TCP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.909,0.909,0.909,0.391,0.45,0.419,0.478,0.55,0.512
+Whole Document,TCP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.909,0.909,0.909,0.36,0.45,0.4,0.48,0.6,0.533
+Fixed Token Splitting,BGP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.429,1.0,0.6,0.483,0.538,0.509,0.414,0.462,0.436
+Fixed Token Splitting,BGP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.545,1.0,0.706,0.369,0.923,0.527,0.338,0.846,0.484
+Fixed Token Splitting,BGP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.667,1.0,0.8,0.324,0.885,0.474,0.338,0.923,0.495
+Fixed Token Splitting,BGP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.377,0.885,0.529,0.393,0.923,0.552
+Fixed Token Splitting,BGP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.397,0.885,0.548,0.379,0.846,0.524
+Fixed Token Splitting,BGP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.274,0.769,0.404,0.247,0.692,0.364
+Fixed Token Splitting,BGP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.247,0.769,0.374,0.235,0.731,0.355
+Fixed Token Splitting,BGP,qwq_32b_qwq_reasoning_ollama_json_schema_output,No,1.0,1.0,1.0,0.329,0.923,0.485,0.356,1.0,0.525
+Fixed Token Splitting,DCCP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.75,1.0,0.857,0.261,0.24,0.25,0.478,0.44,0.458
+Fixed Token Splitting,DCCP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.529,1.0,0.692,0.15,0.48,0.229,0.188,0.6,0.286
+Fixed Token Splitting,DCCP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.474,1.0,0.643,0.176,0.52,0.263,0.216,0.64,0.323
+Fixed Token Splitting,DCCP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.474,1.0,0.643,0.268,0.6,0.37,0.339,0.76,0.469
+Fixed Token Splitting,DCCP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.5,1.0,0.667,0.195,0.64,0.299,0.232,0.76,0.355
+Fixed Token Splitting,DCCP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.75,1.0,0.857,0.208,0.44,0.282,0.358,0.76,0.487
+Fixed Token Splitting,DCCP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.692,1.0,0.818,0.238,0.4,0.299,0.381,0.64,0.478
+Fixed Token Splitting,DCCP,qwq_32b_qwq_reasoning_ollama_json_schema_output,No,0.529,1.0,0.692,0.184,0.28,0.222,0.263,0.4,0.317
+Fixed Token Splitting,DHCP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.429,0.75,0.545,0.316,0.316,0.316,0.368,0.368,0.368
+Fixed Token Splitting,DHCP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.5,0.75,0.6,0.297,0.579,0.393,0.27,0.526,0.357
+Fixed Token Splitting,DHCP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.727,1.0,0.842,0.5,0.526,0.513,0.55,0.579,0.564
+Fixed Token Splitting,DHCP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.875,0.875,0.875,0.632,0.632,0.632,0.579,0.579,0.579
+Fixed Token Splitting,DHCP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.833,0.625,0.714,0.333,0.053,0.091,0.333,0.053,0.091
+Fixed Token Splitting,DHCP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,1.0,0.875,0.933,0.292,0.368,0.326,0.25,0.316,0.279
+Fixed Token Splitting,DHCP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,1.0,0.5,0.667,0.0,0.0,0.0,0.0,0.0,0.0
+Fixed Token Splitting,DHCP,qwq_32b_qwq_reasoning_ollama_json_schema_output,No,1.0,0.625,0.769,0.636,0.368,0.467,0.727,0.421,0.533
+Fixed Token Splitting,FTP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.571,0.4,0.471,0.0,0.0,0.0,0.0,0.0,0.0
+Fixed Token Splitting,FTP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.273,0.6,0.375,0.008,0.042,0.013,0.008,0.042,0.013
+Fixed Token Splitting,FTP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.125,0.2,0.154,0.0,0.0,0.0,0.0,0.0,0.0
+Fixed Token Splitting,FTP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.333,0.6,0.429,0.0,0.0,0.0,0.0,0.0,0.0
+Fixed Token Splitting,FTP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.273,0.3,0.286,0.0,0.0,0.0,0.0,0.0,0.0
+Fixed Token Splitting,FTP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Fixed Token Splitting,FTP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.5,0.1,0.167,0.0,0.0,0.0,0.0,0.0,0.0
+Fixed Token Splitting,FTP,qwq_32b_qwq_reasoning_ollama_json_schema_output,No,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Fixed Token Splitting,IMAP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.25,1.0,0.4,0.176,0.273,0.214,0.176,0.273,0.214
+Fixed Token Splitting,IMAP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.278,1.0,0.435,0.029,0.182,0.051,0.059,0.364,0.101
+Fixed Token Splitting,IMAP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.238,1.0,0.385,0.12,0.545,0.197,0.12,0.545,0.197
+Fixed Token Splitting,IMAP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.417,1.0,0.588,0.364,0.727,0.485,0.318,0.636,0.424
+Fixed Token Splitting,IMAP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.833,1.0,0.909,0.667,0.545,0.6,0.667,0.545,0.6
+Fixed Token Splitting,IMAP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.571,0.8,0.667,0.172,0.455,0.25,0.172,0.455,0.25
+Fixed Token Splitting,IMAP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.8,0.8,0.8,0.375,0.545,0.444,0.375,0.545,0.444
+Fixed Token Splitting,IMAP,qwq_32b_qwq_reasoning_ollama_json_schema_output,No,0.444,0.8,0.571,0.163,0.636,0.259,0.163,0.636,0.259
+Fixed Token Splitting,MQTT,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,1.0,0.333,0.5,0.2,0.059,0.091,0.2,0.059,0.091
+Fixed Token Splitting,MQTT,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.4,0.5,0.444,0.136,0.176,0.154,0.182,0.235,0.205
+Fixed Token Splitting,MQTT,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.429,1.0,0.6,0.029,0.059,0.038,0.114,0.235,0.154
+Fixed Token Splitting,MQTT,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.6,0.25,0.353,0.143,0.059,0.083,0.143,0.059,0.083
+Fixed Token Splitting,MQTT,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.875,0.583,0.7,0.2,0.118,0.148,0.1,0.059,0.074
+Fixed Token Splitting,MQTT,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.75,0.25,0.375,0.0,0.0,0.0,0.0,0.0,0.0
+Fixed Token Splitting,MQTT,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Fixed Token Splitting,MQTT,qwq_32b_qwq_reasoning_ollama_json_schema_output,No,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Fixed Token Splitting,NNTP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.267,0.4,0.32,0.056,0.062,0.059,0.111,0.125,0.118
+Fixed Token Splitting,NNTP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.348,0.8,0.485,0.0,0.0,0.0,0.046,0.188,0.074
+Fixed Token Splitting,NNTP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.5,0.8,0.615,0.036,0.125,0.056,0.018,0.062,0.028
+Fixed Token Splitting,NNTP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.308,0.4,0.348,0.0,0.0,0.0,0.0,0.0,0.0
+Fixed Token Splitting,NNTP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.4,0.4,0.4,0.0,0.0,0.0,0.0,0.0,0.0
+Fixed Token Splitting,NNTP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.6,0.3,0.4,0.071,0.062,0.067,0.0,0.0,0.0
+Fixed Token Splitting,NNTP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.286,0.2,0.235,0.0,0.0,0.0,0.111,0.062,0.08
+Fixed Token Splitting,NNTP,qwq_32b_qwq_reasoning_ollama_json_schema_output,No,1.0,0.2,0.333,0.0,0.0,0.0,0.2,0.062,0.095
+Fixed Token Splitting,POP3,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.0,0.0,0.0,0.6,0.167,0.261
+Fixed Token Splitting,POP3,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.294,0.278,0.286,0.529,0.5,0.514
+Fixed Token Splitting,POP3,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.333,0.167,0.222,0.444,0.222,0.296
+Fixed Token Splitting,POP3,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.4,0.111,0.174,0.6,0.167,0.261
+Fixed Token Splitting,POP3,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.429,0.167,0.24,0.571,0.222,0.32
+Fixed Token Splitting,POP3,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.222,0.111,0.148,0.556,0.278,0.37
+Fixed Token Splitting,POP3,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,1.0,0.111,0.2,0.5,0.056,0.1
+Fixed Token Splitting,POP3,qwq_32b_qwq_reasoning_ollama_json_schema_output,No,1.0,1.0,1.0,0.25,0.222,0.235,0.688,0.611,0.647
+Fixed Token Splitting,PPP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0
+Fixed Token Splitting,PPP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.833,1.0,0.909,0.051,0.111,0.07,0.136,0.296,0.186
+Fixed Token Splitting,PPP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.667,1.0,0.8,0.017,0.074,0.028,0.127,0.556,0.207
+Fixed Token Splitting,PPP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.588,1.0,0.741,0.065,0.259,0.104,0.159,0.63,0.254
+Fixed Token Splitting,PPP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.041,0.185,0.067,0.138,0.63,0.227
+Fixed Token Splitting,PPP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.833,1.0,0.909,0.078,0.444,0.133,0.123,0.704,0.21
+Fixed Token Splitting,PPP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.025,0.111,0.04,0.139,0.63,0.228
+Fixed Token Splitting,PPP,qwq_32b_qwq_reasoning_ollama_json_schema_output,No,0.833,1.0,0.909,0.053,0.222,0.085,0.079,0.333,0.128
+Fixed Token Splitting,PPTP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.381,0.889,0.533,0.5,0.632,0.558,0.5,0.632,0.558
+Fixed Token Splitting,PPTP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.6,0.667,0.632,0.433,0.684,0.531,0.433,0.684,0.531
+Fixed Token Splitting,PPTP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.438,0.778,0.56,0.341,0.737,0.467,0.341,0.737,0.467
+Fixed Token Splitting,PPTP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.7,0.778,0.737,0.412,0.737,0.528,0.412,0.737,0.528
+Fixed Token Splitting,PPTP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.875,0.778,0.824,0.448,0.684,0.542,0.448,0.684,0.542
+Fixed Token Splitting,PPTP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.778,0.778,0.778,0.5,0.632,0.558,0.458,0.579,0.512
+Fixed Token Splitting,PPTP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.875,0.778,0.824,0.5,0.737,0.596,0.5,0.737,0.596
+Fixed Token Splitting,PPTP,qwq_32b_qwq_reasoning_ollama_json_schema_output,No,0.8,0.889,0.842,0.522,0.632,0.571,0.565,0.684,0.619
+Fixed Token Splitting,RTSP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,No,0.375,1.0,0.545,0.4,0.485,0.438,0.4,0.485,0.438
+Fixed Token Splitting,RTSP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,No,0.094,1.0,0.171,0.235,0.727,0.356,0.245,0.758,0.37
+Fixed Token Splitting,RTSP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,No,0.059,1.0,0.111,0.248,0.758,0.373,0.238,0.727,0.358
+Fixed Token Splitting,RTSP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.2,1.0,0.333,0.406,0.788,0.536,0.375,0.727,0.495
+Fixed Token Splitting,RTSP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.2,1.0,0.333,0.524,1.0,0.688,0.492,0.939,0.646
+Fixed Token Splitting,RTSP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.75,1.0,0.857,0.429,0.455,0.441,0.486,0.515,0.5
+Fixed Token Splitting,RTSP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.125,0.03,0.049,0.125,0.03,0.049
+Fixed Token Splitting,RTSP,qwq_32b_qwq_reasoning_ollama_json_schema_output,No,0.75,1.0,0.857,0.578,0.788,0.667,0.578,0.788,0.667
+Fixed Token Splitting,SIP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,No,0.238,1.0,0.385,0.368,0.35,0.359,0.474,0.45,0.462
+Fixed Token Splitting,SIP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,No,0.094,1.0,0.172,0.105,0.65,0.181,0.121,0.75,0.208
+Fixed Token Splitting,SIP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,No,0.079,1.0,0.147,0.099,0.6,0.17,0.124,0.75,0.213
+Fixed Token Splitting,SIP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.208,1.0,0.345,0.241,0.65,0.351,0.296,0.8,0.432
+Fixed Token Splitting,SIP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.227,1.0,0.37,0.34,0.9,0.493,0.358,0.95,0.521
+Fixed Token Splitting,SIP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.714,1.0,0.833,0.458,0.55,0.5,0.542,0.65,0.591
+Fixed Token Splitting,SIP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.417,1.0,0.588,0.325,0.65,0.433,0.475,0.95,0.633
+Fixed Token Splitting,SIP,qwq_32b_qwq_reasoning_ollama_json_schema_output,No,0.625,1.0,0.769,0.444,0.4,0.421,0.5,0.45,0.474
+Fixed Token Splitting,SMTP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,1.0,0.429,0.6,0.0,0.0,0.0,0.25,0.045,0.077
+Fixed Token Splitting,SMTP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.556,0.714,0.625,0.0,0.0,0.0,0.0,0.0,0.0
+Fixed Token Splitting,SMTP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.286,0.571,0.381,0.049,0.091,0.063,0.049,0.091,0.063
+Fixed Token Splitting,SMTP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.444,0.571,0.5,0.0,0.0,0.0,0.0,0.0,0.0
+Fixed Token Splitting,SMTP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.5,0.714,0.588,0.034,0.045,0.039,0.034,0.045,0.039
+Fixed Token Splitting,SMTP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.5,0.143,0.222,0.0,0.0,0.0,0.0,0.0,0.0
+Fixed Token Splitting,SMTP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Fixed Token Splitting,SMTP,qwq_32b_qwq_reasoning_ollama_json_schema_output,No,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Fixed Token Splitting,TCP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.909,0.909,0.909,0.185,0.25,0.213,0.259,0.35,0.298
+Fixed Token Splitting,TCP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.385,0.909,0.541,0.097,0.5,0.163,0.117,0.6,0.195
+Fixed Token Splitting,TCP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.833,0.909,0.87,0.143,0.6,0.231,0.155,0.65,0.25
+Fixed Token Splitting,TCP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.714,0.909,0.8,0.121,0.8,0.211,0.121,0.8,0.211
+Fixed Token Splitting,TCP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.714,0.909,0.8,0.14,0.8,0.239,0.14,0.8,0.239
+Fixed Token Splitting,TCP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.909,0.909,0.909,0.149,0.7,0.246,0.16,0.75,0.263
+Fixed Token Splitting,TCP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Fixed Token Splitting,TCP,qwq_32b_qwq_reasoning_ollama_json_schema_output,No,0.909,0.909,0.909,0.195,0.75,0.309,0.195,0.75,0.309
+Recursive Section Splitting,BGP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.2,1.0,0.333,0.645,0.769,0.702,0.645,0.769,0.702
+Recursive Section Splitting,BGP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.375,1.0,0.545,0.156,0.962,0.269,0.156,0.962,0.269
+Recursive Section Splitting,BGP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.429,1.0,0.6,0.167,0.038,0.062,0.0,0.0,0.0
+Recursive Section Splitting,BGP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.343,0.923,0.5,0.343,0.923,0.5
+Recursive Section Splitting,BGP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.311,0.885,0.46,0.324,0.923,0.48
+Recursive Section Splitting,BGP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.297,0.846,0.44,0.311,0.885,0.46
+Recursive Section Splitting,BGP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.359,0.885,0.511,0.344,0.846,0.489
+Recursive Section Splitting,BGP,qwq_32b_qwq_reasoning_ollama_json_schema_output,No,1.0,1.0,1.0,0.414,0.923,0.571,0.448,1.0,0.619
+Recursive Section Splitting,DCCP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.176,1.0,0.3,0.196,0.44,0.272,0.268,0.6,0.37
+Recursive Section Splitting,DCCP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.205,1.0,0.34,0.121,0.32,0.176,0.167,0.44,0.242
+Recursive Section Splitting,DCCP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.31,1.0,0.474,0.213,0.76,0.333,0.225,0.8,0.351
+Recursive Section Splitting,DCCP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.375,1.0,0.545,0.227,0.68,0.34,0.267,0.8,0.4
+Recursive Section Splitting,DCCP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.5,1.0,0.667,0.17,0.36,0.231,0.283,0.6,0.385
+Recursive Section Splitting,DCCP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.529,1.0,0.692,0.246,0.56,0.341,0.298,0.68,0.415
+Recursive Section Splitting,DCCP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.643,1.0,0.783,0.295,0.52,0.377,0.455,0.8,0.58
+Recursive Section Splitting,DCCP,qwq_32b_qwq_reasoning_ollama_json_schema_output,No,0.45,1.0,0.621,0.254,0.64,0.364,0.333,0.84,0.477
+Recursive Section Splitting,DHCP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,1.0,0.875,0.933,0.462,0.316,0.375,0.462,0.316,0.375
+Recursive Section Splitting,DHCP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.471,1.0,0.64,0.382,0.684,0.491,0.382,0.684,0.491
+Recursive Section Splitting,DHCP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.458,0.579,0.512,0.458,0.579,0.512
+Recursive Section Splitting,DHCP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.552,0.842,0.667,0.552,0.842,0.667
+Recursive Section Splitting,DHCP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.889,1.0,0.941,0.833,0.789,0.811,0.778,0.737,0.757
+Recursive Section Splitting,DHCP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,1.0,0.875,0.933,0.714,0.526,0.606,0.714,0.526,0.606
+Recursive Section Splitting,DHCP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Recursive Section Splitting,DHCP,qwq_32b_qwq_reasoning_ollama_json_schema_output,No,0.889,1.0,0.941,0.419,0.684,0.52,0.387,0.632,0.48
+Recursive Section Splitting,FTP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.24,0.6,0.343,0.015,0.042,0.022,0.015,0.042,0.022
+Recursive Section Splitting,FTP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.152,0.5,0.233,0.0,0.0,0.0,0.013,0.083,0.023
+Recursive Section Splitting,FTP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.194,0.7,0.304,0.01,0.083,0.019,0.005,0.042,0.009
+Recursive Section Splitting,FTP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.263,0.5,0.345,0.0,0.0,0.0,0.0,0.0,0.0
+Recursive Section Splitting,FTP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.25,0.2,0.222,0.0,0.0,0.0,0.0,0.0,0.0
+Recursive Section Splitting,FTP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Recursive Section Splitting,FTP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Recursive Section Splitting,FTP,qwq_32b_qwq_reasoning_ollama_json_schema_output,No,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Recursive Section Splitting,IMAP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Recursive Section Splitting,IMAP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.227,1.0,0.37,0.056,0.636,0.102,0.056,0.636,0.102
+Recursive Section Splitting,IMAP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.2,1.0,0.333,0.12,0.545,0.197,0.12,0.545,0.197
+Recursive Section Splitting,IMAP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.364,0.8,0.5,0.145,0.727,0.242,0.145,0.727,0.242
+Recursive Section Splitting,IMAP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.667,0.8,0.727,0.2,0.545,0.293,0.2,0.545,0.293
+Recursive Section Splitting,IMAP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.5,0.8,0.615,0.091,0.364,0.145,0.091,0.364,0.145
+Recursive Section Splitting,IMAP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.444,0.8,0.571,0.3,0.545,0.387,0.3,0.545,0.387
+Recursive Section Splitting,IMAP,qwq_32b_qwq_reasoning_ollama_json_schema_output,No,0.333,1.0,0.5,0.087,0.545,0.15,0.087,0.545,0.15
+Recursive Section Splitting,MQTT,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.25,0.75,0.375,0.045,0.118,0.066,0.045,0.118,0.066
+Recursive Section Splitting,MQTT,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.818,0.75,0.783,0.121,0.235,0.16,0.152,0.294,0.2
+Recursive Section Splitting,MQTT,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.255,1.0,0.407,0.061,0.176,0.091,0.122,0.353,0.182
+Recursive Section Splitting,MQTT,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.429,0.25,0.316,0.167,0.059,0.087,0.167,0.059,0.087
+Recursive Section Splitting,MQTT,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.667,0.167,0.267,0.0,0.0,0.0,0.0,0.0,0.0
+Recursive Section Splitting,MQTT,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.5,0.25,0.333,0.0,0.0,0.0,0.0,0.0,0.0
+Recursive Section Splitting,MQTT,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+Recursive Section Splitting,MQTT,qwq_32b_qwq_reasoning_ollama_json_schema_output,No,0.667,0.167,0.267,0.0,0.0,0.0,0.0,0.0,0.0
+Recursive Section Splitting,NNTP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.259,0.7,0.378,0.04,0.125,0.061,0.04,0.125,0.061
+Recursive Section Splitting,NNTP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.381,0.8,0.516,0.031,0.188,0.053,0.021,0.125,0.035
+Recursive Section Splitting,NNTP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.256,1.0,0.408,0.022,0.125,0.038,0.022,0.125,0.038
+Recursive Section Splitting,NNTP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.294,0.5,0.37,0.048,0.188,0.077,0.048,0.188,0.077
+Recursive Section Splitting,NNTP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.5,0.4,0.444,0.0,0.0,0.0,0.0,0.0,0.0
+Recursive Section Splitting,NNTP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.6,0.3,0.4,0.0,0.0,0.0,0.0,0.0,0.0
+Recursive Section Splitting,NNTP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.333,0.2,0.25,0.0,0.0,0.0,0.0,0.0,0.0
+Recursive Section Splitting,NNTP,qwq_32b_qwq_reasoning_ollama_json_schema_output,No,0.5,0.4,0.444,0.042,0.062,0.05,0.0,0.0,0.0
+Recursive Section Splitting,POP3,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.3,1.0,0.462,0.119,0.278,0.167,0.262,0.611,0.367
+Recursive Section Splitting,POP3,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.333,1.0,0.5,0.175,0.389,0.241,0.325,0.722,0.448
+Recursive Section Splitting,POP3,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.333,1.0,0.5,0.074,0.111,0.089,0.259,0.389,0.311
+Recursive Section Splitting,POP3,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.6,1.0,0.75,0.333,0.278,0.303,0.6,0.5,0.545
+Recursive Section Splitting,POP3,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.125,0.056,0.077,0.25,0.111,0.154
+Recursive Section Splitting,POP3,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.059,0.056,0.057,0.412,0.389,0.4
+Recursive Section Splitting,POP3,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,1.0,1.0,1.0,0.0,0.0,0.0,0.5,0.111,0.182
+Recursive Section Splitting,POP3,qwq_32b_qwq_reasoning_ollama_json_schema_output,No,0.75,1.0,0.857,0.087,0.111,0.098,0.304,0.389,0.341
+Recursive Section Splitting,PPP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.37,1.0,0.541,0.0,0.0,0.0,0.0,0.0,0.0
+Recursive Section Splitting,PPP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.667,1.0,0.8,0.047,0.222,0.077,0.078,0.37,0.128
+Recursive Section Splitting,PPP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.5,1.0,0.667,0.034,0.185,0.057,0.116,0.63,0.195
+Recursive Section Splitting,PPP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.476,1.0,0.645,0.047,0.259,0.08,0.141,0.778,0.239
+Recursive Section Splitting,PPP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.556,1.0,0.714,0.037,0.185,0.062,0.134,0.667,0.224
+Recursive Section Splitting,PPP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.5,0.8,0.615,0.038,0.148,0.061,0.038,0.148,0.061
+Recursive Section Splitting,PPP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.571,0.8,0.667,0.062,0.037,0.047,0.188,0.111,0.14
+Recursive Section Splitting,PPP,qwq_32b_qwq_reasoning_ollama_json_schema_output,No,0.233,1.0,0.377,0.035,0.185,0.058,0.042,0.222,0.07
+Recursive Section Splitting,PPTP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.333,0.667,0.444,0.438,0.368,0.4,0.438,0.368,0.4
+Recursive Section Splitting,PPTP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.375,0.667,0.48,0.256,0.526,0.345,0.256,0.526,0.345
+Recursive Section Splitting,PPTP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.35,0.778,0.483,0.245,0.684,0.361,0.208,0.579,0.306
+Recursive Section Splitting,PPTP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.533,0.889,0.667,0.389,0.737,0.509,0.361,0.684,0.473
+Recursive Section Splitting,PPTP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.875,0.778,0.824,0.483,0.737,0.583,0.448,0.684,0.542
+Recursive Section Splitting,PPTP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.875,0.778,0.824,0.394,0.684,0.5,0.394,0.684,0.5
+Recursive Section Splitting,PPTP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.875,0.778,0.824,0.429,0.789,0.556,0.4,0.737,0.519
+Recursive Section Splitting,PPTP,qwq_32b_qwq_reasoning_ollama_json_schema_output,No,0.727,0.889,0.8,0.429,0.632,0.511,0.429,0.632,0.511
+Recursive Section Splitting,RTSP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,No,0.045,1.0,0.087,0.062,0.091,0.074,0.083,0.121,0.099
+Recursive Section Splitting,RTSP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,No,0.067,1.0,0.125,0.325,0.788,0.46,0.312,0.758,0.442
+Recursive Section Splitting,RTSP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,No,0.023,1.0,0.044,0.131,0.879,0.227,0.126,0.848,0.22
+Recursive Section Splitting,RTSP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.231,1.0,0.375,0.448,0.788,0.571,0.448,0.788,0.571
+Recursive Section Splitting,RTSP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.158,1.0,0.273,0.458,1.0,0.629,0.431,0.939,0.59
+Recursive Section Splitting,RTSP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.75,1.0,0.857,0.404,0.576,0.475,0.447,0.636,0.525
+Recursive Section Splitting,RTSP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.375,1.0,0.545,0.413,0.576,0.481,0.413,0.576,0.481
+Recursive Section Splitting,RTSP,qwq_32b_qwq_reasoning_ollama_json_schema_output,No,0.25,1.0,0.4,0.16,0.121,0.138,0.2,0.152,0.172
+Recursive Section Splitting,SIP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,No,0.008,0.2,0.015,0.0,0.0,0.0,0.0,0.0,0.0
+Recursive Section Splitting,SIP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,No,0.087,0.8,0.157,0.0,0.0,0.0,0.0,0.0,0.0
+Recursive Section Splitting,SIP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,No,0.014,1.0,0.027,0.051,0.65,0.094,0.062,0.8,0.116
+Recursive Section Splitting,SIP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.217,1.0,0.357,0.203,0.6,0.304,0.254,0.75,0.38
+Recursive Section Splitting,SIP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.312,1.0,0.476,0.286,0.7,0.406,0.327,0.8,0.464
+Recursive Section Splitting,SIP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.5,1.0,0.667,0.522,0.6,0.558,0.609,0.7,0.651
+Recursive Section Splitting,SIP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.357,1.0,0.526,0.333,0.75,0.462,0.422,0.95,0.585
+Recursive Section Splitting,SIP,qwq_32b_qwq_reasoning_ollama_json_schema_output,No,0.217,1.0,0.357,0.279,0.6,0.381,0.372,0.8,0.508
+Recursive Section Splitting,SMTP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.136,0.857,0.235,0.03,0.045,0.036,0.03,0.045,0.036
+Recursive Section Splitting,SMTP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.128,0.714,0.217,0.009,0.045,0.015,0.009,0.045,0.015
+Recursive Section Splitting,SMTP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.088,0.857,0.16,0.014,0.091,0.024,0.021,0.136,0.036
+Recursive Section Splitting,SMTP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.444,0.571,0.5,0.0,0.0,0.0,0.0,0.0,0.0
+Recursive Section Splitting,SMTP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.417,0.714,0.526,0.103,0.136,0.118,0.103,0.136,0.118
+Recursive Section Splitting,SMTP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.333,0.286,0.308,0.045,0.045,0.045,0.045,0.045,0.045
+Recursive Section Splitting,SMTP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.375,0.429,0.4,0.038,0.045,0.042,0.077,0.091,0.083
+Recursive Section Splitting,SMTP,qwq_32b_qwq_reasoning_ollama_json_schema_output,No,0.4,0.571,0.471,0.071,0.045,0.056,0.071,0.045,0.056
+Recursive Section Splitting,TCP,gemma3_12b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.5,0.909,0.645,0.175,0.5,0.26,0.193,0.55,0.286
+Recursive Section Splitting,TCP,gemma3_27b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.556,0.909,0.69,0.097,0.5,0.163,0.107,0.55,0.179
+Recursive Section Splitting,TCP,mistral-small3.1_24b_gemma_mistral_no_think_ollama_json_schema_output,Yes,0.476,0.909,0.625,0.109,0.7,0.189,0.125,0.8,0.216
+Recursive Section Splitting,TCP,qwen3.5_27b_qwen_no_think_ollama_json_schema_output,Yes,0.357,0.909,0.513,0.103,0.75,0.182,0.11,0.8,0.194
+Recursive Section Splitting,TCP,qwen3.5_27b_qwen_think_ollama_json_schema_output,Yes,0.714,0.909,0.8,0.11,0.8,0.194,0.11,0.8,0.194
+Recursive Section Splitting,TCP,qwen3.5_9b_qwen_no_think_ollama_json_schema_output,Yes,0.909,0.909,0.909,0.08,0.65,0.143,0.086,0.7,0.154
+Recursive Section Splitting,TCP,qwen3.5_9b_qwen_think_ollama_json_schema_output,Yes,0.769,0.909,0.833,0.125,0.4,0.19,0.188,0.6,0.286
+Recursive Section Splitting,TCP,qwq_32b_qwq_reasoning_ollama_json_schema_output,No,0.769,0.909,0.833,0.1,0.7,0.175,0.114,0.8,0.2
