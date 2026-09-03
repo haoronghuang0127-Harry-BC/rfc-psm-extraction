@@ -1,0 +1,148 @@
+{
+  "states": [
+    "AUTHORIZATION",
+    "TRANSACTION",
+    "UPDATE",
+    "CLOSED"
+  ],
+  "transitions": [
+    {
+      "from": "AUTHORIZATION",
+      "event": "QUIT",
+      "action": "respond with +OK",
+      "to": "CLOSED"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "USER/PASS or APOP",
+      "action": "respond with positive status if authentication succeeds and lock is acquired",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "failed authentication or lock acquisition",
+      "action": "respond with negative status",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "successful authentication",
+      "action": "lock and open maildrop",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "USER name",
+      "action": "+OK or -ERR",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "PASS string",
+      "action": "+OK or -ERR",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "APOP name digest",
+      "action": "+OK or -ERR",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "QUIT",
+      "action": "+OK or -ERR",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "NOOP",
+      "action": "+OK or -ERR",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "RSET",
+      "action": "+OK or -ERR",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "QUIT",
+      "action": "remove all messages marked as deleted and reply with +OK or -ERR",
+      "to": "UPDATE"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "QUIT",
+      "action": "+OK or -ERR",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "TOP",
+      "action": "+OK or -ERR",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "UIDL",
+      "action": "+OK or -ERR",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "STAT",
+      "action": "+OK or -ERR",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "LIST [msg]",
+      "action": "+OK or -ERR",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "RETR msg",
+      "action": "+OK or -ERR",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "DELE msg",
+      "action": "+OK or -ERR",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "NOOP",
+      "action": "+OK or -ERR",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "RSET",
+      "action": "+OK or -ERR",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "TOP msg n",
+      "action": "+OK or -ERR",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "UIDL [msg]",
+      "action": "+OK or -ERR",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "UPDATE",
+      "event": "",
+      "action": "release lock and close TCP connection",
+      "to": "CLOSED"
+    }
+  ]
+}

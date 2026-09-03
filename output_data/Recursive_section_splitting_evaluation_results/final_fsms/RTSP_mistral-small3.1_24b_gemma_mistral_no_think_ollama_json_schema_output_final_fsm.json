@@ -1,0 +1,1470 @@
+{
+  "states": [
+    "Play",
+    "Session Establishment",
+    "Media Delivery Control",
+    "RTSP session established",
+    "RTSP session context created",
+    "RTSP session aggregated",
+    "PLAY",
+    "PAUSE",
+    "PLAY_NOTIFY",
+    "Session Active",
+    "Session Terminated",
+    "Persistent Connection",
+    "Transient Connection",
+    "Connection Open",
+    "Connection Closed",
+    "Waiting for Response",
+    "Processing Request",
+    "Sending 100 Continue",
+    "Unresponsive",
+    "Active Session",
+    "Overloaded",
+    "Not Overloaded",
+    "RTSP session context",
+    "Media Initialization Phase",
+    "Init",
+    "Ready",
+    "Aggregated Session",
+    "Single Media Session",
+    "Play state",
+    "Playing Live with Time-Shift",
+    "Parameter Setting",
+    "Session Established",
+    "Session Termination Initiated",
+    "Session Not Established",
+    "Connection Established",
+    "Connection Termination Initiated",
+    "Connection Terminated",
+    "Serving Stream",
+    "Stale Entry",
+    "Validating Cache Entry",
+    "Conditional Request",
+    "Full Response",
+    "Not Modified",
+    "Requesting",
+    "Responding",
+    "Unauthorized",
+    "Forbidden",
+    "Not Found",
+    "Method Not Allowed",
+    "Not Acceptable",
+    "Proxy Authentication Required",
+    "Request Timeout",
+    "Gone",
+    "Precondition Failed",
+    "Request Message Body Too Large",
+    "Request-URI Too Long",
+    "Unsupported Media Type",
+    "Parameter Not Understood",
+    "Illegal Conference Identifier",
+    "Not Enough Bandwidth",
+    "Session Not Found",
+    "Method Not Valid in This State",
+    "Header Field Not Valid for Resource",
+    "Invalid Range",
+    "Parameter Is Read-Only",
+    "Aggregate Operation Not Allowed",
+    "Only Aggregate Operation Allowed",
+    "Unsupported Transport",
+    "Destination Unreachable",
+    "Destination Prohibited",
+    "Data Transport Not Ready Yet",
+    "Notification Reason Unknown",
+    "Key Management Error",
+    "Connection Authorization Required",
+    "Connection Credentials Not Accepted",
+    "Failure to Establish Secure Connection",
+    "Server Error 5xx",
+    "Accept-Encoding Present",
+    "Accept-Encoding Absent",
+    "Client authenticated",
+    "Client not authenticated",
+    "Cache receives request with Authorization field",
+    "Cache receives request without Authorization field",
+    "Close Connection",
+    "Message with body",
+    "Message without body",
+    "Message with clock",
+    "Message without clock",
+    "Message with Date header",
+    "Message without Date header",
+    "Cached message",
+    "Uncached message",
+    "Server with clock",
+    "Server without clock",
+    "Client with clock",
+    "Client without clock",
+    "Stale cache entry",
+    "Fresh cache entry",
+    "DESCRIBE Request with If-None-Match",
+    "304 Not Modified",
+    "412 Precondition Failed",
+    "Other Request Method",
+    "Session Context Created",
+    "Session Context Not Created",
+    "TLS Session Established",
+    "TLS Session Not Established",
+    "Proxy Authentication Required",
+    "Connection Authorization Required",
+    "Connection Credentials Not Accepted",
+    "Failure to Establish Secure Connection",
+    "Initial",
+    "Session Setup",
+    "Streaming",
+    "Paused",
+    "Session Teardown",
+    "Initial Request",
+    "Redirected to Secure URI",
+    "TCP/TLS Connection Established",
+    "Session Description Retrieved",
+    "Media Setup",
+    "Media Playback",
+    "Capability Negotiation",
+    "PLAY request",
+    "PLAY response",
+    "RTP Session",
+    "SSRC Collision",
+    "Presentation Description",
+    "Setup",
+    "Control of Transmission",
+    "Synchronization",
+    "Termination",
+    "Waiting for Acknowledgment"
+  ],
+  "transitions": [
+    {
+      "from": "Play",
+      "event": "PLAY",
+      "action": "",
+      "to": "Play"
+    },
+    {
+      "from": "Session Establishment",
+      "event": "OPTIONS",
+      "action": "Supported header",
+      "to": "Session Establishment"
+    },
+    {
+      "from": "Session Establishment",
+      "event": "OPTIONS",
+      "action": "Public response-header",
+      "to": "Session Establishment"
+    },
+    {
+      "from": "RTSP session established",
+      "event": "SETUP request",
+      "action": "server determines if media resource is available and transport parameters are acceptable, creates RTSP session context, stores relevant parameters and state, creates session identifier",
+      "to": "RTSP session context created"
+    },
+    {
+      "from": "RTSP session context created",
+      "event": "SETUP request with existing RTSP session",
+      "action": "server adds media resource under common control",
+      "to": "RTSP session aggregated"
+    },
+    {
+      "from": "PLAY",
+      "event": "PAUSE",
+      "action": "halt delivery and report back the point at which the server stopped",
+      "to": "PAUSE"
+    },
+    {
+      "from": "PAUSE",
+      "event": "PLAY",
+      "action": "resume delivery",
+      "to": "PLAY"
+    },
+    {
+      "from": "PLAY",
+      "event": "PLAY_NOTIFY",
+      "action": "indicate completion of the PLAY request",
+      "to": "PLAY"
+    },
+    {
+      "from": "Session Active",
+      "event": "TEARDOWN request",
+      "action": "Terminate session",
+      "to": "Session Terminated"
+    },
+    {
+      "from": "Session Active",
+      "event": "Session timeout",
+      "action": "Server sends TEARDOWN request",
+      "to": "Session Terminated"
+    },
+    {
+      "from": "Session Active",
+      "event": "REDIRECT method",
+      "action": "Client tears down session and re-establishes at alternative server",
+      "to": "Session Terminated"
+    },
+    {
+      "from": "Session Active",
+      "event": "Client activity beyond keep-alive",
+      "action": "",
+      "to": "Session Active"
+    },
+    {
+      "from": "Persistent Connection",
+      "event": "",
+      "action": "close connection",
+      "to": "Transient Connection"
+    },
+    {
+      "from": "Transient Connection",
+      "event": "need to communicate",
+      "action": "set up new connection",
+      "to": "Persistent Connection"
+    },
+    {
+      "from": "Connection Open",
+      "event": "Client closes connection",
+      "action": "",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "Connection Open",
+      "event": "Server times out all RTSP sessions",
+      "action": "Server closes connection",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "Connection Open",
+      "event": "Server receives incomplete message",
+      "action": "Server closes connection",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "Connection Open",
+      "event": "Client sends new request",
+      "action": "Server closes connection",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "Waiting for Response",
+      "event": "Request received",
+      "action": "Start processing request",
+      "to": "Processing Request"
+    },
+    {
+      "from": "Processing Request",
+      "event": "Processing time exceeds 5 seconds",
+      "action": "Send 100 Continue response",
+      "to": "Sending 100 Continue"
+    },
+    {
+      "from": "Sending 100 Continue",
+      "event": "5 seconds elapsed",
+      "action": "Send another 100 Continue response",
+      "to": "Sending 100 Continue"
+    },
+    {
+      "from": "Sending 100 Continue",
+      "event": "Ready to send final response",
+      "action": "Send final response",
+      "to": "Waiting for Response"
+    },
+    {
+      "from": "Waiting for Response",
+      "event": "10 seconds elapsed without response",
+      "action": "Abort connection",
+      "to": "Unresponsive"
+    },
+    {
+      "from": "Unresponsive",
+      "event": "Establish new connection",
+      "action": "Send queued requests",
+      "to": "Waiting for Response"
+    },
+    {
+      "from": "Active Session",
+      "event": "timeout",
+      "action": "session termination",
+      "to": "Active Session"
+    },
+    {
+      "from": "Active Session",
+      "event": "RTSP request with Session header",
+      "action": "",
+      "to": "Active Session"
+    },
+    {
+      "from": "Active Session",
+      "event": "RTCP message",
+      "action": "",
+      "to": "Active Session"
+    },
+    {
+      "from": "Active Session",
+      "event": "SET_PARAMETER request",
+      "action": "",
+      "to": "Active Session"
+    },
+    {
+      "from": "Active Session",
+      "event": "GET_PARAMETER request",
+      "action": "",
+      "to": "Active Session"
+    },
+    {
+      "from": "Active Session",
+      "event": "OPTIONS request",
+      "action": "",
+      "to": "Active Session"
+    },
+    {
+      "from": "Not Overloaded",
+      "event": "Overload",
+      "action": "Send 503 (Service Unavailable) or 553 (Proxy Unavailable) response with Retry-After header",
+      "to": "Overloaded"
+    },
+    {
+      "from": "Overloaded",
+      "event": "Retry-After timeout",
+      "action": "Allow new requests",
+      "to": "Not Overloaded"
+    },
+    {
+      "from": "Overloaded",
+      "event": "TCP timeout",
+      "action": "Set initial wait timer to 5 seconds, double for each additional failure until it exceeds 30 minutes",
+      "to": "Overloaded"
+    },
+    {
+      "from": "RTSP session context",
+      "event": "Pipelined-Request",
+      "action": "process multiple requests in the same RTSP session context",
+      "to": "RTSP session context"
+    },
+    {
+      "from": "Media Initialization Phase",
+      "event": "DESCRIBE",
+      "action": "return the description in the message body of the response",
+      "to": "Media Initialization Phase"
+    },
+    {
+      "from": "Init",
+      "event": "SETUP",
+      "action": "create RTSP session",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP",
+      "action": "change transport parameters",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP",
+      "action": "change transport parameters",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "start sending data from the beginning of the range specified in the Range header",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY",
+      "action": "replace the current PLAY action with the new one requested",
+      "to": "Play"
+    },
+    {
+      "from": "Aggregated Session",
+      "event": "PLAY Request-URI for a single media",
+      "action": "460 error (Only Aggregate Operation Allowed)",
+      "to": "Aggregated Session"
+    },
+    {
+      "from": "Aggregated Session",
+      "event": "PLAY request",
+      "action": "media playout",
+      "to": "Aggregated Session"
+    },
+    {
+      "from": "Aggregated Session",
+      "event": "failure of prior requests",
+      "action": "halt media playout using PAUSE",
+      "to": "Aggregated Session"
+    },
+    {
+      "from": "Play state",
+      "event": "PLAY request with explicit start value",
+      "action": "stop playout at the current playout point and then starts delivering media according to the Range header",
+      "to": "Play state"
+    },
+    {
+      "from": "Play state",
+      "event": "PLAY request with implicit start point and explicit stop value",
+      "action": "convert the range specifier being played prior to this PLAY request (X to Y) into (X to Z) and continue as if this was the request originally played",
+      "to": "Play state"
+    },
+    {
+      "from": "Play state",
+      "event": "PLAY request with implicit start point and explicit stop value where the current delivery point is beyond the stop point",
+      "action": "immediately pause delivery",
+      "to": "Play state"
+    },
+    {
+      "from": "Play state",
+      "event": "PLAY_NOTIFY request with Notify-Reason: media-properties-update",
+      "action": "Client decides further actions based on Media-Range header",
+      "to": "Play state"
+    },
+    {
+      "from": "Play state",
+      "event": "GET_PARAMETER request with Media-Range header",
+      "action": "Server responds with 200 OK and current Media-Range header",
+      "to": "Play state"
+    },
+    {
+      "from": "Play state",
+      "event": "PLAY_NOTIFY",
+      "action": "Client responds with 200 OK",
+      "to": "Play state"
+    },
+    {
+      "from": "Ready",
+      "event": "PAUSE",
+      "action": "interrupt stream delivery, set pause point, return Range header with unplayed range",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN",
+      "action": "halt media delivery and destroy session",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "TEARDOWN",
+      "action": "halt media delivery and destroy session",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN",
+      "action": "remove media stream and associated resources",
+      "to": "Ready"
+    },
+    {
+      "from": "Parameter Setting",
+      "event": "SET_PARAMETER",
+      "action": "Update keep-alive timer",
+      "to": "Parameter Setting"
+    },
+    {
+      "from": "Parameter Setting",
+      "event": "SET_PARAMETER",
+      "action": "Respond with 415 Unsupported Media Type",
+      "to": "Parameter Setting"
+    },
+    {
+      "from": "Parameter Setting",
+      "event": "SET_PARAMETER",
+      "action": "Respond with 451 Parameter Not Understood",
+      "to": "Parameter Setting"
+    },
+    {
+      "from": "Parameter Setting",
+      "event": "SET_PARAMETER",
+      "action": "Respond with 458 Parameter Is Read-Only",
+      "to": "Parameter Setting"
+    },
+    {
+      "from": "Session Established",
+      "event": "REDIRECT with Session header",
+      "action": "Inform client of termination reason and new location",
+      "to": "Session Termination Initiated"
+    },
+    {
+      "from": "Session Termination Initiated",
+      "event": "Client performs redirection immediately",
+      "action": "Server considers session terminated and frees associated state",
+      "to": "Session Terminated"
+    },
+    {
+      "from": "Session Termination Initiated",
+      "event": "Terminate-Reason header with 'time' parameter",
+      "action": "Client terminates session before redirection time-line",
+      "to": "Session Terminated"
+    },
+    {
+      "from": "Connection Established",
+      "event": "REDIRECT without Session header",
+      "action": "Inform client of termination reason and new location",
+      "to": "Connection Termination Initiated"
+    },
+    {
+      "from": "Connection Termination Initiated",
+      "event": "Client performs redirection immediately",
+      "action": "Server considers connection terminated and frees associated state",
+      "to": "Connection Terminated"
+    },
+    {
+      "from": "Connection Termination Initiated",
+      "event": "Terminate-Reason header with 'time' parameter",
+      "action": "Client terminates connection before redirection time-line",
+      "to": "Connection Terminated"
+    },
+    {
+      "from": "Serving Stream",
+      "event": "SETUP or PLAY request",
+      "action": "ascertains whether it has an up-to-date copy of the continuous media content and its description",
+      "to": "Stale Entry"
+    },
+    {
+      "from": "Stale Entry",
+      "event": "",
+      "action": "checks with the origin server to see if its cached entry is still usable",
+      "to": "Validating Cache Entry"
+    },
+    {
+      "from": "Validating Cache Entry",
+      "event": "DESCRIBE or SETUP request",
+      "action": "includes the associated validator in the request",
+      "to": "Conditional Request"
+    },
+    {
+      "from": "Conditional Request",
+      "event": "validators match",
+      "action": "responds with a special status code (usually, 304 (Not Modified)) and no message body",
+      "to": "Not Modified"
+    },
+    {
+      "from": "Conditional Request",
+      "event": "validators do not match",
+      "action": "returns a full response (including message body)",
+      "to": "Full Response"
+    },
+    {
+      "from": "Requesting",
+      "event": "100 Continue",
+      "action": "The requesting agent SHOULD continue with its request",
+      "to": "Requesting"
+    },
+    {
+      "from": "Requesting",
+      "event": "",
+      "action": "The responding agent MUST send a final response after the request has been completed",
+      "to": "Responding"
+    },
+    {
+      "from": "Session Not Established",
+      "event": "DESCRIBE or SETUP",
+      "action": "3rr response with Location header",
+      "to": "Session Not Established"
+    },
+    {
+      "from": "Session Established",
+      "event": "3rr response",
+      "action": "TEARDOWN request for the session",
+      "to": "Session Not Established"
+    },
+    {
+      "from": "Unauthorized",
+      "event": "401 Unauthorized",
+      "action": "The response is to include a WWW-Authenticate header field containing a challenge applicable to the requested resource. The agent can repeat the request with a suitable Authorization header field.",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Forbidden",
+      "event": "403 Forbidden",
+      "action": "The agent understood the request, but is refusing to fulfill it. Authorization will not help, and the request SHOULD NOT be repeated.",
+      "to": "Forbidden"
+    },
+    {
+      "from": "Not Found",
+      "event": "404 Not Found",
+      "action": "The agent has not found anything matching the Request-URI.",
+      "to": "Not Found"
+    },
+    {
+      "from": "Method Not Allowed",
+      "event": "405 Method Not Allowed",
+      "action": "The response MUST include an Allow header containing a list of valid methods for the requested resource.",
+      "to": "Method Not Allowed"
+    },
+    {
+      "from": "Not Acceptable",
+      "event": "406 Not Acceptable",
+      "action": "The response SHOULD include a message body containing a list of available message body characteristics and location(s) from which the user or user agent can choose the one most appropriate.",
+      "to": "Not Acceptable"
+    },
+    {
+      "from": "Proxy Authentication Required",
+      "event": "407 Proxy Authentication Required",
+      "action": "The proxy MUST return a Proxy-Authenticate header field containing a challenge applicable to the proxy for the requested resource.",
+      "to": "Proxy Authentication Required"
+    },
+    {
+      "from": "Request Timeout",
+      "event": "408 Request Timeout",
+      "action": "The agent MAY repeat the request without modifications at any later time.",
+      "to": "Request Timeout"
+    },
+    {
+      "from": "Gone",
+      "event": "410 Gone",
+      "action": "The requested resource is no longer available at the server and the forwarding address is not known.",
+      "to": "Gone"
+    },
+    {
+      "from": "Precondition Failed",
+      "event": "412 Precondition Failed",
+      "action": "The precondition given in one or more of the 'if-' request-header fields evaluated to false when it was tested on the agent.",
+      "to": "Precondition Failed"
+    },
+    {
+      "from": "Request Message Body Too Large",
+      "event": "413 Request Message Body Too Large",
+      "action": "The agent is refusing to process a request because the request message body is larger than the agent is willing or able to process.",
+      "to": "Request Message Body Too Large"
+    },
+    {
+      "from": "Request-URI Too Long",
+      "event": "414 Request-URI Too Long",
+      "action": "The responding agent is refusing to service the request because the Request-URI is longer than the agent is willing to interpret.",
+      "to": "Request-URI Too Long"
+    },
+    {
+      "from": "Unsupported Media Type",
+      "event": "415 Unsupported Media Type",
+      "action": "The server is refusing to service the request because the message body of the request is in a format not supported by the requested resource for the requested method.",
+      "to": "Unsupported Media Type"
+    },
+    {
+      "from": "Parameter Not Understood",
+      "event": "451 Parameter Not Understood",
+      "action": "The recipient of the request does not support one or more parameters contained in the request.",
+      "to": "Parameter Not Understood"
+    },
+    {
+      "from": "Illegal Conference Identifier",
+      "event": "452 Illegal Conference Identifier",
+      "action": "",
+      "to": "Illegal Conference Identifier"
+    },
+    {
+      "from": "Not Enough Bandwidth",
+      "event": "453 Not Enough Bandwidth",
+      "action": "The request was refused because there was insufficient bandwidth.",
+      "to": "Not Enough Bandwidth"
+    },
+    {
+      "from": "Session Not Found",
+      "event": "458 Session Not Found",
+      "action": "The RTSP session identifier in the Session header is missing, is invalid, or has timed out.",
+      "to": "Session Not Found"
+    },
+    {
+      "from": "Method Not Valid in This State",
+      "event": "459 Method Not Valid in This State",
+      "action": "The agent cannot process this request in its current state. The response MUST contain an Allow header to make error recovery possible.",
+      "to": "Method Not Valid in This State"
+    },
+    {
+      "from": "Header Field Not Valid for Resource",
+      "event": "460 Header Field Not Valid for Resource",
+      "action": "The targeted agent could not act on a required request-header.",
+      "to": "Header Field Not Valid for Resource"
+    },
+    {
+      "from": "Invalid Range",
+      "event": "461 Invalid Range",
+      "action": "The Range value given is out of bounds.",
+      "to": "Invalid Range"
+    },
+    {
+      "from": "Parameter Is Read-Only",
+      "event": "462 Parameter Is Read-Only",
+      "action": "The parameter to be set by SET_PARAMETER can be read but not modified.",
+      "to": "Parameter Is Read-Only"
+    },
+    {
+      "from": "Aggregate Operation Not Allowed",
+      "event": "463 Aggregate Operation Not Allowed",
+      "action": "The requested method may not be applied on the URI in question since it is an aggregate (presentation) URI.",
+      "to": "Aggregate Operation Not Allowed"
+    },
+    {
+      "from": "Only Aggregate Operation Allowed",
+      "event": "464 Only Aggregate Operation Allowed",
+      "action": "The requested method may not be applied on the URI in question since it is not an aggregate control (presentation) URI.",
+      "to": "Only Aggregate Operation Allowed"
+    },
+    {
+      "from": "Unsupported Transport",
+      "event": "465 Unsupported Transport",
+      "action": "The Transport field did not contain a supported transport specification.",
+      "to": "Unsupported Transport"
+    },
+    {
+      "from": "Destination Unreachable",
+      "event": "466 Destination Unreachable",
+      "action": "The data transmission channel could not be established because the agent address could not be reached.",
+      "to": "Destination Unreachable"
+    },
+    {
+      "from": "Destination Prohibited",
+      "event": "467 Destination Prohibited",
+      "action": "The data transmission channel was not established because the server prohibited access to the agent address.",
+      "to": "Destination Prohibited"
+    },
+    {
+      "from": "Data Transport Not Ready Yet",
+      "event": "468 Data Transport Not Ready Yet",
+      "action": "The data transmission channel to the media destination is not yet ready for carrying data.",
+      "to": "Data Transport Not Ready Yet"
+    },
+    {
+      "from": "Notification Reason Unknown",
+      "event": "469 Notification Reason Unknown",
+      "action": "This indicates that the client has received a PLAY_NOTIFY with a Notify-Reason header unknown to the client.",
+      "to": "Notification Reason Unknown"
+    },
+    {
+      "from": "Key Management Error",
+      "event": "470 Key Management Error",
+      "action": "This indicates that there has been an error in a Key Management function used in conjunction with a request.",
+      "to": "Key Management Error"
+    },
+    {
+      "from": "Connection Authorization Required",
+      "event": "471 Connection Authorization Required",
+      "action": "The secured connection attempt needs user or client authorization before proceeding.",
+      "to": "Connection Authorization Required"
+    },
+    {
+      "from": "Connection Credentials Not Accepted",
+      "event": "472 Connection Credentials Not Accepted",
+      "action": "An intermediary has refused to connect to the next hop and carry out the request due to unacceptable credentials for the used policy.",
+      "to": "Connection Credentials Not Accepted"
+    },
+    {
+      "from": "Failure to Establish Secure Connection",
+      "event": "473 Failure to Establish Secure Connection",
+      "action": "A proxy fails to establish a secure connection to the next-hop RTSP agent.",
+      "to": "Failure to Establish Secure Connection"
+    },
+    {
+      "from": "Server Error 5xx",
+      "event": "",
+      "action": "The server SHOULD include a message body containing an explanation of the error situation and whether it is a temporary or permanent condition. User agents SHOULD display any included message body to the user.",
+      "to": "Server Error 5xx"
+    },
+    {
+      "from": "Accept-Encoding Present",
+      "event": "server cannot send acceptable response",
+      "action": "send 406 (Not Acceptable) status code",
+      "to": "Accept-Encoding Present"
+    },
+    {
+      "from": "Accept-Encoding Absent",
+      "event": "",
+      "action": "server may assume any content-coding is acceptable",
+      "to": "Accept-Encoding Absent"
+    },
+    {
+      "from": "Client not authenticated",
+      "event": "401 response",
+      "action": "Client includes Authorization header",
+      "to": "Client authenticated"
+    },
+    {
+      "from": "Cache receives request with Authorization field",
+      "event": "response includes max-age",
+      "action": "Cache may use response for subsequent request, revalidate if max-age passed",
+      "to": "Cache receives request with Authorization field"
+    },
+    {
+      "from": "Cache receives request with Authorization field",
+      "event": "response includes max-age=0",
+      "action": "Cache must revalidate before reusing",
+      "to": "Cache receives request with Authorization field"
+    },
+    {
+      "from": "Cache receives request with Authorization field",
+      "event": "response includes must-revalidate",
+      "action": "Cache may use response for subsequent request, revalidate if stale",
+      "to": "Cache receives request with Authorization field"
+    },
+    {
+      "from": "Cache receives request with Authorization field",
+      "event": "response includes public",
+      "action": "Cache may return response to any subsequent request",
+      "to": "Cache receives request with Authorization field"
+    },
+    {
+      "from": "Persistent Connection",
+      "event": "Connection: close",
+      "action": "close the connection",
+      "to": "Close Connection"
+    },
+    {
+      "from": "Message with body",
+      "event": "",
+      "action": "Include Date header if clock is available",
+      "to": "Message with Date header"
+    },
+    {
+      "from": "Message with body",
+      "event": "",
+      "action": "Do not include Date header if clock is not available",
+      "to": "Message without Date header"
+    },
+    {
+      "from": "Message without body",
+      "event": "",
+      "action": "Include Date header if clock is available",
+      "to": "Message with Date header"
+    },
+    {
+      "from": "Message without body",
+      "event": "",
+      "action": "Do not include Date header if clock is not available",
+      "to": "Message without Date header"
+    },
+    {
+      "from": "Message without Date header",
+      "event": "Message will be cached",
+      "action": "Assign Date header",
+      "to": "Cached message"
+    },
+    {
+      "from": "Message without Date header",
+      "event": "Message will not be cached",
+      "action": "",
+      "to": "Uncached message"
+    },
+    {
+      "from": "Server without clock",
+      "event": "",
+      "action": "Do not include Date header",
+      "to": "Message without Date header"
+    },
+    {
+      "from": "Server without clock",
+      "event": "",
+      "action": "Do not assign Expires or Last-Modified values",
+      "to": "Server without clock"
+    },
+    {
+      "from": "Client with clock",
+      "event": "",
+      "action": "Include Date header",
+      "to": "Message with Date header"
+    },
+    {
+      "from": "Client without clock",
+      "event": "",
+      "action": "Do not include Date header",
+      "to": "Message without Date header"
+    },
+    {
+      "from": "Fresh cache entry",
+      "event": "",
+      "action": "The cache entry is considered stale",
+      "to": "Stale cache entry"
+    },
+    {
+      "from": "Stale cache entry",
+      "event": "Validation with the origin server",
+      "action": "The cache entry is considered fresh",
+      "to": "Fresh cache entry"
+    },
+    {
+      "from": "DESCRIBE Request with If-None-Match",
+      "event": "If-None-Match header matches",
+      "action": "respond with 304 (Not Modified) including cache-related header fields",
+      "to": "304 Not Modified"
+    },
+    {
+      "from": "DESCRIBE Request with If-None-Match",
+      "event": "If-None-Match header does not match",
+      "action": "perform the requested method",
+      "to": "DESCRIBE Request with If-None-Match"
+    },
+    {
+      "from": "DESCRIBE Request with If-None-Match",
+      "event": "If-None-Match header matches and If-Modified-Since header does not match",
+      "action": "perform the requested method",
+      "to": "DESCRIBE Request with If-None-Match"
+    },
+    {
+      "from": "Other Request Method",
+      "event": "If-None-Match header matches",
+      "action": "respond with 412 (Precondition Failed)",
+      "to": "412 Precondition Failed"
+    },
+    {
+      "from": "Other Request Method",
+      "event": "If-None-Match header does not match",
+      "action": "perform the requested method",
+      "to": "Other Request Method"
+    },
+    {
+      "from": "RTSP Session",
+      "event": "SETUP response",
+      "action": "include Media-Properties header",
+      "to": "RTSP Session"
+    },
+    {
+      "from": "RTSP Session",
+      "event": "PLAY_NOTIFY request",
+      "action": "modify Media-Properties",
+      "to": "RTSP Session"
+    },
+    {
+      "from": "RTSP Session",
+      "event": "GET_PARAMETER request",
+      "action": "include Media-Properties header without value",
+      "to": "RTSP Session"
+    },
+    {
+      "from": "Session Context Not Created",
+      "event": "SETUP request with Pipelined-Requests header",
+      "action": "Create binding between Pipelined-Requests identifier and RTSP session ID",
+      "to": "Session Context Created"
+    },
+    {
+      "from": "Session Context Created",
+      "event": "Request with Pipelined-Requests header",
+      "action": "Process request as if it contained the Session header with the found session ID",
+      "to": "Session Context Created"
+    },
+    {
+      "from": "Session Context Created",
+      "event": "Session termination",
+      "action": "Delete the Pipelined-Requests identifier and its binding to a session",
+      "to": "Session Context Not Created"
+    },
+    {
+      "from": "Play",
+      "event": "GET_PARAMETER",
+      "action": "respond with the current playing point or pause point as the start of the range",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "GET_PARAMETER",
+      "action": "respond with the current playing point or pause point as the start of the range",
+      "to": "Ready"
+    },
+    {
+      "from": "Pause",
+      "event": "GET_PARAMETER",
+      "action": "respond with the current playing point or pause point as the start of the range",
+      "to": "Pause"
+    },
+    {
+      "from": "Play state",
+      "event": "GET_PARAMETER request",
+      "action": "include both the Range header and the RTP-Info header",
+      "to": "Play state"
+    },
+    {
+      "from": "PLAY request",
+      "event": "PLAY request with Seek-Style header",
+      "action": "Server includes Seek-Style header in response",
+      "to": "PLAY response"
+    },
+    {
+      "from": "PLAY request",
+      "event": "PLAY request with unknown Seek-Style policy",
+      "action": "Server ignores unknown policy and selects default policy",
+      "to": "PLAY response"
+    },
+    {
+      "from": "PLAY response",
+      "event": "PLAY response with unknown Seek-Style policy",
+      "action": "Client ignores unknown policy and uses Range header",
+      "to": "PLAY response"
+    },
+    {
+      "from": "RTSP session",
+      "event": "TEARDOWN",
+      "action": "",
+      "to": "RTSP session"
+    },
+    {
+      "from": "RTSP session",
+      "event": "REDIRECT",
+      "action": "",
+      "to": "RTSP session"
+    },
+    {
+      "from": "RTSP session",
+      "event": "timeout",
+      "action": "",
+      "to": "RTSP session"
+    },
+    {
+      "from": "RTSP session",
+      "event": "invalid session identifier",
+      "action": "return 454 (Session Not Found)",
+      "to": "Session Not Found"
+    },
+    {
+      "from": "TLS Session Not Established",
+      "event": "Client tries to set up an insecure channel",
+      "action": "Server redirects client to secure service",
+      "to": "TLS Session Established"
+    },
+    {
+      "from": "TLS Session Established",
+      "event": "Proxy requires user and connection authorization",
+      "action": "Proxy responds with 407 Proxy Authentication Required",
+      "to": "Proxy Authentication Required"
+    },
+    {
+      "from": "TLS Session Established",
+      "event": "Proxy does not accept credentials of the next hop",
+      "action": "Proxy responds with 471 Connection Credentials Not Accepted",
+      "to": "Connection Credentials Not Accepted"
+    },
+    {
+      "from": "TLS Session Established",
+      "event": "Proxy fails to establish TLS connection due to cipher-suite mismatch",
+      "action": "Proxy responds with 472 Failure to Establish Secure Connection",
+      "to": "Failure to Establish Secure Connection"
+    },
+    {
+      "from": "TLS Session Established",
+      "event": "Proxy requires connection authorization",
+      "action": "Proxy responds with 470 Connection Authorization Required",
+      "to": "Connection Authorization Required"
+    },
+    {
+      "from": "Initial",
+      "event": "DESCRIBE",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Session Setup"
+    },
+    {
+      "from": "Session Setup",
+      "event": "SETUP",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Session Setup"
+    },
+    {
+      "from": "Session Setup",
+      "event": "PLAY",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Streaming"
+    },
+    {
+      "from": "Streaming",
+      "event": "PAUSE",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Paused"
+    },
+    {
+      "from": "Paused",
+      "event": "PLAY",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Streaming"
+    },
+    {
+      "from": "Streaming",
+      "event": "TEARDOWN",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Session Teardown"
+    },
+    {
+      "from": "Paused",
+      "event": "TEARDOWN",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Session Teardown"
+    },
+    {
+      "from": "Initial Request",
+      "event": "DESCRIBE rtsp://example.com/twister.3gp RTSP/2.0",
+      "action": "RTSP/2.0 301 Moved Permanently",
+      "to": "Redirected to Secure URI"
+    },
+    {
+      "from": "Redirected to Secure URI",
+      "event": "Establish TCP/TLS connection",
+      "action": "Verify server's certificate",
+      "to": "TCP/TLS Connection Established"
+    },
+    {
+      "from": "TCP/TLS Connection Established",
+      "event": "DESCRIBE rtsps://example.com/twister.3gp RTSP/2.0",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Session Description Retrieved"
+    },
+    {
+      "from": "Session Description Retrieved",
+      "event": "SETUP rtsps://example.com/twister.3gp/trackID=1 RTSP/2.0",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Media Setup"
+    },
+    {
+      "from": "Session Description Retrieved",
+      "event": "SETUP rtsps://example.com/twister.3gp/trackID=4 RTSP/2.0",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Media Setup"
+    },
+    {
+      "from": "Media Setup",
+      "event": "PLAY rtsps://example.com/twister.3gp/ RTSP/2.0",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Media Playback"
+    },
+    {
+      "from": "Initial",
+      "event": "GET /sessions.html HTTP/1.1",
+      "action": "HTTP/1.1 200 OK",
+      "to": "Session Setup"
+    },
+    {
+      "from": "Session Setup",
+      "event": "DESCRIBE rtsp://live.example.com/concert/audio RTSP/2.0",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Session Setup"
+    },
+    {
+      "from": "Session Setup",
+      "event": "SETUP rtsp://live.example.com/concert/audio RTSP/2.0",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Media Presentation"
+    },
+    {
+      "from": "Media Presentation",
+      "event": "PLAY rtsp://live.example.com/concert/audio RTSP/2.0",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Media Presentation"
+    },
+    {
+      "from": "Capability Negotiation",
+      "event": "OPTIONS",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Capability Negotiation"
+    },
+    {
+      "from": "Capability Negotiation",
+      "event": "SETUP",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Capability Negotiation"
+    },
+    {
+      "from": "Init",
+      "event": "SETUP",
+      "action": "NRM=1, RP=0.0",
+      "to": "Ready"
+    },
+    {
+      "from": "Init",
+      "event": "SETUP",
+      "action": "3rr Redirect",
+      "to": "Init"
+    },
+    {
+      "from": "Init",
+      "event": "S -> C: REDIRECT",
+      "action": "Terminate all SES",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP",
+      "action": "NRM +=1",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP",
+      "action": "Change transport param",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN",
+      "action": "No session hdr, NRM = 0",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN",
+      "action": "No Session hdr, NRM = 0",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN",
+      "action": "Session hdr, NRM -= 1",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "Play from RP",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "According to range",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "According to range",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "Play from RP",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PAUSE",
+      "action": "Return PP",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SC:REDIRECT",
+      "action": "Set RedP",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SC:REDIRECT",
+      "action": "Session is removed",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "Timeout",
+      "action": "",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "RedP reached",
+      "action": "TEARDOWN of session",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "PAUSE",
+      "action": "Set RP to present point",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "End of media",
+      "action": "Set RP = End of media",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "End of range",
+      "action": "Set RP = End of range",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY",
+      "action": "Play from present point",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY",
+      "action": "According to range",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SC:PLAY_NOTIFY",
+      "action": "200",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP",
+      "action": "455",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP",
+      "action": "455",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP",
+      "action": "Change transport param.",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "TEARDOWN",
+      "action": "No session hdr",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "TEARDOWN",
+      "action": "No Session hdr, NRM=0",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "TEARDOWN",
+      "action": "455",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SC:REDIRECT",
+      "action": "Set RedP",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SC:REDIRECT",
+      "action": "Session is removed",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "RedP reached",
+      "action": "TEARDOWN of session",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "Timeout",
+      "action": "Stop Media playout",
+      "to": "Init"
+    },
+    {
+      "from": "PLAY",
+      "event": "",
+      "action": "The RTP/UDP packets from the server to the client MUST be sent to the address and port given by the first address specification of the dest_addr parameter. The RTCP/UDP packets from the server to the client MUST be sent to the address and port given by the second address specification of the dest_addr parameter, unless RTP and RTCP multiplexing has been negotiated, in which case RTCP MUST be sent to the first address specification. If no second pair is specified and RTP and RTCP multiplexing has not been negotiated, RTCP MUST NOT be sent. The RTCP/UDP packets from the client to the server MUST be sent to the address and port given by the second address specification of the src_addr parameter, unless RTP and RTCP multiplexing has been negotiated, in which case RTCP MUST be sent to the first address specification. If no second pair is specified and RTP and RTCP multiplexing has not been negotiated, RTCP MUST NOT be sent. The RTP/UDP packets from the client to the server MUST be sent to the address and port given by the first address specification of the src_addr parameter.",
+      "to": "PLAY"
+    },
+    {
+      "from": "SETUP Request",
+      "event": "SETUP Request",
+      "action": "Client sends SETUP request with RTP/AVP/TCP transport option",
+      "to": "TCP Connection Establishment"
+    },
+    {
+      "from": "TCP Connection Establishment",
+      "event": "TCP Connection Establishment",
+      "action": "Client establishes TCP connections",
+      "to": "PLAY Request"
+    },
+    {
+      "from": "PLAY Request",
+      "event": "PLAY Request",
+      "action": "Client sends PLAY request",
+      "to": "PLAY Request"
+    },
+    {
+      "from": "PLAY Request",
+      "event": "PAUSE Request",
+      "action": "Client sends PAUSE request",
+      "to": "PAUSE Request"
+    },
+    {
+      "from": "PAUSE Request",
+      "event": "TEARDOWN Request",
+      "action": "Client sends TEARDOWN request",
+      "to": "TEARDOWN Request"
+    },
+    {
+      "from": "PLAY request ongoing",
+      "event": "PLAY request replaces ongoing PLAY request",
+      "action": "RTP timestamps and sequence numbers are set to be continuous",
+      "to": "PLAY request replaced"
+    },
+    {
+      "from": "PLAY request completed",
+      "event": "PLAY request follows completed PLAY request",
+      "action": "RTP stream with gaps in the RTP timeline",
+      "to": "PLAY request with gap"
+    },
+    {
+      "from": "PLAY request with gap",
+      "event": "PLAY request with live streams",
+      "action": "RTP sequence number may not be monotonically increasing",
+      "to": "PLAY request with gap"
+    },
+    {
+      "from": "PLAY",
+      "event": "PAUSE",
+      "action": "Server pauses the media stream and reflects the duration of the pause in the RTP timestamp",
+      "to": "PAUSE"
+    },
+    {
+      "from": "PAUSE",
+      "event": "PLAY",
+      "action": "Server resumes the media stream and adjusts the RTP timestamp to account for the pause duration",
+      "to": "PLAY"
+    },
+    {
+      "from": "RTP Session",
+      "event": "SSRC collision",
+      "action": "server waits to see if client changes SSRC",
+      "to": "SSRC Collision"
+    },
+    {
+      "from": "SSRC Collision",
+      "event": "client changes SSRC",
+      "action": "conflict resolved",
+      "to": "RTP Session"
+    },
+    {
+      "from": "Presentation Description",
+      "event": "",
+      "action": "",
+      "to": "Setup"
+    },
+    {
+      "from": "Setup",
+      "event": "",
+      "action": "",
+      "to": "Control of Transmission"
+    },
+    {
+      "from": "Control of Transmission",
+      "event": "",
+      "action": "",
+      "to": "Synchronization"
+    },
+    {
+      "from": "Synchronization",
+      "event": "",
+      "action": "",
+      "to": "Termination"
+    },
+    {
+      "from": "Waiting for Acknowledgment",
+      "event": "timeout of one round-trip time (RTT)",
+      "action": "resend the same message",
+      "to": "Waiting for Acknowledgment"
+    },
+    {
+      "from": "Play",
+      "event": "Play",
+      "action": "takes effect immediately replacing the previous request",
+      "to": "Play"
+    }
+  ]
+}

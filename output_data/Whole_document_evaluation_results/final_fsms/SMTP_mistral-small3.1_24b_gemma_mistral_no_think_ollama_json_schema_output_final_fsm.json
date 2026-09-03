@@ -1,0 +1,83 @@
+{
+  "states": [
+    "Initial",
+    "Command",
+    "Mail Transaction",
+    "Data Transfer",
+    "Closing"
+  ],
+  "transitions": [
+    {
+      "from": "Initial",
+      "event": "Connection established",
+      "action": "Send 220 greeting",
+      "to": "Command"
+    },
+    {
+      "from": "Command",
+      "event": "EHLO or HELO command",
+      "action": "Send 250 OK",
+      "to": "Command"
+    },
+    {
+      "from": "Command",
+      "event": "MAIL command",
+      "action": "Send 250 OK",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RCPT command",
+      "action": "Send 250 OK",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "DATA command",
+      "action": "Send 354 Start mail input",
+      "to": "Data Transfer"
+    },
+    {
+      "from": "Data Transfer",
+      "event": "<CRLF>.<CRLF>",
+      "action": "Send 250 OK",
+      "to": "Command"
+    },
+    {
+      "from": "Command",
+      "event": "QUIT command",
+      "action": "Send 221 Service closing transmission channel",
+      "to": "Closing"
+    },
+    {
+      "from": "Command",
+      "event": "RSET command",
+      "action": "Send 250 OK",
+      "to": "Command"
+    },
+    {
+      "from": "Command",
+      "event": "VRFY command",
+      "action": "Send 250 OK",
+      "to": "Command"
+    },
+    {
+      "from": "Command",
+      "event": "EXPN command",
+      "action": "Send 250 OK",
+      "to": "Command"
+    },
+    {
+      "from": "Command",
+      "event": "HELP command",
+      "action": "Send 211 or 214",
+      "to": "Command"
+    },
+    {
+      "from": "Command",
+      "event": "NOOP command",
+      "action": "Send 250 OK",
+      "to": "Command"
+    }
+  ]
+}

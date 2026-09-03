@@ -1,0 +1,368 @@
+{
+  "states": [
+    "End of Option List",
+    "No-Operation Option",
+    "Maximum Segment Size Option",
+    "LISTEN",
+    "SYN-SENT",
+    "SYN-RECEIVED",
+    "ESTABLISHED",
+    "FIN-WAIT-1",
+    "FIN-WAIT-2",
+    "CLOSE-WAIT",
+    "CLOSING",
+    "LAST-ACK",
+    "TIME-WAIT",
+    "CLOSED",
+    "Idle",
+    "Active",
+    "urgent mode",
+    "normal mode",
+    "Slow Start",
+    "Congestion Avoidance"
+  ],
+  "transitions": [
+    {
+      "from": "LISTEN",
+      "event": "rcv SYN",
+      "action": "",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "snd SYN,ACK",
+      "action": "",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "rcv ACK of SYN",
+      "action": "",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "snd FIN",
+      "action": "",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "rcv FIN",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "rcv ACK of FIN",
+      "action": "",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "rcv FIN",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "snd FIN",
+      "action": "",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "CLOSING",
+      "event": "rcv ACK of FIN",
+      "action": "",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "rcv ACK of FIN",
+      "action": "",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "CLOSED",
+      "event": "",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "<SEQ=100><CTL=SYN>",
+      "action": "",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "<SEQ=300><ACK=101><CTL=SYN,ACK>",
+      "action": "",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "<SEQ=101><ACK=301><CTL=ACK>",
+      "action": "",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "<SEQ=91><CTL=RST>",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "Close",
+      "action": "construct FIN segment, enter FIN-WAIT-1",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "ACK of FIN and FIN from peer",
+      "action": "ACK FIN",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "",
+      "action": "wait for ACK",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "FIN received from network",
+      "action": "ACK, tell user to CLOSE",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "CLOSE",
+      "action": "send FIN, wait for ACK",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "Close (both users)",
+      "action": "exchange FIN segments",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "Close (both users)",
+      "action": "exchange FIN segments",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "rcv ACK of FIN",
+      "action": "",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "",
+      "action": "linger 2 MSL",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSED STATE",
+      "event": "OPEN",
+      "action": "Create a new TCB; Fill in local socket identifier, remote socket, Diffserv field, security/compartment, and user timeout information; Verify security and Diffserv value; If passive, enter LISTEN state; If active and remote socket is unspecified, return 'error: remote socket unspecified'; If active and remote socket is specified, issue a SYN segment; Select ISS; Send SYN segment; Set SND.UNA to ISS, SND.NXT to ISS+1; Enter SYN-SENT state",
+      "to": "SYN-SENT STATE"
+    },
+    {
+      "from": "LISTEN STATE",
+      "event": "OPEN",
+      "action": "Change connection from passive to active; Select ISS; Send SYN segment; Set SND.UNA to ISS, SND.NXT to ISS+1; Enter SYN-SENT state; Data associated with SEND may be sent with SYN segment or queued for transmission after entering ESTABLISHED state; If remote socket was not specified, then return 'error: remote socket unspecified'",
+      "to": "SYN-SENT STATE"
+    },
+    {
+      "from": "SYN-SENT STATE",
+      "event": "<SEQ=300><ACK=101><CTL=SYN,ACK>",
+      "action": "",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-RECEIVED STATE",
+      "event": "<SEQ=101><ACK=301><CTL=ACK>",
+      "action": "",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "CLOSED STATE",
+      "event": "",
+      "action": "return \"error: connection illegal for this process\"",
+      "to": "LISTEN STATE"
+    },
+    {
+      "from": "LISTEN STATE",
+      "event": "remote socket specified",
+      "action": "change the connection from passive to active, select an ISS. Send a SYN segment, set SND.UNA to ISS, SND.NXT to ISS+1. Enter SYN-SENT state. Data associated with SEND may be sent with SYN segment or queued for transmission after entering ESTABLISHED state. The urgent bit if requested in the command must be sent with the data segments sent as a result of this command. If there is no room to queue the request, respond with \"error: insufficient resources\". If the remote socket was not specified, then return \"error: remote socket unspecified\"",
+      "to": "SYN-SENT STATE"
+    },
+    {
+      "from": "SYN-SENT STATE",
+      "event": "",
+      "action": "Return 'error: connection already exists'",
+      "to": "SYN-SENT STATE"
+    },
+    {
+      "from": "ESTABLISHED STATE",
+      "event": "URGENT flag is set",
+      "action": "SND.UP <- SND.NXT and set the urgent pointer in the outgoing segments",
+      "to": "ESTABLISHED STATE"
+    },
+    {
+      "from": "CLOSE-WAIT STATE",
+      "event": "",
+      "action": "Segmentize the buffer and send it with a piggybacked acknowledgment (acknowledgment value = RCV.NXT). If there is insufficient space to remember this buffer, simply return \"error: insufficient resources\"",
+      "to": "CLOSE-WAIT STATE"
+    },
+    {
+      "from": "TIME-WAIT STATE",
+      "event": "",
+      "action": "Return \"error: connection closing\"",
+      "to": "TIME-WAIT STATE"
+    },
+    {
+      "from": "CLOSED STATE",
+      "event": "",
+      "action": "return \"error: connection does not exist\"",
+      "to": "CLOSED STATE"
+    },
+    {
+      "from": "LISTEN STATE",
+      "event": "",
+      "action": "return \"error: connection reset\"; Delete TCB; enter CLOSED state; and return",
+      "to": "CLOSED STATE"
+    },
+    {
+      "from": "SYN-SENT STATE",
+      "event": "",
+      "action": "give \"connection reset\" notification; Delete the TCB; enter CLOSED state; and return",
+      "to": "CLOSED STATE"
+    },
+    {
+      "from": "SYN-RECEIVED STATE",
+      "event": "",
+      "action": "Queue for processing after entering ESTABLISHED state.  If there\n      is no room to queue this request, respond with \"error: \n      insufficient resources\".",
+      "to": "ESTABLISHED STATE"
+    },
+    {
+      "from": "ESTABLISHED STATE",
+      "event": "",
+      "action": "Reassemble queued incoming segments into receive buffer and return\n      to user.  Mark \"push seen\" (PUSH) if this is the case.",
+      "to": "ESTABLISHED STATE"
+    },
+    {
+      "from": "ESTABLISHED STATE",
+      "event": "",
+      "action": "If RCV.UP is in advance of the data currently being passed to the\n      user, notify the user of the presence of urgent data.",
+      "to": "ESTABLISHED STATE"
+    },
+    {
+      "from": "FIN-WAIT-2 STATE",
+      "event": "",
+      "action": "If insufficient incoming segments are queued to satisfy the\n      request, queue the request.  If there is no queue space to\n      remember the RECEIVE, respond with \"error: insufficient\n      resources\".",
+      "to": "FIN-WAIT-2 STATE"
+    },
+    {
+      "from": "CLOSE-WAIT STATE",
+      "event": "",
+      "action": "Since the remote side has already sent FIN, RECEIVEs must be\n      satisfied by data already on hand, but not yet delivered to the\n      user.  If no text is awaiting delivery, the RECEIVE will get an\n      \"error: connection closing\" response.  Otherwise, any remaining\n      data can be used to satisfy the RECEIVE.",
+      "to": "CLOSE-WAIT STATE"
+    },
+    {
+      "from": "CLOSING STATE",
+      "event": "",
+      "action": "Return \"error: connection closing\".",
+      "to": "CLOSING STATE"
+    },
+    {
+      "from": "LAST-ACK STATE",
+      "event": "",
+      "action": "Return \"error: connection closing\".",
+      "to": "LAST-ACK STATE"
+    },
+    {
+      "from": "TIME-WAIT STATE",
+      "event": "",
+      "action": "Return \"error: connection closing\".",
+      "to": "TIME-WAIT STATE"
+    },
+    {
+      "from": "CLOSED STATE",
+      "event": "SEGMENT ARRIVES",
+      "action": "discard data; if RST, discard; if not RST, send RST",
+      "to": "CLOSED STATE"
+    },
+    {
+      "from": "LISTEN",
+      "event": "RST",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "ACK",
+      "action": "Send RST <SEQ=SEG.ACK><CTL=RST>",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "SYN",
+      "action": "Check security; If mismatch, send RST <SEQ=0><ACK=SEG.SEQ+SEG.LEN><CTL=RST,ACK>; Set RCV.NXT=SEG.SEQ+1, IRS=SEG.SEQ; Select ISS; Send SYN segment; Set SND.UNA to ISS, SND.NXT to ISS+1; Change state to SYN-RECEIVED; Fill in unspecified fields",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "other data or control",
+      "action": "Drop segment and return",
+      "to": "LISTEN"
+    },
+    {
+      "from": "SYN-SENT STATE",
+      "event": "ACK bit is set and SEG.ACK != ISS or SEG.ACK != SND.NXT",
+      "action": "send a reset (<SEQ=SEG.ACK><CTL=RST>) and discard the segment",
+      "to": "SYN-SENT STATE"
+    },
+    {
+      "from": "SYN-SENT STATE",
+      "event": "RST bit is set",
+      "action": "if ACK was acceptable, signal to the user \"error: connection reset\", drop the segment, enter CLOSED state, delete TCB; otherwise, drop the segment",
+      "to": "CLOSED state"
+    },
+    {
+      "from": "SYN-SENT STATE",
+      "event": "security/compartment mismatch",
+      "action": "send a reset (<SEQ=SEG.ACK><CTL=RST> or <SEQ=0><ACK=SEG.SEQ+SEG.LEN><CTL=RST,ACK>) and discard the segment",
+      "to": "SYN-SENT STATE"
+    },
+    {
+      "from": "SYN-SENT STATE",
+      "event": "SYN bit is on and security/compartment is acceptable",
+      "action": "RCV.NXT is set to SEG.SEQ+1, IRS is set to SEG.SEQ, SND.UNA is advanced to equal SEG.ACK, remove acknowledged segments from retransmission queue",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-SENT STATE",
+      "event": "SYN bit is on and security/compartment is acceptable",
+      "action": "change the connection state to ESTABLISHED, form an ACK segment (<SEQ=SND.NXT><ACK=RCV.NXT><CTL=ACK>) and send it, MAY include data or controls",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-SENT STATE",
+      "event": "SYN bit is on and security/compartment is acceptable",
+      "action": "form a SYN,ACK segment (<SEQ=ISS><ACK=RCV.NXT><CTL=SYN,ACK>) and send it, set SND.WND <- SEG.WND, SND.WL1 <- SEG.SEQ, SND.WL2 <- SEG.ACK",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-SENT STATE",
+      "event": "neither SYN nor RST bits are set",
+      "action": "drop the segment",
+      "to": "SYN-SENT STATE"
+    }
+  ]
+}

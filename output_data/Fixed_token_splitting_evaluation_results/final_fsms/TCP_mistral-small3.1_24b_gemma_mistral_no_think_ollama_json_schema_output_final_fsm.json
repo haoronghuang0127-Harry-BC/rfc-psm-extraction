@@ -1,0 +1,522 @@
+{
+  "states": [
+    "CLOSED",
+    "LISTEN",
+    "SYN-SENT",
+    "SYN-RECEIVED",
+    "ESTABLISHED",
+    "FIN-WAIT-1",
+    "FIN-WAIT-2",
+    "CLOSE-WAIT",
+    "CLOSING",
+    "LAST-ACK",
+    "TIME-WAIT",
+    "OPEN"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "active OPEN",
+      "action": "create TCB, snd SYN",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "CLOSED",
+      "event": "passive OPEN",
+      "action": "create TCB",
+      "to": "LISTEN"
+    },
+    {
+      "from": "CLOSED",
+      "event": "OPEN",
+      "action": "Create a new transmission control block (TCB) to hold connection state information. Fill in local socket identifier, remote socket, Diffserv field, security/compartment, and user timeout information. If passive, enter the LISTEN state and return. If active and the remote socket is unspecified, return \"error: remote socket unspecified\"; if active and the remote socket is specified, issue a SYN segment. An initial send sequence number (ISS) is selected. A SYN segment of the form <SEQ=ISS><CTL=SYN> is sent. Set SND.UNA to ISS, SND.NXT to ISS+1, enter SYN-SENT state, and return.",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "CLOSED",
+      "event": "OPEN",
+      "action": "Return \"error: connection illegal for this process\".",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSED",
+      "event": "OPEN",
+      "action": "Return \"error: insufficient resources\".",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSED",
+      "event": "OPEN",
+      "action": "Return \"error: connection does not exist\".",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSED",
+      "event": "SEGMENT ARRIVES",
+      "action": "Discard all data in the incoming segment. An incoming segment containing a RST is discarded. An incoming segment not containing a RST causes a RST to be sent in response.",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSED",
+      "event": "SYN",
+      "action": "",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "CLOSED",
+      "event": "RST",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv SYN",
+      "action": "snd SYN,ACK",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "SYN",
+      "action": "",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "RST",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "OPEN",
+      "action": "Change the connection from passive to active, select an ISS. Send a SYN segment, set SND.UNA to ISS, SND.NXT to ISS+1. Enter SYN-SENT state.",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "LISTEN",
+      "event": "OPEN",
+      "action": "Return \"error: remote socket unspecified\".",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "SEGMENT ARRIVES",
+      "action": "Check for a RST, ACK, SYN, or other data or control.",
+      "to": "LISTEN"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "rcv SYN",
+      "action": "snd ACK",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "rcv SYN,ACK",
+      "action": "snd ACK",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "SYN",
+      "action": "",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "RST",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "SEGMENT ARRIVES",
+      "action": "Check the ACK bit, RST bit, security, and SYN bit.",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "SEGMENT ARRIVES",
+      "action": "Enter SYN-RECEIVED state, form a SYN,ACK segment and send it.",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "SEGMENT ARRIVES",
+      "action": "Change the connection state to ESTABLISHED, form an ACK segment and send it.",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "OPEN",
+      "action": "begin synchronization procedure",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "rcv ACK of SYN",
+      "action": "",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "rcv RST",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "SYN,ACK",
+      "action": "",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "RST",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "RST",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "SYN bit set",
+      "action": "If the connection was initiated with a passive OPEN, then return this connection to the LISTEN state and return. Otherwise, handle per the directions for synchronized states below.",
+      "to": "LISTEN"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "SYN bit set",
+      "action": "If the connection was initiated with a passive OPEN, then return this connection to the LISTEN state and return. Otherwise, handle per the directions for synchronized states below.",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "FIN bit set",
+      "action": "signal the user \"connection closing\" and return any pending RECEIVEs with same message, advance RCV.NXT over the FIN, and send an acknowledgment for the FIN.",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "RST bit set",
+      "action": "If this connection was initiated with a passive OPEN (i.e., came from the LISTEN state), then return this connection to LISTEN state and return. The user need not be informed. If this connection was initiated with an active OPEN (i.e., came from SYN-SENT state), then the connection was refused; signal the user \"connection refused\". In either case, the retransmission queue should be flushed. And in the active OPEN case, enter the CLOSED state and delete the TCB, and return.",
+      "to": "LISTEN"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "RST bit set",
+      "action": "If this connection was initiated with a passive OPEN (i.e., came from the LISTEN state), then return this connection to LISTEN state and return. The user need not be informed. If this connection was initiated with an active OPEN (i.e., came from SYN-SENT state), then the connection was refused; signal the user \"connection refused\". In either case, the retransmission queue should be flushed. And in the active OPEN case, enter the CLOSED state and delete the TCB, and return.",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "SEGMENT ARRIVES",
+      "action": "Process incoming segments in sequence number order.",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "SEGMENT ARRIVES",
+      "action": "Change the connection state to ESTABLISHED.",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "OPEN",
+      "action": "begin synchronization procedure",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "CLOSE",
+      "action": "snd FIN",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "rcv FIN",
+      "action": "snd ACK",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "RST",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "SYN",
+      "action": "",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "SYN bit set",
+      "action": "TCP endpoints MUST send a \"challenge ACK\" to the remote peer: <SEQ=SND.NXT><ACK=RCV.NXT><CTL=ACK>. After sending the acknowledgment, TCP implementations MUST drop the unacceptable segment and stop processing further.",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "FIN bit set",
+      "action": "signal the user \"connection closing\" and return any pending RECEIVEs with same message, advance RCV.NXT over the FIN, and send an acknowledgment for the FIN.",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "SEGMENT ARRIVES",
+      "action": "Process incoming segments in sequence number order.",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "Close",
+      "action": "FIN-WAIT-1  --> <SEQ=100><ACK=300><CTL=FIN,ACK>",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "rcv FIN",
+      "action": "snd ACK",
+      "to": "CLOSING"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "rcv ACK of FIN",
+      "action": "",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "<SEQ=300><ACK=101><CTL=ACK>",
+      "action": "",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "<SEQ=300><ACK=100><CTL=FIN,ACK>",
+      "action": "CLOSING  --> <SEQ=101><ACK=301><CTL=ACK>",
+      "to": "CLOSING"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "FIN",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "RST bit set",
+      "action": "any outstanding RECEIVEs and SEND should receive \"reset\" responses. All segment queues should be flushed. Users should also receive an unsolicited general \"connection reset\" signal. Enter the CLOSED state, delete the TCB, and return.",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "FIN bit set",
+      "action": "signal the user \"connection closing\" and return any pending RECEIVEs with same message, advance RCV.NXT over the FIN, and send an acknowledgment for the FIN.",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "FIN bit set",
+      "action": "signal the user \"connection closing\" and return any pending RECEIVEs with same message, advance RCV.NXT over the FIN, and send an acknowledgment for the FIN.",
+      "to": "CLOSING"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "SEGMENT ARRIVES",
+      "action": "Process incoming segments in sequence number order.",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "rcv FIN",
+      "action": "snd ACK",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "<SEQ=300><ACK=101><CTL=FIN,ACK>",
+      "action": "",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "FIN",
+      "action": "",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "RST bit set",
+      "action": "any outstanding RECEIVEs and SEND should receive \"reset\" responses. All segment queues should be flushed. Users should also receive an unsolicited general \"connection reset\" signal. Enter the CLOSED state, delete the TCB, and return.",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "FIN bit set",
+      "action": "signal the user \"connection closing\" and return any pending RECEIVEs with same message, advance RCV.NXT over the FIN, and send an acknowledgment for the FIN.",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "SEGMENT ARRIVES",
+      "action": "Process incoming segments in sequence number order.",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "CLOSE",
+      "action": "snd FIN",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "FIN",
+      "action": "",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "RST bit set",
+      "action": "any outstanding RECEIVEs and SEND should receive \"reset\" responses. All segment queues should be flushed. Users should also receive an unsolicited general \"connection reset\" signal. Enter the CLOSED state, delete the TCB, and return.",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "FIN bit set",
+      "action": "signal the user \"connection closing\" and return any pending RECEIVEs with same message, advance RCV.NXT over the FIN, and send an acknowledgment for the FIN.",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "SEGMENT ARRIVES",
+      "action": "Process incoming segments in sequence number order.",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "Close",
+      "action": "LAST-ACK  <-- <SEQ=300><ACK=101><CTL=FIN,ACK>",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "CLOSING",
+      "event": "rcv ACK of FIN",
+      "action": "",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "<SEQ=301><ACK=101><CTL=ACK>",
+      "action": "",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "FIN bit set",
+      "action": "signal the user \"connection closing\" and return any pending RECEIVEs with same message, advance RCV.NXT over the FIN, and send an acknowledgment for the FIN.",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "RST bit set",
+      "action": "any outstanding RECEIVEs and SEND should receive \"reset\" responses. All segment queues should be flushed. Users should also receive an unsolicited general \"connection reset\" signal. Enter the CLOSED state, delete the TCB, and return.",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "SEGMENT ARRIVES",
+      "action": "Process incoming segments in sequence number order.",
+      "to": "CLOSING"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "rcv ACK of FIN",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "<SEQ=101><ACK=301><CTL=ACK>",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "FIN bit set",
+      "action": "signal the user \"connection closing\" and return any pending RECEIVEs with same message, advance RCV.NXT over the FIN, and send an acknowledgment for the FIN.",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "RST bit set",
+      "action": "any outstanding RECEIVEs and SEND should receive \"reset\" responses. All segment queues should be flushed. Users should also receive an unsolicited general \"connection reset\" signal. Enter the CLOSED state, delete the TCB, and return.",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "SEGMENT ARRIVES",
+      "action": "Process incoming segments in sequence number order.",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "Timeout=2MSL",
+      "action": "delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "(2 MSL)",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "RST bit set",
+      "action": "Enter the CLOSED state, delete the TCB, and return.",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "FIN bit set",
+      "action": "signal the user \"connection closing\" and return any pending RECEIVEs with same message, advance RCV.NXT over the FIN, and send an acknowledgment for the FIN.",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "TIME-WAIT TIMEOUT",
+      "action": "delete the TCB, enter the CLOSED state, and return.",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "SEGMENT ARRIVES",
+      "action": "Process incoming segments in sequence number order.",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "LISTEN",
+      "event": "OPEN",
+      "action": "allow application to LISTEN on a port",
+      "to": "LISTEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "CLOSE",
+      "action": "close the connection",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "CLOSE",
+      "action": "close the connection",
+      "to": "CLOSED"
+    }
+  ]
+}

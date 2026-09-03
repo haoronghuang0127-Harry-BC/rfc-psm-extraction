@@ -1,0 +1,25 @@
+{
+  "states": [
+    "Initial State"
+  ],
+  "transitions": [
+    {
+      "from": "Initial State",
+      "event": "EHLO",
+      "action": "250 OK",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "HELO",
+      "action": "250 OK",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "RSET",
+      "action": "250 OK",
+      "to": "Initial State"
+    }
+  ]
+}

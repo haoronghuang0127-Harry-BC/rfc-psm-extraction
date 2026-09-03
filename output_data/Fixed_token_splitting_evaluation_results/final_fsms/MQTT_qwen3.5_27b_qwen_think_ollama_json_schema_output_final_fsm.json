@@ -1,0 +1,74 @@
+{
+  "states": [
+    "Token Upload",
+    "Connecting",
+    "Authentication Challenge",
+    "Authenticated",
+    "New Session",
+    "Existing Session",
+    "Connected",
+    "Disconnected"
+  ],
+  "transitions": [
+    {
+      "from": "Token Upload",
+      "event": "Publish token to authz-info",
+      "action": "Disconnect from Broker and reconnect using client authentication",
+      "to": "Connecting"
+    },
+    {
+      "from": "Connecting",
+      "event": "CONNECT (Clean Start=1)",
+      "action": "Set Session Present flag to 0",
+      "to": "New Session"
+    },
+    {
+      "from": "Connecting",
+      "event": "CONNECT (Clean Start=0, Session Exists)",
+      "action": "Resume communications, Set Session Present flag to 1",
+      "to": "Existing Session"
+    },
+    {
+      "from": "Connecting",
+      "event": "CONNECT (Token only)",
+      "action": "Send AUTH packet with reason code 0x18",
+      "to": "Authentication Challenge"
+    },
+    {
+      "from": "Authentication Challenge",
+      "event": "AUTH Response",
+      "action": "Validate token, Send CONNACK 0x00",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Disconnected",
+      "event": "CONNECT",
+      "action": "Validate Token/Scope, Send CONNACK Success",
+      "to": "Connected"
+    },
+    {
+      "from": "Disconnected",
+      "event": "CONNECT",
+      "action": "Send CONNACK Not Authorized",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "PUBLISH (Unauthorized QoS 0)",
+      "action": "Send DISCONNECT, Close Connection",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "Token Expiration",
+      "action": "Send DISCONNECT, Close Connection",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "AUTH",
+      "action": "Update Token",
+      "to": "Connected"
+    }
+  ]
+}

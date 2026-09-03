@@ -1,0 +1,71 @@
+{
+  "states": [
+    "Connection Established",
+    "Initial",
+    "Mail Transaction",
+    "Data Input",
+    "Connection Closed"
+  ],
+  "transitions": [
+    {
+      "from": "Connection Established",
+      "event": "EHLO or HELO",
+      "action": "250 OK",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "MAIL",
+      "action": "250 OK",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "DATA",
+      "action": "354 Start mail input",
+      "to": "Data Input"
+    },
+    {
+      "from": "Data Input",
+      "event": "<CRLF>.<CRLF>",
+      "action": "250 OK or failure reply",
+      "to": "Initial"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RSET",
+      "action": "250 OK, clear buffers",
+      "to": "Initial"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "EHLO",
+      "action": "250 OK, clear buffers",
+      "to": "Initial"
+    },
+    {
+      "from": "Connection Established",
+      "event": "QUIT",
+      "action": "221 OK, close connection",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "Initial",
+      "event": "QUIT",
+      "action": "221 OK, close connection",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "QUIT",
+      "action": "221 OK, abort transaction, close connection",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "Data Input",
+      "event": "QUIT",
+      "action": "221 OK, abort transaction, close connection",
+      "to": "Connection Closed"
+    }
+  ]
+}

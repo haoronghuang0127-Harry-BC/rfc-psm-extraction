@@ -1,0 +1,179 @@
+{
+  "states": [
+    "Begin",
+    "Wait for reply",
+    "Success",
+    "Failure",
+    "Error"
+  ],
+  "transitions": [
+    {
+      "from": "Begin",
+      "event": "",
+      "action": "",
+      "to": "Wait for reply"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "1,3",
+      "action": "",
+      "to": "Error"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "2",
+      "action": "",
+      "to": "Success"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "4,5",
+      "action": "",
+      "to": "Failure"
+    },
+    {
+      "from": "Begin",
+      "event": "RNFR",
+      "action": "",
+      "to": "Wait for reply"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "1,2",
+      "action": "",
+      "to": "Error"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "3",
+      "action": "",
+      "to": "Success"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "4,5",
+      "action": "",
+      "to": "Failure"
+    },
+    {
+      "from": "Begin",
+      "event": "RNTO",
+      "action": "",
+      "to": "Wait for reply"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "1,3",
+      "action": "",
+      "to": "Success"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "2",
+      "action": "",
+      "to": "Error"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "4,5",
+      "action": "",
+      "to": "Failure"
+    },
+    {
+      "from": "Begin",
+      "event": "REST",
+      "action": "",
+      "to": "Wait for reply"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "1,2",
+      "action": "",
+      "to": "Error"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "3",
+      "action": "",
+      "to": "Success"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "4,5",
+      "action": "",
+      "to": "Failure"
+    },
+    {
+      "from": "Begin",
+      "event": "USER",
+      "action": "",
+      "to": "Wait for reply"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "1",
+      "action": "",
+      "to": "Error"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "2",
+      "action": "",
+      "to": "Success"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "3,4,5",
+      "action": "",
+      "to": "Failure"
+    },
+    {
+      "from": "Begin",
+      "event": "PASS",
+      "action": "",
+      "to": "Wait for reply"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "1,3",
+      "action": "",
+      "to": "Error"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "2",
+      "action": "",
+      "to": "Success"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "4,5",
+      "action": "",
+      "to": "Failure"
+    },
+    {
+      "from": "Begin",
+      "event": "ACCT",
+      "action": "",
+      "to": "Wait for reply"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "1,3",
+      "action": "",
+      "to": "Error"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "2",
+      "action": "",
+      "to": "Success"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "4,5",
+      "action": "",
+      "to": "Failure"
+    }
+  ]
+}

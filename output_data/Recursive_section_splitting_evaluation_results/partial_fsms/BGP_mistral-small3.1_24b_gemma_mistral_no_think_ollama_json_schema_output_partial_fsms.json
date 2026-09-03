@@ -1,0 +1,22 @@
+[
+  "{\n  \"states\": [\n    \"Adj-RIB-In\",\n    \"Adj-RIB-Out\",\n    \"Loc-RIB\"\n  ],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [\n    \"TCP connection formed\",\n    \"KEEPALIVE message sent\",\n    \"NOTIFICATION message sent\",\n    \"connection closed\"\n  ],\n  \"transitions\": [\n    {\n      \"from\": \"TCP connection formed\",\n      \"event\": \"KEEPALIVE message sent\",\n      \"action\": \"\",\n      \"to\": \"KEEPALIVE message sent\"\n    },\n    {\n      \"from\": \"TCP connection formed\",\n      \"event\": \"error condition\",\n      \"action\": \"NOTIFICATION message sent\",\n      \"to\": \"connection closed\"\n    }\n  ]\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [\n    \"Idle\",\n    \"Connect\",\n    \"Active\",\n    \"OpenSent\",\n    \"OpenConfirm\",\n    \"Established\"\n  ],\n  \"transitions\": [\n    {\n      \"from\": \"OpenConfirm\",\n      \"event\": \"connection collision\",\n      \"action\": \"send NOTIFICATION message with Error Code Cease\",\n      \"to\": \"Idle\"\n    },\n    {\n      \"from\": \"OpenSent\",\n      \"event\": \"connection collision\",\n      \"action\": \"send NOTIFICATION message with Error Code Cease\",\n      \"to\": \"Idle\"\n    },\n    {\n      \"from\": \"Established\",\n      \"event\": \"connection collision\",\n      \"action\": \"send NOTIFICATION message with Error Code Cease\",\n      \"to\": \"Established\"\n    }\n  ]\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [\n    \"Established\"\n  ],\n  \"transitions\": [\n    {\n      \"from\": \"Established\",\n      \"event\": \"UPDATE message received\",\n      \"action\": \"Check each field for validity, process optional attributes, update Adj-RIB-In, run Decision Process\",\n      \"to\": \"Established\"\n    }\n  ]\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [\n    \"BGP FSM\"\n  ],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}"
+]

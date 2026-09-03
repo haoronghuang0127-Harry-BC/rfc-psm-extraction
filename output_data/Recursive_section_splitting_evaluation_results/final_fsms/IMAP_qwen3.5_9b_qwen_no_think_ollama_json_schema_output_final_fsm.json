@@ -1,0 +1,278 @@
+{
+  "states": [
+    "Not Authenticated",
+    "Authenticated",
+    "Selected",
+    "Logout",
+    "authenticated",
+    "selected",
+    "IDLE",
+    "unauthenticated"
+  ],
+  "transitions": [
+    {
+      "from": "connection established",
+      "event": "",
+      "action": "",
+      "to": "Not Authenticated"
+    },
+    {
+      "from": "connection established",
+      "event": "",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "successful LOGIN or AUTHENTICATE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "successful SELECT or EXAMINE command",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "CLOSE or UNSELECT command, unsolicited CLOSED response code, or failed SELECT or EXAMINE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Authenticated",
+      "event": "rejected connection (BYE greeting)",
+      "action": "",
+      "to": "connection established"
+    },
+    {
+      "from": "not authenticated",
+      "event": "AUTHENTICATE",
+      "action": "authenticate completed",
+      "to": "authenticated"
+    },
+    {
+      "from": "not authenticated",
+      "event": "LOGIN",
+      "action": "login completed",
+      "to": "authenticated"
+    },
+    {
+      "from": "not authenticated",
+      "event": "STARTTLS",
+      "action": "starttls completed, begin TLS negotiation",
+      "to": "not authenticated"
+    },
+    {
+      "from": "authenticated",
+      "event": "SELECT command succeeds",
+      "action": "OK - select completed",
+      "to": "selected"
+    },
+    {
+      "from": "selected",
+      "event": "SELECT command fails",
+      "action": "NO - select failure",
+      "to": "authenticated"
+    },
+    {
+      "from": "selected",
+      "event": "deselecting a selected mailbox",
+      "action": "untagged OK response with [CLOSED]",
+      "to": "authenticated"
+    },
+    {
+      "from": "authenticated",
+      "event": "EXAMINE",
+      "action": "OK - examine completed, now in selected state",
+      "to": "selected"
+    },
+    {
+      "from": "authenticated",
+      "event": "EXAMINE failure",
+      "action": "NO - examine failure, now in authenticated state",
+      "to": "authenticated"
+    },
+    {
+      "from": "IDLE",
+      "event": "DONE",
+      "action": "server sends remaining queued untagged responses then tagged response IDLE terminated",
+      "to": "IDLE"
+    },
+    {
+      "from": "IDLE",
+      "event": "command sent while server waiting for DONE",
+      "action": "",
+      "to": "IDLE"
+    },
+    {
+      "from": "selected",
+      "event": "CLOSE",
+      "action": "OK - close completed",
+      "to": "authenticated"
+    },
+    {
+      "from": "selected",
+      "event": "SELECT",
+      "action": "implicitly close the currently selected mailbox without doing an expunge",
+      "to": "selected"
+    },
+    {
+      "from": "selected",
+      "event": "EXAMINE",
+      "action": "implicitly close the currently selected mailbox without doing an expunge",
+      "to": "authenticated"
+    },
+    {
+      "from": "selected",
+      "event": "LOGOUT",
+      "action": "implicitly close the currently selected mailbox without doing an expunge",
+      "to": "authenticated"
+    },
+    {
+      "from": "selected",
+      "event": "UNSELECT",
+      "action": "OK - unselect completed",
+      "to": "authenticated"
+    },
+    {
+      "from": "selected",
+      "event": "",
+      "action": "BAD - no mailbox selected, or argument supplied but none permitted",
+      "to": "authenticated"
+    },
+    {
+      "from": "unauthenticated",
+      "event": "PREAUTH",
+      "action": "greeting",
+      "to": "authenticated"
+    },
+    {
+      "from": "unauthenticated",
+      "event": "OK",
+      "action": "greeting",
+      "to": "authenticated"
+    },
+    {
+      "from": "unauthenticated",
+      "event": "BYE",
+      "action": "connection refused",
+      "to": "unauthenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "login",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "authenticate",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "STARTTLS",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "select",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "create",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "examine",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "enable",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "logout",
+      "action": "",
+      "to": "Not Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "idle",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "close",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "unselect",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "expunge",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "copy",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "move",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "fetch",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "store",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "search",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "uid",
+      "action": "",
+      "to": "Selected"
+    }
+  ]
+}

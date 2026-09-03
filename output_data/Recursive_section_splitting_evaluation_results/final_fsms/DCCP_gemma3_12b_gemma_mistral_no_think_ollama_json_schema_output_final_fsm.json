@@ -1,0 +1,393 @@
+{
+  "states": [
+    "client",
+    "server",
+    "CLOSED",
+    "LISTEN",
+    "REQUEST",
+    "RESPOND",
+    "PARTOPEN",
+    "OPEN",
+    "CLOSEREQ",
+    "CLOSING",
+    "TIMEWAIT",
+    "DCCP-Request",
+    "DCCP-Response",
+    "Negotiation Initiation",
+    "Server-Priority",
+    "Non-Negotiable",
+    "STABLE",
+    "CHANGING",
+    "UNSTABLE",
+    "ISS",
+    "ISR",
+    "GSS",
+    "GSR",
+    "GAR",
+    "SWL and SWH",
+    "AWL and AWH",
+    "Send NDP Count 0",
+    "Send NDP Count 1",
+    "DCCP A",
+    "DCCP B",
+    "Received",
+    "Received ECN Marked",
+    "Reserved",
+    "Not Yet Received",
+    "Initial State",
+    "HC-Receiver (CCID 2)",
+    "HC-Sender",
+    "Unidirectional Connection",
+    "Bidirectional Connection",
+    "Quiescent",
+    "ECN Capable",
+    "ECN Incapable",
+    "Normal Congestion Response",
+    "Data Dropped Response",
+    "Protocol Constraints",
+    "Application Not Listening",
+    "Receive Buffer",
+    "Corrupt",
+    "Delivered Corrupt",
+    "connection setup",
+    "general use"
+  ],
+  "transitions": [
+    {
+      "from": "DCCP-Response",
+      "event": "DCCP-Request",
+      "action": "Send DCCP-Response",
+      "to": "DCCP-Response"
+    },
+    {
+      "from": "Negotiation Initiation",
+      "event": "Change L option",
+      "action": "retransmit until response",
+      "to": "Negotiation Initiation"
+    },
+    {
+      "from": "Negotiation Initiation",
+      "event": "Change R option",
+      "action": "retransmit until response",
+      "to": "Negotiation Initiation"
+    },
+    {
+      "from": "STABLE",
+      "event": "rcv Change R",
+      "action": "calc new value, snd Confirm L",
+      "to": "CHANGING"
+    },
+    {
+      "from": "STABLE",
+      "event": "rcv Confirm R",
+      "action": "ignore",
+      "to": "STABLE"
+    },
+    {
+      "from": "STABLE",
+      "event": "rcv Change L",
+      "action": "ignore",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "rcv Confirm R",
+      "action": "accept value",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "rcv empty Confirm R",
+      "action": "revert to old value",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "pref list changes",
+      "action": "snd Change L",
+      "to": "UNSTABLE"
+    },
+    {
+      "from": "UNSTABLE",
+      "event": "rcv Confirm/Change R",
+      "action": "ignore",
+      "to": "UNSTABLE"
+    },
+    {
+      "from": "UNSTABLE",
+      "event": "snd Change L",
+      "action": "transition to CHANGING",
+      "to": "CHANGING"
+    },
+    {
+      "from": "CHANGING",
+      "event": "timeout",
+      "action": "snd Change L",
+      "to": "CHANGING"
+    },
+    {
+      "from": "Send NDP Count 0",
+      "event": "Change R(Send NDP Count, 1)",
+      "action": "send NDP Count options",
+      "to": "Send NDP Count 1"
+    },
+    {
+      "from": "Send NDP Count 1",
+      "event": "Change R(Send NDP Count, 0)",
+      "action": "stop sending NDP Count options",
+      "to": "Send NDP Count 0"
+    },
+    {
+      "from": "CLOSED",
+      "event": "",
+      "action": "Request",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "",
+      "action": "Response",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "Ack, DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "Ack, DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "Data, Ack, DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "DCCP-CloseReq",
+      "action": "CLOSEREQ",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "DCCP-Close",
+      "action": "CLOSING",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "DCCP-Reset",
+      "action": "CLOSED (LISTEN)",
+      "to": "CLOSED"
+    },
+    {
+      "from": "OPEN",
+      "event": "DCCP-Close",
+      "action": "CLOSING",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "DCCP-Reset",
+      "action": "TIMEWAIT",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv Request",
+      "action": "snd Response",
+      "to": "RESPOND"
+    },
+    {
+      "from": "RESPOND",
+      "event": "rcv Ack",
+      "action": "snd Ack",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "rcv packet",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "server active close",
+      "action": "snd CloseReq",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "OPEN",
+      "event": "rcv CloseReq",
+      "action": "snd Close",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "rcv Close",
+      "action": "snd Reset",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "rcv Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "RESPOND",
+      "event": "rcv Response",
+      "action": "snd Ack",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "rcv Ack/DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "Initial State",
+      "event": "Change R(Send Ack Vector, 1)",
+      "action": "send Ack Vector options",
+      "to": "Initial State"
+    },
+    {
+      "from": "HC-Sender",
+      "event": "Slow Receiver option",
+      "action": "SHOULD NOT increase its sending rate for approximately one round-trip time",
+      "to": "HC-Sender"
+    },
+    {
+      "from": "LISTEN",
+      "event": "Request or Init Cookie option",
+      "action": "Generate a new socket and switch to that socket; Set S := new socket for this port pair; S.state = RESPOND; Choose S.ISS; Initialize S.GAR := S.ISS; Set S.ISR, S.GSR, S.SWL, S.SWH from packet or Init Cookies",
+      "to": "RESPOND"
+    },
+    {
+      "from": "LISTEN",
+      "event": "Reset",
+      "action": "Generate Reset(No Connection)",
+      "to": "LISTEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "Response or Reset",
+      "action": "Set sequence number variables corresponding to the other endpoint",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "Reset",
+      "action": "Generate Reset(Packet Error)",
+      "to": "REQUEST"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "Response",
+      "action": "Send Ack",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "Sync",
+      "action": "S.OSR := P.seqno; S.state := OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "Request",
+      "action": "Send Response, possibly containing Init Cookie; If Init Cookie was sent, Destroy S and return",
+      "to": "RESPOND"
+    },
+    {
+      "from": "RESPOND",
+      "event": "",
+      "action": "S.OSR := P.seqno; S.state := OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "CloseReq",
+      "action": "Generate Close; S.state := CLOSING; Set CLOSING timer",
+      "to": "CLOSING"
+    },
+    {
+      "from": "OPEN",
+      "event": "Close",
+      "action": "Generate Reset(Closed); Tear down connection",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "OPEN",
+      "event": "Sync",
+      "action": "Generate SyncAck",
+      "to": "OPEN"
+    },
+    {
+      "from": "CLOSING",
+      "event": "",
+      "action": "Generate Reset(Closed); Tear down connection",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "Bidirectional Connection",
+      "event": "DCCP B goes quiescent",
+      "action": "switch ack pattern to unidirectional",
+      "to": "Unidirectional Connection"
+    },
+    {
+      "from": "Unidirectional Connection",
+      "event": "DCCP B sends DCCP-Data or DCCP-DataAck",
+      "action": "switch ack pattern to bidirectional",
+      "to": "Bidirectional Connection"
+    },
+    {
+      "from": "HC-Receiver (CCID 2)",
+      "event": "HC-Sender sends ack-of-acks",
+      "action": "free old Ack Vector state",
+      "to": "HC-Receiver (CCID 2)"
+    },
+    {
+      "from": "HC-Sender",
+      "event": "HC-Receiver has received an ack",
+      "action": "inform HC-Receiver",
+      "to": "HC-Sender"
+    },
+    {
+      "from": "DCCP A",
+      "event": "DCCP-Sync",
+      "action": "elicit an acknowledgement",
+      "to": "DCCP A"
+    },
+    {
+      "from": "DCCP B",
+      "event": "DCCP A acknowledges DCCP B's acknowledgements",
+      "action": "allow DCCP B to free up information",
+      "to": "DCCP B"
+    },
+    {
+      "from": "ECN Capable",
+      "event": "Change L(ECN Inapable, 1)",
+      "action": "send option",
+      "to": "ECN Incapable"
+    },
+    {
+      "from": "ECN Incapable",
+      "event": "Confirm R(ECN Incapable, 1)",
+      "action": "transition to ECN Capable",
+      "to": "ECN Capable"
+    }
+  ]
+}

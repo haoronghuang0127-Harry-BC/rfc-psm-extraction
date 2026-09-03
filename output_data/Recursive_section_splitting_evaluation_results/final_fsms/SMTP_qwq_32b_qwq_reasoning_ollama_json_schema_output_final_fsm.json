@@ -1,0 +1,100 @@
+{
+  "states": [
+    "SMTP Session Established",
+    "Greeting Received",
+    "Client Initiation",
+    "Mail Transaction Start",
+    "Mail Command Sent",
+    "Recipient Commands",
+    "Data Command Sent",
+    "Mail Transaction Complete",
+    "Initialized",
+    "Mail Transaction"
+  ],
+  "transitions": [
+    {
+      "from": "SMTP Session Established",
+      "event": "QUIT",
+      "action": "respond to intervening commands with '503 bad sequence of commands'",
+      "to": "SMTP Session Established"
+    },
+    {
+      "from": "Greeting Received",
+      "event": "EHLO",
+      "action": "server provides list of extensions",
+      "to": "Client Initiation"
+    },
+    {
+      "from": "Greeting Received",
+      "event": "HELO",
+      "action": "",
+      "to": "Client Initiation"
+    },
+    {
+      "from": "Mail Transaction Start",
+      "event": "MAIL FROM",
+      "action": "Reset state tables and buffers, return 250 OK if accepted",
+      "to": "Mail Command Sent"
+    },
+    {
+      "from": "Mail Command Sent",
+      "event": "RCPT TO",
+      "action": "Store recipient, return 250 OK if accepted",
+      "to": "Recipient Commands"
+    },
+    {
+      "from": "Recipient Commands",
+      "event": "RCPT TO",
+      "action": "Store recipient, return 250 OK if accepted",
+      "to": "Recipient Commands"
+    },
+    {
+      "from": "Recipient Commands",
+      "event": "DATA",
+      "action": "Return 354, accept message data until '.', then 250 OK",
+      "to": "Data Command Sent"
+    },
+    {
+      "from": "Data Command Sent",
+      "event": "End of mail data indicator (.)",
+      "action": "Confirm transaction, process recipients and data, return 250 OK",
+      "to": "Mail Transaction Complete"
+    },
+    {
+      "from": "Initialized",
+      "event": "EHLO",
+      "action": "Initialize session",
+      "to": "Initialized"
+    },
+    {
+      "from": "Initialized",
+      "event": "MAIL",
+      "action": "Start mail transaction",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RSET",
+      "action": "Reset to Initialized",
+      "to": "Initialized"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "EHLO",
+      "action": "Reset to Initialized",
+      "to": "Initialized"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "QUIT",
+      "action": "Close session",
+      "to": "Initialized"
+    },
+    {
+      "from": "Initialized",
+      "event": "QUIT",
+      "action": "Close session",
+      "to": "Initialized"
+    }
+  ]
+}

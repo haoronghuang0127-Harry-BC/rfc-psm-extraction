@@ -1,0 +1,33 @@
+{
+  "states": [
+    "Session Initiation",
+    "Mail Transaction",
+    "Mailbox and Address"
+  ],
+  "transitions": [
+    {
+      "from": "Session Initiation",
+      "event": "EHLO",
+      "action": "indicate client's identity",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "MAIL",
+      "action": "reset state tables and buffers",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RCPT",
+      "action": "store forward-path",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "DATA",
+      "action": "store mail data",
+      "to": "Mail Transaction"
+    }
+  ]
+}

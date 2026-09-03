@@ -1,0 +1,45 @@
+{
+  "states": [
+    "AUTHORIZATION",
+    "TRANSACTION",
+    "UPDATE"
+  ],
+  "transitions": [
+    {
+      "from": "AUTHORIZATION",
+      "event": "USER/PASS",
+      "action": "lock maildrop",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "APOP",
+      "action": "lock maildrop",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "QUIT",
+      "action": "close connection",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "QUIT",
+      "action": "release resources",
+      "to": "UPDATE"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "inactivity timeout",
+      "action": "close connection",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "UPDATE",
+      "event": "",
+      "action": "close connection",
+      "to": "AUTHORIZATION"
+    }
+  ]
+}

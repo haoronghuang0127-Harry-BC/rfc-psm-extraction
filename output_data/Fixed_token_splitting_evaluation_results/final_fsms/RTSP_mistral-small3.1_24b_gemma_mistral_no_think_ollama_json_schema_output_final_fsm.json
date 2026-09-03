@@ -1,0 +1,663 @@
+{
+  "states": [
+    "Play state",
+    "Session Establishment",
+    "Media Delivery Control",
+    "Session Context",
+    "Session Terminated",
+    "Persistent Connection",
+    "Transient Connection",
+    "Connection Closed",
+    "Connection Timeout",
+    "Overload",
+    "Init",
+    "Ready",
+    "Play",
+    "Caching",
+    "Validation Model",
+    "Last-Modified Dates",
+    "Message Body Tag Cache Validators",
+    "Weak and Strong Validators",
+    "Non-validating Conditionals",
+    "Invalidation after Updates or Deletions",
+    "100 Continue",
+    "200 OK",
+    "300",
+    "301 Moved Permanently",
+    "302 Found",
+    "303 See Other",
+    "304 Not Modified",
+    "305 Use Proxy",
+    "RTSP Request Received",
+    "Certificate Validation",
+    "Certificate Accepted",
+    "Certificate Rejected",
+    "Connection Credentials Not Accepted",
+    "Connection Authorization Required",
+    "Proxy Authentication Required",
+    "Client Requests Presentation",
+    "Server Redirects to Secure URI",
+    "Client Establishes Secure Connection",
+    "Client Requests Session Description",
+    "Server Responds with Session Description",
+    "Client Sends SETUP Requests",
+    "Server Responds to SETUP Requests",
+    "Client Sends PLAY Request",
+    "Server Responds to PLAY Request",
+    "PLAYBACK",
+    "PLAY mode",
+    "TCP Connection Established",
+    "PLAY Request Sent",
+    "PAUSE Request Sent",
+    "TEARDOWN Request Sent",
+    "SETUP Request Sent"
+  ],
+  "transitions": [
+    {
+      "from": "Session Establishment",
+      "event": "SETUP",
+      "action": "create RTSP session context, store relevant parameters and state, include Session header in response",
+      "to": "Media Delivery Control"
+    },
+    {
+      "from": "Media Delivery Control",
+      "event": "PLAY",
+      "action": "begin playback",
+      "to": "Media Delivery Control"
+    },
+    {
+      "from": "Media Delivery Control",
+      "event": "PAUSE",
+      "action": "suspend playback",
+      "to": "Media Delivery Control"
+    },
+    {
+      "from": "Session Context",
+      "event": "TEARDOWN request",
+      "action": "Terminate the session context",
+      "to": "Session Terminated"
+    },
+    {
+      "from": "Session Context",
+      "event": "Session timeout",
+      "action": "Terminate the session context",
+      "to": "Session Terminated"
+    },
+    {
+      "from": "Session Context",
+      "event": "REDIRECT method",
+      "action": "Indicate the reason and location for redirection",
+      "to": "Session Terminated"
+    },
+    {
+      "from": "Persistent Connection",
+      "event": "Client closes connection",
+      "action": "Close connection",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "Persistent Connection",
+      "event": "Server receives incomplete message",
+      "action": "Wait for completion or close connection",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "Persistent Connection",
+      "event": "Server experiences overload",
+      "action": "Send 503 (Service Unavailable) response",
+      "to": "Overload"
+    },
+    {
+      "from": "Transient Connection",
+      "event": "Single request/response transaction completes",
+      "action": "Close connection",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "Transient Connection",
+      "event": "Server experiences overload",
+      "action": "Send 503 (Service Unavailable) response",
+      "to": "Overload"
+    },
+    {
+      "from": "Connection Closed",
+      "event": "Client establishes new connection",
+      "action": "Open new connection",
+      "to": "Persistent Connection"
+    },
+    {
+      "from": "Connection Closed",
+      "event": "Client establishes new connection",
+      "action": "Open new connection",
+      "to": "Transient Connection"
+    },
+    {
+      "from": "Overload",
+      "event": "Retry-After time elapses",
+      "action": "Retry request",
+      "to": "Persistent Connection"
+    },
+    {
+      "from": "Overload",
+      "event": "Retry-After time elapses",
+      "action": "Retry request",
+      "to": "Transient Connection"
+    },
+    {
+      "from": "Persistent Connection",
+      "event": "Connection Timeout",
+      "action": "Close connection",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "Transient Connection",
+      "event": "Connection Timeout",
+      "action": "Close connection",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "Init",
+      "event": "SETUP",
+      "action": "create RTSP session",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP",
+      "action": "change transport parameters",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP",
+      "action": "change transport parameters",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "start sending data",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY",
+      "action": "replace current PLAY action",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PAUSE",
+      "action": "interrupt stream delivery",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "PAUSE",
+      "action": "interrupt stream delivery",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN",
+      "action": "halt media delivery and destroy session state",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "TEARDOWN",
+      "action": "halt media delivery and destroy session state",
+      "to": "Ready"
+    },
+    {
+      "from": "Session",
+      "event": "SET_PARAMETER",
+      "action": "Update keep-alive timer",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "REDIRECT",
+      "action": "Terminate session and redirect to new server",
+      "to": "Session"
+    },
+    {
+      "from": "Caching",
+      "event": "",
+      "action": "The proxy ascertains whether it has an up-to-date copy of the continuous media content and its description",
+      "to": "Validation Model"
+    },
+    {
+      "from": "Validation Model",
+      "event": "",
+      "action": "The cache first has to check with the origin server to see if its cached entry is still usable",
+      "to": "Last-Modified Dates"
+    },
+    {
+      "from": "Last-Modified Dates",
+      "event": "",
+      "action": "A cache entry is considered to be valid if the cache entry was created after the Last-Modified time",
+      "to": "Message Body Tag Cache Validators"
+    },
+    {
+      "from": "Message Body Tag Cache Validators",
+      "event": "",
+      "action": "The MTag response-header field-value, a message body tag, provides for an opaque cache validator",
+      "to": "Weak and Strong Validators"
+    },
+    {
+      "from": "Weak and Strong Validators",
+      "event": "",
+      "action": "A strong validator changes whenever the bits of an entity changes, while a weak value changes whenever the meaning of an entity changes",
+      "to": "Non-validating Conditionals"
+    },
+    {
+      "from": "Non-validating Conditionals",
+      "event": "",
+      "action": "Comparisons of any other headers are never used for purposes of validating a cache entry",
+      "to": "Invalidation after Updates or Deletions"
+    },
+    {
+      "from": "Invalidation after Updates or Deletions",
+      "event": "",
+      "action": "Some RTSP methods MUST cause a cache to invalidate an entity",
+      "to": "Caching"
+    },
+    {
+      "from": "Caching",
+      "event": "DESCRIBE",
+      "action": "The proxy ascertains whether it has an up-to-date copy of the continuous media content and its description",
+      "to": "Caching"
+    },
+    {
+      "from": "Caching",
+      "event": "SETUP",
+      "action": "The proxy ascertains whether it has an up-to-date copy of the continuous media content and its description",
+      "to": "Caching"
+    },
+    {
+      "from": "Caching",
+      "event": "PLAY",
+      "action": "Subsequent control commands such as PLAY or PAUSE then pass the proxy unmodified",
+      "to": "Caching"
+    },
+    {
+      "from": "Caching",
+      "event": "PAUSE",
+      "action": "Subsequent control commands such as PLAY or PAUSE then pass the proxy unmodified",
+      "to": "Caching"
+    },
+    {
+      "from": "100 Continue",
+      "event": "",
+      "action": "The requesting agent SHOULD continue with its request",
+      "to": "100 Continue"
+    },
+    {
+      "from": "200 OK",
+      "event": "",
+      "action": "The request has succeeded",
+      "to": "200 OK"
+    },
+    {
+      "from": "300",
+      "event": "",
+      "action": "The 300 response code is not used in RTSP 2.0",
+      "to": "300"
+    },
+    {
+      "from": "301 Moved Permanently",
+      "event": "",
+      "action": "The requested resource is moved permanently and resides now at the URI given by the Location header",
+      "to": "301 Moved Permanently"
+    },
+    {
+      "from": "302 Found",
+      "event": "",
+      "action": "The requested resource resides temporarily at the URI given by the Location header",
+      "to": "302 Found"
+    },
+    {
+      "from": "303 See Other",
+      "event": "",
+      "action": "This status code MUST NOT be used in RTSP 2.0",
+      "to": "303 See Other"
+    },
+    {
+      "from": "304 Not Modified",
+      "event": "",
+      "action": "The server SHOULD send a 304 response if the requested resource has not been modified",
+      "to": "304 Not Modified"
+    },
+    {
+      "from": "305 Use Proxy",
+      "event": "",
+      "action": "The requested resource MUST be accessed through the proxy",
+      "to": "305 Use Proxy"
+    },
+    {
+      "from": "Play",
+      "event": "GET_PARAMETER",
+      "action": "respond with the current playing point or pause point as the start of the range",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "GET_PARAMETER",
+      "action": "respond with the current playing point or pause point as the start of the range",
+      "to": "Ready"
+    },
+    {
+      "from": "Session",
+      "event": "TEARDOWN",
+      "action": "Session terminated",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "REDIRECT",
+      "action": "Session redirected",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "Session-Timeout",
+      "action": "Session timed out",
+      "to": "Session"
+    },
+    {
+      "from": "RTSP Request Received",
+      "event": "Accept-Credentials header not included",
+      "action": "Use Proxy method",
+      "to": "Certificate Validation"
+    },
+    {
+      "from": "RTSP Request Received",
+      "event": "Accept-Credentials header included",
+      "action": "Use specified method",
+      "to": "Certificate Validation"
+    },
+    {
+      "from": "Certificate Validation",
+      "event": "Certificate accepted by policy",
+      "action": "Send message to next hop",
+      "to": "Certificate Accepted"
+    },
+    {
+      "from": "Certificate Validation",
+      "event": "Certificate not accepted by policy",
+      "action": "Respond with 471 status code",
+      "to": "Connection Credentials Not Accepted"
+    },
+    {
+      "from": "Certificate Validation",
+      "event": "User method",
+      "action": "Send 470 or 407 response with Connection-Credentials header",
+      "to": "Connection Authorization Required"
+    },
+    {
+      "from": "Connection Authorization Required",
+      "event": "Certificate accepted by client",
+      "action": "Include Accept-Credentials header in RTSP request",
+      "to": "Certificate Accepted"
+    },
+    {
+      "from": "Connection Authorization Required",
+      "event": "Certificate rejected by client",
+      "action": "Respond with 407 status code",
+      "to": "Proxy Authentication Required"
+    },
+    {
+      "from": "Client Requests Presentation",
+      "event": "DESCRIBE rtsp://example.com/twister.3gp RTSP/2.0",
+      "action": "M->C: RTSP/2.0 301 Moved Permanently",
+      "to": "Server Redirects to Secure URI"
+    },
+    {
+      "from": "Server Redirects to Secure URI",
+      "event": "Client Establishes TCP/TLS connection",
+      "action": "",
+      "to": "Client Establishes Secure Connection"
+    },
+    {
+      "from": "Client Establishes Secure Connection",
+      "event": "DESCRIBE rtsps://example.com/twister.3gp RTSP/2.0",
+      "action": "M->C: RTSP/2.0 200 OK",
+      "to": "Server Responds with Session Description"
+    },
+    {
+      "from": "Server Responds with Session Description",
+      "event": "SETUP rtsps://example.com/twister.3gp/trackID=1 RTSP/2.0",
+      "action": "M->C: RTSP/2.0 200 OK",
+      "to": "Server Responds to SETUP Requests"
+    },
+    {
+      "from": "Server Responds with Session Description",
+      "event": "SETUP rtsps://example.com/twister.3gp/trackID=4 RTSP/2.0",
+      "action": "M->C: RTSP/2.0 200 OK",
+      "to": "Server Responds to SETUP Requests"
+    },
+    {
+      "from": "Server Responds to SETUP Requests",
+      "event": "PLAY rtsps://example.com/twister.3gp/ RTSP/2.0",
+      "action": "M->C: RTSP/2.0 200 OK",
+      "to": "Server Responds to PLAY Request"
+    },
+    {
+      "from": "Init",
+      "event": "SETUP",
+      "action": "NRM=1, RP=0.0",
+      "to": "Ready"
+    },
+    {
+      "from": "Init",
+      "event": "SETUP",
+      "action": "3rr Redirect",
+      "to": "Init"
+    },
+    {
+      "from": "Init",
+      "event": "S -> C: REDIRECT",
+      "action": "Terminate all SES",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP",
+      "action": "NRM +=1",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP",
+      "action": "Change transport param",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN",
+      "action": "No session hdr, NRM = 0",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN",
+      "action": "Session hdr, NRM -= 1",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "Play from RP",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "According to range",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PAUSE",
+      "action": "Return PP",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SC:REDIRECT",
+      "action": "Set RedP",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SC:REDIRECT",
+      "action": "Session is removed",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "Timeout",
+      "action": "",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "RedP reached",
+      "action": "TEARDOWN of session",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "PAUSE",
+      "action": "Set RP to present point",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "End of media",
+      "action": "Set RP = End of media",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "End of range",
+      "action": "Set RP = End of range",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY",
+      "action": "Play from present point",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY",
+      "action": "According to range",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SC:PLAY_NOTIFY",
+      "action": "200",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP",
+      "action": "455",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP",
+      "action": "Change transport param.",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "TEARDOWN",
+      "action": "No session hdr",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "TEARDOWN",
+      "action": "No Session hdr, NRM=0",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "TEARDOWN",
+      "action": "455",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SC:REDIRECT",
+      "action": "Set RedP",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SC:REDIRECT",
+      "action": "Session is removed",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "RedP reached",
+      "action": "TEARDOWN of session",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "Timeout",
+      "action": "Stop Media playout",
+      "to": "Init"
+    },
+    {
+      "from": "TCP Connection Established",
+      "event": "PLAY",
+      "action": "media begins to flow from server to client over the RTP TCP connection, and RTCP packets flow bidirectionally over the RTCP TCP connection",
+      "to": "PLAY Request Sent"
+    },
+    {
+      "from": "PLAY Request Sent",
+      "event": "PAUSE",
+      "action": "pauses the flow of packets over the connections, without closing the connections",
+      "to": "PAUSE Request Sent"
+    },
+    {
+      "from": "PAUSE Request Sent",
+      "event": "PLAY",
+      "action": "media begins to flow from server to client over the RTP TCP connection, and RTCP packets flow bidirectionally over the RTCP TCP connection",
+      "to": "PLAY Request Sent"
+    },
+    {
+      "from": "PLAY Request Sent",
+      "event": "TEARDOWN",
+      "action": "TCP connections for RTP and RTCP are to be closed by the RTSP client as soon as possible",
+      "to": "TEARDOWN Request Sent"
+    },
+    {
+      "from": "TEARDOWN Request Sent",
+      "event": "SETUP",
+      "action": "TCP connection is established",
+      "to": "TCP Connection Established"
+    },
+    {
+      "from": "TCP Connection Established",
+      "event": "SETUP",
+      "action": "TCP connection is established",
+      "to": "SETUP Request Sent"
+    },
+    {
+      "from": "Play",
+      "event": "Play",
+      "action": "takes effect immediately replacing the previous request",
+      "to": "Play"
+    }
+  ]
+}

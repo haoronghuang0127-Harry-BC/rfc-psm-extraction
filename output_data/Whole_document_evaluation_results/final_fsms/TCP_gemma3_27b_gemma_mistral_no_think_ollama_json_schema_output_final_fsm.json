@@ -1,0 +1,155 @@
+{
+  "states": [
+    "CLOSED",
+    "LISTEN",
+    "SYN-SENT",
+    "SYN-RECEIVED",
+    "ESTABLISHED",
+    "FIN-WAIT-1",
+    "FIN-WAIT-2",
+    "CLOSE-WAIT",
+    "CLOSING",
+    "LAST-ACK",
+    "TIME-WAIT"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "OPEN",
+      "action": "Create a new TCB",
+      "to": "LISTEN"
+    },
+    {
+      "from": "CLOSED",
+      "event": "OPEN",
+      "action": "Send SYN segment",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "LISTEN",
+      "event": "SYN",
+      "action": "Set RCV.NXT, IRS, send SYN-ACK",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "ACK",
+      "action": "Enter ESTABLISHED state",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "SYN-ACK",
+      "action": "Enter ESTABLISHED state",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "FIN",
+      "action": "Enter CLOSE-WAIT state",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "ACK",
+      "action": "Enter FIN-WAIT-2",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "ACK",
+      "action": "Enter TIME-WAIT",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "FIN",
+      "action": "Send FIN segment, enter LAST-ACK state",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "CLOSING",
+      "event": "ACK",
+      "action": "Enter TIME-WAIT state",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "ACK",
+      "action": "Delete TCB, enter CLOSED state",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "FIN",
+      "action": "Restart 2 MSL timeout",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "CLOSED",
+      "event": "RST",
+      "action": "Discard segment",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "RST",
+      "action": "Discard segment",
+      "to": "LISTEN"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "RST",
+      "action": "Signal error, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "RST",
+      "action": "Signal error, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "RST",
+      "action": "Signal error, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "RST",
+      "action": "Signal error, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "RST",
+      "action": "Signal error, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "RST",
+      "action": "Signal error, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "RST",
+      "action": "Signal error, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "RST",
+      "action": "Delete TCB, enter CLOSED state",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "RST",
+      "action": "Delete TCB, enter CLOSED state",
+      "to": "CLOSED"
+    }
+  ]
+}

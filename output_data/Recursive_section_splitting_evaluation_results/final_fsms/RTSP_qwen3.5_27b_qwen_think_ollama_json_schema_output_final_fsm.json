@@ -1,0 +1,457 @@
+{
+  "states": [
+    "Play state",
+    "Session Established",
+    "Playing",
+    "Paused",
+    "Session Context Established",
+    "Session Context Terminated",
+    "Init",
+    "Ready",
+    "Play",
+    "Ready state",
+    "Session Destroyed",
+    "Non-Aggregated Control",
+    "RTSP session",
+    "No Session",
+    "TCP Connections Not Established",
+    "TCP Connections Established",
+    "Media Flowing",
+    "Media Paused",
+    "Connections Closed"
+  ],
+  "transitions": [
+    {
+      "from": "Session Established",
+      "event": "PLAY",
+      "action": "Server delivers media",
+      "to": "Playing"
+    },
+    {
+      "from": "Playing",
+      "event": "PAUSE",
+      "action": "Delivery halted and point reported in response",
+      "to": "Paused"
+    },
+    {
+      "from": "Paused",
+      "event": "PLAY",
+      "action": "Resume delivery without Range header",
+      "to": "Playing"
+    },
+    {
+      "from": "Session Context Established",
+      "event": "client show liveness",
+      "action": "session context is kept alive",
+      "to": "Session Context Established"
+    },
+    {
+      "from": "Session Context Established",
+      "event": "client fails to show liveness for more than the established session timeout value",
+      "action": "server may terminate the context",
+      "to": "Session Context Terminated"
+    },
+    {
+      "from": "Session Context Established",
+      "event": "client sending a TEARDOWN request",
+      "action": "session context is terminated",
+      "to": "Session Context Terminated"
+    },
+    {
+      "from": "Session Context Established",
+      "event": "server sends a TEARDOWN request",
+      "action": "terminate the session context",
+      "to": "Session Context Terminated"
+    },
+    {
+      "from": "Session Context Established",
+      "event": "server uses the REDIRECT method",
+      "action": "request that the client tear down the session",
+      "to": "Session Context Terminated"
+    },
+    {
+      "from": "Session Context Terminated",
+      "event": "client re-establish the session context",
+      "action": "re-establish the session context",
+      "to": "Session Context Established"
+    },
+    {
+      "from": "Init",
+      "event": "SETUP",
+      "action": "200 OK response with Session ID",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP",
+      "action": "200 OK response with Transport parameters",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP",
+      "action": "200 OK response with Transport parameters and Range header",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN",
+      "action": "Session removed",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "TEARDOWN",
+      "action": "Session removed",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "Timeout",
+      "action": "Session removed",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "Timeout",
+      "action": "Session removed",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "PAUSE",
+      "action": "Put server in Ready state",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY request",
+      "action": "start sending data",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY request",
+      "action": "replace the current PLAY action with the new one requested",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PAUSE request",
+      "action": "put the stream into the Ready state",
+      "to": "Ready"
+    },
+    {
+      "from": "Play state",
+      "event": "PLAY request",
+      "action": "update current PLAY request (total replacement or continuation)",
+      "to": "Play state"
+    },
+    {
+      "from": "Play state",
+      "event": "PLAY_NOTIFY request with Notify-Reason header set to media-properties-update",
+      "action": "client uses Media-Range header to decide further actions if present",
+      "to": "Play state"
+    },
+    {
+      "from": "Play state",
+      "event": "GET_PARAMETER request without a body but including a Media-Range header",
+      "action": "200 OK response includes current Media-Range header",
+      "to": "Play state"
+    },
+    {
+      "from": "Ready",
+      "event": "PAUSE",
+      "action": "200 OK",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN (aggregated/non-aggregated)",
+      "action": "media delivery halted, session state destroyed",
+      "to": "Session Destroyed"
+    },
+    {
+      "from": "Play",
+      "event": "TEARDOWN (aggregated/non-aggregated)",
+      "action": "media delivery halted, session state destroyed",
+      "to": "Session Destroyed"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN (media URI in aggregated)",
+      "action": "removes indicated media stream",
+      "to": "Non-Aggregated Control"
+    },
+    {
+      "from": "Ready",
+      "event": "Server TEARDOWN",
+      "action": "terminate ongoing session",
+      "to": "Session Destroyed"
+    },
+    {
+      "from": "Play",
+      "event": "Server TEARDOWN",
+      "action": "terminate ongoing session",
+      "to": "Session Destroyed"
+    },
+    {
+      "from": "No Session",
+      "event": "successful SETUP request",
+      "action": "RTSP session is created",
+      "to": "RTSP session"
+    },
+    {
+      "from": "RTSP session",
+      "event": "TEARDOWN",
+      "action": "destroyed",
+      "to": "No Session"
+    },
+    {
+      "from": "RTSP session",
+      "event": "REDIRECT",
+      "action": "destroyed",
+      "to": "No Session"
+    },
+    {
+      "from": "RTSP session",
+      "event": "timed out by the server",
+      "action": "destroyed",
+      "to": "No Session"
+    },
+    {
+      "from": "Init",
+      "event": "SETUP",
+      "action": "NRM=1, RP=0.0",
+      "to": "Ready"
+    },
+    {
+      "from": "Init",
+      "event": "SETUP (Needs Redirect)",
+      "action": "3rr Redirect",
+      "to": "Init"
+    },
+    {
+      "from": "Init",
+      "event": "S -> C: REDIRECT (No Session hdr)",
+      "action": "Terminate all SES",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP (New URI)",
+      "action": "NRM +=1",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP (URI Setup prior)",
+      "action": "Change transport param",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN (Prs URI)",
+      "action": "No session hdr, NRM = 0",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN (md URI,NRM=1)",
+      "action": "No Session hdr, NRM = 0",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN (md URI,NRM>1)",
+      "action": "Session hdr, NRM -= 1",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY (Prs URI, No range)",
+      "action": "Play from RP",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY (Prs URI, Range)",
+      "action": "According to range",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY (md URI, NRM=1, Range)",
+      "action": "According to range",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY (md URI, NRM=1)",
+      "action": "Play from RP",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PAUSE (Prs URI)",
+      "action": "Return PP",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SC:REDIRECT (Terminate-Reason)",
+      "action": "Set RedP",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SC:REDIRECT (No Terminate-Reason time parameter)",
+      "action": "Session is removed",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "Timeout",
+      "action": "",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "RedP reached",
+      "action": "TEARDOWN of session",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "PAUSE (Prs URI)",
+      "action": "Set RP to present point",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "End of media (All media)",
+      "action": "Set RP = End of media",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "End of range",
+      "action": "Set RP = End of range",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY (Prs URI, No range)",
+      "action": "Play from present point",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY (Prs URI, Range)",
+      "action": "According to range",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SC:PLAY_NOTIFY",
+      "action": "200",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP (New URI)",
+      "action": "455",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP (md URI)",
+      "action": "455",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP (md URI, IFI)",
+      "action": "Change transport param.",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "TEARDOWN (Prs URI)",
+      "action": "No session hdr",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "TEARDOWN (md URI,NRM=1)",
+      "action": "No Session hdr, NRM=0",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "TEARDOWN (md URI)",
+      "action": "455",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SC:REDIRECT (Terminate Reason with Time parameter)",
+      "action": "Set RedP",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SC:REDIRECT",
+      "action": "Session is removed",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "RedP reached",
+      "action": "TEARDOWN of session",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "Timeout",
+      "action": "Stop Media playout",
+      "to": "Init"
+    },
+    {
+      "from": "TCP Connections Not Established",
+      "event": "2xx reply for SETUP",
+      "action": "initiate the TCP connection",
+      "to": "TCP Connections Established"
+    },
+    {
+      "from": "TCP Connections Established",
+      "event": "PLAY request",
+      "action": "media begins to flow",
+      "to": "Media Flowing"
+    },
+    {
+      "from": "Media Flowing",
+      "event": "PAUSE request",
+      "action": "pauses the flow of packets",
+      "to": "Media Paused"
+    },
+    {
+      "from": "Media Flowing",
+      "event": "TEARDOWN request",
+      "action": "TCP connections... are to be closed",
+      "to": "Connections Closed"
+    },
+    {
+      "from": "Media Paused",
+      "event": "TEARDOWN request",
+      "action": "TCP connections... are to be closed",
+      "to": "Connections Closed"
+    },
+    {
+      "from": "Play state",
+      "event": "PLAY request",
+      "action": "takes effect immediately replacing the previous request",
+      "to": "Play state"
+    }
+  ]
+}

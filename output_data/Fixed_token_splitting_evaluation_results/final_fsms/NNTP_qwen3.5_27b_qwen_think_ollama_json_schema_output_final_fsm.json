@@ -1,0 +1,214 @@
+{
+  "states": [
+    "Initial connection",
+    "Transit mode",
+    "Reading mode",
+    "transit mode",
+    "reader mode",
+    "Connection Closed",
+    "No Group Selected",
+    "Group Selected",
+    "Command Mode",
+    "Waiting for Article Data"
+  ],
+  "transitions": [
+    {
+      "from": "Initial connection",
+      "event": "greeting received",
+      "action": "Advertise MODE-READER capability, NOT READER capability",
+      "to": "Transit mode"
+    },
+    {
+      "from": "Transit mode",
+      "event": "MODE READER",
+      "action": "Advertise READER capability, NOT MODE-READER capability",
+      "to": "Reading mode"
+    },
+    {
+      "from": "transit mode",
+      "event": "MODE READER",
+      "action": "Server returns 200 or 201; capability list changes",
+      "to": "reader mode"
+    },
+    {
+      "from": "transit mode",
+      "event": "QUIT",
+      "action": "Server returns 205; closes connection",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "reader mode",
+      "event": "QUIT",
+      "action": "Server returns 205; closes connection",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "transit mode",
+      "event": "MODE READER",
+      "action": "Server returns 502; closes connection",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "No Group Selected",
+      "event": "GROUP",
+      "action": "211 number low high group",
+      "to": "Group Selected"
+    },
+    {
+      "from": "No Group Selected",
+      "event": "GROUP",
+      "action": "411",
+      "to": "No Group Selected"
+    },
+    {
+      "from": "No Group Selected",
+      "event": "LISTGROUP [group]",
+      "action": "211 number low high group",
+      "to": "Group Selected"
+    },
+    {
+      "from": "No Group Selected",
+      "event": "LISTGROUP [group]",
+      "action": "411",
+      "to": "No Group Selected"
+    },
+    {
+      "from": "No Group Selected",
+      "event": "LISTGROUP",
+      "action": "412",
+      "to": "No Group Selected"
+    },
+    {
+      "from": "No Group Selected",
+      "event": "LAST",
+      "action": "412",
+      "to": "No Group Selected"
+    },
+    {
+      "from": "No Group Selected",
+      "event": "NEXT",
+      "action": "412",
+      "to": "No Group Selected"
+    },
+    {
+      "from": "No Group Selected",
+      "event": "ARTICLE",
+      "action": "412",
+      "to": "No Group Selected"
+    },
+    {
+      "from": "Group Selected",
+      "event": "GROUP",
+      "action": "211 number low high group",
+      "to": "Group Selected"
+    },
+    {
+      "from": "Group Selected",
+      "event": "GROUP",
+      "action": "411",
+      "to": "Group Selected"
+    },
+    {
+      "from": "Group Selected",
+      "event": "LISTGROUP",
+      "action": "211 number low high group",
+      "to": "Group Selected"
+    },
+    {
+      "from": "Group Selected",
+      "event": "LAST",
+      "action": "223 n message-id",
+      "to": "Group Selected"
+    },
+    {
+      "from": "Group Selected",
+      "event": "LAST",
+      "action": "412 or 420 or 422",
+      "to": "Group Selected"
+    },
+    {
+      "from": "Group Selected",
+      "event": "NEXT",
+      "action": "223 n message-id",
+      "to": "Group Selected"
+    },
+    {
+      "from": "Group Selected",
+      "event": "NEXT",
+      "action": "412 or 420 or 421",
+      "to": "Group Selected"
+    },
+    {
+      "from": "Group Selected",
+      "event": "ARTICLE",
+      "action": "220 0|n message-id",
+      "to": "Group Selected"
+    },
+    {
+      "from": "Group Selected",
+      "event": "ARTICLE",
+      "action": "412 or 420 or 423 or 430",
+      "to": "Group Selected"
+    },
+    {
+      "from": "Command Mode",
+      "event": "POST",
+      "action": "340",
+      "to": "Waiting for Article Data"
+    },
+    {
+      "from": "Command Mode",
+      "event": "POST",
+      "action": "440",
+      "to": "Command Mode"
+    },
+    {
+      "from": "Waiting for Article Data",
+      "event": "Article Data",
+      "action": "240, 441",
+      "to": "Command Mode"
+    },
+    {
+      "from": "Command Mode",
+      "event": "IHAVE",
+      "action": "335",
+      "to": "Waiting for Article Data"
+    },
+    {
+      "from": "Command Mode",
+      "event": "IHAVE",
+      "action": "435, 436",
+      "to": "Command Mode"
+    },
+    {
+      "from": "Waiting for Article Data",
+      "event": "Article Data",
+      "action": "235, 436, 437",
+      "to": "Command Mode"
+    },
+    {
+      "from": "Command Mode",
+      "event": "ARTICLE",
+      "action": "220, 412, 420, 423, 430",
+      "to": "Command Mode"
+    },
+    {
+      "from": "Command Mode",
+      "event": "HEAD",
+      "action": "221, 412, 420, 423, 430",
+      "to": "Command Mode"
+    },
+    {
+      "from": "Command Mode",
+      "event": "BODY",
+      "action": "222, 412, 420, 423, 430",
+      "to": "Command Mode"
+    },
+    {
+      "from": "Command Mode",
+      "event": "STAT",
+      "action": "223, 412, 420, 423, 430",
+      "to": "Command Mode"
+    }
+  ]
+}

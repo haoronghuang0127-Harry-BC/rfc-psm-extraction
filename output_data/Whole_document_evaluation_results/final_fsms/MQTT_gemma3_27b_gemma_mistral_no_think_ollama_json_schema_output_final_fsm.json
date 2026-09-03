@@ -1,0 +1,78 @@
+{
+  "states": [
+    "Client connected",
+    "Client disconnected",
+    "Token validated",
+    "Token invalid",
+    "Session established",
+    "Session not established"
+  ],
+  "transitions": [
+    {
+      "from": "Client connected",
+      "event": "PUBLISH packet received",
+      "action": "Authorize publish",
+      "to": "Client connected"
+    },
+    {
+      "from": "Client connected",
+      "event": "SUBSCRIBE packet received",
+      "action": "Authorize subscribe",
+      "to": "Client connected"
+    },
+    {
+      "from": "Client connected",
+      "event": "DISCONNECT",
+      "action": "Close connection",
+      "to": "Client disconnected"
+    },
+    {
+      "from": "Client disconnected",
+      "event": "CONNECT",
+      "action": "Attempt token validation",
+      "to": "Token validated"
+    },
+    {
+      "from": "Token validated",
+      "event": "Valid token",
+      "action": "Establish session",
+      "to": "Session established"
+    },
+    {
+      "from": "Token validated",
+      "event": "Invalid token",
+      "action": "Reject connection",
+      "to": "Token invalid"
+    },
+    {
+      "from": "Session established",
+      "event": "PUBLISH packet received",
+      "action": "Authorize publish",
+      "to": "Session established"
+    },
+    {
+      "from": "Session established",
+      "event": "SUBSCRIBE packet received",
+      "action": "Authorize subscribe",
+      "to": "Session established"
+    },
+    {
+      "from": "Session established",
+      "event": "DISCONNECT",
+      "action": "Close connection",
+      "to": "Client disconnected"
+    },
+    {
+      "from": "Token invalid",
+      "event": "",
+      "action": "",
+      "to": "Client disconnected"
+    },
+    {
+      "from": "Session established",
+      "event": "Token expiration",
+      "action": "Send 'Not authorized'",
+      "to": "Client disconnected"
+    }
+  ]
+}

@@ -1,0 +1,271 @@
+{
+  "states": [
+    "CLOSED",
+    "CLOSING",
+    "CLOSEREQ",
+    "LISTEN",
+    "OPEN",
+    "PARTOPEN",
+    "REQUEST",
+    "RESPOND",
+    "State 0",
+    "State 0/1",
+    "State 1",
+    "State 3",
+    "TIMEWAIT"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "DCCP-Request",
+      "action": "sending DCCP-Request",
+      "to": "REQUEST"
+    },
+    {
+      "from": "LISTEN",
+      "event": "DCCP-Request",
+      "action": "receiving DCCP-Request",
+      "to": "RESPOND"
+    },
+    {
+      "from": "REQUEST",
+      "event": "DCCP-Response",
+      "action": "receiving DCCP-Response",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "DCCP-CloseReq",
+      "action": "sending DCCP-CloseReq",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "OPEN",
+      "event": "",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "DCCP-Reset",
+      "action": "receiving DCCP-Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv Request",
+      "action": "snd Response",
+      "to": "RESPOND"
+    },
+    {
+      "from": "RESPOND",
+      "event": "rcv Ack/DataAck",
+      "action": "leaves the RESPOND state for OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "timeout of not less than 4MSL",
+      "action": "send a DCCP-Reset with Reset Code 2, 'Aborted'",
+      "to": "CLOSED"
+    },
+    {
+      "from": "REQUEST",
+      "event": "rcv Response",
+      "action": "moves from the REQUEST state to PARTOPEN",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "rcv packet other than DCCP-Response, DCCP-Reset, or DCCP-Sync",
+      "action": "leaves the PARTOPEN state for OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "snd CloseReq",
+      "action": "server active close",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "OPEN",
+      "event": "active close or rcv CloseReq",
+      "action": "client moves from OPEN through CLOSING",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "rcv Close",
+      "action": "snd Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "rcv Reset",
+      "action": "hold TIMEWAIT state",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "2MSL timer expires",
+      "action": "transition to CLOSED",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv Reset",
+      "action": "hold TIMEWAIT state",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "REQUEST",
+      "event": "rcv Reset",
+      "action": "hold TIMEWAIT state",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "RESPOND",
+      "event": "rcv Reset",
+      "action": "hold TIMEWAIT state",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "rcv Reset",
+      "action": "hold TIMEWAIT state",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "OPEN",
+      "event": "rcv Reset",
+      "action": "hold TIMEWAIT state",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "rcv Reset",
+      "action": "hold TIMEWAIT state",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "REQUEST",
+      "event": "Response",
+      "action": "S.state := PARTOPEN",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "Reset",
+      "action": "Tear down connection; Set TIMEWAIT timer; S.state := TIMEWAIT",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "Response",
+      "action": "Send Ack",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "CloseReq",
+      "action": "Generate Close; S.state := CLOSING",
+      "to": "CLOSING"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "Data",
+      "action": "S.state := OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "Request",
+      "action": "Send Response; S.state := OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "CloseReq",
+      "action": "Generate Close; S.state := CLOSING",
+      "to": "CLOSING"
+    },
+    {
+      "from": "OPEN",
+      "event": "Reset",
+      "action": "Tear down connection; Set TIMEWAIT timer; S.state := TIMEWAIT",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "Reset",
+      "action": "Tear down connection; Set TIMEWAIT timer; S.state := TIMEWAIT",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "State 0",
+      "event": "Receive Acknowledgement",
+      "action": "Combine states according to table",
+      "to": "State 0"
+    },
+    {
+      "from": "State 0",
+      "event": "Receive Acknowledgement",
+      "action": "Combine states according to table",
+      "to": "State 1"
+    },
+    {
+      "from": "State 0",
+      "event": "Receive Acknowledgement",
+      "action": "Combine states according to table",
+      "to": "State 0/1"
+    },
+    {
+      "from": "State 1",
+      "event": "Receive Acknowledgement",
+      "action": "Combine states according to table",
+      "to": "State 0/1"
+    },
+    {
+      "from": "State 1",
+      "event": "Receive Acknowledgement",
+      "action": "Combine states according to table",
+      "to": "State 1"
+    },
+    {
+      "from": "State 3",
+      "event": "Receive Acknowledgement",
+      "action": "Combine states according to table",
+      "to": "State 0"
+    },
+    {
+      "from": "State 3",
+      "event": "Receive Acknowledgement",
+      "action": "Combine states according to table",
+      "to": "State 1"
+    },
+    {
+      "from": "State 3",
+      "event": "Receive Acknowledgement",
+      "action": "Combine states according to table",
+      "to": "State 3"
+    }
+  ]
+}

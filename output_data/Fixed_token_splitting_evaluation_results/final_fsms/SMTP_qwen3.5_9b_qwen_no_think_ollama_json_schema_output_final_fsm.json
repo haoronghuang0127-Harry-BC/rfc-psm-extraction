@@ -1,0 +1,38 @@
+{
+  "states": [
+    "Initial State",
+    "Mail Transaction In Progress"
+  ],
+  "transitions": [
+    {
+      "from": "Initial State",
+      "event": "MAIL command",
+      "action": "reset all state tables and buffers",
+      "to": "Mail Transaction In Progress"
+    },
+    {
+      "from": "Mail Transaction In Progress",
+      "event": "RCPT command",
+      "action": "store the forward-path",
+      "to": "Mail Transaction In Progress"
+    },
+    {
+      "from": "Mail Transaction In Progress",
+      "event": "DATA command",
+      "action": "consider succeeding lines as message text; upon end of mail data indicator, process stored recipients and mail data",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "EHLO",
+      "action": "250 OK",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "HELO",
+      "action": "250 OK",
+      "to": "Initial State"
+    }
+  ]
+}

@@ -1,0 +1,128 @@
+{
+  "states": [
+    "Connection",
+    "Session",
+    "Not Authenticated State",
+    "Authenticated State",
+    "Selected State",
+    "Logout State",
+    "Any State",
+    "authenticated state",
+    "selected state",
+    "Unauthenticated",
+    "UNDELETED",
+    "UNDRAFT",
+    "UNFLAGGED",
+    "UNKEYWORD <flag>",
+    "UNKNOWN-CTE",
+    "UNSEEN",
+    "UNSEEN (status item)",
+    "UNSELECT",
+    "UNSUBSCRIBE",
+    "Unique Identifier (UID)"
+  ],
+  "transitions": [
+    {
+      "from": "Connection",
+      "event": "",
+      "action": "initial greeting from the server",
+      "to": "Session"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "successful LOGIN or AUTHENTICATE command",
+      "action": "",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "successful SELECT or EXAMINE command",
+      "action": "",
+      "to": "Selected State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "CLOSE or UNSELECT command, unsolicited CLOSED response code, or failed SELECT or EXAMINE command",
+      "action": "",
+      "to": "Not Authenticated State"
+    },
+    {
+      "from": "Selected State",
+      "event": "LOGOUT command",
+      "action": "send an untagged BYE response and a tagged OK response to the LOGOUT command",
+      "to": "Logout State"
+    },
+    {
+      "from": "Selected State",
+      "event": "server shutdown, or connection closed",
+      "action": "",
+      "to": "Logout State"
+    },
+    {
+      "from": "Logout State",
+      "event": "both sides close the connection",
+      "action": "",
+      "to": "Logout State"
+    },
+    {
+      "from": "Any State",
+      "event": "CAPABILITY",
+      "action": "OK",
+      "to": "Any State"
+    },
+    {
+      "from": "Any State",
+      "event": "NOOP",
+      "action": "OK",
+      "to": "Any State"
+    },
+    {
+      "from": "Any State",
+      "event": "LOGOUT",
+      "action": "OK",
+      "to": "Any State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "AUTHENTICATE",
+      "action": "OK",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "LOGIN",
+      "action": "OK",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "STARTTLS",
+      "action": "OK",
+      "to": "Not Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "STARTTLS",
+      "action": "OK",
+      "to": "Not Authenticated State"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "d login",
+      "action": "S: d NO [CONTACTADMIN]",
+      "to": "Unauthenticated"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "d login",
+      "action": "S: d NO [EXPIRED]",
+      "to": "Unauthenticated"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "a LOGIN",
+      "action": "S: a NO [UNAVAILABLE]",
+      "to": "Unauthenticated"
+    }
+  ]
+}

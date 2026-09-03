@@ -1,0 +1,57 @@
+{
+  "states": [
+    "Init",
+    "Ready",
+    "Play"
+  ],
+  "transitions": [
+    {
+      "from": "Init",
+      "event": "SETUP",
+      "action": "Session Created",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP",
+      "action": "Transport Changed",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP",
+      "action": "Transport Changed",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "Start Delivery",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY",
+      "action": "Update Range/Action",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PAUSE",
+      "action": "Pause / State Change",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "PAUSE",
+      "action": "enters the Ready state; 200 OK response MUST include the Range header",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "resumes from the pause point and plays until media end",
+      "to": "Play"
+    }
+  ]
+}

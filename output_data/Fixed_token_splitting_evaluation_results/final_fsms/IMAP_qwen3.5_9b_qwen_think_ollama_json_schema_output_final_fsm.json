@@ -1,0 +1,107 @@
+{
+  "states": [
+    "Not Authenticated",
+    "Authenticated",
+    "Selected",
+    "Logout",
+    "Any State"
+  ],
+  "transitions": [
+    {
+      "from": "Not Authenticated",
+      "event": "LOGIN or AUTHENTICATE command",
+      "action": "successful authentication",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "SELECT or EXAMINE command",
+      "action": "successful selection",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "CLOSE or UNSELECT command",
+      "action": "successful close/unselect",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "failed SELECT or EXAMINE command",
+      "action": "error in selecting mailbox",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "LOGOUT command",
+      "action": "logout response sent",
+      "to": "Logout"
+    },
+    {
+      "from": "Authenticated",
+      "event": "LOGOUT command",
+      "action": "logout response sent",
+      "to": "Logout"
+    },
+    {
+      "from": "Selected",
+      "event": "LOGOUT command",
+      "action": "logout response sent",
+      "to": "Logout"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "server shutdown or connection closed",
+      "action": "unilateral action",
+      "to": "Logout"
+    },
+    {
+      "from": "Authenticated",
+      "event": "server shutdown or connection closed",
+      "action": "unilateral action",
+      "to": "Logout"
+    },
+    {
+      "from": "Selected",
+      "event": "server shutdown or connection closed",
+      "action": "unilateral action",
+      "to": "Logout"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "AUTHENTICATE",
+      "action": "authenticate completed",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "STARTTLS",
+      "action": "starttls completed",
+      "to": "Not Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "SELECT",
+      "action": "OK [READ-WRITE] SELECT completed",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "EXAMINE",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "CLOSE",
+      "action": "OK CLOSE completed",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "UNSELECT",
+      "action": "OK Unselect completed",
+      "to": "Authenticated"
+    }
+  ]
+}

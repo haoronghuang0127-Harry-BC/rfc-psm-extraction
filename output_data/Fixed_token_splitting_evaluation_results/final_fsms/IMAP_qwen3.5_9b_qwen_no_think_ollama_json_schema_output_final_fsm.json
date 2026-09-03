@@ -1,0 +1,187 @@
+{
+  "states": [
+    "Not Authenticated",
+    "Authenticated",
+    "Selected",
+    "Logout",
+    "not authenticated",
+    "authenticated",
+    "unauthenticated"
+  ],
+  "transitions": [
+    {
+      "from": "Not Authenticated",
+      "event": "successful LOGIN or AUTHENTICATE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "successful SELECT or EXAMINE command",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "CLOSE or UNSELECT command, unsolicited CLOSED response code, or failed SELECT or EXAMINE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "CLOSE or UNSELECT command, unsolicited CLOSED response code, or failed SELECT or EXAMINE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Selected",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "connection without pre-authentication (OK greeting)",
+      "action": "",
+      "to": "Not Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "pre-authenticated connection (PREAUTH greeting)",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "rejected connection (BYE greeting)",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "not authenticated",
+      "event": "AUTHENTICATE",
+      "action": "authenticate completed",
+      "to": "authenticated"
+    },
+    {
+      "from": "not authenticated",
+      "event": "LOGIN",
+      "action": "login completed",
+      "to": "authenticated"
+    },
+    {
+      "from": "not authenticated",
+      "event": "STARTTLS",
+      "action": "starttls completed",
+      "to": "not authenticated"
+    },
+    {
+      "from": "unauthenticated",
+      "event": "AUTHENTICATE",
+      "action": "Success (tls protection)",
+      "to": "authenticated"
+    },
+    {
+      "from": "unauthenticated",
+      "event": "LOGIN",
+      "action": "login completed",
+      "to": "authenticated"
+    },
+    {
+      "from": "authenticated",
+      "event": "SELECT",
+      "action": "OK [READ-WRITE] SELECT completed",
+      "to": "selected"
+    },
+    {
+      "from": "authenticated",
+      "event": "EXAMINE",
+      "action": "OK [READ-WRITE] EXAMINE completed",
+      "to": "selected"
+    },
+    {
+      "from": "selected",
+      "event": "CLOSE",
+      "action": "OK CLOSE completed",
+      "to": "authenticated"
+    },
+    {
+      "from": "selected",
+      "event": "UNSELECT",
+      "action": "OK Unselect completed",
+      "to": "authenticated"
+    },
+    {
+      "from": "selected",
+      "event": "LOGOUT",
+      "action": "OK LOGOUT completed",
+      "to": "authenticated"
+    },
+    {
+      "from": "selected",
+      "event": "SELECT",
+      "action": "OK [READ-WRITE] SELECT completed",
+      "to": "selected"
+    },
+    {
+      "from": "selected",
+      "event": "EXAMINE",
+      "action": "OK [READ-WRITE] EXAMINE completed",
+      "to": "selected"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "LOGIN",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "AUTHENTICATE",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "STARTTLS",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "SELECT",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "EXAMINE",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "CLOSE",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "UNSELECT",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "LOGOUT",
+      "action": "",
+      "to": "Not Authenticated"
+    }
+  ]
+}

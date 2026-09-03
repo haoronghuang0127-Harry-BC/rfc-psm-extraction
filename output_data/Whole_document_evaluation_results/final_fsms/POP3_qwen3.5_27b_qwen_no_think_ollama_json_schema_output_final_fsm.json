@@ -1,0 +1,27 @@
+{
+  "states": [
+    "AUTHORIZATION",
+    "TRANSACTION",
+    "UPDATE"
+  ],
+  "transitions": [
+    {
+      "from": "AUTHORIZATION",
+      "event": "successful authentication",
+      "action": "server acquires resources associated with the client's maildrop",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "QUIT",
+      "action": "session terminates",
+      "to": "UPDATE"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "QUIT",
+      "action": "server releases resources and closes TCP connection",
+      "to": "UPDATE"
+    }
+  ]
+}

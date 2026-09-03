@@ -1,0 +1,135 @@
+{
+  "states": [
+    "authenticated state",
+    "Authenticated",
+    "Authenticated State",
+    "Logout",
+    "Not Authenticated",
+    "Not Authenticated State",
+    "Selected",
+    "selected state",
+    "unauthenticated"
+  ],
+  "transitions": [
+    {
+      "from": "Not Authenticated",
+      "event": "successful LOGIN or AUTHENTICATE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "successful SELECT or EXAMINE command",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "CLOSE or UNSELECT command, unsolicited CLOSED response code, or failed SELECT or EXAMINE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "untagged BYE response and a tagged OK response",
+      "to": "Logout"
+    },
+    {
+      "from": "Authenticated",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "untagged BYE response and a tagged OK response",
+      "to": "Logout"
+    },
+    {
+      "from": "Selected",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "untagged BYE response and a tagged OK response",
+      "to": "Logout"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "AUTHENTICATE",
+      "action": "authenticate completed, now in authenticated state",
+      "to": "authenticated state"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "LOGIN",
+      "action": "login completed, now in authenticated state",
+      "to": "authenticated state"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "STARTTLS",
+      "action": "starttls completed, begin TLS negotiation",
+      "to": "Not Authenticated State"
+    },
+    {
+      "from": "authenticated state",
+      "event": "SELECT/EXAMINE",
+      "action": "enter the selected state",
+      "to": "selected state"
+    },
+    {
+      "from": "authenticated state",
+      "event": "ENABLE",
+      "action": "OK - Relevant capabilities enabled",
+      "to": "authenticated state"
+    },
+    {
+      "from": "Authenticated",
+      "event": "SELECT",
+      "action": "OK [PERMANENTFLAGS...]",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "SELECT",
+      "action": "NO",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "CLOSE",
+      "action": "OK [CLOSED]",
+      "to": "Authenticated"
+    },
+    {
+      "from": "authenticated state",
+      "event": "EXAMINE",
+      "action": "OK - examine completed",
+      "to": "selected state"
+    },
+    {
+      "from": "authenticated state",
+      "event": "EXAMINE",
+      "action": "NO - examine failure",
+      "to": "authenticated state"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "SUBSCRIBE",
+      "action": "subscribe completed",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "selected state",
+      "event": "CLOSE",
+      "action": "OK - close completed",
+      "to": "authenticated state"
+    },
+    {
+      "from": "Selected",
+      "event": "UNSELECT",
+      "action": "OK - unselect completed",
+      "to": "Authenticated"
+    },
+    {
+      "from": "unauthenticated",
+      "event": "PREAUTH response",
+      "action": "moves connection directly to the authenticated state",
+      "to": "authenticated state"
+    }
+  ]
+}

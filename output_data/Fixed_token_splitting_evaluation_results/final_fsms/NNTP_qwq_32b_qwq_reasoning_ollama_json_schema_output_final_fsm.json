@@ -1,0 +1,38 @@
+{
+  "states": [
+    "Initial Connection",
+    "Reader Mode"
+  ],
+  "transitions": [
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "Server sends greeting (200, 201, 400, 502)",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "QUIT",
+      "action": "Server responds 205 and closes connection",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "CAPABILITIES",
+      "action": "Server responds 101 with capability list",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "MODE READER",
+      "action": "Server responds 200/201 (posting allowed/prohibited) or 502",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "QUIT",
+      "action": "Server responds 205 and closes connection",
+      "to": "Reader Mode"
+    }
+  ]
+}

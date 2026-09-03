@@ -1,0 +1,168 @@
+{
+  "states": [
+    "No Session",
+    "Session Established",
+    "PLAY",
+    "PAUSE",
+    "Established Session Context",
+    "Terminated",
+    "Init",
+    "Ready",
+    "Play",
+    "Play state",
+    "Informational 1xx",
+    "destroyed"
+  ],
+  "transitions": [
+    {
+      "from": "No Session",
+      "event": "SETUP request",
+      "action": "Create RTSP session, send Session and Transport headers",
+      "to": "Session Established"
+    },
+    {
+      "from": "Session Established",
+      "event": "SETUP request for new media resource",
+      "action": "Add media resource to session if allowed",
+      "to": "Session Established"
+    },
+    {
+      "from": "PAUSE",
+      "event": "PLAY",
+      "action": "resumes playback from paused position",
+      "to": "PLAY"
+    },
+    {
+      "from": "PLAY",
+      "event": "PAUSE",
+      "action": "halts delivery, reports paused position",
+      "to": "PAUSE"
+    },
+    {
+      "from": "Established Session Context",
+      "event": "TEARDOWN request",
+      "action": "Terminate session context",
+      "to": "Terminated"
+    },
+    {
+      "from": "Established Session Context",
+      "event": "REDIRECT method",
+      "action": "Request re-establishment at alternative server",
+      "to": "Terminated"
+    },
+    {
+      "from": "Established Session Context",
+      "event": "Session timeout",
+      "action": "Terminate session context",
+      "to": "Terminated"
+    },
+    {
+      "from": "Established Session Context",
+      "event": "Keep-alive (RTCP or RTSP request)",
+      "action": "Maintain session context",
+      "to": "Established Session Context"
+    },
+    {
+      "from": "Init",
+      "event": "SETUP",
+      "action": "creates RTSP session",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP",
+      "action": "changes transport parameters",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP",
+      "action": "changes transport parameters",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "start sending data from specified range",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY",
+      "action": "replace current PLAY action",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PAUSE",
+      "action": "stop sending data, set pause point",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "end of range or media",
+      "action": "stop sending data",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY_NOTIFY request with Notify-Reason: media-properties-update",
+      "action": "Check Media-Range header for further actions",
+      "to": "Play state"
+    },
+    {
+      "from": "Play state",
+      "event": "GET_PARAMETER request with Media-Range header",
+      "action": "Receive 200 OK response with current Media-Range header",
+      "to": "Play state"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY_NOTIFY end-of-stream",
+      "action": "respond with 200 OK",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY_NOTIFY media-properties-update",
+      "action": "respond with 200 OK",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY_NOTIFY scale-change",
+      "action": "respond with 200 OK",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PAUSE",
+      "action": "Interrupt stream delivery, set pause point, return Range header",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN",
+      "action": "halt media delivery, destroy session",
+      "to": "destroyed"
+    },
+    {
+      "from": "Play",
+      "event": "TEARDOWN",
+      "action": "halt media delivery, destroy session",
+      "to": "destroyed"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN on media URI in aggregated session",
+      "action": "remove media stream, keep session",
+      "to": "Ready"
+    },
+    {
+      "from": "Informational 1xx",
+      "event": "100 Continue",
+      "action": "The requesting agent SHOULD continue with its request. The responding agent MUST send a final response after the request has been completed.",
+      "to": "Informational 1xx"
+    }
+  ]
+}

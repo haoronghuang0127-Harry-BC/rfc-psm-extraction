@@ -1,0 +1,21 @@
+{
+  "states": [
+    "AUTHORIZATION",
+    "TRANSACTION",
+    "UPDATE"
+  ],
+  "transitions": [
+    {
+      "from": "AUTHORIZATION",
+      "event": "Successful Authentication (USER/PASS or APOP)",
+      "action": "Server acquires lock, responds +OK",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "QUIT command",
+      "action": "Remove deleted messages, release lock, close connection",
+      "to": "UPDATE"
+    }
+  ]
+}

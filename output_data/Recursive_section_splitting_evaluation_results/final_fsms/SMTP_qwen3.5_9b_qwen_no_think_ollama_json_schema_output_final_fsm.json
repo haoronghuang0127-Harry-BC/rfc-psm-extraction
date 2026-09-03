@@ -1,0 +1,144 @@
+{
+  "states": [
+    "Initial",
+    "Mail Transaction In Progress",
+    "Initial State",
+    "Terminated",
+    "initialized",
+    "mail_transaction_open"
+  ],
+  "transitions": [
+    {
+      "from": "Initial",
+      "event": "MAIL command",
+      "action": "reset all state tables and buffers",
+      "to": "Mail Transaction In Progress"
+    },
+    {
+      "from": "Mail Transaction In Progress",
+      "event": "RCPT command",
+      "action": "store the forward-path",
+      "to": "Mail Transaction In Progress"
+    },
+    {
+      "from": "Mail Transaction In Progress",
+      "event": "DATA command",
+      "action": "consider succeeding lines as message text until end of mail data indicator",
+      "to": "Mail Transaction In Progress"
+    },
+    {
+      "from": "Mail Transaction In Progress",
+      "event": "end of mail data indicator",
+      "action": "confirm the transaction and process stored recipients and mail data",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial State",
+      "event": "EHLO",
+      "action": "successful response, failure response, or error response",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "HELO",
+      "action": "reply properly",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "RSET",
+      "action": "250 OK reply",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "NOOP",
+      "action": "250 OK reply",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "HELP",
+      "action": "send helpful information",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "VRFY",
+      "action": "confirm user or mailbox",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "EXPN",
+      "action": "confirm mailing list and return membership",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "QUIT",
+      "action": "221 OK reply, close transmission channel",
+      "to": "Terminated"
+    },
+    {
+      "from": "Initial State",
+      "event": "MAIL",
+      "action": "clears buffers, inserts reverse-path",
+      "to": "Mail Transaction In Progress"
+    },
+    {
+      "from": "Mail Transaction In Progress",
+      "event": "RCPT",
+      "action": "appends forward-path",
+      "to": "Mail Transaction In Progress"
+    },
+    {
+      "from": "Mail Transaction In Progress",
+      "event": "DATA",
+      "action": "appends mail data, clears buffers on completion",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction In Progress",
+      "event": "RSET",
+      "action": "discards stored info, clears buffers, 250 OK reply",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction In Progress",
+      "event": "QUIT",
+      "action": "aborts current transaction, 221 OK reply, close transmission channel",
+      "to": "Terminated"
+    },
+    {
+      "from": "initialized",
+      "event": "EHLO",
+      "action": "clear all buffers and reset the state exactly as if a RSET command had been issued",
+      "to": "initialized"
+    },
+    {
+      "from": "initialized",
+      "event": "MAIL",
+      "action": "begins a mail transaction",
+      "to": "mail_transaction_open"
+    },
+    {
+      "from": "mail_transaction_open",
+      "event": "RSET",
+      "action": "aborts the transaction",
+      "to": "initialized"
+    },
+    {
+      "from": "mail_transaction_open",
+      "event": "EHLO",
+      "action": "clear all buffers and reset the state exactly as if a RSET command had been issued",
+      "to": "initialized"
+    },
+    {
+      "from": "mail_transaction_open",
+      "event": "QUIT",
+      "action": "connection closure",
+      "to": "initialized"
+    }
+  ]
+}

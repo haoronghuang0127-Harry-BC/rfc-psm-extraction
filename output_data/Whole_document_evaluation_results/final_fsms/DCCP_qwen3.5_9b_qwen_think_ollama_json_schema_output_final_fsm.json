@@ -1,0 +1,87 @@
+{
+  "states": [
+    "CLOSED",
+    "LISTEN",
+    "REQUEST",
+    "RESPOND",
+    "PARTOPEN",
+    "OPEN",
+    "CLOSEREQ",
+    "CLOSING",
+    "TIMEWAIT"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "snd Request",
+      "action": "Choose ISS... send DCCP-Request",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "rcv Response",
+      "action": "Move to PARTOPEN",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "rcv packet != Response/Reset/Sync",
+      "action": "Move to OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv Request",
+      "action": "Generate Response... Move to RESPOND",
+      "to": "RESPOND"
+    },
+    {
+      "from": "RESPOND",
+      "event": "rcv Ack",
+      "action": "Move to OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "timeout >= 4MSL",
+      "action": "Send DCCP-Reset (Reset Code 2)... Move to CLOSED",
+      "to": "CLOSED"
+    },
+    {
+      "from": "OPEN",
+      "event": "snd CloseReq",
+      "action": "Move to CLOSEREQ",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "rcv Close",
+      "action": "Send Reset... Move to CLOSED",
+      "to": "CLOSED"
+    },
+    {
+      "from": "OPEN",
+      "event": "snd Close",
+      "action": "Move to CLOSING",
+      "to": "CLOSING"
+    },
+    {
+      "from": "OPEN",
+      "event": "rcv CloseReq",
+      "action": "Send Close... Move to CLOSING",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "rcv Reset",
+      "action": "Hold TIMEWAIT",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "2MSL timer expires",
+      "action": "Move to CLOSED",
+      "to": "CLOSED"
+    }
+  ]
+}

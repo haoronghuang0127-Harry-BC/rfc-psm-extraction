@@ -1,0 +1,188 @@
+{
+  "states": [
+    "idle",
+    "wait_ctl_reply",
+    "established",
+    "wait_stop_reply",
+    "wait_reply",
+    "wait_connect",
+    "wait_disconnect",
+    "wait_cs_ans"
+  ],
+  "transitions": [
+    {
+      "from": "idle",
+      "event": "TCP Open Indication / Send Start Control Connection Request",
+      "action": "transmits a send Start-Control-Connection-Request",
+      "to": "wait_ctl_reply"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Start-Control-Connection-Request (Version Supported)",
+      "action": "Send Start-Control-Connection-Reply",
+      "to": "established"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Start Ctl Connection Request Version Not OK",
+      "action": "Send Stop Reply, Close TCP",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Receive Start Ctl Connection Reply Version OK",
+      "action": "",
+      "to": "established"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Version Not OK",
+      "action": "Send Stop-Control-Connection-Request",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Collision",
+      "action": "Close TCP",
+      "to": "idle"
+    },
+    {
+      "from": "established",
+      "event": "Local Terminate",
+      "action": "Send Stop-Control-Connection-Request",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "established",
+      "event": "Receive Stop-Control-Connection-Request",
+      "action": "Send Stop-Control-Connection-Reply, close TCP connection",
+      "to": "idle"
+    },
+    {
+      "from": "wait_stop_reply",
+      "event": "Receive Stop-Control-Connection-Reply",
+      "action": "Close TCP connection",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Incoming call detected",
+      "action": "Send Incoming-Call-Request",
+      "to": "wait_reply"
+    },
+    {
+      "from": "wait_reply",
+      "event": "Receive Incoming Call Reply Not Accepting",
+      "action": "",
+      "to": "idle"
+    },
+    {
+      "from": "wait_reply",
+      "event": "Receive Incoming Call Reply Accepting",
+      "action": "Send Incoming-Call-Connected",
+      "to": "established"
+    },
+    {
+      "from": "established",
+      "event": "Receive Clear Call Request or telco call dropped or local disconnect",
+      "action": "Send Call Disconnect Notify",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Incoming Call Request (Acceptable)",
+      "action": "Send Incoming-Call-Reply",
+      "to": "wait_connect"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Incoming Call Request (Not Acceptable)",
+      "action": "Send Incoming-Call-Reply",
+      "to": "idle"
+    },
+    {
+      "from": "wait_connect",
+      "event": "Receive Incoming Call Connect",
+      "action": "",
+      "to": "established"
+    },
+    {
+      "from": "wait_connect",
+      "event": "Receive Call Disconnect Notify",
+      "action": "",
+      "to": "idle"
+    },
+    {
+      "from": "established",
+      "event": "Local Terminate / Send Call Clear Request",
+      "action": "Send Call-Clear-Request",
+      "to": "wait_disconnect"
+    },
+    {
+      "from": "established",
+      "event": "Receive Call Disconnect Notify",
+      "action": "",
+      "to": "idle"
+    },
+    {
+      "from": "wait_disconnect",
+      "event": "Receive Call Disconnect Notify",
+      "action": "",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Outgoing Call Request No Error",
+      "action": "Off Hook; Dial",
+      "to": "wait_cs_ans"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Outgoing Call Request in Error",
+      "action": "Send Outgoing Call Reply with Error",
+      "to": "idle"
+    },
+    {
+      "from": "wait_cs_ans",
+      "event": "Incomplete Call / Timer Expires",
+      "action": "Send Outgoing Call Reply with Error",
+      "to": "idle"
+    },
+    {
+      "from": "wait_cs_ans",
+      "event": "Telco Answer",
+      "action": "Send Outgoing Call Reply",
+      "to": "established"
+    },
+    {
+      "from": "established",
+      "event": "Receive Call Clear Request or local terminate or telco disconnect",
+      "action": "Hangup call and send Call Disconnect Notify",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Send Outgoing Call Request",
+      "action": "Send Outgoing-Call-Request",
+      "to": "wait_reply"
+    },
+    {
+      "from": "wait_reply",
+      "event": "Receive Outgoing Call Reply with Error",
+      "action": "",
+      "to": "idle"
+    },
+    {
+      "from": "wait_reply",
+      "event": "Receive Outgoing Call Reply No Error",
+      "action": "",
+      "to": "established"
+    },
+    {
+      "from": "established",
+      "event": "Echo-Reply Timeout",
+      "action": "Close control connection",
+      "to": "idle"
+    }
+  ]
+}

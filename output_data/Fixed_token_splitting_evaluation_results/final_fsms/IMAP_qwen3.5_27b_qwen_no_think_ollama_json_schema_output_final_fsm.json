@@ -1,0 +1,150 @@
+{
+  "states": [
+    "Connection",
+    "Session",
+    "Not Authenticated",
+    "Authenticated",
+    "Selected",
+    "Logout",
+    "not authenticated state",
+    "authenticated state",
+    "selected state",
+    "not yet authenticated",
+    "IMAP4rev1 mode",
+    "IMAP4rev2 mode"
+  ],
+  "transitions": [
+    {
+      "from": "Connection",
+      "event": "SELECT or EXAMINE command",
+      "action": "",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "SELECT or EXAMINE of another mailbox, CLOSE command, UNSELECT command, or connection termination",
+      "action": "",
+      "to": "Connection"
+    },
+    {
+      "from": "connection established",
+      "event": "server greeting (OK)",
+      "action": "",
+      "to": "Not Authenticated"
+    },
+    {
+      "from": "connection established",
+      "event": "server greeting (PREAUTH)",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "connection established",
+      "event": "server greeting (BYE)",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "successful LOGIN or AUTHENTICATE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Authenticated",
+      "event": "successful SELECT or EXAMINE command",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "CLOSE or UNSELECT command, unsolicited CLOSED response code, or failed SELECT or EXAMINE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Selected",
+      "event": "CLOSE or UNSELECT command, unsolicited CLOSED response code, or failed SELECT or EXAMINE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "not authenticated state",
+      "event": "AUTHENTICATE",
+      "action": "authenticate completed, now in authenticated state",
+      "to": "authenticated state"
+    },
+    {
+      "from": "not authenticated state",
+      "event": "LOGIN",
+      "action": "establishes authentication and enters the authenticated state",
+      "to": "authenticated state"
+    },
+    {
+      "from": "authenticated state",
+      "event": "SELECT",
+      "action": "OK - select completed",
+      "to": "selected state"
+    },
+    {
+      "from": "authenticated state",
+      "event": "EXAMINE",
+      "action": "OK - examine completed",
+      "to": "selected state"
+    },
+    {
+      "from": "selected state",
+      "event": "CLOSE",
+      "action": "OK - close completed, now in authenticated state",
+      "to": "authenticated state"
+    },
+    {
+      "from": "selected state",
+      "event": "UNSELECT",
+      "action": "OK - unselect completed, now in authenticated state",
+      "to": "authenticated state"
+    },
+    {
+      "from": "not yet authenticated",
+      "event": "OK response at connection startup",
+      "action": "",
+      "to": "not yet authenticated"
+    },
+    {
+      "from": "not yet authenticated",
+      "event": "PREAUTH response at connection startup",
+      "action": "",
+      "to": "authenticated"
+    },
+    {
+      "from": "not yet authenticated",
+      "event": "BYE response at connection startup",
+      "action": "server closes the connection immediately",
+      "to": "not yet authenticated"
+    },
+    {
+      "from": "IMAP4rev1 mode",
+      "event": "ENABLE IMAP4rev2",
+      "action": "",
+      "to": "IMAP4rev2 mode"
+    }
+  ]
+}

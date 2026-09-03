@@ -1,0 +1,372 @@
+{
+  "states": [
+    "Initial",
+    "Starting",
+    "Closed",
+    "Stopped",
+    "Closing",
+    "Stopping",
+    "Req-Sent",
+    "Ack-Rcvd",
+    "Ack-Sent",
+    "Opened",
+    "Request-Sent",
+    "Ack-Received"
+  ],
+  "transitions": [
+    {
+      "from": "Initial",
+      "event": "Up",
+      "action": "irc,scr/6",
+      "to": "Starting"
+    },
+    {
+      "from": "Starting",
+      "event": "Up",
+      "action": "irc,scr/6",
+      "to": "Starting"
+    },
+    {
+      "from": "Starting",
+      "event": "Open",
+      "action": "tls/1",
+      "to": "Starting"
+    },
+    {
+      "from": "Closed",
+      "event": "Up",
+      "action": "tlu",
+      "to": "Starting"
+    },
+    {
+      "from": "Closed",
+      "event": "Open",
+      "action": "irc,scr/6",
+      "to": "Starting"
+    },
+    {
+      "from": "Stopped",
+      "event": "Up",
+      "action": "tls/1",
+      "to": "Starting"
+    },
+    {
+      "from": "Closing",
+      "event": "Up",
+      "action": "-",
+      "to": "Closing"
+    },
+    {
+      "from": "Stopping",
+      "event": "Up",
+      "action": "-",
+      "to": "Stopping"
+    },
+    {
+      "from": "Req-Sent",
+      "event": "Up",
+      "action": "-",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Ack-Rcvd",
+      "event": "Up",
+      "action": "-",
+      "to": "Ack-Rcvd"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "Up",
+      "action": "-",
+      "to": "Ack-Sent"
+    },
+    {
+      "from": "Opened",
+      "event": "Up",
+      "action": "-",
+      "to": "Opened"
+    },
+    {
+      "from": "Initial",
+      "event": "Down",
+      "action": "tld/1",
+      "to": "Starting"
+    },
+    {
+      "from": "Starting",
+      "event": "Down",
+      "action": "tld/1",
+      "to": "Starting"
+    },
+    {
+      "from": "Closed",
+      "event": "Down",
+      "action": "tld/1",
+      "to": "Initial"
+    },
+    {
+      "from": "Stopped",
+      "event": "Down",
+      "action": "tld/1",
+      "to": "Initial"
+    },
+    {
+      "from": "Closing",
+      "event": "Down",
+      "action": "tld/1",
+      "to": "Initial"
+    },
+    {
+      "from": "Stopping",
+      "event": "Down",
+      "action": "tld/1",
+      "to": "Initial"
+    },
+    {
+      "from": "Req-Sent",
+      "event": "Down",
+      "action": "tld/1",
+      "to": "Initial"
+    },
+    {
+      "from": "Ack-Rcvd",
+      "event": "Down",
+      "action": "tld/1",
+      "to": "Initial"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "Down",
+      "action": "tld/1",
+      "to": "Initial"
+    },
+    {
+      "from": "Opened",
+      "event": "Down",
+      "action": "tld/1",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "Open",
+      "action": "tls/1",
+      "to": "Starting"
+    },
+    {
+      "from": "Starting",
+      "event": "Open",
+      "action": "1",
+      "to": "Starting"
+    },
+    {
+      "from": "Closed",
+      "event": "Open",
+      "action": "irc,scr/6",
+      "to": "Starting"
+    },
+    {
+      "from": "Stopped",
+      "event": "Open",
+      "action": "irc,scr/6",
+      "to": "Starting"
+    },
+    {
+      "from": "Closing",
+      "event": "Open",
+      "action": "irc,scr/6",
+      "to": "Starting"
+    },
+    {
+      "from": "Stopping",
+      "event": "Open",
+      "action": "irc,scr/6",
+      "to": "Starting"
+    },
+    {
+      "from": "Req-Sent",
+      "event": "Open",
+      "action": "irc,scr/6",
+      "to": "Starting"
+    },
+    {
+      "from": "Ack-Rcvd",
+      "event": "Open",
+      "action": "irc,scr/6",
+      "to": "Starting"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "Open",
+      "action": "irc,scr/6",
+      "to": "Starting"
+    },
+    {
+      "from": "Opened",
+      "event": "Open",
+      "action": "irc,scr/6",
+      "to": "Starting"
+    },
+    {
+      "from": "Initial",
+      "event": "Close",
+      "action": "",
+      "to": "Initial"
+    },
+    {
+      "from": "Starting",
+      "event": "Close",
+      "action": "tlf/0",
+      "to": "Closed"
+    },
+    {
+      "from": "Closed",
+      "event": "Close",
+      "action": "2",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "Close",
+      "action": "2",
+      "to": "Stopped"
+    },
+    {
+      "from": "Closing",
+      "event": "Close",
+      "action": "4",
+      "to": "Closing"
+    },
+    {
+      "from": "Stopping",
+      "event": "Close",
+      "action": "4",
+      "to": "Stopping"
+    },
+    {
+      "from": "Req-Sent",
+      "event": "Close",
+      "action": "irc,str/4",
+      "to": "Closing"
+    },
+    {
+      "from": "Ack-Rcvd",
+      "event": "Close",
+      "action": "irc,str/4",
+      "to": "Closing"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "Close",
+      "action": "irc,str/4",
+      "to": "Closing"
+    },
+    {
+      "from": "Opened",
+      "event": "Close",
+      "action": "tld,irc,str/4",
+      "to": "Closing"
+    },
+    {
+      "from": "Initial",
+      "event": "Up",
+      "action": "Send-Configure-Request",
+      "to": "Starting"
+    },
+    {
+      "from": "Starting",
+      "event": "Up",
+      "action": "Send-Configure-Request",
+      "to": "Closed"
+    },
+    {
+      "from": "Closed",
+      "event": "Configure-Request",
+      "action": "Send-Terminate-Ack",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "Configure-Request",
+      "action": "Send appropriate response",
+      "to": "Stopped"
+    },
+    {
+      "from": "Stopped",
+      "event": "other packets",
+      "action": "Send-Terminate-Ack",
+      "to": "Stopped"
+    },
+    {
+      "from": "Closing",
+      "event": "Terminate-Ack",
+      "action": "",
+      "to": "Closed"
+    },
+    {
+      "from": "Closing",
+      "event": "Restart timer expiration",
+      "action": "Send-Terminate-Request, restart Restart timer",
+      "to": "Closing"
+    },
+    {
+      "from": "Stopping",
+      "event": "Terminate-Ack",
+      "action": "",
+      "to": "Closed"
+    },
+    {
+      "from": "Request-Sent",
+      "event": "",
+      "action": "",
+      "to": "Request-Sent"
+    },
+    {
+      "from": "Ack-Received",
+      "event": "",
+      "action": "",
+      "to": "Ack-Received"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "",
+      "action": "",
+      "to": "Ack-Sent"
+    },
+    {
+      "from": "Opened",
+      "event": "Down",
+      "action": "This-Layer-Down",
+      "to": "Opened"
+    },
+    {
+      "from": "Opened",
+      "event": "Open",
+      "action": "Issue Down event, followed by Up event",
+      "to": "Starting"
+    },
+    {
+      "from": "Opened",
+      "event": "Echo-Request",
+      "action": "transmit Echo-Reply",
+      "to": "Opened"
+    },
+    {
+      "from": "Opened",
+      "event": "Discard-Request",
+      "action": "silently discard",
+      "to": "Opened"
+    },
+    {
+      "from": "Closed",
+      "event": "unelicited Terminate-Ack",
+      "action": " ",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "unelicited Terminate-Ack",
+      "action": " ",
+      "to": "Stopped"
+    }
+  ]
+}

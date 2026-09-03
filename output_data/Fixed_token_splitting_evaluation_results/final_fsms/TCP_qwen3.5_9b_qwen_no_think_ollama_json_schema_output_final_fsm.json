@@ -1,0 +1,581 @@
+{
+  "states": [
+    "CLOSED",
+    "LISTEN",
+    "SYN-SENT",
+    "SYN-RECEIVED",
+    "ESTABLISHED",
+    "FIN-WAIT-1",
+    "FIN-WAIT-2",
+    "CLOSE-WAIT",
+    "CLOSING",
+    "LAST-ACK",
+    "TIME-WAIT"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "",
+      "action": "",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "LISTEN",
+      "event": "",
+      "action": "",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "",
+      "action": "",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "",
+      "action": "",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "",
+      "action": "",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "",
+      "action": "",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "",
+      "action": "",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "",
+      "action": "",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "",
+      "action": "",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "",
+      "action": "",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "",
+      "action": "",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "",
+      "action": "",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "CLOSING",
+      "event": "",
+      "action": "",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "",
+      "action": "",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "CLOSED",
+      "event": "OPEN",
+      "action": "Create TCB, enter LISTEN (passive) or SYN-SENT (active)",
+      "to": "LISTEN"
+    },
+    {
+      "from": "CLOSED",
+      "event": "OPEN",
+      "action": "Create TCB, enter SYN-SENT",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "CLOSED",
+      "event": "SEND",
+      "action": "Change to active, send SYN, enter SYN-SENT",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "LISTEN",
+      "event": "OPEN",
+      "action": "Change to active, send SYN, enter SYN-SENT",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "LISTEN",
+      "event": "SEND",
+      "action": "Change to active, send SYN, enter SYN-SENT",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "LISTEN",
+      "event": "SEGMENT ARRIVES",
+      "action": "Accept SYN, enter SYN-RECEIVED",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "SEGMENT ARRIVES",
+      "action": "Receive ACK for SYN, enter ESTABLISHED",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "SEGMENT ARRIVES",
+      "action": "Receive SYN, enter SYN-RECEIVED",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "SEGMENT ARRIVES",
+      "action": "Receive ACK for SYN, enter ESTABLISHED",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "CLOSE",
+      "action": "Send FIN, enter FIN-WAIT-1",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "CLOSE",
+      "action": "Send FIN, enter FIN-WAIT-1",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "ABORT",
+      "action": "Send RST, enter CLOSED",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "SEGMENT ARRIVES",
+      "action": "Receive FIN, enter FIN-WAIT-2",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "SEGMENT ARRIVES",
+      "action": "Receive FIN, enter TIME-WAIT",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "CLOSE",
+      "action": "Send FIN, enter LAST-ACK",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "CLOSING",
+      "event": "SEGMENT ARRIVES",
+      "action": "Receive ACK for FIN, enter LAST-ACK",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "SEGMENT ARRIVES",
+      "action": "Receive ACK for FIN, enter TIME-WAIT",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "CLOSED",
+      "event": "ABORT",
+      "action": "Delete TCB, enter CLOSED",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "ABORT",
+      "action": "Delete TCB, enter CLOSED",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "ABORT",
+      "action": "Delete TCB, enter CLOSED",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "ABORT",
+      "action": "Delete TCB, enter CLOSED",
+      "to": "CLOSED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "ABORT",
+      "action": "Send RST, enter CLOSED",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "ABORT",
+      "action": "Send RST, enter CLOSED",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "ABORT",
+      "action": "Send RST, enter CLOSED",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "ABORT",
+      "action": "Send RST, enter CLOSED",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "ABORT",
+      "action": "Delete TCB, enter CLOSED",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "ABORT",
+      "action": "Delete TCB, enter CLOSED",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "ABORT",
+      "action": "Delete TCB, enter CLOSED",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSED",
+      "event": "STATUS",
+      "action": "Return state and TCB pointer",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "STATUS",
+      "action": "Return state and TCB pointer",
+      "to": "LISTEN"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "STATUS",
+      "action": "Return state and TCB pointer",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "STATUS",
+      "action": "Return state and TCB pointer",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "STATUS",
+      "action": "Return state and TCB pointer",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "STATUS",
+      "action": "Return state and TCB pointer",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "STATUS",
+      "action": "Return state and TCB pointer",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "STATUS",
+      "action": "Return state and TCB pointer",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "STATUS",
+      "action": "Return state and TCB pointer",
+      "to": "CLOSING"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "STATUS",
+      "action": "Return state and TCB pointer",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "STATUS",
+      "action": "Return state and TCB pointer",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "RST bit set, passive OPEN",
+      "action": "return to LISTEN state",
+      "to": "LISTEN"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "RST bit set, active OPEN",
+      "action": "signal connection refused, flush retransmission queue, enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "RST bit set, within window",
+      "action": "send challenge ACK, drop segment",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "security/compartment mismatch",
+      "action": "send reset, return",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "passive OPEN, SYN bit set",
+      "action": "return to LISTEN state",
+      "to": "LISTEN"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "ACK bit on, acceptable ACK",
+      "action": "enter ESTABLISHED state",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "ACK bit on, unacceptable ACK",
+      "action": "send reset segment",
+      "to": "CLOSED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "RST bit set",
+      "action": "flush queues, signal reset, enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "security/compartment mismatch",
+      "action": "send reset, flush queues, signal reset, enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "SYN bit set",
+      "action": "send challenge ACK, drop segment",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "ACK bit on, acceptable ACK",
+      "action": "update SND.UNA, remove acknowledged segments, update window if applicable",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "FIN bit set",
+      "action": "signal connection closing, advance RCV.NXT, send ACK, enter CLOSE-WAIT state",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "RST bit set",
+      "action": "flush queues, signal reset, enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "security/compartment mismatch",
+      "action": "send reset, flush queues, signal reset, enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "SYN bit set",
+      "action": "send challenge ACK, drop segment",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "ACK bit on, acceptable ACK",
+      "action": "update SND.UNA, remove acknowledged segments, if FIN acknowledged enter FIN-WAIT-2",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "ACK bit on, acceptable ACK, our FIN not yet acked",
+      "action": "update SND.UNA, remove acknowledged segments",
+      "to": "CLOSING"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "RST bit set",
+      "action": "flush queues, signal reset, enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "security/compartment mismatch",
+      "action": "send reset, flush queues, signal reset, enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "SYN bit set",
+      "action": "send challenge ACK, drop segment",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "ACK bit on, acceptable ACK",
+      "action": "update SND.UNA, remove acknowledged segments, if retransmission queue empty acknowledge CLOSE",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "FIN bit set",
+      "action": "enter TIME-WAIT state, start time-wait timer, turn off other timers",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "RST bit set",
+      "action": "flush queues, signal reset, enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "security/compartment mismatch",
+      "action": "send reset, flush queues, signal reset, enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "SYN bit set",
+      "action": "send challenge ACK, drop segment",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "ACK bit on, acceptable ACK",
+      "action": "update SND.UNA, remove acknowledged segments",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "RST bit set",
+      "action": "flush queues, signal reset, enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "security/compartment mismatch",
+      "action": "send reset, flush queues, signal reset, enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "SYN bit set",
+      "action": "send challenge ACK, drop segment",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "ACK bit on, acceptable ACK",
+      "action": "update SND.UNA, remove acknowledged segments, if ACK acknowledges our FIN enter TIME-WAIT",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "RST bit set",
+      "action": "flush queues, signal reset, enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "security/compartment mismatch",
+      "action": "send reset, flush queues, signal reset, enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "SYN bit set",
+      "action": "send challenge ACK, drop segment",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "ACK bit on, acceptable ACK",
+      "action": "if FIN acknowledged delete TCB, enter CLOSED state",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "RST bit set",
+      "action": "enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "security/compartment mismatch",
+      "action": "send reset, flush queues, signal reset, enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "SYN bit set",
+      "action": "if Timestamp Option used and meets expectations accept; otherwise send challenge ACK, drop segment",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "ACK bit on, acceptable ACK",
+      "action": "acknowledge retransmission of remote FIN, restart 2 MSL timeout",
+      "to": "TIME-WAIT"
+    }
+  ]
+}

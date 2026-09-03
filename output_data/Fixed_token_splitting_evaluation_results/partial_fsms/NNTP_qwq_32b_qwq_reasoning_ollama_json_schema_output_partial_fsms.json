@@ -1,0 +1,13 @@
+[
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [\"Initial Connection\", \"Reader Mode\"],\n  \"transitions\": [\n    {\n      \"from\": \"Initial Connection\",\n      \"event\": \"\",\n      \"action\": \"Server sends greeting (200, 201, 400, 502)\",\n      \"to\": \"Initial Connection\"\n    },\n    {\n      \"from\": \"Initial Connection\",\n      \"event\": \"QUIT\",\n      \"action\": \"Server responds 205 and closes connection\",\n      \"to\": \"Initial Connection\"\n    },\n    {\n      \"from\": \"Initial Connection\",\n      \"event\": \"CAPABILITIES\",\n      \"action\": \"Server responds 101 with capability list\",\n      \"to\": \"Initial Connection\"\n    },\n    {\n      \"from\": \"Initial Connection\",\n      \"event\": \"MODE READER\",\n      \"action\": \"Server responds 200/201 (posting allowed/prohibited) or 502\",\n      \"to\": \"Reader Mode\"\n    },\n    {\n      \"from\": \"Reader Mode\",\n      \"event\": \"QUIT\",\n      \"action\": \"Server responds 205 and closes connection\",\n      \"to\": \"Reader Mode\"\n    }\n  ]\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}"
+]

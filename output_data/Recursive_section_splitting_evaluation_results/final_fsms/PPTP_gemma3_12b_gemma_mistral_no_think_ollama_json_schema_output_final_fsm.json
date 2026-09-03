@@ -1,0 +1,120 @@
+{
+  "states": [
+    "PAC",
+    "PNS",
+    "Control Connection Established",
+    "Tunnel Established",
+    "Start-Control-Connection-Request",
+    "Incoming-Call-Connected",
+    "idle",
+    "wait_ctl_reply",
+    "established",
+    "wait_stop_reply",
+    "wait_connect",
+    "None",
+    "Not-Connected",
+    "Bad-Format",
+    "Bad-Value",
+    "No-Resource",
+    "Bad-Call ID",
+    "PAC-Error"
+  ],
+  "transitions": [
+    {
+      "from": "PAC",
+      "event": "Outgoing-Call-Request",
+      "action": "request outbound calls",
+      "to": "PNS"
+    },
+    {
+      "from": "PNS",
+      "event": "Incoming-Call-Request",
+      "action": "responding to inbound requests",
+      "to": "PAC"
+    },
+    {
+      "from": "PAC",
+      "event": "Start-Control-Connection-Request",
+      "action": "establish the control connection",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "PNS",
+      "event": "Start-Control-Connection-Reply",
+      "action": "establish the control connection",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "Control Connection Established",
+      "event": "",
+      "action": "maintain the tunnel and sessions",
+      "to": "Tunnel Established"
+    },
+    {
+      "from": "Tunnel Established",
+      "event": "GRE encapsulated PPP packets",
+      "action": "multiplex and demultiplex PPP packets",
+      "to": "Tunnel Established"
+    },
+    {
+      "from": "idle",
+      "event": "TCP Open Indication",
+      "action": "Send Start Control Connection Request",
+      "to": "wait_ctl_reply"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Receive Start Ctl Connection Reply",
+      "action": "Version OK",
+      "to": "established"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Receive Start Ctl Connection Reply",
+      "action": "Version Not OK",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "established",
+      "event": "Receive Stop Control Connection Request",
+      "action": "Send Stop Control Request",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "wait_stop_reply",
+      "event": "",
+      "action": "Close TCP",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Start Control Connection Request",
+      "action": "Version Not OK/Send Start Control Connection Reply",
+      "to": "established"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Start Control Connection Request",
+      "action": "Version OK",
+      "to": "established"
+    },
+    {
+      "from": "established",
+      "event": "Receive Stop Control Connection Request",
+      "action": "Send Stop Control Connection Reply and close TCP",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "wait_connect",
+      "event": "Receive Incoming Call Connect",
+      "action": "Send Outgoing Call Reply",
+      "to": "established"
+    },
+    {
+      "from": "established",
+      "event": "Receive Call Disconnect Notify",
+      "action": "Close TCP and control connection becomes idle",
+      "to": "idle"
+    }
+  ]
+}

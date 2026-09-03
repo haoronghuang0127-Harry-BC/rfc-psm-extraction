@@ -1,0 +1,53 @@
+{
+  "states": [
+    "Session",
+    "Session Present",
+    "New Session",
+    "Existing Session",
+    "Disconnected"
+  ],
+  "transitions": [
+    {
+      "from": "New Session",
+      "event": "CONNECT with Clean Start=1",
+      "action": "Broker sets Session Present flag to 0 in CONNACK",
+      "to": "New Session"
+    },
+    {
+      "from": "Session Present",
+      "event": "CONNECT with Clean Start=0 and existing Session",
+      "action": "Broker resumes communications based on existing Session state and sets Session Present flag to 1 in CONNACK",
+      "to": "Session Present"
+    },
+    {
+      "from": "New Session",
+      "event": "CONNACK with Session Present = 0",
+      "action": "",
+      "to": "New Session"
+    },
+    {
+      "from": "Existing Session",
+      "event": "CONNACK with Session Present = 1",
+      "action": "",
+      "to": "Existing Session"
+    },
+    {
+      "from": "Session",
+      "event": "Authorization error on PUBLISH",
+      "action": "Ignore PUBLISH packet and disconnect Client",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Session",
+      "event": "SUBSCRIBE authorization failure",
+      "action": "Return code 0x80 in SUBACK for unauthorized topic(s)",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "Broker-Client PUBLISH authorization failure due to expired tokens",
+      "action": "Disconnect Client",
+      "to": "Disconnected"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+[
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [\"Connection Establishment\", \"Login\", \"Logout\", \"Transfer parameters\", \"File action commands\", \"Informational commands\", \"Miscellaneous commands\"], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}"
+]

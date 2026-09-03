@@ -1,0 +1,39 @@
+{
+  "states": [
+    "AUTHORIZATION",
+    "TRANSACTION",
+    "UPDATE"
+  ],
+  "transitions": [
+    {
+      "from": "AUTHORIZATION",
+      "event": "USER",
+      "action": "+OK name is a valid mailbox\n-ERR never heard of mailbox name",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "QUIT",
+      "action": "+OK\n-ERR some deleted messages not removed",
+      "to": "UPDATE"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "USER",
+      "action": "+OK mrose is a real hoopy frood",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "PASS",
+      "action": "+OK maildrop locked and ready",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "APOP",
+      "action": "+OK maildrop locked and ready",
+      "to": "TRANSACTION"
+    }
+  ]
+}

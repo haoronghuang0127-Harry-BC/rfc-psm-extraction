@@ -1,0 +1,91 @@
+{
+  "states": [
+    "Initial",
+    "Receiving MAIL",
+    "Receiving RCPT",
+    "Receiving DATA",
+    "Data Received",
+    "Relaying",
+    "Final Delivery"
+  ],
+  "transitions": [
+    {
+      "from": "Initial",
+      "event": "EHLO",
+      "action": "250 OK",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "MAIL",
+      "action": "250 OK",
+      "to": "Receiving MAIL"
+    },
+    {
+      "from": "Receiving MAIL",
+      "event": "RCPT",
+      "action": "250 OK",
+      "to": "Receiving RCPT"
+    },
+    {
+      "from": "Receiving RCPT",
+      "event": "RCPT",
+      "action": "250 OK",
+      "to": "Receiving RCPT"
+    },
+    {
+      "from": "Receiving RCPT",
+      "event": "DATA",
+      "action": "354 Start mail input",
+      "to": "Receiving DATA"
+    },
+    {
+      "from": "Receiving DATA",
+      "event": "End of Data",
+      "action": "250 OK",
+      "to": "Data Received"
+    },
+    {
+      "from": "Data Received",
+      "event": "Relay",
+      "action": "Forward message",
+      "to": "Relaying"
+    },
+    {
+      "from": "Data Received",
+      "event": "Final Delivery",
+      "action": "Deliver message",
+      "to": "Final Delivery"
+    },
+    {
+      "from": "Initial",
+      "event": "RSET",
+      "action": "250 OK",
+      "to": "Initial"
+    },
+    {
+      "from": "Receiving MAIL",
+      "event": "RSET",
+      "action": "250 OK",
+      "to": "Initial"
+    },
+    {
+      "from": "Receiving RCPT",
+      "event": "RSET",
+      "action": "250 OK",
+      "to": "Initial"
+    },
+    {
+      "from": "Receiving DATA",
+      "event": "RSET",
+      "action": "250 OK",
+      "to": "Initial"
+    },
+    {
+      "from": "Data Received",
+      "event": "QUIT",
+      "action": "221 OK",
+      "to": "Initial"
+    }
+  ]
+}

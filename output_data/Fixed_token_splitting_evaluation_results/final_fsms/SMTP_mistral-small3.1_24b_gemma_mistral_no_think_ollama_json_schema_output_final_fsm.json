@@ -1,0 +1,266 @@
+{
+  "states": [
+    "SMTP client",
+    "SMTP server",
+    "Initial",
+    "Mail Transaction",
+    "Mail Transaction State",
+    "Data Transfer",
+    "End of Mail Data",
+    "Initial State",
+    "Session",
+    "Command",
+    "Ready",
+    "Relayed Mail",
+    "Verifying and Sending",
+    "Closed"
+  ],
+  "transitions": [
+    {
+      "from": "Initial",
+      "event": "MAIL",
+      "action": "reset state tables and buffers",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RCPT",
+      "action": "store forward-path",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "DATA",
+      "action": "return 354 Intermediate reply",
+      "to": "Data Transfer"
+    },
+    {
+      "from": "Data Transfer",
+      "event": "end of mail data indicator",
+      "action": "process stored recipients and mail data",
+      "to": "End of Mail Data"
+    },
+    {
+      "from": "Initial State",
+      "event": "EHLO",
+      "action": "Send multiline reply with keywords and parameters",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "HELO",
+      "action": "Send reply",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "MAIL",
+      "action": "Clear buffers and insert reverse-path information",
+      "to": "Mail Transaction State"
+    },
+    {
+      "from": "Mail Transaction State",
+      "event": "RCPT",
+      "action": "Append forward-path argument to forward-path buffer",
+      "to": "Mail Transaction State"
+    },
+    {
+      "from": "Mail Transaction State",
+      "event": "DATA",
+      "action": "Append mail data to mail data buffer",
+      "to": "Mail Transaction State"
+    },
+    {
+      "from": "Mail Transaction State",
+      "event": "End of mail data indication",
+      "action": "Process stored mail transaction information and clear buffers",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction State",
+      "event": "RSET",
+      "action": "Discard stored sender, recipients, and mail data; clear buffers",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "VRFY",
+      "action": "Confirm user or mailbox",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "EXPN",
+      "action": "Confirm mailing list and return membership",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "HELP",
+      "action": "Send helpful information",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "NOOP",
+      "action": "Send 250 OK reply",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "QUIT",
+      "action": "Send 221 OK reply and close transmission channel",
+      "to": "Closed"
+    },
+    {
+      "from": "Session",
+      "event": "EHLO",
+      "action": "clear all buffers and reset the state",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "MAIL",
+      "action": "",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RCPT",
+      "action": "",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "DATA",
+      "action": "",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "QUIT",
+      "action": "",
+      "to": "Command"
+    },
+    {
+      "from": "Session",
+      "event": "NOOP",
+      "action": "",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "HELP",
+      "action": "",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "EXPN",
+      "action": "",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "VRFY",
+      "action": "",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "RSET",
+      "action": "",
+      "to": "Session"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RSET",
+      "action": "",
+      "to": "Session"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "EHLO",
+      "action": "clear all buffers and reset the state",
+      "to": "Session"
+    },
+    {
+      "from": "Ready",
+      "event": "EHLO",
+      "action": "250-foo.com greets bar.com\n250-8BITMIME\n250-SIZE\n250-DSN\n250 HELP",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "MAIL FROM",
+      "action": "250 OK",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RCPT TO",
+      "action": "250 OK",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RCPT TO",
+      "action": "550 No such user here",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "DATA",
+      "action": "354 Start mail input; end with <CRLF>.<CRLF>",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "QUIT",
+      "action": "221 foo.com Service closing transmission channel",
+      "to": "Ready"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RSET",
+      "action": "250 OK",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "EHLO",
+      "action": "250-foo.com greets bar.com\n250-8BITMIME\n250-SIZE\n250-DSN\n250-VRFY\n250 HELP",
+      "to": "Verifying and Sending"
+    },
+    {
+      "from": "Verifying and Sending",
+      "event": "VRFY",
+      "action": "250 Mark Crispin <Admin.MRC@foo.com>",
+      "to": "Verifying and Sending"
+    },
+    {
+      "from": "Verifying and Sending",
+      "event": "MAIL FROM",
+      "action": "250 OK",
+      "to": "Verifying and Sending"
+    },
+    {
+      "from": "Verifying and Sending",
+      "event": "RCPT TO",
+      "action": "250 OK",
+      "to": "Verifying and Sending"
+    },
+    {
+      "from": "Verifying and Sending",
+      "event": "DATA",
+      "action": "354 Start mail input; end with <CRLF>.<CRLF>",
+      "to": "Verifying and Sending"
+    },
+    {
+      "from": "Verifying and Sending",
+      "event": "QUIT",
+      "action": "221 foo.com Service closing transmission channel",
+      "to": "Ready"
+    }
+  ]
+}

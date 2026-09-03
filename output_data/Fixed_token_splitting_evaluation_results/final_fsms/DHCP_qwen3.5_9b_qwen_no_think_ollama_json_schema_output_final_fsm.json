@@ -1,0 +1,157 @@
+{
+  "states": [
+    "INIT",
+    "INIT-REBOOT",
+    "SELECTING",
+    "REQUESTING",
+    "BOUND",
+    "RENEWING",
+    "REBINDING"
+  ],
+  "transitions": [
+    {
+      "from": "INIT",
+      "event": "",
+      "action": "broadcasts a DHCPDISCOVER message",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "receives DHCPOFFER messages",
+      "action": "selects one server and broadcasts a DHCPREQUEST message",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "times out waiting for DHCPOFFER",
+      "action": "retransmits DHCPDISCOVER",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "receives neither DHCPACK nor DHCPNAK after retransmission",
+      "action": "reverts to INIT state and restarts initialization",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "receives DHCPACK",
+      "action": "performs final check on parameters, notes lease duration",
+      "to": "BOUND"
+    },
+    {
+      "from": "INIT",
+      "event": "receives DHCPNAK",
+      "action": "restarts configuration process",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "detects address already in use (via ARP)",
+      "action": "sends DHCPDECLINE and restarts configuration process",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "",
+      "action": "graceful shutdown or explicit relinquishment",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "detects address already in use (via ARP)",
+      "action": "sends DHCPDECLINE and restarts configuration process",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "lease expires before contacting server",
+      "action": "discontinues use of address",
+      "to": "INIT"
+    },
+    {
+      "from": "SELECTING",
+      "event": "",
+      "action": "Client inserts selected server address in 'server identifier', sets 'ciaddr' to zero, fills 'requested IP address' with yiaddr from chosen DHCPOFFER; Client may collect offers and select best one; If no acceptable offers, client sends DHCPDISCOVER (implied transition out of SELECTING or back to DISCOVER state not explicitly named here but implied by action)",
+      "to": "SELECTING"
+    },
+    {
+      "from": "INIT",
+      "event": "",
+      "action": "Send DHCPDISCOVER",
+      "to": "SELECTING"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "",
+      "action": "Send DHCPREQUEST",
+      "to": "REQUESTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPNAK",
+      "action": "Halt network",
+      "to": "INIT-REBOOT"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPOFFER/Collect replies",
+      "action": "Select offer",
+      "to": "REQUESTING"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPNAK",
+      "action": "Halt network",
+      "to": "INIT-REBOOT"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEWING",
+      "event": "T1 expires/Send DHCPREQUEST",
+      "action": "",
+      "to": "RENEWING"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBINDING",
+      "event": "T2 expires/Broadcast DHCPREQUEST",
+      "action": "",
+      "to": "REBINDING"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "BOUND",
+      "event": "T1 expires/Send DHCPREQUEST",
+      "action": "",
+      "to": "RENEWING"
+    },
+    {
+      "from": "BOUND",
+      "event": "T2 expires/Broadcast DHCPREQUEST",
+      "action": "",
+      "to": "REBINDING"
+    },
+    {
+      "from": "BOUND",
+      "event": "Lease expired",
+      "action": "Stop network processing, request initialization",
+      "to": "INIT"
+    }
+  ]
+}

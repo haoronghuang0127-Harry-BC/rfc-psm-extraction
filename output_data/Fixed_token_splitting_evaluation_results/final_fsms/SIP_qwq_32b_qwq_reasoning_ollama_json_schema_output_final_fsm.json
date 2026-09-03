@@ -1,0 +1,122 @@
+{
+  "states": [
+    "Initial",
+    "Session Established",
+    "Terminated",
+    "Calling",
+    "Proceeding",
+    "Completed",
+    "Trying",
+    "Confirmed"
+  ],
+  "transitions": [
+    {
+      "from": "Initial",
+      "event": "INVITE",
+      "action": "Send 100 Trying",
+      "to": "Session Established"
+    },
+    {
+      "from": "Session Established",
+      "event": "BYE",
+      "action": "Send 200 OK",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "provisional response (1xx)",
+      "action": "transition to Proceeding, pass response to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Calling",
+      "event": "final response (300-699)",
+      "action": "generate ACK, pass response to TU, send ACK, start timer D",
+      "to": "Completed"
+    },
+    {
+      "from": "Calling",
+      "event": "2xx response",
+      "action": "pass response to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer B fires",
+      "action": "inform TU timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "final response (300-699)",
+      "action": "generate ACK, pass response to TU, send ACK, start timer D",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx response",
+      "action": "pass response to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer D fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "retransmission of final response",
+      "action": "retransmit ACK",
+      "to": "Completed"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer F fires",
+      "action": "inform TU about the timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "provisional response received",
+      "action": "pass to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "final response received",
+      "action": "pass to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer E fires",
+      "action": "retransmit request, reset Timer E to T2",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer F fires",
+      "action": "inform TU of timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "final response received",
+      "action": "pass to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer K fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Confirmed",
+      "event": "Timer I fires",
+      "action": "",
+      "to": "Terminated"
+    }
+  ]
+}

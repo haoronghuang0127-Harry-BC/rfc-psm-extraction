@@ -1,0 +1,40 @@
+{
+  "states": [
+    "Fixed Token Segment 2",
+    "CONNECT",
+    "AUTHORIZED",
+    "UNAUTHORIZED"
+  ],
+  "transitions": [
+    {
+      "from": "CONNECT",
+      "event": "valid token",
+      "action": "send CONNACK with reason code 0x00 (Success)",
+      "to": "AUTHORIZED"
+    },
+    {
+      "from": "CONNECT",
+      "event": "invalid token",
+      "action": "send CONNACK with reason code 0x87 (Not Authorized)",
+      "to": "UNAUTHORIZED"
+    },
+    {
+      "from": "CONNECT",
+      "event": "omits Authentication Data",
+      "action": "send CONNACK with reason code 0x87 (Not Authorized)",
+      "to": "UNAUTHORIZED"
+    },
+    {
+      "from": "CONNECT",
+      "event": "malformed token",
+      "action": "send CONNACK with reason code 0x87 (Not Authorized)",
+      "to": "UNAUTHORIZED"
+    },
+    {
+      "from": "CONNECT",
+      "event": "Will Topic fails authorization",
+      "action": "send CONNACK with reason code 0x87 (Not Authorized)",
+      "to": "UNAUTHORIZED"
+    }
+  ]
+}

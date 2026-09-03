@@ -1,0 +1,153 @@
+{
+  "states": [
+    "Client",
+    "Broker",
+    "Client Authorization Server",
+    "authz-info",
+    "TLS connection setup",
+    "Client connects to Broker",
+    "Broker stores and indexes tokens",
+    "Token validation",
+    "Client Authentication over TLS",
+    "Pre-Shared Key Mode",
+    "Raw Public Key Mode",
+    "Connected",
+    "Unauthorized",
+    "New Session",
+    "Existing Session"
+  ],
+  "transitions": [
+    {
+      "from": "Client",
+      "event": "Token request",
+      "action": "acquire access token",
+      "to": "Client Authorization Server"
+    },
+    {
+      "from": "Client Authorization Server",
+      "event": "Access token",
+      "action": "return access token",
+      "to": "Client"
+    },
+    {
+      "from": "Client",
+      "event": "Connection request",
+      "action": "send token",
+      "to": "Broker"
+    },
+    {
+      "from": "Broker",
+      "event": "Connection response",
+      "action": "validate token",
+      "to": "Broker"
+    },
+    {
+      "from": "Client connects to Broker",
+      "event": "publish token to \"authz-info\" topic",
+      "action": "disconnect from Broker",
+      "to": "Broker stores and indexes tokens"
+    },
+    {
+      "from": "Broker stores and indexes tokens",
+      "event": "token received",
+      "action": "store and index token",
+      "to": "Token validation"
+    },
+    {
+      "from": "Token validation",
+      "event": "token is valid",
+      "action": "",
+      "to": "Client Authentication over TLS"
+    },
+    {
+      "from": "Token validation",
+      "event": "token is not valid",
+      "action": "discard the token",
+      "to": "Token validation"
+    },
+    {
+      "from": "Client Authentication over TLS",
+      "event": "",
+      "action": "",
+      "to": "Raw Public Key Mode"
+    },
+    {
+      "from": "Client Authentication over TLS",
+      "event": "",
+      "action": "",
+      "to": "Pre-Shared Key Mode"
+    },
+    {
+      "from": "Pre-Shared Key Mode",
+      "event": "",
+      "action": "",
+      "to": "Client Authentication over TLS"
+    },
+    {
+      "from": "Raw Public Key Mode",
+      "event": "",
+      "action": "",
+      "to": "Client Authentication over TLS"
+    },
+    {
+      "from": "authz-info",
+      "event": "Client connects to Broker",
+      "action": "use TLS:Anon,MQTT:None",
+      "to": "Client connects to Broker"
+    },
+    {
+      "from": "Connected",
+      "event": "PUBLISH packet with QoS >= 1",
+      "action": "return PUBACK or PUBREC with reason code 0x87",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Connected",
+      "event": "PUBLISH packet with QoS 0",
+      "action": "send DISCONNECT packet with reason code 0x87 and close connection",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Connected",
+      "event": "SUBSCRIBE packet",
+      "action": "match Topic Filter against scope; return SUBACK with 0x87 for unauthorized filters",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "Token expiration",
+      "action": "send PUBACK, SUBACK, or DISCONNECT with 'Not authorized'",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Connected",
+      "event": "PINGREQ packet",
+      "action": "check for token expiration",
+      "to": "Connected"
+    },
+    {
+      "from": "Unauthorized",
+      "event": "Reauthentication request (AUTH packet)",
+      "action": "accept if PoP validated, otherwise deny",
+      "to": "Connected"
+    },
+    {
+      "from": "Unauthorized",
+      "event": "Reauthentication request (AUTH packet)",
+      "action": "deny",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "New Session",
+      "event": "CONNACK",
+      "action": "signal new Session to Client",
+      "to": "Connected"
+    },
+    {
+      "from": "Existing Session",
+      "event": "CONNACK",
+      "action": "signal continued Session to Client",
+      "to": "Connected"
+    }
+  ]
+}

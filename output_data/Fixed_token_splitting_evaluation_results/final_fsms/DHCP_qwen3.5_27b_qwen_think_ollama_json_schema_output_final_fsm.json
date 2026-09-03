@@ -1,0 +1,30 @@
+{
+  "states": [
+    "BOUND",
+    "INIT",
+    "REBINDING",
+    "RENEW",
+    "RENEWING",
+    "SELECTING"
+  ],
+  "transitions": [
+    {
+      "from": "BOUND",
+      "event": "Receive DHCPACK (address in use)",
+      "action": "Send DHCPDECLINE message and restarts the configuration process",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "Receive DHCPNAK",
+      "action": "Restarting the configuration process",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "Receive neither DHCPACK nor DHCPNAK after retransmission",
+      "action": "Use previously allocated network address and configuration parameters",
+      "to": "BOUND"
+    }
+  ]
+}

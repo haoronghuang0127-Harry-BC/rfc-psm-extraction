@@ -1,0 +1,358 @@
+{
+  "states": [
+    "Connection established",
+    "Transit Mode",
+    "Reading Mode",
+    "Initial Connection",
+    "Reader Mode",
+    "Connection Closing",
+    "Invalid",
+    "Group Selected",
+    "Article Retrieved",
+    "Article Retrieval",
+    "Article Header Retrieval",
+    "Article Body Retrieval",
+    "Article Status Check",
+    "Article Posting",
+    "Article Transfer",
+    "MODE-READER"
+  ],
+  "transitions": [
+    {
+      "from": "Connection established",
+      "event": "",
+      "action": "The NNTP server host MUST send a greeting",
+      "to": "Connection established"
+    },
+    {
+      "from": "Transit Mode",
+      "event": "MODE READER",
+      "action": "200 Server ready, posting allowed",
+      "to": "Reading Mode"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "200 Service available, posting allowed",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "201 Service available, posting prohibited",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "400 Service temporarily unavailable",
+      "to": "Connection Closing"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "502 Service permanently unavailable",
+      "to": "Connection Closing"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "MODE READER",
+      "action": "200 Posting allowed",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "MODE READER",
+      "action": "201 Posting prohibited",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "QUIT",
+      "action": "205 Connection closing",
+      "to": "Connection Closing"
+    },
+    {
+      "from": "Transit Mode",
+      "event": "MODE READER",
+      "action": "502 Reading service permanently unavailable",
+      "to": "Connection Closing"
+    },
+    {
+      "from": "Invalid",
+      "event": "GROUP group",
+      "action": "211 number low high group",
+      "to": "Group Selected"
+    },
+    {
+      "from": "Invalid",
+      "event": "GROUP group",
+      "action": "411",
+      "to": "Invalid"
+    },
+    {
+      "from": "Group Selected",
+      "event": "LAST",
+      "action": "223 n message-id",
+      "to": "Article Retrieved"
+    },
+    {
+      "from": "Group Selected",
+      "event": "LAST",
+      "action": "422",
+      "to": "Group Selected"
+    },
+    {
+      "from": "Group Selected",
+      "event": "LAST",
+      "action": "420",
+      "to": "Group Selected"
+    },
+    {
+      "from": "Group Selected",
+      "event": "NEXT",
+      "action": "223 n message-id",
+      "to": "Article Retrieved"
+    },
+    {
+      "from": "Group Selected",
+      "event": "NEXT",
+      "action": "421",
+      "to": "Group Selected"
+    },
+    {
+      "from": "Group Selected",
+      "event": "NEXT",
+      "action": "420",
+      "to": "Group Selected"
+    },
+    {
+      "from": "Group Selected",
+      "event": "ARTICLE message-id",
+      "action": "220 0|n message-id",
+      "to": "Article Retrieved"
+    },
+    {
+      "from": "Group Selected",
+      "event": "ARTICLE message-id",
+      "action": "430",
+      "to": "Group Selected"
+    },
+    {
+      "from": "Group Selected",
+      "event": "ARTICLE number",
+      "action": "220 n message-id",
+      "to": "Article Retrieved"
+    },
+    {
+      "from": "Group Selected",
+      "event": "ARTICLE number",
+      "action": "423",
+      "to": "Group Selected"
+    },
+    {
+      "from": "Group Selected",
+      "event": "ARTICLE",
+      "action": "220 n message-id",
+      "to": "Article Retrieved"
+    },
+    {
+      "from": "Group Selected",
+      "event": "ARTICLE",
+      "action": "420",
+      "to": "Group Selected"
+    },
+    {
+      "from": "Article Retrieval",
+      "event": "ARTICLE",
+      "action": "220 0|n message-id    Article exists",
+      "to": "Article Retrieval"
+    },
+    {
+      "from": "Article Retrieval",
+      "event": "ARTICLE",
+      "action": "430 No Such Article Found",
+      "to": "Article Retrieval"
+    },
+    {
+      "from": "Article Retrieval",
+      "event": "ARTICLE",
+      "action": "412 No newsgroup selected",
+      "to": "Article Retrieval"
+    },
+    {
+      "from": "Article Retrieval",
+      "event": "ARTICLE",
+      "action": "423 No article with that number",
+      "to": "Article Retrieval"
+    },
+    {
+      "from": "Article Retrieval",
+      "event": "ARTICLE",
+      "action": "420 No current article selected",
+      "to": "Article Retrieval"
+    },
+    {
+      "from": "Article Header Retrieval",
+      "event": "HEAD",
+      "action": "221 0|n message-id    Headers follow (multi-line)",
+      "to": "Article Header Retrieval"
+    },
+    {
+      "from": "Article Header Retrieval",
+      "event": "HEAD",
+      "action": "430 No Such Article Found",
+      "to": "Article Header Retrieval"
+    },
+    {
+      "from": "Article Header Retrieval",
+      "event": "HEAD",
+      "action": "412 No newsgroup selected",
+      "to": "Article Header Retrieval"
+    },
+    {
+      "from": "Article Header Retrieval",
+      "event": "HEAD",
+      "action": "423 No article with that number",
+      "to": "Article Header Retrieval"
+    },
+    {
+      "from": "Article Header Retrieval",
+      "event": "HEAD",
+      "action": "420 No current article selected",
+      "to": "Article Header Retrieval"
+    },
+    {
+      "from": "Article Body Retrieval",
+      "event": "BODY",
+      "action": "222 0|n message-id    Body follows (multi-line)",
+      "to": "Article Body Retrieval"
+    },
+    {
+      "from": "Article Body Retrieval",
+      "event": "BODY",
+      "action": "430 No Such Article Found",
+      "to": "Article Body Retrieval"
+    },
+    {
+      "from": "Article Body Retrieval",
+      "event": "BODY",
+      "action": "412 No newsgroup selected",
+      "to": "Article Body Retrieval"
+    },
+    {
+      "from": "Article Body Retrieval",
+      "event": "BODY",
+      "action": "423 No article with that number",
+      "to": "Article Body Retrieval"
+    },
+    {
+      "from": "Article Body Retrieval",
+      "event": "BODY",
+      "action": "420 No current article selected",
+      "to": "Article Body Retrieval"
+    },
+    {
+      "from": "Article Status Check",
+      "event": "STAT",
+      "action": "223 0|n message-id    Article exists",
+      "to": "Article Status Check"
+    },
+    {
+      "from": "Article Status Check",
+      "event": "STAT",
+      "action": "430 No Such Article Found",
+      "to": "Article Status Check"
+    },
+    {
+      "from": "Article Status Check",
+      "event": "STAT",
+      "action": "412 No newsgroup selected",
+      "to": "Article Status Check"
+    },
+    {
+      "from": "Article Status Check",
+      "event": "STAT",
+      "action": "423 No article with that number",
+      "to": "Article Status Check"
+    },
+    {
+      "from": "Article Status Check",
+      "event": "STAT",
+      "action": "420 No current article selected",
+      "to": "Article Status Check"
+    },
+    {
+      "from": "Article Posting",
+      "event": "POST",
+      "action": "340 Send article to be posted",
+      "to": "Article Posting"
+    },
+    {
+      "from": "Article Posting",
+      "event": "POST",
+      "action": "440 Posting not permitted",
+      "to": "Article Posting"
+    },
+    {
+      "from": "Article Posting",
+      "event": "",
+      "action": "240 Article received OK",
+      "to": "Article Posting"
+    },
+    {
+      "from": "Article Posting",
+      "event": "",
+      "action": "441 Posting failed",
+      "to": "Article Posting"
+    },
+    {
+      "from": "Article Transfer",
+      "event": "IHAVE",
+      "action": "335 Send article to be transferred",
+      "to": "Article Transfer"
+    },
+    {
+      "from": "Article Transfer",
+      "event": "IHAVE",
+      "action": "435 Article not wanted",
+      "to": "Article Transfer"
+    },
+    {
+      "from": "Article Transfer",
+      "event": "IHAVE",
+      "action": "436 Transfer not possible; try again later",
+      "to": "Article Transfer"
+    },
+    {
+      "from": "Article Transfer",
+      "event": "",
+      "action": "235 Article transferred OK",
+      "to": "Article Transfer"
+    },
+    {
+      "from": "Article Transfer",
+      "event": "",
+      "action": "436 Transfer failed; try again later",
+      "to": "Article Transfer"
+    },
+    {
+      "from": "Article Transfer",
+      "event": "",
+      "action": "437 Transfer rejected; do not retry",
+      "to": "Article Transfer"
+    },
+    {
+      "from": "MODE-READER",
+      "event": "initial connection",
+      "action": "service available, posting allowed",
+      "to": "MODE-READER"
+    },
+    {
+      "from": "MODE-READER",
+      "event": "initial connection",
+      "action": "service available, posting prohibited",
+      "to": "MODE-READER"
+    }
+  ]
+}

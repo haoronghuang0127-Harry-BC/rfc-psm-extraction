@@ -1,0 +1,17 @@
+[
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\n  \"states\": [\n    \"AUTHORIZATION\",\n    \"TRANSACTION\",\n    \"UPDATE\"\n  ],\n  \"transitions\": [\n    {\n      \"from\": \"AUTHORIZATION\",\n      \"event\": \"successful identification\",\n      \"action\": \"server acquires resources associated with the client's maildrop\",\n      \"to\": \"TRANSACTION\"\n    },\n    {\n      \"from\": \"TRANSACTION\",\n      \"event\": \"QUIT command\",\n      \"action\": \"POP3 server releases any resources acquired during the TRANSACTION state and says goodbye\",\n      \"to\": \"UPDATE\"\n    }\n  ]\n}",
+  "{\n  \"states\": [\n    \"AUTHORIZATION\",\n    \"TRANSACTION\"\n  ],\n  \"transitions\": [\n    {\n      \"from\": \"AUTHORIZATION\",\n      \"event\": \"authentication command\",\n      \"action\": \"positive status indicator\",\n      \"to\": \"TRANSACTION\"\n    }\n  ]\n}",
+  "{\n  \"states\": [\n    \"TRANSACTION\",\n    \"UPDATE\",\n    \"AUTHORIZATION\"\n  ],\n  \"transitions\": [\n    {\n      \"from\": \"TRANSACTION\",\n      \"event\": \"QUIT\",\n      \"action\": \"The POP3 server removes all messages marked as deleted from the maildrop and replies as to the status of this operation. If there is an error, such as a resource shortage, encountered while removing messages, the maildrop may result in having some or none of the messages marked as deleted be removed. In no case may the server remove any messages not marked as deleted. Whether the removal was successful or not, the server then releases any exclusive-access lock on the maildrop and closes the TCP connection.\",\n      \"to\": \"UPDATE\"\n    }\n  ]\n}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\n  \"states\": [\n    \"AUTHORIZATION state\",\n    \"TRANSACTION state\"\n  ],\n  \"transitions\": []\n}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\n  \"states\": [\n    \"AUTHORIZATION\"\n  ],\n  \"transitions\": []\n}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}"
+]

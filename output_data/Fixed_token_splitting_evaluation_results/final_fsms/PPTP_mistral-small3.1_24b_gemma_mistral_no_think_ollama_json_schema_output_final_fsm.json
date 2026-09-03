@@ -1,0 +1,268 @@
+{
+  "states": [
+    "Control Connection Established",
+    "Control Connection Not Established",
+    "idle",
+    "wait_ctl_reply",
+    "established",
+    "wait_stop_reply",
+    "wait_reply",
+    "wait_connect",
+    "wait_disconnect",
+    "wait_cs_ans",
+    "Window Overflow",
+    "Multi-packet Acknowledgment",
+    "Out-of-sequence Packets",
+    "Acknowledgment Time-Outs",
+    "Adaptive Acknowledgment Time-Out",
+    "Congestion Control"
+  ],
+  "transitions": [
+    {
+      "from": "Control Connection Not Established",
+      "event": "Start-Control-Connection-Request",
+      "action": "Start-Control-Connection-Reply",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "Control Connection Established",
+      "event": "Stop-Control-Connection-Request",
+      "action": "",
+      "to": "Control Connection Not Established"
+    },
+    {
+      "from": "idle",
+      "event": "TCP Open Indication",
+      "action": "Send Start Control Connection Request",
+      "to": "wait_ctl_reply"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Receive Start Control Connection Reply Version OK",
+      "action": "Send Start Control Connection Reply",
+      "to": "established"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Receive Start Control Connection Reply Version Not OK",
+      "action": "Send Stop Control Connection Request",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "established",
+      "event": "Local Terminate",
+      "action": "Send Stop Control Connection Request",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "established",
+      "event": "Receive Stop Control Connection Request",
+      "action": "Send Stop Control Connection Reply",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "wait_stop_reply",
+      "event": "Receive Stop Control Connection Reply",
+      "action": "Close TCP",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Start-Control-Connection-Request",
+      "action": "send Start-Control-Connection-Reply",
+      "to": "established"
+    },
+    {
+      "from": "established",
+      "event": "Stop-Control-Connection-Request",
+      "action": "send Stop-Control-Connection-Reply, close TCP connection",
+      "to": "idle"
+    },
+    {
+      "from": "established",
+      "event": "local termination",
+      "action": "send Stop-Control-Connection-Request",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "wait_stop_reply",
+      "event": "Stop-Control-Connection-Reply",
+      "action": "close TCP connection",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Incoming-Call-Request",
+      "action": "send Incoming-Call-Reply",
+      "to": "wait_reply"
+    },
+    {
+      "from": "wait_reply",
+      "event": "Incoming-Call-Reply",
+      "action": "send Incoming-Call-Connected",
+      "to": "established"
+    },
+    {
+      "from": "wait_reply",
+      "event": "Incoming-Call-Reply",
+      "action": "send Call Disconnect Notify",
+      "to": "idle"
+    },
+    {
+      "from": "established",
+      "event": "Call-Disconnect-Notify",
+      "action": "",
+      "to": "idle"
+    },
+    {
+      "from": "established",
+      "event": "Call-Clear-Request",
+      "action": "send Call-Disconnect-Notify",
+      "to": "idle"
+    },
+    {
+      "from": "established",
+      "event": "local disconnect",
+      "action": "send Call-Disconnect-Notify",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Incoming-Call-Request",
+      "action": "send Incoming-Call-Reply",
+      "to": "wait_connect"
+    },
+    {
+      "from": "wait_connect",
+      "event": "Incoming-Call-Connected",
+      "action": "",
+      "to": "established"
+    },
+    {
+      "from": "wait_connect",
+      "event": "Call-Disconnect-Notify",
+      "action": "",
+      "to": "idle"
+    },
+    {
+      "from": "established",
+      "event": "Call-Clear-Request",
+      "action": "",
+      "to": "wait_disconnect"
+    },
+    {
+      "from": "wait_disconnect",
+      "event": "Call-Disconnect-Notify",
+      "action": "",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Outgoing-Call-Request",
+      "action": "send Outgoing-Call-Reply",
+      "to": "wait_reply"
+    },
+    {
+      "from": "wait_reply",
+      "event": "Outgoing-Call-Reply",
+      "action": "",
+      "to": "established"
+    },
+    {
+      "from": "wait_reply",
+      "event": "Outgoing-Call-Reply",
+      "action": "",
+      "to": "idle"
+    },
+    {
+      "from": "established",
+      "event": "Call-Disconnect-Notify",
+      "action": "",
+      "to": "idle"
+    },
+    {
+      "from": "established",
+      "event": "Call-Clear-Request",
+      "action": "send Call-Disconnect-Notify",
+      "to": "wait_disconnect"
+    },
+    {
+      "from": "wait_disconnect",
+      "event": "Call-Disconnect-Notify",
+      "action": "",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Outgoing-Call-Request",
+      "action": "allocate physical channel, place outbound call",
+      "to": "wait_cs_ans"
+    },
+    {
+      "from": "wait_cs_ans",
+      "event": "Outgoing-Call-Reply",
+      "action": "send Outgoing-Call-Reply",
+      "to": "established"
+    },
+    {
+      "from": "wait_cs_ans",
+      "event": "Outgoing-Call-Reply",
+      "action": "send Outgoing-Call-Reply",
+      "to": "idle"
+    },
+    {
+      "from": "established",
+      "event": "Call-Clear-Request",
+      "action": "send Call-Disconnect-Notify",
+      "to": "idle"
+    },
+    {
+      "from": "established",
+      "event": "telco disconnect",
+      "action": "send Call-Disconnect-Notify",
+      "to": "idle"
+    },
+    {
+      "from": "established",
+      "event": "local terminate",
+      "action": "send Call-Disconnect-Notify",
+      "to": "idle"
+    },
+    {
+      "from": "Window Overflow",
+      "event": "",
+      "action": "excess packets are thrown away",
+      "to": "Window Overflow"
+    },
+    {
+      "from": "Multi-packet Acknowledgment",
+      "event": "",
+      "action": "acknowledgment of multiple packets with a single acknowledgment",
+      "to": "Multi-packet Acknowledgment"
+    },
+    {
+      "from": "Out-of-sequence Packets",
+      "event": "",
+      "action": "out of sequence packets between the PNS and PAC MUST be silently discarded",
+      "to": "Out-of-sequence Packets"
+    },
+    {
+      "from": "Acknowledgment Time-Outs",
+      "event": "",
+      "action": "adaptive time-out mechanism that compensates for changing throughput",
+      "to": "Adaptive Acknowledgment Time-Out"
+    },
+    {
+      "from": "Adaptive Acknowledgment Time-Out",
+      "event": "",
+      "action": "adaptive algorithm detailed below is based on the TCP 1989 implementation",
+      "to": "Adaptive Acknowledgment Time-Out"
+    },
+    {
+      "from": "Congestion Control",
+      "event": "",
+      "action": "adjusting for Time-Out",
+      "to": "Congestion Control"
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "states": [
+    "Initial",
+    "Mail Transaction"
+  ],
+  "transitions": [
+    {
+      "from": "Initial",
+      "event": "EHLO",
+      "action": "250 OK",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "HELO",
+      "action": "250 OK",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "",
+      "action": "554",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "MAIL",
+      "action": "250 OK",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RCPT",
+      "action": "250 OK",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "DATA",
+      "action": "354",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "",
+      "action": "250 OK",
+      "to": "Initial"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RSET",
+      "action": "250 OK",
+      "to": "Initial"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "",
+      "action": "554",
+      "to": "Initial"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "DATA",
+      "action": "503",
+      "to": "Mail Transaction"
+    }
+  ]
+}

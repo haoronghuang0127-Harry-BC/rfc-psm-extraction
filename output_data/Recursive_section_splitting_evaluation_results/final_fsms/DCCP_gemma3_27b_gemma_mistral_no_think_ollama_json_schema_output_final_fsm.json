@@ -1,0 +1,446 @@
+{
+  "states": [
+    "DCCP A",
+    "DCCP B",
+    "HC-Sender",
+    "HC-Receiver",
+    "CLOSED",
+    "LISTEN",
+    "REQUEST",
+    "RESPOND",
+    "PARTOPEN",
+    "OPEN",
+    "CLOSEREQ",
+    "CLOSING",
+    "TIMEWAIT",
+    "CLOSED (LISTEN)",
+    "STABLE",
+    "CHANGING",
+    "UNSTABLE",
+    "Allow Short Sequence Numbers Enabled",
+    "Allow Short Sequence Numbers Disabled",
+    "Send NDP Count feature is one",
+    "Send NDP Count feature is zero",
+    "Accepting packets with CsCov = 0",
+    "Accepting packets with CsCov >= MinCsCov",
+    "Ignoring packets with invalid CsCov",
+    "New connection",
+    "Established connection",
+    "bidirectional connection",
+    "unidirectional connection",
+    "quiescent",
+    "Initial",
+    "Congested",
+    "Not Congested",
+    "State 0",
+    "State 1",
+    "State 2",
+    "State 3",
+    "Receiving data",
+    "Application Not Listening",
+    "Receive Buffer Full",
+    "ECN capable",
+    "ECN incapable",
+    "Maintaining MPS",
+    "PMTU Discovery",
+    "Sending Packets"
+  ],
+  "transitions": [
+    {
+      "from": "DCCP A",
+      "event": "application data",
+      "action": "",
+      "to": "DCCP B"
+    },
+    {
+      "from": "DCCP B",
+      "event": "acknowledgements",
+      "action": "",
+      "to": "DCCP A"
+    },
+    {
+      "from": "DCCP B",
+      "event": "application data",
+      "action": "",
+      "to": "DCCP A"
+    },
+    {
+      "from": "DCCP A",
+      "event": "acknowledgements",
+      "action": "",
+      "to": "DCCP B"
+    },
+    {
+      "from": "CLOSED",
+      "event": "DCCP-Request",
+      "action": "",
+      "to": "REQUEST"
+    },
+    {
+      "from": "LISTEN",
+      "event": "DCCP-Request",
+      "action": "",
+      "to": "RESPOND"
+    },
+    {
+      "from": "REQUEST",
+      "event": "DCCP-Response",
+      "action": "",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "DCCP-Ack",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "DCCP-Ack",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "DCCP-DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "DCCP-Data",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "DCCP-Ack",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "DCCP-DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "DCCP-CloseReq",
+      "action": "",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "DCCP-Close",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "DCCP-Reset",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "STABLE",
+      "event": "snd Change L",
+      "action": "set F.state := CHANGING",
+      "to": "CHANGING"
+    },
+    {
+      "from": "CHANGING",
+      "event": "rcv Change R",
+      "action": "calc new value, snd Confirm L",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "rcv Confirm R",
+      "action": "Set F.value := new value",
+      "to": "STABLE"
+    },
+    {
+      "from": "STABLE",
+      "event": "pref list changes",
+      "action": "transition to UNSTABLE",
+      "to": "UNSTABLE"
+    },
+    {
+      "from": "UNSTABLE",
+      "event": "snd Change L",
+      "action": "transition back to CHANGING",
+      "to": "CHANGING"
+    },
+    {
+      "from": "CHANGING",
+      "event": "rcv non-ack",
+      "action": "snd Change L",
+      "to": "CHANGING"
+    },
+    {
+      "from": "STABLE",
+      "event": "rcv Change R",
+      "action": "calc new value, snd Confirm L",
+      "to": "STABLE"
+    },
+    {
+      "from": "Allow Short Sequence Numbers Enabled",
+      "event": "DCCP A sends \"Change L(Allow Short Seqnos, 1)\"",
+      "action": "",
+      "to": "Allow Short Sequence Numbers Enabled"
+    },
+    {
+      "from": "Allow Short Sequence Numbers Disabled",
+      "event": "",
+      "action": "DCCP B MUST NOT send packets with short sequence numbers and DCCP A MUST ignore any packets with short sequence numbers that are received.",
+      "to": "Allow Short Sequence Numbers Disabled"
+    },
+    {
+      "from": "Send NDP Count feature is zero",
+      "event": "DCCP A sends \"Change R(Send NDP Count, 1)\" option",
+      "action": "DCCP B MUST send NDP Count options",
+      "to": "Send NDP Count feature is one"
+    },
+    {
+      "from": "LISTEN",
+      "event": "Request",
+      "action": "Set S := new socket for this port pair; S.state = RESPOND; Choose S.ISS; Initialize S.GAR; Set S.ISR, S.GSR, S.SWL, S.SWH",
+      "to": "RESPOND"
+    },
+    {
+      "from": "REQUEST",
+      "event": "Response",
+      "action": "Set S.GSR, S.ISR, S.SWL, S.SWH",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "Reset",
+      "action": "Set S.GSR, S.ISR, S.SWL, S.SWH",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "",
+      "action": "increment Sequence Number",
+      "to": "REQUEST"
+    },
+    {
+      "from": "RESPOND",
+      "event": "Request",
+      "action": "Send Response, possibly containing Init Cookie; If Init Cookie was sent, Destroy S and return",
+      "to": "RESPOND"
+    },
+    {
+      "from": "RESPOND",
+      "event": "Reset",
+      "action": "Generate Reset(No Connection)",
+      "to": "RESPOND"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "Response",
+      "action": "Send Ack",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "Sync",
+      "action": "S.OSR := P.seqno; S.state := OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "CloseReq",
+      "action": "Generate Close; S.state := CLOSING; Set CLOSING timer",
+      "to": "CLOSING"
+    },
+    {
+      "from": "OPEN",
+      "event": "Close",
+      "action": "Generate Reset(Closed)",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "Reset",
+      "action": "Tear down connection",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "Close",
+      "action": "Generate Reset(Closed)",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "HC-Receiver",
+      "event": "Packet with Sequence Number > buf_ackno arrives",
+      "action": "updates buf_head, buf_ackno, and possibly buf_nonce, updates buffer itself",
+      "to": "HC-Receiver"
+    },
+    {
+      "from": "HC-Receiver",
+      "event": "Packet's state equals the state at the head of the buffer",
+      "action": "may increment its run length",
+      "to": "HC-Receiver"
+    },
+    {
+      "from": "HC-Receiver",
+      "event": "Several packets are missing",
+      "action": "may enter multiple bytes with run length 0",
+      "to": "HC-Receiver"
+    },
+    {
+      "from": "HC-Receiver",
+      "event": "Circular buffer overflows",
+      "action": "compress the buffer, transfer its state to a larger buffer, or drop all received packets",
+      "to": "HC-Receiver"
+    },
+    {
+      "from": "HC-Receiver",
+      "event": "Packet with Sequence Number S <= buf_ackno arrives",
+      "action": "scan the table for the byte corresponding to S",
+      "to": "HC-Receiver"
+    },
+    {
+      "from": "HC-Receiver",
+      "event": "S was previously lost (State 3)",
+      "action": "change the byte's state",
+      "to": "HC-Receiver"
+    },
+    {
+      "from": "HC-Receiver",
+      "event": "S was not marked as lost",
+      "action": "packet is probably a duplicate and should be ignored",
+      "to": "HC-Receiver"
+    },
+    {
+      "from": "HC-Sender",
+      "event": "receives an acknowledgement",
+      "action": "reads off the number of packets that were dropped and/or ECN marked, check the ECN Nonce for correctness",
+      "to": "HC-Sender"
+    },
+    {
+      "from": "HC-Receiver",
+      "event": "HC-Sender's packets include acknowledgement numbers",
+      "action": "finds the acknowledgement record R and does the following",
+      "to": "HC-Receiver"
+    },
+    {
+      "from": "HC-Receiver",
+      "event": "R.ack_nonce is 1",
+      "action": "flips buf_nonce, and the value of ack_nonce for every later ack record",
+      "to": "HC-Receiver"
+    },
+    {
+      "from": "Receiving data",
+      "event": "Receive Data Dropped option with Drop Code 1",
+      "action": "Report Drop Code 1 for every succeeding data packet",
+      "to": "Application Not Listening"
+    },
+    {
+      "from": "Receiving data",
+      "event": "Receive Data Dropped option with Drop Code 2",
+      "action": "reduce the sender's instantaneous rate by one packet per round-trip time",
+      "to": "Receive Buffer Full"
+    },
+    {
+      "from": "Application Not Listening",
+      "event": "",
+      "action": "Expect no more data will ever be delivered",
+      "to": "Application Not Listening"
+    },
+    {
+      "from": "Receive Buffer Full",
+      "event": "",
+      "action": "",
+      "to": "Receive Buffer Full"
+    },
+    {
+      "from": "ECN capable",
+      "event": "Change L(ECN Inapable, 1)",
+      "action": "send \"Confirm R(ECN Incapable, 1)\"",
+      "to": "ECN incapable"
+    },
+    {
+      "from": "ECN incapable",
+      "event": "connection closes",
+      "action": "",
+      "to": "ECN incapable"
+    },
+    {
+      "from": "ECN incapable",
+      "event": "until acknowledged",
+      "action": "send Mandatory \"Change L(ECN Incapable, 1)\" options",
+      "to": "ECN incapable"
+    },
+    {
+      "from": "ECN incapable",
+      "event": "data sent inappropriately",
+      "action": "send Data Dropped options",
+      "to": "ECN incapable"
+    },
+    {
+      "from": "Maintaining MPS",
+      "event": "Receive Datagram Too Big message",
+      "action": "decrease PMTU",
+      "to": "Maintaining MPS"
+    },
+    {
+      "from": "Maintaining MPS",
+      "event": "Application requests PMTU discovery",
+      "action": "reset PMTU to outgoing interface's MTU",
+      "to": "Maintaining MPS"
+    },
+    {
+      "from": "Maintaining MPS",
+      "event": "Application attempts to send packet larger than MPS",
+      "action": "refuse to send packet, return error",
+      "to": "Maintaining MPS"
+    },
+    {
+      "from": "PMTU Discovery",
+      "event": "Send unfragmentable packets",
+      "action": "check for ICMP Destination Unreachable",
+      "to": "PMTU Discovery"
+    },
+    {
+      "from": "Sending Packets",
+      "event": "IPv4 connection, application requests fragmentation",
+      "action": "send packets with DF bit not set",
+      "to": "Sending Packets"
+    },
+    {
+      "from": "Sending Packets",
+      "event": "IPv6 connection, application requests fragmentation",
+      "action": "use fragmentation extension headers",
+      "to": "Sending Packets"
+    },
+    {
+      "from": "Sending Packets",
+      "event": "DCCP-Request or DCCP-Response",
+      "action": "send as fragmentable",
+      "to": "Sending Packets"
+    },
+    {
+      "from": "Sending Packets",
+      "event": "DCCP-Reset",
+      "action": "send as fragmentable",
+      "to": "Sending Packets"
+    }
+  ]
+}

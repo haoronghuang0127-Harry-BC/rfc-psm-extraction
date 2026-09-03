@@ -1,0 +1,360 @@
+{
+  "states": [
+    "RTSP Session Context Creation",
+    "Aggregated Session",
+    "Established RTSP Session",
+    "Playing On-Demand Content",
+    "Paused Playback",
+    "Playing Live Content",
+    "Playing Live Content with Recording",
+    "Session Established",
+    "Session Timeout",
+    "Session Terminated",
+    "RTSP session",
+    "Idle",
+    "Connected",
+    "Persistent Connection",
+    "Server-to-Client Request Pending",
+    "Overload Situation",
+    "No Overload Situation",
+    "Init",
+    "Ready",
+    "Play",
+    "Not Scaling",
+    "Scaling",
+    "Server Default Policy",
+    "Client Preference",
+    "RAP",
+    "CoRAP",
+    "First-Prior",
+    "Next",
+    "Playing Live with Recording",
+    "Playing Live with Time-Shift",
+    "Play state",
+    "Requesting agent",
+    "Internal Server Error",
+    "Not Implemented",
+    "Bad Gateway",
+    "Service Unavailable",
+    "Gateway Timeout",
+    "RTSP Version Not Supported",
+    "Option Not Supported",
+    "Proxy Unavailable",
+    "Initial State",
+    "Setup State",
+    "PLAY request replaces an ongoing request",
+    "RTSP session with media that lacks random access properties",
+    "PLAY request after a completed PLAY operation",
+    "PLAY",
+    "PAUSE",
+    "PLAY after PAUSE",
+    "Presentation Description",
+    "Setup",
+    "Control of Transmission",
+    "Synchronization",
+    "Termination",
+    "On-Demand Playback of Stored Content",
+    "Unicast Distribution of Live Content",
+    "On-Demand Playback Using Multicast",
+    "Inviting an RTSP Server into a Conference",
+    "Live Content Using Multicast",
+    "Aggregate Control Not Available",
+    "Aggregate Control Available",
+    "RTSP External SDP Delivery",
+    "Play State",
+    "TCP/TLS Connection Established",
+    "SETUP Requests Sent",
+    "PLAY Request Sent",
+    "Media Delivery in Progress"
+  ],
+  "transitions": [
+    {
+      "from": "RTSP Session Context Creation",
+      "event": "SETUP request",
+      "action": "create RTSP session context and store parameters, include Session header in response, specify selected transport parameters",
+      "to": "RTSP Session Context Creation"
+    },
+    {
+      "from": "RTSP Session Context Creation",
+      "event": "SETUP request referencing existing RTSP session",
+      "action": "add media resource under common control",
+      "to": "Aggregated Session"
+    },
+    {
+      "from": "Established RTSP Session",
+      "event": "PLAY",
+      "action": "deliver media from closest random access point",
+      "to": "Playing On-Demand Content"
+    },
+    {
+      "from": "Playing On-Demand Content",
+      "event": "PAUSE",
+      "action": "halt delivery and report pause point",
+      "to": "Paused Playback"
+    },
+    {
+      "from": "Paused Playback",
+      "event": "PLAY",
+      "action": "resume playback",
+      "to": "Playing On-Demand Content"
+    },
+    {
+      "from": "Established RTSP Session",
+      "event": "PLAY",
+      "action": "receive live media",
+      "to": "Playing Live Content"
+    },
+    {
+      "from": "Playing Live Content",
+      "event": "PAUSE",
+      "action": "halt delivery",
+      "to": "Paused Playback"
+    },
+    {
+      "from": "Established RTSP Session",
+      "event": "PLAY",
+      "action": "learn current duration of recording",
+      "to": "Playing Live Content with Recording"
+    },
+    {
+      "from": "Playing Live Content with Recording",
+      "event": "PLAY",
+      "action": "contain current Media-Range header",
+      "to": "Playing Live Content with Recording"
+    },
+    {
+      "from": "Playing Live Content with Recording",
+      "event": "PLAY_NOTIFY",
+      "action": "send current media range",
+      "to": "Playing Live Content with Recording"
+    },
+    {
+      "from": "Playing Live Content with Recording",
+      "event": "PLAY",
+      "action": "adjust position to closest available point",
+      "to": "Playing Live Content with Recording"
+    },
+    {
+      "from": "Playing Live Content with Recording",
+      "event": "PAUSE",
+      "action": "adjust to closest point in available media",
+      "to": "Paused Playback"
+    },
+    {
+      "from": "Session Established",
+      "event": "Media-transport protocol keep-alive",
+      "action": "",
+      "to": "Session Established"
+    },
+    {
+      "from": "Session Established",
+      "event": "RTSP request",
+      "action": "",
+      "to": "Session Established"
+    },
+    {
+      "from": "Session Established",
+      "event": "session timeout value exceeded",
+      "action": "terminate context",
+      "to": "Session Terminated"
+    },
+    {
+      "from": "Session Established",
+      "event": "TEARDOWN request",
+      "action": "terminate context",
+      "to": "Session Terminated"
+    },
+    {
+      "from": "Session Established",
+      "event": "REDIRECT method",
+      "action": "initiate session termination",
+      "to": "Session Terminated"
+    },
+    {
+      "from": "Session Established",
+      "event": "",
+      "action": "send TEARDOWN request",
+      "to": "Session Terminated"
+    },
+    {
+      "from": "RTSP session",
+      "event": "SETUP request",
+      "action": "200 OK response",
+      "to": "RTSP session"
+    },
+    {
+      "from": "Idle",
+      "event": "",
+      "action": "open TCP connection",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "SETUP and PLAY message exchanges",
+      "action": "establish persistent connection",
+      "to": "Persistent Connection"
+    },
+    {
+      "from": "Persistent Connection",
+      "event": "new request (e.g., PAUSE)",
+      "action": "open new connection (transient or persistent)",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "server desires to send a REDIRECT request",
+      "action": "discard request",
+      "to": "Connected"
+    },
+    {
+      "from": "Persistent Connection",
+      "event": "loss of TCP connection",
+      "action": "set up a new connection",
+      "to": "Connected"
+    },
+    {
+      "from": "Persistent Connection",
+      "event": "server-to-client requests",
+      "action": "silently discard RTSP messages, drop session",
+      "to": "Idle"
+    },
+    {
+      "from": "PLAY",
+      "event": "",
+      "action": "",
+      "to": "PLAY"
+    },
+    {
+      "from": "PLAY",
+      "event": "PLAY",
+      "action": "replace current PLAY action",
+      "to": "Play"
+    },
+    {
+      "from": "PLAY",
+      "event": "PLAY",
+      "action": "stop playout, start delivering media, send 200 OK, send PLAY_NOTIFY, set pause point",
+      "to": "Play"
+    },
+    {
+      "from": "PLAY",
+      "event": "PLAY",
+      "action": "convert range specifier, continue, send 200 OK, send PLAY_NOTIFY, set pause point",
+      "to": "Play"
+    },
+    {
+      "from": "PLAY",
+      "event": "PLAY",
+      "action": "change scale, send 200 OK, send RTP-Info",
+      "to": "Play"
+    },
+    {
+      "from": "Initial State",
+      "event": "DESCRIBE",
+      "action": "Redirect to secure URI",
+      "to": "TCP/TLS Connection Established"
+    },
+    {
+      "from": "TCP/TLS Connection Established",
+      "event": "DESCRIBE request",
+      "action": "Send SDP response",
+      "to": "SETUP Requests Sent"
+    },
+    {
+      "from": "SETUP Requests Sent",
+      "event": "SETUP requests and MIKEY messages",
+      "action": "Send PLAY request",
+      "to": "PLAY Request Sent"
+    },
+    {
+      "from": "PLAY Request Sent",
+      "event": "PLAY request",
+      "action": "Send RTP/SAVP response",
+      "to": "Media Delivery in Progress"
+    },
+    {
+      "from": "Initial",
+      "event": "GET /sessions.html HTTP/1.1",
+      "action": "HTTP/1.1 200 OK",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "DESCRIBE rtsp://live.example.com/concert/audio RTSP/2.0",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "SETUP rtsp://live.example.com/concert/audio RTSP/2.0",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "PLAY rtsp://live.example.com/concert/audio RTSP/2.0",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Playing"
+    },
+    {
+      "from": "Negotiation State",
+      "event": "SETUP rtsp://media.example.com/twister.3gp/trackID=1 RTSP/2.0",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Setup State"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "position normal play time, deliver stream data",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY",
+      "action": "replace current PLAY action",
+      "to": "Play"
+    },
+    {
+      "from": "PLAY",
+      "event": "",
+      "action": "",
+      "to": "PLAY"
+    },
+    {
+      "from": "PLAY",
+      "event": "PLAY",
+      "action": "immediately replaces the previous request",
+      "to": "PLAY"
+    },
+    {
+      "from": "PLAY",
+      "event": "PLAY",
+      "action": "stop playout, start delivering media, send 200 OK, send PLAY_NOTIFY, set pause point",
+      "to": "PLAY"
+    },
+    {
+      "from": "PLAY",
+      "event": "PLAY",
+      "action": "convert range specifier, continue, send 200 OK, send PLAY_NOTIFY, set pause point",
+      "to": "PLAY"
+    },
+    {
+      "from": "PLAY",
+      "event": "PLAY",
+      "action": "change scale, send 200 OK, send RTP-Info",
+      "to": "PLAY"
+    },
+    {
+      "from": "PLAY",
+      "event": "PAUSE",
+      "action": "send 200 OK",
+      "to": "PAUSE"
+    },
+    {
+      "from": "PAUSE",
+      "event": "PLAY",
+      "action": "process request, send 200 OK, update RTP timestamp",
+      "to": "PLAY after PAUSE"
+    }
+  ]
+}

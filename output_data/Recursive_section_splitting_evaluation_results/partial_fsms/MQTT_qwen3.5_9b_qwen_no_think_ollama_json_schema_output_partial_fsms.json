@@ -1,0 +1,20 @@
+[
+  "{\"states\": [], \"transitions\": []}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\n  \"states\": [\n    \"Raw Public Key Mode\",\n    \"Pre-Shared Key Mode\"\n  ],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [\n    \"CONNECT with Authentication Data\",\n    \"Continue Authentication\",\n    \"Token Validation\",\n    \"Success\"\n  ],\n  \"transitions\": [\n    {\n      \"from\": \"CONNECT with Authentication Data\",\n      \"event\": \"\",\n      \"action\": \"Broker responds with AUTH packet containing RS nonce challenge\",\n      \"to\": \"Continue Authentication\"\n    },\n    {\n      \"from\": \"Continue Authentication\",\n      \"event\": \"\",\n      \"action\": \"Client sends AUTH packet with Client nonce and signature/MAC\",\n      \"to\": \"Token Validation\"\n    },\n    {\n      \"from\": \"Token Validation\",\n      \"event\": \"\",\n      \"action\": \"Broker validates token\",\n      \"to\": \"Success\"\n    }\n  ]\n}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}"
+]

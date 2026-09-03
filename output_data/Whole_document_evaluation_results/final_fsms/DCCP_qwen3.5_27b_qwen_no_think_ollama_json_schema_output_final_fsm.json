@@ -1,0 +1,81 @@
+{
+  "states": [
+    "CLOSED",
+    "LISTEN",
+    "REQUEST",
+    "RESPOND",
+    "PARTOPEN",
+    "OPEN",
+    "CLOSEREQ",
+    "CLOSING",
+    "TIMEWAIT"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "active open",
+      "action": "send DCCP-Request",
+      "to": "REQUEST"
+    },
+    {
+      "from": "CLOSED",
+      "event": "passive open",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "receive DCCP-Request",
+      "action": "send DCCP-Response",
+      "to": "RESPOND"
+    },
+    {
+      "from": "REQUEST",
+      "event": "receive DCCP-Response",
+      "action": "send DCCP-Ack or DCCP-DataAck",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "receive valid DCCP-Ack",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "receive valid packet other than DCCP-Response, DCCP-Reset, or DCCP-Sync",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "server decides to close and not hold TIMEWAIT",
+      "action": "send DCCP-CloseReq",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "OPEN",
+      "event": "client or server decides to close",
+      "action": "send DCCP-Close",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "receive DCCP-Close",
+      "action": "send DCCP-Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "receive DCCP-Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "2MSL timer expires",
+      "action": "",
+      "to": "CLOSED"
+    }
+  ]
+}

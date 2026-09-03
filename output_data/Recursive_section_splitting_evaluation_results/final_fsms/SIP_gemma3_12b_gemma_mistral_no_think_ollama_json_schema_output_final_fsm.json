@@ -1,0 +1,483 @@
+{
+  "states": [
+    "User location",
+    "User availability",
+    "User capabilities",
+    "Session setup",
+    "Session management",
+    "client transaction",
+    "server transaction",
+    "UAC",
+    "UAS",
+    "Transaction Layer Error State",
+    "Unrecognized Response State",
+    "Processing 3xx Responses State",
+    "Processing 4xx Responses State",
+    "Request Processing",
+    "Method Inspection",
+    "Header Inspection",
+    "Content Processing",
+    "Stateless UAS Behavior",
+    "Idle",
+    "Transaction Processing",
+    "Client waiting for provisional response",
+    "Client has received a provisional response",
+    "Server processing CANCEL request",
+    "UAS has not sent a final response",
+    "UAS has sent a final response",
+    "Registrar",
+    "Proxy Server",
+    "Location Service",
+    "UA",
+    "Proxy",
+    "Receiving a REGISTER request",
+    "Processing Require header field",
+    "Authenticating the UAC",
+    "Authorizing the UAC",
+    "Extracting address-of-record",
+    "Checking Contact header field",
+    "Processing contact addresses",
+    "Returning a 200 (OK) response",
+    "Dialog Established",
+    "INVITE Transaction in Progress (Client)",
+    "INVITE Transaction in Progress (Server)",
+    "Timer Active (491)",
+    "UAC Core - Session Terminated",
+    "UAS Core - Processing BYE Request",
+    "UAS Core - Session Terminated",
+    "Stateless",
+    "Stateful",
+    "Server Transaction",
+    "Client Transaction",
+    "Proxy Core",
+    "Validating Request",
+    "User Agent Server",
+    "OPTIONS Recipient",
+    "Determining Request Targets",
+    "Request Forwarding",
+    "Canonicalizing Request-URI",
+    "Client Transaction Matching",
+    "Stateless Proxy Processing",
+    "Client Transaction Processing",
+    "Response Context Processing",
+    "Server Transaction Processing",
+    "Response Context Termination",
+    "Client Transaction",
+    "UAS",
+    "Registered",
+    "Session Setup",
+    "Established",
+    "Terminating",
+    "normal",
+    "non-urgent",
+    "urgent",
+    "emergency",
+    "1xx",
+    "100 Trying",
+    "180 Ringing",
+    "181 Call Is Being Forwarded",
+    "182 Queued",
+    "183 Session Progress",
+    "2xx",
+    "200 OK",
+    "3xx",
+    "300 Multiple Choices",
+    "301 Moved Permanently",
+    "302 Moved Temporarily",
+    "305 Use Proxy",
+    "380 Alternative Service",
+    "4xx",
+    "400 Bad Request",
+    "401 Unauthorized",
+    "402 Payment Required",
+    "403 Forbidden",
+    "404 Not Found",
+    "405 Method Not Allowed",
+    "406 Not Acceptable",
+    "407 Proxy Authentication Required",
+    "408 Request Timeout",
+    "410 Gone",
+    "413 Request Entity Too Large",
+    "414 Request-URI Too Long",
+    "415 Unsupported Media Type",
+    "416 Unsupported URI Scheme",
+    "420 Bad Extension",
+    "421 Extension Required",
+    "423 Interval Too Brief",
+    "480 Temporarily Unavailable",
+    "481 Call/Transaction Does Not Exist",
+    "482 Loop Detected",
+    "483 Too Many Hops",
+    "484 Address Incomplete",
+    "485 Ambiguous",
+    "486 Busy Here",
+    "487 Request Terminated",
+    "488 Not Acceptable Here",
+    "491 Request Pending",
+    "493 Undecipherable",
+    "5xx",
+    "500 Server Internal Error",
+    "501 Not Implemented",
+    "502 Bad Gateway",
+    "503 Service Unavailable",
+    "504 Server Time-out",
+    "505 Version Not Supported",
+    "513 Message Too Large",
+    "6xx",
+    "600 Busy Everywhere",
+    "603 Decline",
+    "604 Does Not Exist Anywhere",
+    "606 Not Acceptable",
+    "identity"
+  ],
+  "transitions": [
+    {
+      "from": "UAC",
+      "event": "",
+      "action": "generates a new request",
+      "to": "UAS"
+    },
+    {
+      "from": "UAS",
+      "event": "",
+      "action": "generates a response",
+      "to": "UAC"
+    },
+    {
+      "from": "Transaction Layer Error State",
+      "event": "timeout error",
+      "action": "treat as 408",
+      "to": "Transaction Layer Error State"
+    },
+    {
+      "from": "Transaction Layer Error State",
+      "event": "fatal transport error",
+      "action": "treat as 503",
+      "to": "Transaction Layer Error State"
+    },
+    {
+      "from": "Unrecognized Response State",
+      "event": "",
+      "action": "treat as x00",
+      "to": "Unrecognized Response State"
+    },
+    {
+      "from": "Unrecognized Response State",
+      "event": "provisional response different than 100",
+      "action": "treat as 183",
+      "to": "Unrecognized Response State"
+    },
+    {
+      "from": "Processing 3xx Responses State",
+      "event": "redirection response",
+      "action": "use URI(s) in Contact header field to formulate new requests",
+      "to": "Processing 3xx Responses State"
+    },
+    {
+      "from": "Processing 4xx Responses State",
+      "event": "401 or 407 response",
+      "action": "follow authorization procedures",
+      "to": "Processing 4xx Responses State"
+    },
+    {
+      "from": "Processing 4xx Responses State",
+      "event": "413 response",
+      "action": "retry request, omitting or shortening body",
+      "to": "Processing 4xx Responses State"
+    },
+    {
+      "from": "Processing 4xx Responses State",
+      "event": "415 response",
+      "action": "retry request, using supported media types",
+      "to": "Processing 4xx Responses State"
+    },
+    {
+      "from": "Processing 4xx Responses State",
+      "event": "416 response",
+      "action": "retry request, using SIP URI",
+      "to": "Processing 4xx Responses State"
+    },
+    {
+      "from": "Processing 4xx Responses State",
+      "event": "420 response",
+      "action": "retry request, omitting unsupported extensions",
+      "to": "Processing 4xx Responses State"
+    },
+    {
+      "from": "Request Processing",
+      "event": "authenticated",
+      "action": "inspect method",
+      "to": "Method Inspection"
+    },
+    {
+      "from": "Method Inspection",
+      "event": "unsupported method",
+      "action": "generate 405 response",
+      "to": "Request Processing"
+    },
+    {
+      "from": "Method Inspection",
+      "event": "supported method",
+      "action": "inspect headers",
+      "to": "Header Inspection"
+    },
+    {
+      "from": "Header Inspection",
+      "event": "unrecognized header",
+      "action": "ignore header",
+      "to": "Header Inspection"
+    },
+    {
+      "from": "Header Inspection",
+      "event": "valid Request-URI scheme",
+      "action": "continue processing",
+      "to": "Content Processing"
+    },
+    {
+      "from": "Header Inspection",
+      "event": "invalid Request-URI scheme",
+      "action": "reject with 416",
+      "to": "Request Processing"
+    },
+    {
+      "from": "Header Inspection",
+      "event": "invalid Request-URI address",
+      "action": "reject with 404",
+      "to": "Request Processing"
+    },
+    {
+      "from": "Header Inspection",
+      "event": "no tag in To header",
+      "action": "check against ongoing transactions",
+      "to": "Content Processing"
+    },
+    {
+      "from": "Header Inspection",
+      "event": "matching transaction",
+      "action": "generate 482 response",
+      "to": "Request Processing"
+    },
+    {
+      "from": "Content Processing",
+      "event": "unsupported content type",
+      "action": "reject with 415",
+      "to": "Request Processing"
+    },
+    {
+      "from": "Content Processing",
+      "event": "understood extensions",
+      "action": "examine body",
+      "to": "Stateless UAS Behavior"
+    },
+    {
+      "from": "Stateless UAS Behavior",
+      "event": "identical request",
+      "action": "regenerate response",
+      "to": "Stateless UAS Behavior"
+    },
+    {
+      "from": "Idle",
+      "event": "request (other than CANCEL)",
+      "action": "refuse request or gather locations and return 3xx response",
+      "to": "Transaction Processing"
+    },
+    {
+      "from": "Transaction Processing",
+      "event": "CANCEL",
+      "action": "return 2xx response",
+      "to": "Idle"
+    },
+    {
+      "from": "Client waiting for provisional response",
+      "event": "arrival of a provisional response",
+      "action": "",
+      "to": "Client has received a provisional response"
+    },
+    {
+      "from": "Client has received a provisional response",
+      "event": "decision to send the CANCEL",
+      "action": "creates a client transaction for the CANCEL and passes it the CANCEL request along with the destination address, port, and transport",
+      "to": "Client waiting for provisional response"
+    },
+    {
+      "from": "Server processing CANCEL request",
+      "event": "",
+      "action": "processes the CANCEL request according to the general UAS processing",
+      "to": "UAS has not sent a final response"
+    },
+    {
+      "from": "UAS has not sent a final response",
+      "event": "original request was an INVITE",
+      "action": "responds to the INVITE with a 487 (Request Terminated)",
+      "to": "UAS has sent a final response"
+    },
+    {
+      "from": "UAS has sent a final response",
+      "event": "",
+      "action": "no effect on the processing of the original request, no effect on any session state, and no effect on the responses generated for the original request",
+      "to": "UAS has sent a final response"
+    },
+    {
+      "from": "Registered",
+      "event": "REGISTER",
+      "action": "200 OK",
+      "to": "Registered"
+    },
+    {
+      "from": "Session Setup",
+      "event": "INVITE",
+      "action": "100 Trying, INVITE, 100 Trying, INVITE, 180 Ringing, 200 OK, ACK",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "BYE",
+      "action": "200 OK",
+      "to": "Terminating"
+    },
+    {
+      "from": "Validating Request",
+      "event": "Reasonable Syntax Check Failed",
+      "action": "Respond with error code",
+      "to": "User Agent Server"
+    },
+    {
+      "from": "Validating Request",
+      "event": "Unsupported URI Scheme",
+      "action": "Respond with 416",
+      "to": "User Agent Server"
+    },
+    {
+      "from": "Validating Request",
+      "event": "Max-Forwards Field Value is Zero",
+      "action": "Do not forward request; respond with 483 if not OPTIONS, otherwise act as final recipient",
+      "to": "User Agent Server"
+    },
+    {
+      "from": "Validating Request",
+      "event": "Loop Detected",
+      "action": "MAY return 482",
+      "to": "Validating Request"
+    },
+    {
+      "from": "Validating Request",
+      "event": "Proxy-Require Header Field Not Understood",
+      "action": "Respond with 420 and Unsupported header",
+      "to": "User Agent Server"
+    },
+    {
+      "from": "Validating Request",
+      "event": "Proxy-Authorization Check Failed",
+      "action": "Inspect request as described in Section 22.3",
+      "to": "User Agent Server"
+    },
+    {
+      "from": "Receiving a REGISTER request",
+      "event": "Request-URI inspection",
+      "action": "Forward the request to the addressed domain",
+      "to": "Receiving a REGISTER request"
+    },
+    {
+      "from": "Receiving a REGISTER request",
+      "event": "Require header field",
+      "action": "",
+      "to": "Processing Require header field"
+    },
+    {
+      "from": "Processing Require header field",
+      "event": "Authentication",
+      "action": "Authenticate the UAC",
+      "to": "Authenticating the UAC"
+    },
+    {
+      "from": "Authenticating the UAC",
+      "event": "Authorization",
+      "action": "Determine if the authenticated user is authorized",
+      "to": "Authorizing the UAC"
+    },
+    {
+      "from": "Authorizing the UAC",
+      "event": "Authorization failure",
+      "action": "Return a 403 (Forbidden) and skip the remaining steps",
+      "to": "Receiving a REGISTER request"
+    },
+    {
+      "from": "Authorizing the UAC",
+      "event": "Address-of-record extraction",
+      "action": "",
+      "to": "Extracting address-of-record"
+    },
+    {
+      "from": "Extracting address-of-record",
+      "event": "Invalid address-of-record",
+      "action": "Send a 404 (Not Found) response and skip the remaining steps",
+      "to": "Receiving a REGISTER request"
+    },
+    {
+      "from": "Extracting address-of-record",
+      "event": "Contact header field",
+      "action": "",
+      "to": "Checking Contact header field"
+    },
+    {
+      "from": "Checking Contact header field",
+      "event": "Invalid request",
+      "action": "Return a 400 (Invalid Request) and skip the remaining steps",
+      "to": "Receiving a REGISTER request"
+    },
+    {
+      "from": "Checking Contact header field",
+      "event": "Call-ID agreement",
+      "action": "Remove or update binding",
+      "to": "Processing contact addresses"
+    },
+    {
+      "from": "Processing contact addresses",
+      "event": "Expiration interval determination",
+      "action": "Determine expiration interval",
+      "to": "Processing contact addresses"
+    },
+    {
+      "from": "Processing contact addresses",
+      "event": "423 (Interval Too Brief)",
+      "action": "Reject the registration with a response of 423 (Interval Too Brief)",
+      "to": "Receiving a REGISTER request"
+    },
+    {
+      "from": "Processing contact addresses",
+      "event": "URI comparison",
+      "action": "Tentatively add or update binding",
+      "to": "Processing contact addresses"
+    },
+    {
+      "from": "Processing contact addresses",
+      "event": "Call-ID value differs",
+      "action": "Remove or update binding",
+      "to": "Processing contact addresses"
+    },
+    {
+      "from": "Processing contact addresses",
+      "event": "CSeq value comparison",
+      "action": "Update or abort request",
+      "to": "Processing contact addresses"
+    },
+    {
+      "from": "Processing contact addresses",
+      "event": "All binding updates succeed",
+      "action": "Commit binding updates",
+      "to": "Returning a 200 (OK) response"
+    },
+    {
+      "from": "Processing contact addresses",
+      "event": "Binding update failure",
+      "action": "Return a 500 (Server Error) response and remove tentative binding updates",
+      "to": "Receiving a REGISTER request"
+    },
+    {
+      "from": "Returning a 200 (OK) response",
+      "event": "",
+      "action": "Return a 200 (OK) response",
+      "to": "Receiving a REGISTER request"
+    }
+  ]
+}

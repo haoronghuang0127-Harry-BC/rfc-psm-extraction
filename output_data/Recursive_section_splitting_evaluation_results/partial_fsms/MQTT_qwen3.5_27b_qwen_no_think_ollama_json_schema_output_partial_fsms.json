@@ -1,0 +1,20 @@
+[
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\n  \"states\": [\n    \"Client Connection Request\",\n    \"Broker Challenge Sent\",\n    \"Client Response Sent\"\n  ],\n  \"transitions\": [\n    {\n      \"from\": \"Client Connection Request\",\n      \"event\": \"CONNECT with Authentication Data containing only token\",\n      \"action\": \"Send AUTH packet with reason code 0x18 (Continue Authentication) and 8-byte RS nonce\",\n      \"to\": \"Broker Challenge Sent\"\n    },\n    {\n      \"from\": \"Broker Challenge Sent\",\n      \"event\": \"AUTH packet with Client nonce and signature/MAC\",\n      \"action\": \"Validate token and send CONNACK 0x00 (Success)\",\n      \"to\": \"Client Response Sent\"\n    }\n  ]\n}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [\n    \"Session State stored\",\n    \"Session State discarded\"\n  ],\n  \"transitions\": [\n    {\n      \"from\": \"Session State stored\",\n      \"event\": \"Client DISCONNECT with Session Expiry Interval set to 0\",\n      \"action\": \"Broker doesn't store the Session State but MUST keep the retained messages\",\n      \"to\": \"Session State discarded\"\n    }\n  ]\n}",
+  "{\n  \"states\": [\n    \"New Session\",\n    \"Existing Session\"\n  ],\n  \"transitions\": [\n    {\n      \"from\": \"New Session\",\n      \"event\": \"CONNECT with Clean flag = 0 and no associated Session\",\n      \"action\": \"Broker creates a new Session\",\n      \"to\": \"Existing Session\"\n    },\n    {\n      \"from\": \"Existing Session\",\n      \"event\": \"CONNECT with Clean flag = 0\",\n      \"action\": \"Broker resumes communications based on current Session state\",\n      \"to\": \"Existing Session\"\n    },\n    {\n      \"from\": \"New Session\",\n      \"event\": \"CONNECT with Clean flag = 1\",\n      \"action\": \"Broker starts a new Session\",\n      \"to\": \"New Session\"\n    }\n  ]\n}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}"
+]

@@ -1,0 +1,354 @@
+{
+  "states": [
+    "Session established",
+    "Session terminated",
+    "Stateless UAS",
+    "Stateful UAS",
+    "Pending Transaction",
+    "Transaction Cancelled",
+    "early",
+    "confirmed",
+    "early dialog",
+    "established dialog",
+    "confirmed dialog",
+    "terminated",
+    "Session",
+    "Terminated",
+    "Stateful Proxy",
+    "Stateless Proxy",
+    "Client Transaction",
+    "Response Context",
+    "proceeding",
+    "Calling",
+    "Proceeding",
+    "Completed",
+    "Trying",
+    "server transaction"
+  ],
+  "transitions": [
+    {
+      "from": "Session established",
+      "event": "re-INVITE",
+      "action": "send 200 (OK) to accept the change or send error response such as 488 (Not Acceptable Here)",
+      "to": "Session established"
+    },
+    {
+      "from": "Session established",
+      "event": "BYE",
+      "action": "send 200 (OK) response",
+      "to": "Session terminated"
+    },
+    {
+      "from": "Pending Transaction",
+      "event": "CANCEL request received",
+      "action": "respond with 487 (Request Terminated) for INVITE; respond with 200 (OK) to CANCEL",
+      "to": "Transaction Cancelled"
+    },
+    {
+      "from": "Pending Transaction",
+      "event": "64*T1 seconds timeout without final response",
+      "action": "consider original transaction cancelled and destroy client transaction",
+      "to": "Transaction Cancelled"
+    },
+    {
+      "from": "early",
+      "event": "2xx final response arrives",
+      "action": "",
+      "to": "confirmed"
+    },
+    {
+      "from": "early",
+      "event": "other responses or no response arrives",
+      "action": "dialog terminates",
+      "to": "early"
+    },
+    {
+      "from": "early",
+      "event": "2xx response",
+      "action": "transition to confirmed state and recompute route set",
+      "to": "confirmed"
+    },
+    {
+      "from": "early dialog",
+      "event": "2xx response",
+      "action": "establish a dialog",
+      "to": "established dialog"
+    },
+    {
+      "from": "established dialog",
+      "event": "ACK received for 2xx response",
+      "action": "",
+      "to": "confirmed dialog"
+    },
+    {
+      "from": "established dialog",
+      "event": "64*T1 seconds without ACK",
+      "action": "terminate session with BYE",
+      "to": "confirmed dialog"
+    },
+    {
+      "from": "early dialog",
+      "event": "BYE request",
+      "action": "terminate session",
+      "to": "terminated"
+    },
+    {
+      "from": "established dialog",
+      "event": "BYE request",
+      "action": "terminate session",
+      "to": "terminated"
+    },
+    {
+      "from": "confirmed dialog",
+      "event": "BYE request",
+      "action": "terminate session and dialog",
+      "to": "terminated"
+    },
+    {
+      "from": "Session",
+      "event": "timeout on BYE response",
+      "action": "consider session and dialog terminated",
+      "to": "Terminated"
+    },
+    {
+      "from": "Stateful Proxy",
+      "event": "transition to stateless operation",
+      "action": "discard all state",
+      "to": "Stateless Proxy"
+    },
+    {
+      "from": "Client Transaction",
+      "event": "INVITE request proxied",
+      "action": "Set timer C",
+      "to": "Client Transaction"
+    },
+    {
+      "from": "Client Transaction",
+      "event": "provisional response (101-199)",
+      "action": "Reset timer C",
+      "to": "Client Transaction"
+    },
+    {
+      "from": "Client Transaction",
+      "event": "response received",
+      "action": "hand to client transaction",
+      "to": "Response Context"
+    },
+    {
+      "from": "Response Context",
+      "event": "all client transactions terminated and no final response forwarded",
+      "action": "choose best final response and forward",
+      "to": "Response Context"
+    },
+    {
+      "from": "proceeding",
+      "event": "Timer C fires",
+      "action": "generate a CANCEL request matching that transaction",
+      "to": "terminated"
+    },
+    {
+      "from": "proceeding",
+      "event": "Timer C fires",
+      "action": "reset the timer with any value it chooses",
+      "to": "proceeding"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer A fires",
+      "action": "retransmit the request, reset timer A with value 2*T1",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer B fires",
+      "action": "inform TU that a timeout has occurred",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "Transport Err.",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "1xx response received",
+      "action": "pass provisional response to TU, stop retransmitting request",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Calling",
+      "event": "2xx response received",
+      "action": "pass response to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "300-699 response received",
+      "action": "pass response to TU, generate and send ACK request",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "1xx response received",
+      "action": "pass provisional response to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx response received",
+      "action": "pass response to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699 response received",
+      "action": "pass response to TU, generate and send ACK request",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "retransmission of final response received",
+      "action": "re-pass ACK to transport layer for retransmission",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer D fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Transport Err.",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer F fires",
+      "action": "inform TU about the timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "provisional response received",
+      "action": "pass response to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "final response (status codes 200-699) received",
+      "action": "pass response to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer E fires",
+      "action": "retransmit request; reset Timer E to T2",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer F fires",
+      "action": "inform TU of a timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "final response (status codes 200-699) received",
+      "action": "pass response to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer K fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx response from TU",
+      "action": "pass response to transport layer for transmission",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "response with status code 300-699 from TU",
+      "action": "pass response to transport layer for transmission; set Timer G (unreliable)",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "request retransmission received",
+      "action": "retransmit most recent provisional response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer G fires",
+      "action": "retransmit response; reset Timer G",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "request retransmission received",
+      "action": "pass response to transport for retransmission",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "ACK received",
+      "action": "",
+      "to": "Confirmed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer H fires",
+      "action": "indicate transaction failure to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Confirmed",
+      "event": "Timer I fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "provisional response from TU",
+      "action": "pass response to transport layer for transmission",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "final response (status codes 200-699) from TU",
+      "action": "pass response to transport layer for transmission; set Timer J (unreliable)",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "request retransmission received",
+      "action": "retransmit most recently sent provisional response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Completed",
+      "event": "request retransmission received",
+      "action": "pass final response to transport layer for retransmission",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer J fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "server transaction",
+      "event": "transport layer indicates a failure after backup delivery attempts fail",
+      "action": "inform the TU that a failure has occurred",
+      "to": "terminated"
+    }
+  ]
+}

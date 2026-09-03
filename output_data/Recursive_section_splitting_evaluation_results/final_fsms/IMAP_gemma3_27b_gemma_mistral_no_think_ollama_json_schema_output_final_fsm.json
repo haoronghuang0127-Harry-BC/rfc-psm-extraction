@@ -1,0 +1,784 @@
+{
+  "states": [
+    "Connection",
+    "Session",
+    "Not Authenticated",
+    "Authenticated",
+    "Selected",
+    "Logout",
+    "Synchronizing Literal Transmission",
+    "Non-Synchronizing Literal Transmission",
+    "command in progress",
+    "no command in progress",
+    "Not Authenticated State",
+    "Authenticated State",
+    "Not Selected",
+    "Selected State",
+    "IDLE",
+    "authenticated state",
+    "selected mailbox",
+    "TLS_NEGOTIATION",
+    "IMAP4REV2_SESSION",
+    "LOGGED_OUT",
+    "before authentication",
+    "not in selected state"
+  ],
+  "transitions": [
+    {
+      "from": "Connection",
+      "event": "SELECT or EXAMINE command",
+      "action": "",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "SELECT or EXAMINE of another mailbox",
+      "action": "",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "CLOSE command",
+      "action": "",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "UNSELECT command",
+      "action": "",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "connection termination",
+      "action": "",
+      "to": "Connection"
+    },
+    {
+      "from": "connection established",
+      "event": "OK greeting",
+      "action": "",
+      "to": "Not Authenticated"
+    },
+    {
+      "from": "connection established",
+      "event": "PREAUTH greeting",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "connection established",
+      "event": "BYE greeting",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "successful LOGIN or AUTHENTICATE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "successful SELECT or EXAMINE command",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "CLOSE or UNSELECT command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "unsolicited CLOSED response code",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "failed SELECT or EXAMINE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "LOGOUT command",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Selected",
+      "event": "server shutdown",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Selected",
+      "event": "connection closed",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "LOGOUT command",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Authenticated",
+      "event": "LOGOUT command",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Logout",
+      "event": "",
+      "action": "",
+      "to": "both sides close the connection"
+    },
+    {
+      "from": "Synchronizing Literal Transmission",
+      "event": "command continuation request",
+      "action": "send octet data",
+      "to": "Synchronizing Literal Transmission"
+    },
+    {
+      "from": "Non-Synchronizing Literal Transmission",
+      "event": "",
+      "action": "",
+      "to": "Non-Synchronizing Literal Transmission"
+    },
+    {
+      "from": "no command in progress",
+      "event": "untagged response",
+      "action": "deal with flow control considerations",
+      "to": "no command in progress"
+    },
+    {
+      "from": "command in progress",
+      "event": "command continuation request",
+      "action": "negotiate before subsequent command",
+      "to": "command in progress"
+    },
+    {
+      "from": "command in progress",
+      "event": "ambiguity detected",
+      "action": "execute commands to completion in order",
+      "to": "command in progress"
+    },
+    {
+      "from": "no command in progress",
+      "event": "FETCH, STORE, or SEARCH",
+      "action": "",
+      "to": "command in progress"
+    },
+    {
+      "from": "command in progress",
+      "event": "FETCH, STORE, or SEARCH",
+      "action": "",
+      "to": "command in progress"
+    },
+    {
+      "from": "command in progress",
+      "event": "UID FETCH, UID STORE, or UID SEARCH",
+      "action": "",
+      "to": "command in progress"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "AUTHENTICATE",
+      "action": "now in authenticated state",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "LOGIN",
+      "action": "login completed",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "STARTTLS",
+      "action": "Begin TLS negotiation now",
+      "to": "Not Authenticated State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "",
+      "action": "",
+      "to": "Not Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "ENABLE",
+      "action": "OK - Relevant capabilities enabled, send untagged ENABLED response",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "ENABLE",
+      "action": "BAD - No arguments, or syntax error in an argument",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "SELECT/EXAMINE",
+      "action": "",
+      "to": "Not Selected"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "",
+      "action": "",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "SELECT Command",
+      "action": "send FLAGS, EXISTS, LIST, PERMANENTFLAGS, UIDNEXT, UIDVALIDITY",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "SELECT Command failure",
+      "action": "no action",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Selected State",
+      "event": "SELECT Command",
+      "action": "send [CLOSED] untagged response",
+      "to": "Selected State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "EXAMINE",
+      "action": "FLAGS, EXISTS, LIST",
+      "to": "Selected State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "EXAMINE",
+      "action": "NO",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "EXAMINE",
+      "action": "BAD",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Selected State",
+      "event": "LOGOUT command",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Selected State",
+      "event": "server shutdown",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Selected State",
+      "event": "connection closed",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "LOGOUT command",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Authenticated",
+      "event": "LOGOUT command",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "TLS_NEGOTIATION",
+      "event": "AUTHENTICATE SCRAM-SHA-256",
+      "action": "SCRAM-SHA-256 authentication successful",
+      "to": "AUTHENTICATED"
+    },
+    {
+      "from": "AUTHENTICATED",
+      "event": "ENABLE IMAP4rev2",
+      "action": "Some capabilities enabled",
+      "to": "IMAP4REV2_SESSION"
+    },
+    {
+      "from": "IMAP4REV2_SESSION",
+      "event": "select inbox",
+      "action": "SELECT completed",
+      "to": "IMAP4REV2_SESSION"
+    },
+    {
+      "from": "IMAP4REV2_SESSION",
+      "event": "fetch 12 full",
+      "action": "FETCH completed",
+      "to": "IMAP4REV2_SESSION"
+    },
+    {
+      "from": "IMAP4REV2_SESSION",
+      "event": "fetch 12 body[header]",
+      "action": "FETCH completed",
+      "to": "IMAP4REV2_SESSION"
+    },
+    {
+      "from": "IMAP4REV2_SESSION",
+      "event": "store 12 +flags \\deleted",
+      "action": "+FLAGS completed",
+      "to": "IMAP4REV2_SESSION"
+    },
+    {
+      "from": "IMAP4REV2_SESSION",
+      "event": "logout",
+      "action": "LOGOUT completed",
+      "to": "LOGGED_OUT"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "login",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "authenticate",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "STARTTLS",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "append",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "create",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "delete",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "enable",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "examine",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "list",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "namespace-command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "rename",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "select",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "status",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "subscribe",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "unsubscribe",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "idle",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "CLOSE",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "UNSELECT",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "EXPUNGE",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "copy",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "move",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "fetch",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "store",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "search",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "uid",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "CAPABILITY",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "LOGOUT",
+      "action": "",
+      "to": "Not Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "NOOP",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "CAPABILITY",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "LOGOUT",
+      "action": "",
+      "to": "Not Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "NOOP",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "before authentication",
+      "event": "CAPABILITY",
+      "action": "ignore other responses",
+      "to": "before authentication"
+    },
+    {
+      "from": "before authentication",
+      "event": "server status responses",
+      "action": "ignore other responses",
+      "to": "before authentication"
+    },
+    {
+      "from": "authenticated",
+      "event": "ALERT",
+      "action": "ignore",
+      "to": "authenticated"
+    },
+    {
+      "from": "not in selected state",
+      "event": "message and mailbox status",
+      "action": "ignore",
+      "to": "not in selected state"
+    },
+    {
+      "from": "IDLE",
+      "event": "DONE",
+      "action": "IDLE terminated",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "IDLE",
+      "action": "continuation request",
+      "to": "IDLE"
+    },
+    {
+      "from": "Selected State",
+      "event": "CLOSE",
+      "action": "close completed",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "selected mailbox",
+      "event": "UNSELECT",
+      "action": "OK - unselect completed",
+      "to": "authenticated state"
+    },
+    {
+      "from": "Selected State",
+      "event": "EXPUNGE",
+      "action": "send untagged EXPUNGE responses for each removed message",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "EXPUNGE",
+      "action": "OK - expunge completed, NO - expunge failure, BAD - command unknown or arguments invalid",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "SEARCH RETURN (SAVE)",
+      "action": "SEARCH completed, result saved",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "SEARCH RETURN (SAVE)",
+      "action": "SEARCH completed",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "UID SEARCH",
+      "action": "ESEARCH",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "SEARCH RETURN (SAVE)",
+      "action": "SEARCH completed",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "SEARCH RETURN (SAVE)",
+      "action": "SEARCH completed",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "SEARCH RETURN (SAVE)",
+      "action": "SEARCH completed",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "SEARCH RETURN (SAVE)",
+      "action": "SEARCH completed",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "SEARCH RETURN (SAVE)",
+      "action": "SEARCH completed",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "SEARCH RETURN (SAVE)",
+      "action": "SEARCH completed",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "SEARCH RETURN (ALL SAVE)",
+      "action": "ESEARCH",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "SEARCH RETURN (SAVE MIN)",
+      "action": "ESEARCH",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "SEARCH RETURN (MAX SAVE MIN)",
+      "action": "ESEARCH",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "SEARCH RETURN (MAX SAVE MIN COUNT)",
+      "action": "ESEARCH",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "SEARCH RETURN (ALL SAVE MIN)",
+      "action": "ESEARCH",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected",
+      "event": "FETCH",
+      "action": "OK - fetch completed, NO - fetch error: can't fetch that data, BAD - command unknown or arguments invalid",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected State",
+      "event": "UID COPY",
+      "action": "OK",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "UID MOVE",
+      "action": "OK",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "UID FETCH",
+      "action": "OK",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "UID STORE",
+      "action": "OK",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "UID EXPUNGE",
+      "action": "OK",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "UID SEARCH",
+      "action": "ESEARCH",
+      "to": "Selected State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "RENAME",
+      "action": "OK - rename completed",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "RENAME",
+      "action": "NO - rename failure",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "RENAME",
+      "action": "BAD - command unknown or arguments invalid",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "APPEND Command",
+      "action": "OK - append completed",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "APPEND Command",
+      "action": "NO - append error",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "APPEND Command",
+      "action": "BAD - command unknown or arguments invalid",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "APPEND Command",
+      "action": "send untagged LIST response",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "APPEND Command",
+      "action": "send APPENDUID response code",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "APPEND Command",
+      "action": "send NO response with [TRYCREATE] prefix",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "mailbox selected",
+      "action": "send untagged EXISTS response",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "NAMESPACE",
+      "action": "return NAMESPACE response",
+      "to": "Authenticated State"
+    }
+  ]
+}

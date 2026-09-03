@@ -1,0 +1,14 @@
+[
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [\"INIT-REBOOT\", \"SELECTING\", \"RENEWING\", \"REBINDING\"], \"transitions\": [{\"from\": \"INIT-REBOOT\", \"event\": \"DHCPREQUEST\", \"action\": \"send DHCPNAK message\", \"to\": \"INIT-REBOOT\"}, {\"from\": \"SELECTING\", \"event\": \"DHCPREQUEST\", \"action\": \"identify the offering server in the DHCPREQUEST message\", \"to\": \"SELECTING\"}, {\"from\": \"RENEWING\", \"event\": \"DHCPREQUEST\", \"action\": \"extend lease\", \"to\": \"RENEWING\"}, {\"from\": \"REBINDING\", \"event\": \"DHCPREQUEST\", \"action\": \"extend lease\", \"to\": \"REBINDING\"}]}",
+  "{\"states\": [\"INIT-REBOOT\", \"INIT\", \"REBOOTING\", \"SELECTING\", \"BOUND\", \"RENEWING\", \"REBINDING\"], \"transitions\": [{\"from\": \"INIT-REBOOT\", \"event\": \"DHCPNAK/Restart\", \"action\": \"Discard offer/Send DHCPDISCOVER\", \"to\": \"INIT\"}, {\"from\": \"INIT\", \"event\": \"DHCPNAK\", \"action\": \"Send DHCPDISCOVER\", \"to\": \"INIT-REBOOT\"}, {\"from\": \"INIT\", \"event\": \"DHCPACK\", \"action\": \"not accept.\", \"to\": \"REBOOTING\"}, {\"from\": \"REBOOTING\", \"event\": \"DHCPACK\", \"action\": \"Record lease, set timers T1, T2\", \"to\": \"SELECTING\"}, {\"from\": \"SELECTING\", \"event\": \"DHCPOFFER/Collect replies\", \"action\": \"Select offer/send DHCPREQUEST\", \"to\": \"BOUND\"}, {\"from\": \"BOUND\", \"event\": \"T2 expires/DHCPNAK\", \"action\": \"Broadcast DHCPREQUEST/Halt network\", \"to\": \"REBINDING\"}, {\"from\": \"BOUND\", \"event\": \"T1 expires/Send DHCPREQUEST\", \"action\": \"Record lease, set timers T1, T2\", \"to\": \"RENEWING\"}, {\"from\": \"RENEWING\", \"event\": \"DHCPACK\", \"action\": \"Record lease, set timers T1, T2\", \"to\": \"BOUND\"}, {\"from\": \"REBINDING\", \"event\": \"DHCPACK\", \"action\": \"Record lease, set timers T1, T2\", \"to\": \"BOUND\"}]}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}"
+]

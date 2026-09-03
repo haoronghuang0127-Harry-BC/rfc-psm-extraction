@@ -1,0 +1,156 @@
+{
+  "states": [
+    "Client",
+    "Broker",
+    "Authorization Server (AS)",
+    "Client Authorization Server (CAS)",
+    "MQTT Client",
+    "Resource Server (RS)",
+    "Network Connection",
+    "Session",
+    "Application Message",
+    "MQTT Control Packet",
+    "UTF-8-encoded string",
+    "Binary Data",
+    "Variable Byte Integer",
+    "QoS level",
+    "Property",
+    "Topic Name",
+    "Subscription",
+    "Topic Filter",
+    "AUTH",
+    "PUBLISH",
+    "PUBACK",
+    "PUBREC",
+    "SUBSCRIBE",
+    "SUBACK",
+    "PINGREQ",
+    "PINGRESP",
+    "DISCONNECT",
+    "Will Message",
+    "CONNECT",
+    "CONNACK"
+  ],
+  "transitions": [
+    {
+      "from": "Client",
+      "event": "Token request",
+      "action": "Token acquisition from AS",
+      "to": "Authorization Server (AS)"
+    },
+    {
+      "from": "Client",
+      "event": "connection requests",
+      "action": "TLS for communication security",
+      "to": "Broker"
+    },
+    {
+      "from": "Client",
+      "event": "publish requests",
+      "action": "TLS for communication security",
+      "to": "Broker"
+    },
+    {
+      "from": "Client",
+      "event": "subscribe requests",
+      "action": "TLS for communication security",
+      "to": "Broker"
+    },
+    {
+      "from": "Client",
+      "event": "MQTT PUBLISH packet",
+      "action": "TLS for communication security",
+      "to": "Broker"
+    },
+    {
+      "from": "Client",
+      "event": "MQTT Control Packet",
+      "action": "TLS for communication security",
+      "to": "Broker"
+    },
+    {
+      "from": "Broker",
+      "event": "connection requests from the Clients",
+      "action": "TLS for communication security",
+      "to": "Client"
+    },
+    {
+      "from": "Broker",
+      "event": "publish requests from the Clients",
+      "action": "TLS for communication security",
+      "to": "Client"
+    },
+    {
+      "from": "Broker",
+      "event": "subscribe requests from the Clients",
+      "action": "TLS for communication security",
+      "to": "Client"
+    },
+    {
+      "from": "Broker",
+      "event": "MQTT Control Packet",
+      "action": "TLS for communication security",
+      "to": "Client"
+    },
+    {
+      "from": "Authorization Server (AS)",
+      "event": "token request",
+      "action": "verify the request",
+      "to": "Client"
+    },
+    {
+      "from": "Authorization Server (AS)",
+      "event": "token request",
+      "action": "issue an access token",
+      "to": "Client"
+    },
+    {
+      "from": "Client",
+      "event": "Token request",
+      "action": "verify the access token request",
+      "to": "Authorization Server (AS)"
+    },
+    {
+      "from": "Client",
+      "event": "Token request",
+      "action": "issue an access token",
+      "to": "Authorization Server (AS)"
+    },
+    {
+      "from": "Client",
+      "event": "connection request",
+      "action": "authenticate",
+      "to": "Broker"
+    },
+    {
+      "from": "Client",
+      "event": "publish request",
+      "action": "authenticate",
+      "to": "Broker"
+    },
+    {
+      "from": "Client",
+      "event": "subscribe request",
+      "action": "authenticate",
+      "to": "Broker"
+    },
+    {
+      "from": "Broker",
+      "event": "Client connection",
+      "action": "verify the token",
+      "to": "Client"
+    },
+    {
+      "from": "Broker",
+      "event": "Client publish",
+      "action": "verify the token",
+      "to": "Client"
+    },
+    {
+      "from": "Broker",
+      "event": "Client subscribe",
+      "action": "verify the token",
+      "to": "Client"
+    }
+  ]
+}

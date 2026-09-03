@@ -1,0 +1,516 @@
+{
+  "states": [
+    "CLOSED",
+    "LISTEN",
+    "REQUEST",
+    "RESPOND",
+    "PARTOPEN",
+    "OPEN",
+    "CLOSEREQ",
+    "CLOSING",
+    "TIMEWAIT",
+    "CONNECTED",
+    "STABLE",
+    "CHANGING",
+    "UNSTABLE",
+    "bidirectional",
+    "unidirectional",
+    "State 0",
+    "State 1",
+    "State 3"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "Send DCCP-Request",
+      "action": "",
+      "to": "REQUEST"
+    },
+    {
+      "from": "LISTEN",
+      "event": "Receive DCCP-Request",
+      "action": "",
+      "to": "RESPOND"
+    },
+    {
+      "from": "REQUEST",
+      "event": "Receive DCCP-Response",
+      "action": "",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "Send DCCP-Ack or DCCP-DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "Receive DCCP-Ack or DCCP-DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "Send DCCP-CloseReq",
+      "action": "",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "OPEN",
+      "event": "Receive DCCP-CloseReq",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "Receive DCCP-Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "Receive DCCP-Close",
+      "action": "Send DCCP-Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "Timeout 2MSL",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSED",
+      "event": "DCCP-Request",
+      "action": "sends DCCP-Request packet",
+      "to": "CONNECTED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "DCCP-Request",
+      "action": "sends DCCP-Response packet",
+      "to": "CONNECTED"
+    },
+    {
+      "from": "CONNECTED",
+      "event": "DCCP-Reset",
+      "action": "holds state for two maximum segment lifetimes",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "STABLE",
+      "event": "app/protocol evt",
+      "action": "snd Change L",
+      "to": "CHANGING"
+    },
+    {
+      "from": "CHANGING",
+      "event": "rcv Confirm R",
+      "action": "accept value",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "rcv empty Confirm R",
+      "action": "revert to old value",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "pref list changes",
+      "action": "",
+      "to": "UNSTABLE"
+    },
+    {
+      "from": "UNSTABLE",
+      "event": "snd Change L",
+      "action": "",
+      "to": "CHANGING"
+    },
+    {
+      "from": "CHANGING",
+      "event": "timeout/ rcv non-ack",
+      "action": "snd Change L",
+      "to": "CHANGING"
+    },
+    {
+      "from": "STABLE",
+      "event": "rcv Change R",
+      "action": "calc new value, snd Confirm L",
+      "to": "STABLE"
+    },
+    {
+      "from": "STABLE",
+      "event": "rcv Confirm R",
+      "action": "ignore",
+      "to": "STABLE"
+    },
+    {
+      "from": "UNSTABLE",
+      "event": "rcv Confirm/Change R",
+      "action": "ignore",
+      "to": "UNSTABLE"
+    },
+    {
+      "from": "CLOSED",
+      "event": "decides to initiate a connection",
+      "action": "sends a DCCP-Request packet",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "receives a DCCP-Response",
+      "action": "",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "sends DCCP-Ack or DCCP-DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "receives DCCP-Request",
+      "action": "sends a DCCP-Response",
+      "to": "RESPOND"
+    },
+    {
+      "from": "RESPOND",
+      "event": "receives DCCP-Ack or DCCP-DataAck",
+      "action": "sends Data, Ack, DataAck",
+      "to": "OPEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "timeout",
+      "action": "send new DCCP-Request packet",
+      "to": "REQUEST"
+    },
+    {
+      "from": "OPEN",
+      "event": "Data, Ack, DataAck",
+      "action": "exchange Data, Ack, DataAck",
+      "to": "OPEN"
+    },
+    {
+      "from": "CLOSED",
+      "event": "passive open",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "CLOSED",
+      "event": "active open",
+      "action": "snd Request",
+      "to": "REQUEST"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv Request",
+      "action": "snd Response",
+      "to": "RESPOND"
+    },
+    {
+      "from": "REQUEST",
+      "event": "rcv Response",
+      "action": "snd Ack",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "rcv Ack/DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "rcv packet",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "timeout",
+      "action": "snd DCCP-Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "timeout",
+      "action": "send DCCP-Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "OPEN",
+      "event": "server active close",
+      "action": "snd CloseReq",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "OPEN",
+      "event": "active close or rcv CloseReq",
+      "action": "snd Close",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "rcv Close",
+      "action": "snd Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "rcv Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "2MSL timer expires",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv DCCP-Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "REQUEST",
+      "event": "rcv DCCP-Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "RESPOND",
+      "event": "rcv DCCP-Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "rcv DCCP-Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "OPEN",
+      "event": "rcv DCCP-Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "rcv DCCP-Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "REQUEST",
+      "event": "Response",
+      "action": "S.state := PARTOPEN; Set PARTOPEN timer",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "Packet not Request",
+      "action": "S.OSR := P.seqno; S.state := OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "Packet not Response and not Sync",
+      "action": "S.OSR := P.seqno; S.state := OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "Reset",
+      "action": "Tear down connection; S.state := TIMEWAIT; Set TIMEWAIT timer",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "RESPOND",
+      "event": "Reset",
+      "action": "Tear down connection; S.state := TIMEWAIT; Set TIMEWAIT timer",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "Reset",
+      "action": "Tear down connection; S.state := TIMEWAIT; Set TIMEWAIT timer",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "OPEN",
+      "event": "Reset",
+      "action": "Tear down connection; S.state := TIMEWAIT; Set TIMEWAIT timer",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "REQUEST",
+      "event": "CloseReq",
+      "action": "Generate Close; S.state := CLOSING; Set CLOSING timer",
+      "to": "CLOSING"
+    },
+    {
+      "from": "RESPOND",
+      "event": "CloseReq",
+      "action": "Generate Close; S.state := CLOSING; Set CLOSING timer",
+      "to": "CLOSING"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "CloseReq",
+      "action": "Generate Close; S.state := CLOSING; Set CLOSING timer",
+      "to": "CLOSING"
+    },
+    {
+      "from": "OPEN",
+      "event": "CloseReq",
+      "action": "Generate Close; S.state := CLOSING; Set CLOSING timer",
+      "to": "CLOSING"
+    },
+    {
+      "from": "bidirectional",
+      "event": "notices that DCCP B has gone quiescent",
+      "action": "switches its ack pattern from bidirectional to unidirectional",
+      "to": "unidirectional"
+    },
+    {
+      "from": "unidirectional",
+      "event": "must acknowledge even a single DCCP-Data or DCCP-DataAck packet from DCCP B",
+      "action": "switches from unidirectional to bidirectional",
+      "to": "bidirectional"
+    },
+    {
+      "from": "State 0",
+      "event": "Receive Ack Vector State 0",
+      "action": "Update packet state",
+      "to": "State 0"
+    },
+    {
+      "from": "State 0",
+      "event": "Receive Ack Vector State 1",
+      "action": "Update packet state",
+      "to": "State 0"
+    },
+    {
+      "from": "State 0",
+      "event": "Receive Ack Vector State 1",
+      "action": "Update packet state",
+      "to": "State 1"
+    },
+    {
+      "from": "State 0",
+      "event": "Receive Ack Vector State 3",
+      "action": "Update packet state",
+      "to": "State 0"
+    },
+    {
+      "from": "State 1",
+      "event": "Receive Ack Vector State 0",
+      "action": "Update packet state",
+      "to": "State 1"
+    },
+    {
+      "from": "State 1",
+      "event": "Receive Ack Vector State 1",
+      "action": "Update packet state",
+      "to": "State 1"
+    },
+    {
+      "from": "State 1",
+      "event": "Receive Ack Vector State 3",
+      "action": "Update packet state",
+      "to": "State 1"
+    },
+    {
+      "from": "State 3",
+      "event": "Receive Ack Vector State 0",
+      "action": "Update packet state",
+      "to": "State 0"
+    },
+    {
+      "from": "State 3",
+      "event": "Receive Ack Vector State 1",
+      "action": "Update packet state",
+      "to": "State 1"
+    },
+    {
+      "from": "State 3",
+      "event": "Receive Ack Vector State 3",
+      "action": "Update packet state",
+      "to": "State 3"
+    },
+    {
+      "from": "State 0",
+      "event": "Packet Received State 0",
+      "action": "Update stored state",
+      "to": "State 0"
+    },
+    {
+      "from": "State 0",
+      "event": "Packet Received State 1",
+      "action": "Update stored state",
+      "to": "State 0"
+    },
+    {
+      "from": "State 0",
+      "event": "Packet Received State 1",
+      "action": "Update stored state",
+      "to": "State 1"
+    },
+    {
+      "from": "State 0",
+      "event": "Packet Received State 3",
+      "action": "Update stored state",
+      "to": "State 0"
+    },
+    {
+      "from": "State 1",
+      "event": "Packet Received State 0",
+      "action": "Update stored state",
+      "to": "State 0"
+    },
+    {
+      "from": "State 1",
+      "event": "Packet Received State 0",
+      "action": "Update stored state",
+      "to": "State 1"
+    },
+    {
+      "from": "State 1",
+      "event": "Packet Received State 1",
+      "action": "Update stored state",
+      "to": "State 1"
+    },
+    {
+      "from": "State 1",
+      "event": "Packet Received State 3",
+      "action": "Update stored state",
+      "to": "State 1"
+    },
+    {
+      "from": "State 3",
+      "event": "Packet Received State 0",
+      "action": "Update stored state",
+      "to": "State 0"
+    },
+    {
+      "from": "State 3",
+      "event": "Packet Received State 1",
+      "action": "Update stored state",
+      "to": "State 1"
+    },
+    {
+      "from": "State 3",
+      "event": "Packet Received State 3",
+      "action": "Update stored state",
+      "to": "State 3"
+    }
+  ]
+}

@@ -1,0 +1,646 @@
+{
+  "states": [
+    "Link Dead",
+    "Link Establishment",
+    "Opened",
+    "Authenticate",
+    "Network-Layer Protocol",
+    "Closing",
+    "Terminate",
+    "DOWN",
+    "Initial",
+    "Starting",
+    "Closed",
+    "Stopped",
+    "Stopping",
+    "Request-Sent",
+    "Ack-Received",
+    "Ack-Sent"
+  ],
+  "transitions": [
+    {
+      "from": "Link Dead",
+      "event": "",
+      "action": "physical-layer ready",
+      "to": "Link Establishment"
+    },
+    {
+      "from": "Link Establishment",
+      "event": "Configure-Ack sent and received",
+      "action": "LCP Opened state entered",
+      "to": "Opened"
+    },
+    {
+      "from": "Opened",
+      "event": "",
+      "action": "authentication required",
+      "to": "Authenticate"
+    },
+    {
+      "from": "Opened",
+      "event": "",
+      "action": "NCP configuration begins",
+      "to": "Network-Layer Protocol"
+    },
+    {
+      "from": "Authenticate",
+      "event": "authentication completed",
+      "action": "",
+      "to": "Network-Layer Protocol"
+    },
+    {
+      "from": "Authenticate",
+      "event": "authentication fails",
+      "action": "proceed to Link Termination phase",
+      "to": "Terminate"
+    },
+    {
+      "from": "Network-Layer Protocol",
+      "event": "LCP Configure-Request received",
+      "action": "",
+      "to": "Link Establishment"
+    },
+    {
+      "from": "Network-Layer Protocol",
+      "event": "",
+      "action": "link closing initiated",
+      "to": "Closing"
+    },
+    {
+      "from": "Closing",
+      "event": "Terminate packets exchanged",
+      "action": "inform network-layer protocols, signal physical-layer disconnect",
+      "to": "Terminate"
+    },
+    {
+      "from": "Terminate",
+      "event": "",
+      "action": "link termination enforced",
+      "to": "DOWN"
+    },
+    {
+      "from": "DOWN",
+      "event": "external event (e.g., disconnection)",
+      "action": "",
+      "to": "Link Dead"
+    },
+    {
+      "from": "Initial",
+      "event": "Up",
+      "action": "irc,scr",
+      "to": "6"
+    },
+    {
+      "from": "Starting",
+      "event": "Down",
+      "action": "",
+      "to": "0"
+    },
+    {
+      "from": "Starting",
+      "event": "Open",
+      "action": "tls",
+      "to": "1"
+    },
+    {
+      "from": "Starting",
+      "event": "Close",
+      "action": "tlf",
+      "to": "0"
+    },
+    {
+      "from": "Closed",
+      "event": "Down",
+      "action": "",
+      "to": "0"
+    },
+    {
+      "from": "Closed",
+      "event": "Open",
+      "action": "irc,scr",
+      "to": "6"
+    },
+    {
+      "from": "Closed",
+      "event": "Close",
+      "action": "",
+      "to": "2"
+    },
+    {
+      "from": "Stopped",
+      "event": "Down",
+      "action": "tls",
+      "to": "1"
+    },
+    {
+      "from": "Stopped",
+      "event": "Open",
+      "action": "3r",
+      "to": "3"
+    },
+    {
+      "from": "Stopped",
+      "event": "Close",
+      "action": "",
+      "to": "2"
+    },
+    {
+      "from": "Closing",
+      "event": "Down",
+      "action": "",
+      "to": "0"
+    },
+    {
+      "from": "Closing",
+      "event": "Open",
+      "action": "5r",
+      "to": "5"
+    },
+    {
+      "from": "Closing",
+      "event": "Close",
+      "action": "",
+      "to": "4"
+    },
+    {
+      "from": "Closing",
+      "event": "TO+",
+      "action": "str",
+      "to": "4"
+    },
+    {
+      "from": "Closing",
+      "event": "TO-",
+      "action": "tlf",
+      "to": "2"
+    },
+    {
+      "from": "Stopping",
+      "event": "Down",
+      "action": "",
+      "to": "1"
+    },
+    {
+      "from": "Stopping",
+      "event": "Open",
+      "action": "5r",
+      "to": "5"
+    },
+    {
+      "from": "Stopping",
+      "event": "Close",
+      "action": "",
+      "to": "4"
+    },
+    {
+      "from": "Stopping",
+      "event": "TO+",
+      "action": "str",
+      "to": "5"
+    },
+    {
+      "from": "Stopping",
+      "event": "TO-",
+      "action": "tlf",
+      "to": "3"
+    },
+    {
+      "from": "6",
+      "event": "Down",
+      "action": "",
+      "to": "1"
+    },
+    {
+      "from": "6",
+      "event": "Open",
+      "action": "",
+      "to": "6"
+    },
+    {
+      "from": "6",
+      "event": "Close",
+      "action": "irc,str",
+      "to": "4"
+    },
+    {
+      "from": "6",
+      "event": "TO+",
+      "action": "scr",
+      "to": "6"
+    },
+    {
+      "from": "6",
+      "event": "TO-",
+      "action": "tlf",
+      "to": "3"
+    },
+    {
+      "from": "6",
+      "event": "RCR+",
+      "action": "sca",
+      "to": "8"
+    },
+    {
+      "from": "6",
+      "event": "RCR-",
+      "action": "scn",
+      "to": "6"
+    },
+    {
+      "from": "6",
+      "event": "RCA",
+      "action": "irc",
+      "to": "7"
+    },
+    {
+      "from": "6",
+      "event": "RCN",
+      "action": "irc,scr",
+      "to": "6"
+    },
+    {
+      "from": "6",
+      "event": "RTR",
+      "action": "sta",
+      "to": "6"
+    },
+    {
+      "from": "6",
+      "event": "RTA",
+      "action": "",
+      "to": "6"
+    },
+    {
+      "from": "6",
+      "event": "RUC",
+      "action": "scj",
+      "to": "6"
+    },
+    {
+      "from": "6",
+      "event": "RXJ+",
+      "action": "",
+      "to": "6"
+    },
+    {
+      "from": "6",
+      "event": "RXJ-",
+      "action": "tlf",
+      "to": "3"
+    },
+    {
+      "from": "6",
+      "event": "RXR",
+      "action": "",
+      "to": "6"
+    },
+    {
+      "from": "7",
+      "event": "Down",
+      "action": "",
+      "to": "1"
+    },
+    {
+      "from": "7",
+      "event": "Open",
+      "action": "",
+      "to": "7"
+    },
+    {
+      "from": "7",
+      "event": "Close",
+      "action": "irc,str",
+      "to": "4"
+    },
+    {
+      "from": "7",
+      "event": "TO+",
+      "action": "scr",
+      "to": "6"
+    },
+    {
+      "from": "7",
+      "event": "TO-",
+      "action": "tlf",
+      "to": "3"
+    },
+    {
+      "from": "7",
+      "event": "RCR+",
+      "action": "sca,tlu",
+      "to": "9"
+    },
+    {
+      "from": "7",
+      "event": "RCR-",
+      "action": "scn",
+      "to": "7"
+    },
+    {
+      "from": "7",
+      "event": "RCA",
+      "action": "scr",
+      "to": "6"
+    },
+    {
+      "from": "7",
+      "event": "RCN",
+      "action": "scr",
+      "to": "6"
+    },
+    {
+      "from": "7",
+      "event": "RTR",
+      "action": "sta",
+      "to": "6"
+    },
+    {
+      "from": "7",
+      "event": "RTA",
+      "action": "",
+      "to": "6"
+    },
+    {
+      "from": "7",
+      "event": "RUC",
+      "action": "scj",
+      "to": "7"
+    },
+    {
+      "from": "7",
+      "event": "RXJ+",
+      "action": "",
+      "to": "6"
+    },
+    {
+      "from": "7",
+      "event": "RXJ-",
+      "action": "tlf",
+      "to": "3"
+    },
+    {
+      "from": "7",
+      "event": "RXR",
+      "action": "",
+      "to": "7"
+    },
+    {
+      "from": "8",
+      "event": "Down",
+      "action": "",
+      "to": "1"
+    },
+    {
+      "from": "8",
+      "event": "Open",
+      "action": "",
+      "to": "8"
+    },
+    {
+      "from": "8",
+      "event": "Close",
+      "action": "irc,str",
+      "to": "4"
+    },
+    {
+      "from": "8",
+      "event": "TO+",
+      "action": "scr",
+      "to": "8"
+    },
+    {
+      "from": "8",
+      "event": "TO-",
+      "action": "tlf",
+      "to": "3"
+    },
+    {
+      "from": "8",
+      "event": "RCR+",
+      "action": "sca",
+      "to": "8"
+    },
+    {
+      "from": "8",
+      "event": "RCR-",
+      "action": "scn",
+      "to": "6"
+    },
+    {
+      "from": "8",
+      "event": "RCA",
+      "action": "irc,tlu",
+      "to": "9"
+    },
+    {
+      "from": "8",
+      "event": "RCN",
+      "action": "irc,scr",
+      "to": "8"
+    },
+    {
+      "from": "8",
+      "event": "RTR",
+      "action": "sta",
+      "to": "6"
+    },
+    {
+      "from": "8",
+      "event": "RTA",
+      "action": "",
+      "to": "8"
+    },
+    {
+      "from": "8",
+      "event": "RUC",
+      "action": "scj",
+      "to": "8"
+    },
+    {
+      "from": "8",
+      "event": "RXJ+",
+      "action": "",
+      "to": "8"
+    },
+    {
+      "from": "8",
+      "event": "RXJ-",
+      "action": "tlf",
+      "to": "3"
+    },
+    {
+      "from": "8",
+      "event": "RXR",
+      "action": "",
+      "to": "8"
+    },
+    {
+      "from": "9",
+      "event": "Down",
+      "action": "tld",
+      "to": "1"
+    },
+    {
+      "from": "9",
+      "event": "Open",
+      "action": "",
+      "to": "9"
+    },
+    {
+      "from": "9",
+      "event": "Close",
+      "action": "tld,irc,str",
+      "to": "4"
+    },
+    {
+      "from": "9",
+      "event": "TO+",
+      "action": "",
+      "to": "-"
+    },
+    {
+      "from": "9",
+      "event": "TO-",
+      "action": "",
+      "to": "-"
+    },
+    {
+      "from": "9",
+      "event": "RCR+",
+      "action": "tld,scr,sca",
+      "to": "8"
+    },
+    {
+      "from": "9",
+      "event": "RCR-",
+      "action": "tld,scr,scn",
+      "to": "6"
+    },
+    {
+      "from": "9",
+      "event": "RCA",
+      "action": "tld,scr",
+      "to": "6"
+    },
+    {
+      "from": "9",
+      "event": "RCN",
+      "action": "tld,scr",
+      "to": "6"
+    },
+    {
+      "from": "9",
+      "event": "RTR",
+      "action": "tld,zrc,sta",
+      "to": "5"
+    },
+    {
+      "from": "9",
+      "event": "RTA",
+      "action": "tld,scr",
+      "to": "6"
+    },
+    {
+      "from": "9",
+      "event": "RUC",
+      "action": "scj",
+      "to": "9"
+    },
+    {
+      "from": "9",
+      "event": "RXJ+",
+      "action": "",
+      "to": "9"
+    },
+    {
+      "from": "9",
+      "event": "RXJ-",
+      "action": "tld,irc,str",
+      "to": "5"
+    },
+    {
+      "from": "9",
+      "event": "RXR",
+      "action": "ser",
+      "to": "9"
+    },
+    {
+      "from": "Initial",
+      "event": "",
+      "action": "",
+      "to": "Starting"
+    },
+    {
+      "from": "Starting",
+      "event": "lower layer becomes available (Up)",
+      "action": "Configure-Request is sent",
+      "to": "Request-Sent"
+    },
+    {
+      "from": "Closed",
+      "event": "reception of Configure-Request packets",
+      "action": "Terminate-Ack is sent",
+      "to": "Stopped"
+    },
+    {
+      "from": "Stopped",
+      "event": "Configure-Request packets",
+      "action": "appropriate response is sent",
+      "to": "Ack-Sent"
+    },
+    {
+      "from": "Stopped",
+      "event": "other packets",
+      "action": "Terminate-Ack is sent",
+      "to": "Closed"
+    },
+    {
+      "from": "Closing",
+      "event": "reception of a Terminate-Ack",
+      "action": "",
+      "to": "Closed"
+    },
+    {
+      "from": "Closing",
+      "event": "Restart timer expiration",
+      "action": "new Terminate-Request is transmitted, Restart timer is restarted",
+      "to": "Closing"
+    },
+    {
+      "from": "Closing",
+      "event": "Restart timer has expired Max-Terminate times",
+      "action": "",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopping",
+      "event": "Terminate-Request sent and Restart timer running (implicit)",
+      "action": "",
+      "to": "Stopped"
+    },
+    {
+      "from": "Request-Sent",
+      "event": "Configure-Ack received",
+      "action": "",
+      "to": "Ack-Received"
+    },
+    {
+      "from": "Request-Sent",
+      "event": "Configure-Ack sent",
+      "action": "",
+      "to": "Ack-Sent"
+    },
+    {
+      "from": "Ack-Received",
+      "event": "Configure-Ack sent",
+      "action": "",
+      "to": "Ack-Sent"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "Configure-Ack received",
+      "action": "",
+      "to": "Opened"
+    }
+  ]
+}

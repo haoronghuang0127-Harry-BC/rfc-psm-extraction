@@ -1,0 +1,182 @@
+{
+  "states": [
+    "Control Connection Opened",
+    "File Transfer in Progress",
+    "Connection Closed",
+    "B",
+    "W",
+    "S",
+    "F",
+    "E"
+  ],
+  "transitions": [
+    {
+      "from": "Control Connection Opened",
+      "event": "RETR",
+      "action": "transfer a copy of the file to the server- or user-DTP",
+      "to": "File Transfer in Progress"
+    },
+    {
+      "from": "Control Connection Opened",
+      "event": "STOR",
+      "action": "accept the data transferred via the data connection and store the data as a file",
+      "to": "File Transfer in Progress"
+    },
+    {
+      "from": "Control Connection Opened",
+      "event": "APPE",
+      "action": "accept the data transferred via the data connection and store the data in a file",
+      "to": "File Transfer in Progress"
+    },
+    {
+      "from": "Control Connection Opened",
+      "event": "STOU",
+      "action": "create a file under a name unique to that directory",
+      "to": "File Transfer in Progress"
+    },
+    {
+      "from": "File Transfer in Progress",
+      "event": "ABOR",
+      "action": "abort the previous FTP service command and any associated transfer of data; data connection must be closed",
+      "to": "Control Connection Opened"
+    },
+    {
+      "from": "Control Connection Opened",
+      "event": "QUIT",
+      "action": "server closes the control connection",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "File Transfer in Progress",
+      "event": "QUIT",
+      "action": "connection will remain open for result response and the server will then close it",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "B",
+      "event": "cmd",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "B",
+      "event": "RNFR",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "B",
+      "event": "RNTO",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "B",
+      "event": "REST",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "B",
+      "event": "USER",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "B",
+      "event": "PASS",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "B",
+      "event": "ACCT",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "2",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "1,3",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "1",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "3",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "4,5",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "W",
+      "event": "1,3",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "W",
+      "event": "1,3",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "W",
+      "event": "3",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "W",
+      "event": "1,2",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "W",
+      "event": "1",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "W",
+      "event": "2",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "W",
+      "event": "1",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "1,3",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "3",
+      "action": "",
+      "to": "B"
+    }
+  ]
+}

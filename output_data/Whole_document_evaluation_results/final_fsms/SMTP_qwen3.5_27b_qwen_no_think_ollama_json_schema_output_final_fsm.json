@@ -1,0 +1,68 @@
+{
+  "states": [
+    "Initial State",
+    "Mail Transaction in Progress"
+  ],
+  "transitions": [
+    {
+      "from": "Initial State",
+      "event": "EHLO",
+      "action": "250 OK, clear buffers and state tables",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "HELO",
+      "action": "250 OK, confirm initial state",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "RSET",
+      "action": "250 OK, discard stored sender, recipients, and mail data; clear buffers and state tables",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "MAIL FROM:<reverse-path>",
+      "action": "250 OK, reset state tables and buffers, insert reverse-path into buffer",
+      "to": "Mail Transaction in Progress"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "RCPT TO:<forward-path>",
+      "action": "250 OK, store forward-path",
+      "to": "Mail Transaction in Progress"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "DATA",
+      "action": "354 Start mail input; end with <CRLF>.<CRLF>",
+      "to": "Mail Transaction in Progress"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "<CRLF>.<CRLF>",
+      "action": "250 OK, process stored mail transaction information, clear buffers",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "RSET",
+      "action": "250 OK, discard stored sender, recipients, and mail data; clear buffers and state tables",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "EHLO",
+      "action": "250 OK, clear all buffers and reset state",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "QUIT",
+      "action": "221 OK, close transmission channel",
+      "to": "Initial State"
+    }
+  ]
+}

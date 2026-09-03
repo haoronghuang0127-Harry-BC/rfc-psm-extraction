@@ -1,0 +1,30 @@
+{
+  "states": [
+    "Raw Public Key Mode",
+    "Pre-Shared Key Mode",
+    "CONNECT with Authentication Data",
+    "Continue Authentication",
+    "Token Validation",
+    "Success"
+  ],
+  "transitions": [
+    {
+      "from": "CONNECT with Authentication Data",
+      "event": "",
+      "action": "Broker responds with AUTH packet containing RS nonce challenge",
+      "to": "Continue Authentication"
+    },
+    {
+      "from": "Continue Authentication",
+      "event": "",
+      "action": "Client sends AUTH packet with Client nonce and signature/MAC",
+      "to": "Token Validation"
+    },
+    {
+      "from": "Token Validation",
+      "event": "",
+      "action": "Broker validates token",
+      "to": "Success"
+    }
+  ]
+}

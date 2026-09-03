@@ -1,0 +1,21 @@
+{
+  "states": [
+    "AUTHORIZATION",
+    "TRANSACTION",
+    "UPDATE"
+  ],
+  "transitions": [
+    {
+      "from": "AUTHORIZATION",
+      "event": "",
+      "action": "acquires an exclusive-access lock on the maildrop",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "QUIT",
+      "action": "removes all messages marked as deleted from the maildrop and replies... releases any exclusive-access lock on the maildrop and closes the TCP connection",
+      "to": "UPDATE"
+    }
+  ]
+}

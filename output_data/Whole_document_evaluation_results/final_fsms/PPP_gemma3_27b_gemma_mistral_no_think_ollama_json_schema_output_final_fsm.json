@@ -1,0 +1,183 @@
+{
+  "states": [
+    "Dead",
+    "Establish",
+    "Opened",
+    "Authenticate",
+    "Network-Layer Protocol",
+    "Closing",
+    "Stopping",
+    "Terminate",
+    "Initial",
+    "Starting",
+    "Closed",
+    "Stopped",
+    "Req-Sent",
+    "Ack-Received",
+    "Ack-Sent"
+  ],
+  "transitions": [
+    {
+      "from": "Dead",
+      "event": "Up",
+      "action": "tlu",
+      "to": "Establish"
+    },
+    {
+      "from": "Establish",
+      "event": "Down",
+      "action": "tld",
+      "to": "Initial"
+    },
+    {
+      "from": "Establish",
+      "event": "Open",
+      "action": "tls",
+      "to": "Starting"
+    },
+    {
+      "from": "Starting",
+      "event": "Open",
+      "action": "tls",
+      "to": "Starting"
+    },
+    {
+      "from": "Starting",
+      "event": "Down",
+      "action": "tld",
+      "to": "Initial"
+    },
+    {
+      "from": "Closed",
+      "event": "Open",
+      "action": "irc,scr",
+      "to": "Establish"
+    },
+    {
+      "from": "Stopped",
+      "event": "Open",
+      "action": "irc,scr",
+      "to": "Establish"
+    },
+    {
+      "from": "Initial",
+      "event": "Up",
+      "action": "irc,scr",
+      "to": "Establish"
+    },
+    {
+      "from": "Initial",
+      "event": "Down",
+      "action": "tld",
+      "to": "Initial"
+    },
+    {
+      "from": "Starting",
+      "event": "Up",
+      "action": "irc,scr",
+      "to": "Establish"
+    },
+    {
+      "from": "Opened",
+      "event": "Down",
+      "action": "tld",
+      "to": "Initial"
+    },
+    {
+      "from": "Authenticate",
+      "event": "FAIL",
+      "action": "",
+      "to": "Terminate"
+    },
+    {
+      "from": "Network-Layer Protocol",
+      "event": "FAIL",
+      "action": "",
+      "to": "Terminate"
+    },
+    {
+      "from": "Closing",
+      "event": "FAIL",
+      "action": "",
+      "to": "Terminate"
+    },
+    {
+      "from": "Stopping",
+      "event": "FAIL",
+      "action": "",
+      "to": "Terminate"
+    },
+    {
+      "from": "Authenticate",
+      "event": "RCR+",
+      "action": "scr",
+      "to": "Establish"
+    },
+    {
+      "from": "Authenticate",
+      "event": "RCR-",
+      "action": "scr",
+      "to": "Establish"
+    },
+    {
+      "from": "Network-Layer Protocol",
+      "event": "RCR+",
+      "action": "scr",
+      "to": "Establish"
+    },
+    {
+      "from": "Network-Layer Protocol",
+      "event": "RCR-",
+      "action": "scr",
+      "to": "Establish"
+    },
+    {
+      "from": "Closing",
+      "event": "RCR+",
+      "action": "scr",
+      "to": "Establish"
+    },
+    {
+      "from": "Closing",
+      "event": "RCR-",
+      "action": "scr",
+      "to": "Establish"
+    },
+    {
+      "from": "Stopping",
+      "event": "RCR+",
+      "action": "scr",
+      "to": "Establish"
+    },
+    {
+      "from": "Stopping",
+      "event": "RCR-",
+      "action": "scr",
+      "to": "Establish"
+    },
+    {
+      "from": "Authenticate",
+      "event": "RTR",
+      "action": "str",
+      "to": "Closing"
+    },
+    {
+      "from": "Network-Layer Protocol",
+      "event": "RTR",
+      "action": "str",
+      "to": "Closing"
+    },
+    {
+      "from": "Closing",
+      "event": "RTR",
+      "action": "str",
+      "to": "Closing"
+    },
+    {
+      "from": "Stopping",
+      "event": "RTR",
+      "action": "str",
+      "to": "Stopping"
+    }
+  ]
+}

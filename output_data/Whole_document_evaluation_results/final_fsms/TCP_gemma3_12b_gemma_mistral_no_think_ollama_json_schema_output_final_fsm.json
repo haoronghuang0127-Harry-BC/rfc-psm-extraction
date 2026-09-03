@@ -1,0 +1,83 @@
+{
+  "states": [
+    "LISTEN",
+    "SYN-SENT",
+    "SYN-RECEIVED",
+    "ESTABLISHED",
+    "FIN-WAIT-1",
+    "FIN-WAIT-2",
+    "CLOSE-WAIT",
+    "CLOSING",
+    "LAST-ACK",
+    "TIME-WAIT",
+    "CLOSED"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "OPEN",
+      "action": "create TCB; enter LISTEN state",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "SYN",
+      "action": "set RCV.NXT; enter SYN-RECEIVED state",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "ACK",
+      "action": "enter ESTABLISHED state",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "SYN,ACK",
+      "action": "enter ESTABLISHED state",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "CLOSE",
+      "action": "enter FIN-WAIT-1 state",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "FIN",
+      "action": "enter FIN-WAIT-2 state",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "FIN",
+      "action": "enter TIME-WAIT state",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "CLOSE",
+      "action": "send FIN; enter LAST-ACK state",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "CLOSING",
+      "event": "ACK",
+      "action": "enter TIME-WAIT state",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "ACK",
+      "action": "enter CLOSED state",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "timeout",
+      "action": "delete TCB; enter CLOSED state",
+      "to": "CLOSED"
+    }
+  ]
+}

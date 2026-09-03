@@ -1,0 +1,134 @@
+{
+  "states": [
+    "INIT",
+    "DHCPDISCOVER",
+    "DHCPOFFER",
+    "DHCPREQUEST",
+    "DHCPACK",
+    "DHCPNAK",
+    "DHCPDECLINE",
+    "DHCPRELEASE",
+    "DHCPINFORM",
+    "BOUND",
+    "RENEWING",
+    "REBINDING",
+    "REBOOTING",
+    "SELECTING"
+  ],
+  "transitions": [
+    {
+      "from": "INIT",
+      "event": "DHCPDISCOVER",
+      "action": "broadcast a DHCPDISCOVER message",
+      "to": "DHCPDISCOVER"
+    },
+    {
+      "from": "DHCPDISCOVER",
+      "event": "DHCPOFFER",
+      "action": "receives one or more DHCPOFFER messages",
+      "to": "DHCPREQUEST"
+    },
+    {
+      "from": "DHCPREQUEST",
+      "event": "DHCPACK",
+      "action": "receives the DHCPACK message",
+      "to": "BOUND"
+    },
+    {
+      "from": "DHCPREQUEST",
+      "event": "DHCPNAK",
+      "action": "receives a DHCPNAK message",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPRELEASE",
+      "action": "may choose to relinquish its lease",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPREQUEST",
+      "action": "broadcast a DHCPREQUEST message",
+      "to": "DHCPREQUEST"
+    },
+    {
+      "from": "DHCPINFORM",
+      "event": "DHCPACK",
+      "action": "receives a DHCPACK message",
+      "to": "BOUND"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPNAK/Restart",
+      "action": "",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPNAK/Discard offer",
+      "action": "Send DHCPDISCOVER",
+      "to": "REBOOTING"
+    },
+    {
+      "from": "REBOOTING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBOOTING",
+      "event": "DHCPNAK",
+      "action": "Halt network",
+      "to": "INIT"
+    },
+    {
+      "from": "REBOOTING",
+      "event": "DHCPACK",
+      "action": "Select offer/send DHCPREQUEST",
+      "to": "SELECTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPOFFER",
+      "action": "Collect replies",
+      "to": "SELECTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPNAK",
+      "action": "Halt network",
+      "to": "INIT"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "BOUND",
+      "event": "T2 expires",
+      "action": "Broadcast DHCPREQUEST",
+      "to": "REBINDING"
+    },
+    {
+      "from": "BOUND",
+      "event": "T1 expires",
+      "action": "Send DHCPREQUEST to leasing server",
+      "to": "RENEWING"
+    }
+  ]
+}

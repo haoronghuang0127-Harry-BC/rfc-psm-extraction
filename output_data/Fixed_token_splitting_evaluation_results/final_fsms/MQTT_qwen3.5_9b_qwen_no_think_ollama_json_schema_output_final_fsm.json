@@ -1,0 +1,46 @@
+{
+  "states": [
+    "Anonymous",
+    "Authenticated",
+    "Connected",
+    "Disconnected"
+  ],
+  "transitions": [
+    {
+      "from": "Anonymous",
+      "event": "",
+      "action": "Client publishes token to authz-info topic and disconnects; Broker validates token",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "CONNECT with Authentication Method 'ace' and valid token",
+      "action": "Broker performs PoP validation on provided token",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Disconnected",
+      "event": "",
+      "action": "Client sends CONNECT packet with valid token; Broker validates token and accepts connection",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "Token expiration check fails or authorization failure on PUBLISH/SUBSCRIBE/CONNECT",
+      "action": "Broker sends DISCONNECT packet with reason code 0x87 (Not authorized) and closes Network Connection",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "Client sends AUTH packet with reason code 0x19 (Reauthentication)",
+      "action": "Broker validates new token; if successful, continues session; if failed, sends DISCONNECT and closes connection",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "Client disconnects normally or network error occurs",
+      "action": "Connection terminates",
+      "to": "Disconnected"
+    }
+  ]
+}

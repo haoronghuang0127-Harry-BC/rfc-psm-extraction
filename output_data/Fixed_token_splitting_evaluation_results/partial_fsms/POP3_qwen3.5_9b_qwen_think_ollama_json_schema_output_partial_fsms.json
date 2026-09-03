@@ -1,0 +1,3 @@
+[
+  "{\n  \"states\": [\n    \"AUTHORIZATION\",\n    \"TRANSACTION\",\n    \"UPDATE\"\n  ],\n  \"transitions\": [\n    {\n      \"from\": \"AUTHORIZATION\",\n      \"event\": \"successful authentication\",\n      \"action\": \"+OK\",\n      \"to\": \"TRANSACTION\"\n    },\n    {\n      \"from\": \"TRANSACTION\",\n      \"event\": \"QUIT\",\n      \"action\": \"Remove deleted messages, release lock, close connection (+OK/-ERR)\",\n      \"to\": \"UPDATE\"\n    }\n  ]\n}"
+]

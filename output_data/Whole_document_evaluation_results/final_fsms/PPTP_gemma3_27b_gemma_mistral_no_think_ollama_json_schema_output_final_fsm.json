@@ -1,0 +1,78 @@
+{
+  "states": [
+    "idle",
+    "wait_ctl_reply",
+    "established",
+    "wait_stop_reply",
+    "wait_connect",
+    "Wait-Disconnect"
+  ],
+  "transitions": [
+    {
+      "from": "idle",
+      "event": "TCP Open Indication",
+      "action": "Send Start Control Connection Request",
+      "to": "wait_ctl_reply"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Start-Control-Connection-Reply",
+      "action": "",
+      "to": "established"
+    },
+    {
+      "from": "established",
+      "event": "Stop-Control-Connection-Request",
+      "action": "Send Stop-Control-Connection-Reply",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "wait_stop_reply",
+      "event": "Stop-Control-Connection-Reply",
+      "action": "",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Start Control Connection Request",
+      "action": "Send Start-Control-Connection-Reply",
+      "to": "established"
+    },
+    {
+      "from": "established",
+      "event": "Receive Stop Control Connection Request",
+      "action": "Send Stop-Control-Connection-Reply",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "collision",
+      "action": "close TCP",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Incoming-Call-Request",
+      "action": "Send Incoming-Call-Reply",
+      "to": "wait_connect"
+    },
+    {
+      "from": "wait_connect",
+      "event": "Incoming-Call-Reply",
+      "action": "Answer call",
+      "to": "established"
+    },
+    {
+      "from": "established",
+      "event": "Call-Clear-Request",
+      "action": "Send Call-Disconnect-Notify",
+      "to": "Wait-Disconnect"
+    },
+    {
+      "from": "Wait-Disconnect",
+      "event": "Call-Disconnect-Notify",
+      "action": "",
+      "to": "idle"
+    }
+  ]
+}

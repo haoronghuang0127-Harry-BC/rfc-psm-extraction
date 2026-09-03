@@ -1,0 +1,33 @@
+{
+  "states": [
+    "AUTHORIZATION",
+    "TRANSACTION",
+    "UPDATE"
+  ],
+  "transitions": [
+    {
+      "from": "AUTHORIZATION",
+      "event": "USER command",
+      "action": "+OK name is a valid mailbox or -ERR never heard of mailbox name",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "PASS command",
+      "action": "+OK maildrop locked and ready or -ERR invalid password or -ERR unable to lock maildrop",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "APOP command",
+      "action": "+OK maildrop locked and ready or -ERR permission denied",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "QUIT command",
+      "action": "+OK or -ERR",
+      "to": "UPDATE"
+    }
+  ]
+}

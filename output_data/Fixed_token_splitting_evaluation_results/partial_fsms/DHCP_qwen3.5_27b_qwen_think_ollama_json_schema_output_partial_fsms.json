@@ -1,0 +1,6 @@
+[
+  "{\n  \"states\": [\n    \"BOUND\",\n    \"RENEW\",\n    \"REBINDING\"\n  ],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [\n    \"INIT\",\n    \"BOUND\",\n    \"RENEWING\",\n    \"REBINDING\"\n  ],\n  \"transitions\": [\n    {\n      \"from\": \"BOUND\",\n      \"event\": \"Receive DHCPACK (address in use)\",\n      \"action\": \"Send DHCPDECLINE message and restarts the configuration process\",\n      \"to\": \"INIT\"\n    },\n    {\n      \"from\": \"BOUND\",\n      \"event\": \"Receive DHCPNAK\",\n      \"action\": \"Restarting the configuration process\",\n      \"to\": \"INIT\"\n    },\n    {\n      \"from\": \"BOUND\",\n      \"event\": \"Receive neither DHCPACK nor DHCPNAK after retransmission\",\n      \"action\": \"Use previously allocated network address and configuration parameters\",\n      \"to\": \"BOUND\"\n    }\n  ]\n}",
+  "{\n  \"states\": [\n    \"SELECTING\"\n  ],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}"
+]

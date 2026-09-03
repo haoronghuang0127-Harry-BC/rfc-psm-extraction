@@ -1,0 +1,157 @@
+{
+  "states": [
+    "early",
+    "confirmed",
+    "terminated",
+    "Calling",
+    "Proceeding",
+    "Completed",
+    "Trying"
+  ],
+  "transitions": [
+    {
+      "from": "early",
+      "event": "",
+      "action": "2xx final response arrives",
+      "to": "confirmed"
+    },
+    {
+      "from": "early",
+      "event": "",
+      "action": "dialog transitioned to confirmed state",
+      "to": "confirmed"
+    },
+    {
+      "from": "early",
+      "event": "non-2xx final response",
+      "action": "all early dialogs considered terminated",
+      "to": "terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "",
+      "action": "INVITE sent",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer A fires",
+      "action": "retransmit request, reset timer",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer B fires",
+      "action": "inform TU of timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "receive 1xx response",
+      "action": "pass response to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Calling",
+      "event": "receive 300-699 response",
+      "action": "generate ACK, pass response to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive 1xx response",
+      "action": "pass response to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive 2xx response",
+      "action": "pass response to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive 300-699 response",
+      "action": "generate ACK, pass response to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer D fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "receive retransmitted final response",
+      "action": "retransmit ACK",
+      "to": "Completed"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer F fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "Transport Err",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "1xx resp.",
+      "action": "resp. to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "200-699 resp.",
+      "action": "resp. to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer F fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "200-699 resp.",
+      "action": "resp. to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer K fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "ACK",
+      "action": "",
+      "to": "Confirmed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer H fires",
+      "action": "Inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "ACK",
+      "action": "",
+      "to": "Confirmed"
+    },
+    {
+      "from": "Terminated",
+      "event": "",
+      "action": "transition to the terminated state",
+      "to": "Terminated"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+[
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [\"Session Initiation\", \"Mail Transaction\", \"Mailbox and Address\"], \"transitions\": [\n    {\n      \"from\": \"Session Initiation\",\n      \"event\": \"EHLO\",\n      \"action\": \"indicate client's identity\",\n      \"to\": \"Mail Transaction\"\n    },\n    {\n      \"from\": \"Mail Transaction\",\n      \"event\": \"MAIL\",\n      \"action\": \"reset state tables and buffers\",\n      \"to\": \"Mail Transaction\"\n    },\n    {\n      \"from\": \"Mail Transaction\",\n      \"event\": \"RCPT\",\n      \"action\": \"store forward-path\",\n      \"to\": \"Mail Transaction\"\n    },\n    {\n      \"from\": \"Mail Transaction\",\n      \"event\": \"DATA\",\n      \"action\": \"store mail data\",\n      \"to\": \"Mail Transaction\"\n    }\n  ]\n}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}"
+]

@@ -1,0 +1,258 @@
+{
+  "states": [
+    "early",
+    "confirmed",
+    "established",
+    "completed",
+    "terminated",
+    "proceeding",
+    "calling",
+    "Proceeding",
+    "Completed",
+    "Terminated",
+    "Trying",
+    "Confirmed"
+  ],
+  "transitions": [
+    {
+      "from": "early",
+      "event": "receive 2xx response",
+      "action": "transition to confirmed state",
+      "to": "confirmed"
+    },
+    {
+      "from": "early",
+      "event": "ACK request for the response is received",
+      "action": "Session established",
+      "to": "established"
+    },
+    {
+      "from": "early",
+      "event": "64*T1 seconds after the reception of the first 2xx response",
+      "action": "Dialog terminated",
+      "to": "terminated"
+    },
+    {
+      "from": "established",
+      "event": "BYE request is passed to the client transaction",
+      "action": "Session terminated",
+      "to": "terminated"
+    },
+    {
+      "from": "completed",
+      "event": "64*T1 seconds after the reception of the first 2xx response",
+      "action": "Transaction Completed",
+      "to": "completed"
+    },
+    {
+      "from": "completed",
+      "event": "BYE request is passed to the client transaction",
+      "action": "Transaction terminated",
+      "to": "terminated"
+    },
+    {
+      "from": "confirmed",
+      "event": "BYE request is passed to the client transaction",
+      "action": "Session terminated",
+      "to": "terminated"
+    },
+    {
+      "from": "calling",
+      "event": "Timer A fires",
+      "action": "Retransmit request, Reset Timer A",
+      "to": "calling"
+    },
+    {
+      "from": "calling",
+      "event": "1xx response",
+      "action": "Pass to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "calling",
+      "event": "2xx response",
+      "action": "Pass response to TU, Destroy transaction",
+      "to": "Terminated"
+    },
+    {
+      "from": "calling",
+      "event": "300-699 response",
+      "action": "Pass response to TU, Generate ACK, Start Timer D",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "1xx response",
+      "action": "Pass to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx response",
+      "action": "Pass response to TU, Destroy transaction",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699 response",
+      "action": "Pass response to TU, Generate ACK, Start Timer D",
+      "to": "Completed"
+    },
+    {
+      "from": "calling",
+      "event": "Timer B fires",
+      "action": "Inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer B fires",
+      "action": "Inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "response retransmission",
+      "action": "Retransmit ACK",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer D fires",
+      "action": "Move to terminated state",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer E fires",
+      "action": "reset Timer E",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer F fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "1xx response received",
+      "action": "pass to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "Final response received",
+      "action": "pass to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Trying",
+      "event": "Request retransmission received",
+      "action": "discard",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "Provisional response from TU",
+      "action": "send response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer E fires",
+      "action": "retransmit request, reset Timer E",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer F fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Final response received",
+      "action": "pass to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "1xx response from TU",
+      "action": "send response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Request retransmission received",
+      "action": "pass most recent provisional response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx response from TU",
+      "action": "send response",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699 response from TU",
+      "action": "send response",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Final response from TU",
+      "action": "send response",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer K fires",
+      "action": "transition to Terminated",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer G fires",
+      "action": "send response",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Request retransmission received",
+      "action": "pass response",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "ACK received",
+      "action": "transition to Confirmed",
+      "to": "Confirmed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer H fires",
+      "action": "indicate transaction failure",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Transport Error",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer J fires",
+      "action": "transition to Terminated",
+      "to": "Terminated"
+    },
+    {
+      "from": "Confirmed",
+      "event": "Timer I fires",
+      "action": "transition to Terminated",
+      "to": "Terminated"
+    }
+  ]
+}

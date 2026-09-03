@@ -1,0 +1,139 @@
+{
+  "states": [
+    "Control connection established",
+    "Login sequence initiated",
+    "Logged in",
+    "File transfer in progress",
+    "Control connection closed",
+    "Intermediate State",
+    "Connection Establishment",
+    "Login",
+    "Logout",
+    "Transfer parameters",
+    "File action commands",
+    "Informational commands",
+    "Miscellaneous commands",
+    "B",
+    "W",
+    "S",
+    "F",
+    "E",
+    "User logged in"
+  ],
+  "transitions": [
+    {
+      "from": "Control connection established",
+      "event": "USER",
+      "action": "flush any user, password, and account information already supplied; begin login sequence again",
+      "to": "Login sequence initiated"
+    },
+    {
+      "from": "Login sequence initiated",
+      "event": "PASS",
+      "action": "complete user identification for access control (if account not required)",
+      "to": "Logged in"
+    },
+    {
+      "from": "Login sequence initiated",
+      "event": "ACCT",
+      "action": "provide account information",
+      "to": "Logged in"
+    },
+    {
+      "from": "Logged in",
+      "event": "REIN",
+      "action": "terminate USER; flush all I/O and account information; reset parameters to default settings; leave control connection open",
+      "to": "Control connection established"
+    },
+    {
+      "from": "Logged in",
+      "event": "QUIT",
+      "action": "terminate USER; close control connection if file transfer not in progress",
+      "to": "Control connection closed"
+    },
+    {
+      "from": "File transfer in progress",
+      "event": "ABOR",
+      "action": "abort FTP service command and associated data transfer; close data connection; return 426 reply then 226 reply",
+      "to": "Logged in"
+    },
+    {
+      "from": "File transfer in progress",
+      "event": "QUIT",
+      "action": "terminate USER; keep connection open for result response then close it",
+      "to": "Control connection closed"
+    },
+    {
+      "from": "B",
+      "event": "cmd",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "2",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "4,5",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "W",
+      "event": "1,3",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "W",
+      "event": "1",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "3",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "Control connection established",
+      "event": "USER Doe",
+      "action": "331 User name ok, need password",
+      "to": "Control connection established"
+    },
+    {
+      "from": "Control connection established",
+      "event": "PASS mumble",
+      "action": "230 User logged in",
+      "to": "User logged in"
+    },
+    {
+      "from": "User logged in",
+      "event": "RETR test.pl1",
+      "action": "150 File status okay; about to open data connection; 226 Closing data connection, file transfer successful",
+      "to": "User logged in"
+    },
+    {
+      "from": "User logged in",
+      "event": "TYPE I",
+      "action": "200 Command OK",
+      "to": "User logged in"
+    },
+    {
+      "from": "User logged in",
+      "event": "STOR >udd>cn>fd",
+      "action": "550 Access denied",
+      "to": "User logged in"
+    },
+    {
+      "from": "User logged in",
+      "event": "QUIT",
+      "action": "Server closes all connections",
+      "to": "Control connection established"
+    }
+  ]
+}

@@ -1,0 +1,194 @@
+{
+  "states": [
+    "Adj-RIB-In",
+    "Adj-RIB-Out",
+    "Loc-RIB",
+    "Routing Information Base",
+    "Idle",
+    "Connect",
+    "Active",
+    "OpenSent",
+    "OpenConfirm",
+    "Established",
+    "decision function is in process",
+    "Phase 2 function",
+    "Routing Table",
+    "Phase 3 function"
+  ],
+  "transitions": [
+    {
+      "from": "OpenSent",
+      "event": "",
+      "action": "perform collision resolution procedure",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "",
+      "action": "close existing BGP connection",
+      "to": "OpenSent"
+    },
+    {
+      "from": "OpenSent",
+      "event": "",
+      "action": "close newly created BGP connection",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "Connect",
+      "event": "ManualStart",
+      "action": "",
+      "to": "Active"
+    },
+    {
+      "from": "Connect",
+      "event": "ManualStop",
+      "action": "",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "ManualStart",
+      "action": "",
+      "to": "Connect"
+    },
+    {
+      "from": "Idle",
+      "event": "ManualStop",
+      "action": "",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "ConnectRetryTimer_Expires",
+      "action": "",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "HoldTimer_Expires",
+      "action": "",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "KeepaliveTimer_Expires",
+      "action": "",
+      "to": "Connect"
+    },
+    {
+      "from": "Idle",
+      "event": "ManualStart",
+      "action": "initializes all BGP resources for the peer connection, sets ConnectRetryCounter to zero, starts the ConnectRetryTimer with the initial value, initiates a TCP connection to the other BGP peer, listens for a connection that may be initiated by the remote BGP peer, changes its state to Connect",
+      "to": "Connect"
+    },
+    {
+      "from": "Idle",
+      "event": "AutomaticStart",
+      "action": "initializes all BGP resources for the peer connection, sets ConnectRetryCounter to zero, starts the ConnectRetryTimer with the initial value, initiates a TCP connection to the other BGP peer, listens for a connection that may be initiated by the remote BGP peer, changes its state to Connect",
+      "to": "Connect"
+    },
+    {
+      "from": "Idle",
+      "event": "ManualStart_with_PassiveTcpEstablishment",
+      "action": "initializes all BGP resources, sets the ConnectRetryCounter to zero, starts the ConnectRetryTimer with the initial value, listens for a connection that may be initiated by the remote peer, changes its state to Active",
+      "to": "Active"
+    },
+    {
+      "from": "Idle",
+      "event": "AutomaticStart_with_PassiveTcpEstablishment",
+      "action": "initializes all BGP resources, sets the ConnectRetryCounter to zero, starts the ConnectRetryTimer with the initial value, listens for a connection that may be initiated by the remote peer, changes its state to Active",
+      "to": "Active"
+    },
+    {
+      "from": "Connect",
+      "event": "ManualStop",
+      "action": "drops the TCP connection, releases all BGP resources, sets ConnectRetryCounter to zero, stops the ConnectRetryTimer and sets ConnectRetryTimer to zero, changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "ConnectRetryTimer_Expires",
+      "action": "drops the TCP connection, restarts the ConnectRetryTimer, stops the DelayOpenTimer and resets the timer to zero, initiates a TCP connection to the other BGP peer, continues to listen for a connection that may be initiated by the remote BGP peer, stays in the Connect state",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "DelayOpenTimer_Expires",
+      "action": "sends an OPEN message to its peer, sets the HoldTimer to a large value, changes its state to OpenSent",
+      "to": "OpenSent"
+    },
+    {
+      "from": "Connect",
+      "event": "TcpConnection_Valid",
+      "action": "",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "Tcp_CR_Invalid",
+      "action": "",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "TcpConnectionFails",
+      "action": "restarts the ConnectRetryTimer (with the initial value), stops and clears the DelayOpenTimer (sets the value to zero), releases all BGP resource, increments the ConnectRetryCounter by 1, changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "OPEN message",
+      "action": "stops the ConnectRetryTimer (if running) and sets the ConnectRetryTimer to zero, completes the BGP initialization, stops and clears the DelayOpenTimer (sets to zero), sends an OPEN message, sends a KEEPALIVE message, sets the HoldTimer to a large value, changes its state to OpenConfirm",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "Active",
+      "event": "ManualStop",
+      "action": "If the DelayOpenTimer is running and the SendNOTIFICATIONwithoutOPEN session attribute is set, the local system sends a NOTIFICATION with a Cease, releases all BGP resources including stopping the DelayOpenTimer, drops the TCP connection, sets the ConnectRetryCounter to zero, stops the ConnectRetryTimer and sets the ConnectRetryTimer to zero, changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "ConnectRetryTimer_Expires",
+      "action": "restarts the ConnectRetryTimer (with initial value), initiates a TCP connection to the other BGP peer, continues to listen for a TCP connection that may be initiated by a remote BGP peer, changes its state to Connect",
+      "to": "Connect"
+    },
+    {
+      "from": "Active",
+      "event": "DelayOpenTimer_Expires",
+      "action": "sets the ConnectRetryTimer to zero, stops and clears the DelayOpenTimer (sets the value to zero), completes the BGP initialization, sends the OPEN message to its peer, sets its hold timer to a large value, changes its state to OpenSent",
+      "to": "OpenSent"
+    },
+    {
+      "from": "Active",
+      "event": "TcpConnection_Valid",
+      "action": "",
+      "to": "Active"
+    },
+    {
+      "from": "Active",
+      "event": "Tcp_CR_Invalid",
+      "action": "",
+      "to": "Active"
+    },
+    {
+      "from": "Active",
+      "event": "TcpConnectionFails",
+      "action": "restarts the ConnectRetryTimer (with the initial value), stops and clears the DelayOpenTimer (sets the value to zero), releases all BGP resource, increments the ConnectRetryCounter by 1, changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "ManualStop",
+      "action": "sends the NOTIFICATION with a Cease, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, sets the ConnectRetryCounter to zero, changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "AutomaticStop",
+      "action": "sends the NOTIFICATION with a Cease, sets the ConnectRetryTimer to zero",
+      "to": "Idle"
+    }
+  ]
+}

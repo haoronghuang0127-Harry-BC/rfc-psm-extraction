@@ -1,0 +1,116 @@
+{
+  "states": [
+    "Ack-Received",
+    "Ack-Sent",
+    "Authenticate",
+    "Closing",
+    "Closed",
+    "Dead",
+    "Establish",
+    "Initial",
+    "Network",
+    "Opened",
+    "Request-Sent",
+    "Starting",
+    "Stopped",
+    "Stopping"
+  ],
+  "transitions": [
+    {
+      "from": "Dead",
+      "event": "Up",
+      "action": "",
+      "to": "Establish"
+    },
+    {
+      "from": "Establish",
+      "event": "Configure-Ack sent and received",
+      "action": "LCP Opened state entered",
+      "to": "Opened"
+    },
+    {
+      "from": "Opened",
+      "event": "",
+      "action": "",
+      "to": "Authenticate"
+    },
+    {
+      "from": "Opened",
+      "event": "LCP Configure-Request",
+      "action": "return to Link Establishment phase",
+      "to": "Establish"
+    },
+    {
+      "from": "Authenticate",
+      "event": "",
+      "action": "",
+      "to": "Network"
+    },
+    {
+      "from": "Authenticate",
+      "event": "Authentication fails",
+      "action": "proceed to Link Termination phase",
+      "to": "Closing"
+    },
+    {
+      "from": "Authenticate",
+      "event": "LCP Configure-Request",
+      "action": "return to Link Establishment phase",
+      "to": "Establish"
+    },
+    {
+      "from": "Network",
+      "event": "",
+      "action": "",
+      "to": "Closing"
+    },
+    {
+      "from": "Network",
+      "event": "LCP Configure-Request",
+      "action": "return to Link Establishment phase",
+      "to": "Establish"
+    },
+    {
+      "from": "Closing",
+      "event": "Terminate-Ack/Restart counter expires",
+      "action": "signal physical-layer to disconnect",
+      "to": "Dead"
+    },
+    {
+      "from": "Closing",
+      "event": "Terminate-Ack",
+      "action": "Enter Closed",
+      "to": "Closed"
+    },
+    {
+      "from": "Closing",
+      "event": "Restart Timer Expired",
+      "action": "Transmit Terminate-Request",
+      "to": "Closing"
+    },
+    {
+      "from": "Closing",
+      "event": "Max-Terminate Times Expired",
+      "action": "Enter Closed",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "Receive-Configure-Request",
+      "action": "Return to Starting",
+      "to": "Starting"
+    },
+    {
+      "from": "Starting",
+      "event": "Up",
+      "action": "renegotiation of the link",
+      "to": "Request-Sent"
+    },
+    {
+      "from": "Closing",
+      "event": "Open",
+      "action": "orderly termination of the link",
+      "to": "Stopping"
+    }
+  ]
+}

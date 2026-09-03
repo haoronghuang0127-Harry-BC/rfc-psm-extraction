@@ -1,0 +1,268 @@
+{
+  "states": [
+    "Data Transfer",
+    "System Failure",
+    "Restart Procedure",
+    "Positive Preliminary reply",
+    "Positive Completion reply",
+    "Positive Intermediate reply",
+    "Transient Negative Completion reply",
+    "Permanent Negative Completion reply",
+    "Begin",
+    "Wait for reply",
+    "Success",
+    "Error",
+    "Failure",
+    "Directory Created",
+    "Directory Already Exists",
+    "Access Denied"
+  ],
+  "transitions": [
+    {
+      "from": "Data Transfer",
+      "event": "System Failure",
+      "action": "Mark the corresponding position of this marker in the receiving system, and return this information to the user",
+      "to": "System Failure"
+    },
+    {
+      "from": "System Failure",
+      "event": "Restart Command",
+      "action": "Restart the data transfer by identifying the marker point with the FTP restart procedure",
+      "to": "Restart Procedure"
+    },
+    {
+      "from": "Restart Procedure",
+      "event": "Restart Command",
+      "action": "Restart the data transfer by identifying the marker point with the FTP restart procedure",
+      "to": "Data Transfer"
+    },
+    {
+      "from": "Positive Preliminary reply",
+      "event": "",
+      "action": "",
+      "to": "Positive Completion reply"
+    },
+    {
+      "from": "Positive Intermediate reply",
+      "event": "",
+      "action": "",
+      "to": "Positive Completion reply"
+    },
+    {
+      "from": "Transient Negative Completion reply",
+      "event": "",
+      "action": "",
+      "to": "Positive Completion reply"
+    },
+    {
+      "from": "Permanent Negative Completion reply",
+      "event": "",
+      "action": "",
+      "to": "Positive Completion reply"
+    },
+    {
+      "from": "Begin",
+      "event": "cmd",
+      "action": "",
+      "to": "Wait for reply"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "2",
+      "action": "",
+      "to": "Success"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "1,3",
+      "action": "",
+      "to": "Error"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "4,5",
+      "action": "",
+      "to": "Failure"
+    },
+    {
+      "from": "Begin",
+      "event": "RNFR",
+      "action": "",
+      "to": "Wait for reply"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "1,2",
+      "action": "",
+      "to": "Error"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "3",
+      "action": "",
+      "to": "Begin"
+    },
+    {
+      "from": "Begin",
+      "event": "RNTO",
+      "action": "",
+      "to": "Wait for reply"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "2",
+      "action": "",
+      "to": "Success"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "1,3",
+      "action": "",
+      "to": "Error"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "4,5",
+      "action": "",
+      "to": "Failure"
+    },
+    {
+      "from": "Begin",
+      "event": "REST",
+      "action": "",
+      "to": "Wait for reply"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "1,2",
+      "action": "",
+      "to": "Error"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "3",
+      "action": "",
+      "to": "Begin"
+    },
+    {
+      "from": "Begin",
+      "event": "cmd",
+      "action": "",
+      "to": "Wait for reply"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "2",
+      "action": "",
+      "to": "Success"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "1",
+      "action": "",
+      "to": "Error"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "4,5",
+      "action": "",
+      "to": "Failure"
+    },
+    {
+      "from": "Begin",
+      "event": "USER",
+      "action": "",
+      "to": "Wait for reply"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "1",
+      "action": "",
+      "to": "Error"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "2",
+      "action": "",
+      "to": "Begin"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "3",
+      "action": "",
+      "to": "Begin"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "4,5",
+      "action": "",
+      "to": "Failure"
+    },
+    {
+      "from": "Begin",
+      "event": "PASS",
+      "action": "",
+      "to": "Wait for reply"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "2",
+      "action": "",
+      "to": "Success"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "1,3",
+      "action": "",
+      "to": "Error"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "4,5",
+      "action": "",
+      "to": "Failure"
+    },
+    {
+      "from": "Begin",
+      "event": "ACCT",
+      "action": "",
+      "to": "Wait for reply"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "2",
+      "action": "",
+      "to": "Success"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "1,3",
+      "action": "",
+      "to": "Error"
+    },
+    {
+      "from": "Wait for reply",
+      "event": "4,5",
+      "action": "",
+      "to": "Failure"
+    },
+    {
+      "from": "Directory Created",
+      "event": "MKD",
+      "action": "257<space>\"<directory-name>\"<space><commentary>",
+      "to": "Directory Created"
+    },
+    {
+      "from": "Directory Created",
+      "event": "MKD",
+      "action": "521-<directory-name> directory already exists; 521 taking no action.",
+      "to": "Directory Already Exists"
+    },
+    {
+      "from": "Directory Created",
+      "event": "MKD",
+      "action": "access denied",
+      "to": "Access Denied"
+    }
+  ]
+}

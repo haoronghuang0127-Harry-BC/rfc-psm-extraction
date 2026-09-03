@@ -1,0 +1,51 @@
+{
+  "states": [
+    "AUTHORIZATION",
+    "TRANSACTION",
+    "UPDATE"
+  ],
+  "transitions": [
+    {
+      "from": "AUTHORIZATION",
+      "event": "successful authentication",
+      "action": "acquires an exclusive-access lock on the maildrop and responds with a positive status indicator",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "QUIT command",
+      "action": "removes all messages marked as deleted from the maildrop, releases any exclusive-access lock on the maildrop, and closes the TCP connection",
+      "to": "UPDATE"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "APOP name digest",
+      "action": "+OK maildrop locked and ready",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "APOP name digest",
+      "action": "-ERR permission denied",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "PASS string",
+      "action": "+OK maildrop locked and ready",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "PASS string",
+      "action": "-ERR invalid password",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "PASS string",
+      "action": "-ERR unable to lock maildrop",
+      "to": "AUTHORIZATION"
+    }
+  ]
+}

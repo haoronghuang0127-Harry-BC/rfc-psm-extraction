@@ -1,0 +1,112 @@
+{
+  "states": [
+    "Initial connection",
+    "Service available, posting allowed",
+    "Service available, posting prohibited",
+    "Service temporarily unavailable",
+    "Service permanently unavailable",
+    "Reader mode, posting permitted",
+    "Reader mode, posting prohibited",
+    "Transit mode",
+    "Transit service only",
+    "Connection closing"
+  ],
+  "transitions": [
+    {
+      "from": "Initial connection",
+      "event": "200",
+      "action": "Service available, posting allowed",
+      "to": "Service available, posting allowed"
+    },
+    {
+      "from": "Initial connection",
+      "event": "201",
+      "action": "Service available, posting prohibited",
+      "to": "Service available, posting prohibited"
+    },
+    {
+      "from": "Initial connection",
+      "event": "400",
+      "action": "Service temporarily unavailable",
+      "to": "Service temporarily unavailable"
+    },
+    {
+      "from": "Initial connection",
+      "event": "502",
+      "action": "Service permanently unavailable",
+      "to": "Service permanently unavailable"
+    },
+    {
+      "from": "Service available, posting allowed",
+      "event": "QUIT",
+      "action": "Connection closing",
+      "to": "Connection closing"
+    },
+    {
+      "from": "Service available, posting prohibited",
+      "event": "QUIT",
+      "action": "Connection closing",
+      "to": "Connection closing"
+    },
+    {
+      "from": "Service temporarily unavailable",
+      "event": "",
+      "action": "Connection closing",
+      "to": "Connection closing"
+    },
+    {
+      "from": "Service permanently unavailable",
+      "event": "",
+      "action": "Connection closing",
+      "to": "Connection closing"
+    },
+    {
+      "from": "Service available, posting allowed",
+      "event": "MODE READER",
+      "action": "Reader mode, posting permitted",
+      "to": "Reader mode, posting permitted"
+    },
+    {
+      "from": "Service available, posting prohibited",
+      "event": "MODE READER",
+      "action": "Reader mode, posting prohibited",
+      "to": "Reader mode, posting prohibited"
+    },
+    {
+      "from": "Transit mode",
+      "event": "MODE READER",
+      "action": "Reader mode, posting permitted",
+      "to": "Reader mode, posting permitted"
+    },
+    {
+      "from": "Transit mode",
+      "event": "MODE READER",
+      "action": "Reader mode, posting prohibited",
+      "to": "Reader mode, posting prohibited"
+    },
+    {
+      "from": "Transit mode",
+      "event": "CAPABILITIES",
+      "action": "Reader mode, posting permitted",
+      "to": "Reader mode, posting permitted"
+    },
+    {
+      "from": "Transit mode",
+      "event": "CAPABILITIES",
+      "action": "Reader mode, posting prohibited",
+      "to": "Reader mode, posting prohibited"
+    },
+    {
+      "from": "Transit mode",
+      "event": "502",
+      "action": "Transit service only",
+      "to": "Transit service only"
+    },
+    {
+      "from": "Transit service only",
+      "event": "",
+      "action": "Connection closing",
+      "to": "Connection closing"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "states": [
+    "Initial Connection",
+    "Selected Newsgroup"
+  ],
+  "transitions": [
+    {
+      "from": "Initial Connection",
+      "event": "connection established",
+      "action": "send greeting",
+      "to": "Selected Newsgroup"
+    }
+  ]
+}

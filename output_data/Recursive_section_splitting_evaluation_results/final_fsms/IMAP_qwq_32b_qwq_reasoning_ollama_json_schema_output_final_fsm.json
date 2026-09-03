@@ -1,0 +1,435 @@
+{
+  "states": [
+    "Connection",
+    "Session",
+    "Not Authenticated",
+    "Authenticated",
+    "Selected",
+    "Logout",
+    "Not Authenticated State",
+    "Authenticated state",
+    "Selected State",
+    "IDLE",
+    "Selected State",
+    "Selected",
+    "Non-authenticated state",
+    "Authenticated state",
+    "Selected state"
+  ],
+  "transitions": [
+    {
+      "from": "Connection",
+      "event": "SELECT or EXAMINE command",
+      "action": "",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "SELECT or EXAMINE command of another mailbox",
+      "action": "",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "CLOSE command",
+      "action": "",
+      "to": "Connection"
+    },
+    {
+      "from": "Session",
+      "event": "UNSELECT command",
+      "action": "",
+      "to": "Connection"
+    },
+    {
+      "from": "Session",
+      "event": "connection termination",
+      "action": "",
+      "to": "Connection"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "successful LOGIN or AUTHENTICATE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "successful SELECT or EXAMINE command",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "CLOSE or UNSELECT command, unsolicited CLOSED response code, or failed SELECT or EXAMINE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Authenticated",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Logout",
+      "event": "",
+      "action": "",
+      "to": "both sides close the connection"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "AUTHENTICATE",
+      "action": "establishes authentication",
+      "to": "Authenticated state"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "LOGIN",
+      "action": "establishes authentication",
+      "to": "Authenticated state"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "STARTTLS",
+      "action": "OK - starttls completed",
+      "to": "Not Authenticated State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "STARTTLS",
+      "action": "BAD - STARTTLS received after TLS negotiation",
+      "to": "Not Authenticated State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "STARTTLS",
+      "action": "NO - TLS negotiation can't be initiated",
+      "to": "Not Authenticated State"
+    },
+    {
+      "from": "Authenticated",
+      "event": "ENABLE",
+      "action": "OK - Relevant capabilities enabled",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "SELECT",
+      "action": "OK - select completed",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "SELECT",
+      "action": "NO - select failure",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "SELECT",
+      "action": "BAD - command unknown or arguments invalid",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "EXAMINE",
+      "action": "OK [READ-ONLY] examine completed",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "EXAMINE",
+      "action": "NO - examine failure",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "EXAMINE",
+      "action": "BAD - command unknown or arguments invalid",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "CREATE",
+      "action": "OK - create completed / NO - create failure / BAD - command unknown or arguments invalid",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "SUBSCRIBE",
+      "action": "OK - subscribe completed",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "SUBSCRIBE",
+      "action": "NO - subscribe failure: can't subscribe to that name",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "SUBSCRIBE",
+      "action": "BAD - command unknown or arguments invalid",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "UNSUBSCRIBE",
+      "action": "OK - unsubscribe completed",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "UNSUBSCRIBE",
+      "action": "NO - unsubscribe failure: can't unsubscribe that name",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "UNSUBSCRIBE",
+      "action": "BAD - command unknown or arguments invalid",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "STATUS",
+      "action": "RETURN STATUS",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "APPEND",
+      "action": "OK - append completed / NO - append error / BAD - command unknown or arguments invalid",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "IDLE",
+      "action": "server requests continuation",
+      "to": "IDLE"
+    },
+    {
+      "from": "IDLE",
+      "event": "DONE",
+      "action": "server sends tagged response",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "CLOSE",
+      "action": "permanently removes deleted messages and returns to authenticated state",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "LOGOUT",
+      "action": "implicitly closes mailbox and logs out",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "SELECT",
+      "action": "implicitly closes current mailbox",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "EXAMINE",
+      "action": "implicitly closes current mailbox",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "UNSELECT",
+      "action": "OK - unselect completed",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "UNSELECT",
+      "action": "BAD - no mailbox selected, or argument supplied but none permitted",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "EXPUNGE",
+      "action": "send untagged EXPUNGE responses for each removed message, return OK, NO, or BAD",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "SEARCH (SAVE)",
+      "action": "return tagged NO response with NOTSAVED and set search result to empty sequence",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected State",
+      "event": "STORE",
+      "action": "OK - store completed",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "STORE",
+      "action": "NO - store error: can't store that data",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "STORE",
+      "action": "BAD - command unknown or arguments invalid",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected",
+      "event": "COPY",
+      "action": "OK - copy completed / NO - copy error / BAD - command unknown or arguments invalid",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "MOVE",
+      "action": "OK - move completed",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "MOVE",
+      "action": "NO - move error",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "MOVE",
+      "action": "BAD - command unknown or arguments invalid",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "UID",
+      "action": "respond with untagged responses (FETCH, ESEARCH, EXPUNGE) and result (OK, NO, BAD)",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "SELECT or EXAMINE command on another mailbox",
+      "action": "CLOSED response code",
+      "to": "Selected"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "CAPABILITY",
+      "action": "",
+      "to": "Not Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "LOGOUT",
+      "action": "",
+      "to": "Not Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "NOOP",
+      "action": "",
+      "to": "Not Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "LOGIN",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "STARTTLS",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "CAPABILITY",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "LOGOUT",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "NOOP",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "SELECT",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "EXAMINE",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "CAPABILITY",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "LOGOUT",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "NOOP",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "CLOSE",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "UNSELECT",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Non-authenticated state",
+      "event": "STARTTLS/AUTHENTICATE commands issued",
+      "action": "Negotiate TLS or SASL security layer",
+      "to": "Authenticated state"
+    },
+    {
+      "from": "Authenticated state",
+      "event": "SELECT mailbox command",
+      "action": "Enter selected state",
+      "to": "Selected state"
+    }
+  ]
+}

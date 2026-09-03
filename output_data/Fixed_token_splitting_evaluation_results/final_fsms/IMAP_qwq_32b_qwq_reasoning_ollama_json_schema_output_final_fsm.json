@@ -1,0 +1,273 @@
+{
+  "states": [
+    "Not Authenticated",
+    "Authenticated",
+    "Selected",
+    "Logout",
+    "Not authenticated state",
+    "Authenticated state",
+    "Selected state",
+    "Logged Out",
+    "IDLE"
+  ],
+  "transitions": [
+    {
+      "from": "Not Authenticated",
+      "event": "successful LOGIN or AUTHENTICATE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "successful SELECT or EXAMINE command",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "CLOSE or UNSELECT command, unsolicited CLOSED response code, or failed SELECT or EXAMINE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Selected",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Not authenticated state",
+      "event": "AUTHENTICATE",
+      "action": "authenticate completed",
+      "to": "Authenticated state"
+    },
+    {
+      "from": "Not authenticated state",
+      "event": "LOGIN",
+      "action": "login completed",
+      "to": "Authenticated state"
+    },
+    {
+      "from": "Not authenticated state",
+      "event": "STARTTLS",
+      "action": "starttls completed",
+      "to": "Not authenticated state"
+    },
+    {
+      "from": "Authenticated state",
+      "event": "SELECT",
+      "action": "mailbox selected",
+      "to": "Selected state"
+    },
+    {
+      "from": "Authenticated state",
+      "event": "EXAMINE",
+      "action": "mailbox examined",
+      "to": "Selected state"
+    },
+    {
+      "from": "Authenticated",
+      "event": "SELECT",
+      "action": "Sends required untagged responses (FLAGS, EXISTS, LIST, PERMANENTFLAGS, UIDNEXT, UIDVALIDITY) and OK/NO/BAD result",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "EXAMINE",
+      "action": "Sends required untagged responses (FLAGS, EXISTS, LIST, PERMANENTFLAGS, UIDNEXT, UIDVALIDITY) and OK/NO/BAD result",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "SELECT",
+      "action": "Deselects current mailbox, sends [CLOSED] if needed, then processes new SELECT command",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "EXAMINE",
+      "action": "Deselects current mailbox, sends [CLOSED] if needed, then processes new EXAMINE command",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "LOGOUT",
+      "action": "Terminates session",
+      "to": "Logged Out"
+    },
+    {
+      "from": "Authenticated",
+      "event": "LOGOUT",
+      "action": "Terminates session",
+      "to": "Logged Out"
+    },
+    {
+      "from": "Authenticated",
+      "event": "ENABLE",
+      "action": "Enables extensions, sends ENABLED response",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "CAPABILITY",
+      "action": "Sends CAPABILITY response",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "LOGIN",
+      "action": "Authenticates user, sends OK/NO/BAD result",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "AUTHENTICATE",
+      "action": "Authenticates using SASL, sends OK/NO/BAD result",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "CREATE",
+      "action": "Creates mailbox, sends OK/NO/BAD result",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "DELETE",
+      "action": "Deletes mailbox, sends OK/NO/BAD result",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "RENAME",
+      "action": "Renames mailbox, sends OK/NO/BAD result",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "SUBSCRIBE",
+      "action": "Subscribes to mailbox, sends OK/NO/BAD result",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "UNSUBSCRIBE",
+      "action": "Unsubscribes from mailbox, sends OK/NO/BAD result",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "LIST",
+      "action": "Lists mailboxes, sends OK/NO/BAD result",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "STATUS",
+      "action": "Requests mailbox status, sends OK/NO/BAD result",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "APPEND",
+      "action": "Appends message to mailbox, sends OK/NO/BAD result",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "IDLE",
+      "action": "Enters IDLE mode, sends OK/NO/BAD result",
+      "to": "IDLE"
+    },
+    {
+      "from": "IDLE",
+      "event": "IDLE done",
+      "action": "Exits IDLE mode",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "SELECT",
+      "action": "OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "CLOSE",
+      "action": "OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "UNSELECT",
+      "action": "OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "LOGOUT",
+      "action": "OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "IDLE",
+      "action": "OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "EXPUNGE",
+      "action": "OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "SEARCH",
+      "action": "OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "FETCH",
+      "action": "OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "STORE",
+      "action": "OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "COPY",
+      "action": "OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "MOVE",
+      "action": "OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "UID",
+      "action": "OK",
+      "to": "Selected"
+    }
+  ]
+}

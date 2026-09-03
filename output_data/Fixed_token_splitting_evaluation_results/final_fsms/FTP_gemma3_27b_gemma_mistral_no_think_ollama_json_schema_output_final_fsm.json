@@ -1,0 +1,784 @@
+{
+  "states": [
+    "active",
+    "passive",
+    "STREAM MODE",
+    "BLOCK MODE",
+    "COMPRESSED MODE",
+    "FILE STRUCTURE",
+    "RECORD STRUCTURE",
+    "PAGE STRUCTURE",
+    "data transfer in progress",
+    "user login",
+    "file transfer not in progress",
+    "Positive Preliminary reply",
+    "Positive Completion reply",
+    "Positive Intermediate reply",
+    "Transient Negative Completion reply",
+    "Permanent Negative Completion reply",
+    "Connection Establishment",
+    "Login",
+    "Transfer parameters",
+    "File action commands",
+    "Informational commands",
+    "Miscellaneous commands"
+  ],
+  "transitions": [
+    {
+      "from": "active",
+      "event": "",
+      "action": "",
+      "to": "active"
+    },
+    {
+      "from": "passive",
+      "event": "",
+      "action": "",
+      "to": "passive"
+    },
+    {
+      "from": "STREAM MODE",
+      "event": "EOR and EOF",
+      "action": "two-byte control code",
+      "to": "STREAM MODE"
+    },
+    {
+      "from": "STREAM MODE",
+      "event": "EOF",
+      "action": "sending host closing the data connection",
+      "to": "STREAM MODE"
+    },
+    {
+      "from": "BLOCK MODE",
+      "event": "EOR",
+      "action": "descriptor code",
+      "to": "BLOCK MODE"
+    },
+    {
+      "from": "BLOCK MODE",
+      "event": "EOF",
+      "action": "descriptor code",
+      "to": "BLOCK MODE"
+    },
+    {
+      "from": "COMPRESSED MODE",
+      "event": "n bytes of regular data",
+      "action": "send byte with left-most bit 0 and right-most 7 bits containing n",
+      "to": "COMPRESSED MODE"
+    },
+    {
+      "from": "COMPRESSED MODE",
+      "event": "n replications of data byte d",
+      "action": "send 2 bytes",
+      "to": "COMPRESSED MODE"
+    },
+    {
+      "from": "COMPRESSED MODE",
+      "event": "n filler bytes",
+      "action": "send single byte",
+      "to": "COMPRESSED MODE"
+    },
+    {
+      "from": "COMPRESSED MODE",
+      "event": "escape sequence",
+      "action": "send double byte",
+      "to": "COMPRESSED MODE"
+    },
+    {
+      "from": "FILE STRUCTURE",
+      "event": "",
+      "action": "",
+      "to": "FILE STRUCTURE"
+    },
+    {
+      "from": "RECORD STRUCTURE",
+      "event": "",
+      "action": "",
+      "to": "RECORD STRUCTURE"
+    },
+    {
+      "from": "PAGE STRUCTURE",
+      "event": "",
+      "action": "",
+      "to": "PAGE STRUCTURE"
+    },
+    {
+      "from": "file transfer not in progress",
+      "event": "ABOR",
+      "action": "closes the data connection, returns a 226 reply",
+      "to": "file transfer not in progress"
+    },
+    {
+      "from": "file transfer not in progress",
+      "event": "ABOR",
+      "action": "closes the data connection, returns a 426 reply, then sends a 226 reply",
+      "to": "file transfer not in progress"
+    },
+    {
+      "from": "data transfer in progress",
+      "event": "ABOR",
+      "action": "closes the data connection",
+      "to": "file transfer not in progress"
+    },
+    {
+      "from": "user login",
+      "event": "USER",
+      "action": "flushes any user, password, and account information",
+      "to": "user login"
+    },
+    {
+      "from": "user login",
+      "event": "REIN",
+      "action": "resets all parameters to the default settings",
+      "to": "user login"
+    },
+    {
+      "from": "file transfer not in progress",
+      "event": "QUIT",
+      "action": "closes the control connection",
+      "to": "file transfer not in progress"
+    },
+    {
+      "from": "data transfer in progress",
+      "event": "QUIT",
+      "action": "connection will remain open for result response, then the server will close it",
+      "to": "file transfer not in progress"
+    },
+    {
+      "from": "file transfer not in progress",
+      "event": "RESTART",
+      "action": "skips over the file to the specified data checkpoint",
+      "to": "data transfer in progress"
+    },
+    {
+      "from": "Positive Preliminary reply",
+      "event": "",
+      "action": "",
+      "to": "Positive Completion reply"
+    },
+    {
+      "from": "Positive Completion reply",
+      "event": "",
+      "action": "",
+      "to": "Positive Completion reply"
+    },
+    {
+      "from": "Positive Intermediate reply",
+      "event": "",
+      "action": "",
+      "to": "Positive Intermediate reply"
+    },
+    {
+      "from": "Transient Negative Completion reply",
+      "event": "",
+      "action": "",
+      "to": "Transient Negative Completion reply"
+    },
+    {
+      "from": "Permanent Negative Completion reply",
+      "event": "",
+      "action": "",
+      "to": "Permanent Negative Completion reply"
+    },
+    {
+      "from": "Connection Establishment",
+      "event": "120",
+      "action": "220",
+      "to": "Connection Establishment"
+    },
+    {
+      "from": "Connection Establishment",
+      "event": "220",
+      "action": "",
+      "to": "Connection Establishment"
+    },
+    {
+      "from": "Connection Establishment",
+      "event": "421",
+      "action": "",
+      "to": "Connection Establishment"
+    },
+    {
+      "from": "Login",
+      "event": "USER",
+      "action": "230",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "USER",
+      "action": "530",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "USER",
+      "action": "500, 501, 421",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "USER",
+      "action": "331, 332",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "PASS",
+      "action": "230",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "PASS",
+      "action": "202",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "PASS",
+      "action": "530",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "PASS",
+      "action": "500, 501, 503, 421",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "PASS",
+      "action": "332",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "ACCT",
+      "action": "230",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "ACCT",
+      "action": "202",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "ACCT",
+      "action": "530",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "ACCT",
+      "action": "500, 501, 503, 421",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "CWD",
+      "action": "250",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "CWD",
+      "action": "500, 501, 502, 421, 530, 550",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "CDUP",
+      "action": "200",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "CDUP",
+      "action": "500, 501, 502, 421, 530, 550",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "SMNT",
+      "action": "202, 250",
+      "to": "Login"
+    },
+    {
+      "from": "Login",
+      "event": "SMNT",
+      "action": "500, 501, 502, 421, 530, 550",
+      "to": "Login"
+    },
+    {
+      "from": "Transfer parameters",
+      "event": "PORT",
+      "action": "200",
+      "to": "Transfer parameters"
+    },
+    {
+      "from": "Transfer parameters",
+      "event": "PORT",
+      "action": "500, 501, 421, 530",
+      "to": "Transfer parameters"
+    },
+    {
+      "from": "Transfer parameters",
+      "event": "PASV",
+      "action": "227",
+      "to": "Transfer parameters"
+    },
+    {
+      "from": "Transfer parameters",
+      "event": "PASV",
+      "action": "500, 501, 502, 421, 530",
+      "to": "Transfer parameters"
+    },
+    {
+      "from": "Transfer parameters",
+      "event": "MODE",
+      "action": "200",
+      "to": "Transfer parameters"
+    },
+    {
+      "from": "Transfer parameters",
+      "event": "MODE",
+      "action": "500, 501, 504, 421, 530",
+      "to": "Transfer parameters"
+    },
+    {
+      "from": "Transfer parameters",
+      "event": "TYPE",
+      "action": "200",
+      "to": "Transfer parameters"
+    },
+    {
+      "from": "Transfer parameters",
+      "event": "TYPE",
+      "action": "500, 501, 504, 421, 530",
+      "to": "Transfer parameters"
+    },
+    {
+      "from": "Transfer parameters",
+      "event": "STRU",
+      "action": "200",
+      "to": "Transfer parameters"
+    },
+    {
+      "from": "Transfer parameters",
+      "event": "STRU",
+      "action": "500, 501, 504, 421, 530",
+      "to": "Transfer parameters"
+    },
+    {
+      "from": "File action commands",
+      "event": "ALLO",
+      "action": "200",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "ALLO",
+      "action": "202",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "ALLO",
+      "action": "500, 501, 504, 421, 530",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "REST",
+      "action": "500, 501, 502, 421, 530",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "REST",
+      "action": "350",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "STOR",
+      "action": "125, 150",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "STOR",
+      "action": "(110)",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "STOR",
+      "action": "226, 250",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "STOR",
+      "action": "425, 426, 451, 551, 552",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "STOR",
+      "action": "532, 450, 452, 553",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "STOR",
+      "action": "500, 501, 421, 530",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "STOU",
+      "action": "125, 150",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "STOU",
+      "action": "(110)",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "STOU",
+      "action": "226, 250",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "STOU",
+      "action": "425, 426, 451, 551, 552",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "STOU",
+      "action": "532, 450, 452, 553",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "STOU",
+      "action": "500, 501, 421, 530",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "RETR",
+      "action": "125, 150",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "RETR",
+      "action": "(110)",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "RETR",
+      "action": "226, 250",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "RETR",
+      "action": "425, 426, 451",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "RETR",
+      "action": "450, 550",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "RETR",
+      "action": "500, 501, 421, 530",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "LIST",
+      "action": "125, 150",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "LIST",
+      "action": "226, 250",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "LIST",
+      "action": "425, 426, 451",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "LIST",
+      "action": "450",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "LIST",
+      "action": "500, 501, 502, 421, 530",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "NLST",
+      "action": "125, 150",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "NLST",
+      "action": "226, 250",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "NLST",
+      "action": "425, 426, 451",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "NLST",
+      "action": "450",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "NLST",
+      "action": "500, 501, 502, 421, 530",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "APPE",
+      "action": "125, 150",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "APPE",
+      "action": "(110)",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "APPE",
+      "action": "226, 250",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "APPE",
+      "action": "425, 426, 451, 551, 552",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "APPE",
+      "action": "532, 450, 550, 452, 553",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "APPE",
+      "action": "500, 501, 502, 421, 530",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "RNFR",
+      "action": "450, 550",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "RNFR",
+      "action": "500, 501, 502, 421, 530",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "RNFR",
+      "action": "350",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "RNTO",
+      "action": "250",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "RNTO",
+      "action": "532, 553",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "RNTO",
+      "action": "500, 501, 502, 503, 421, 530",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "DELE",
+      "action": "250",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "DELE",
+      "action": "450, 550",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "DELE",
+      "action": "500, 501, 502, 421, 530",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "RMD",
+      "action": "250",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "RMD",
+      "action": "500, 501, 502, 421, 530, 550",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "MKD",
+      "action": "257",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "MKD",
+      "action": "500, 501, 502, 421, 530, 550",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "PWD",
+      "action": "257",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "PWD",
+      "action": "500, 501, 502, 421, 550",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "ABOR",
+      "action": "225, 226",
+      "to": "File action commands"
+    },
+    {
+      "from": "File action commands",
+      "event": "ABOR",
+      "action": "500, 501, 502, 421",
+      "to": "File action commands"
+    },
+    {
+      "from": "Informational commands",
+      "event": "SYST",
+      "action": "215",
+      "to": "Informational commands"
+    },
+    {
+      "from": "Informational commands",
+      "event": "SYST",
+      "action": "500, 501, 502, 421",
+      "to": "Informational commands"
+    },
+    {
+      "from": "Informational commands",
+      "event": "STAT",
+      "action": "211, 212, 213",
+      "to": "Informational commands"
+    },
+    {
+      "from": "Informational commands",
+      "event": "STAT",
+      "action": "450",
+      "to": "Informational commands"
+    },
+    {
+      "from": "Informational commands",
+      "event": "STAT",
+      "action": "500, 501, 502, 421, 530",
+      "to": "Informational commands"
+    },
+    {
+      "from": "Informational commands",
+      "event": "HELP",
+      "action": "211, 214",
+      "to": "Informational commands"
+    },
+    {
+      "from": "Informational commands",
+      "event": "HELP",
+      "action": "500, 501, 502, 421",
+      "to": "Informational commands"
+    },
+    {
+      "from": "Miscellaneous commands",
+      "event": "SITE",
+      "action": "200",
+      "to": "Miscellaneous commands"
+    },
+    {
+      "from": "Miscellaneous commands",
+      "event": "SITE",
+      "action": "202",
+      "to": "Miscellaneous commands"
+    },
+    {
+      "from": "Miscellaneous commands",
+      "event": "SITE",
+      "action": "500, 501, 530",
+      "to": "Miscellaneous commands"
+    },
+    {
+      "from": "Miscellaneous commands",
+      "event": "NOOP",
+      "action": "200",
+      "to": "Miscellaneous commands"
+    },
+    {
+      "from": "Miscellaneous commands",
+      "event": "NOOP",
+      "action": "500",
+      "to": "Miscellaneous commands"
+    }
+  ]
+}

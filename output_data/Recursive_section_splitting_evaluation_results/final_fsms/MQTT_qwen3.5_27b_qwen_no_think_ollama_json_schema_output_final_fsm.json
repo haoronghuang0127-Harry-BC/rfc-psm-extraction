@@ -1,0 +1,49 @@
+{
+  "states": [
+    "Client Connection Request",
+    "Broker Challenge Sent",
+    "Client Response Sent",
+    "Session State stored",
+    "Session State discarded",
+    "New Session",
+    "Existing Session"
+  ],
+  "transitions": [
+    {
+      "from": "Client Connection Request",
+      "event": "CONNECT with Authentication Data containing only token",
+      "action": "Send AUTH packet with reason code 0x18 (Continue Authentication) and 8-byte RS nonce",
+      "to": "Broker Challenge Sent"
+    },
+    {
+      "from": "Broker Challenge Sent",
+      "event": "AUTH packet with Client nonce and signature/MAC",
+      "action": "Validate token and send CONNACK 0x00 (Success)",
+      "to": "Client Response Sent"
+    },
+    {
+      "from": "Session State stored",
+      "event": "Client DISCONNECT with Session Expiry Interval set to 0",
+      "action": "Broker doesn't store the Session State but MUST keep the retained messages",
+      "to": "Session State discarded"
+    },
+    {
+      "from": "New Session",
+      "event": "CONNECT with Clean flag = 0 and no associated Session",
+      "action": "Broker creates a new Session",
+      "to": "Existing Session"
+    },
+    {
+      "from": "Existing Session",
+      "event": "CONNECT with Clean flag = 0",
+      "action": "Broker resumes communications based on current Session state",
+      "to": "Existing Session"
+    },
+    {
+      "from": "New Session",
+      "event": "CONNECT with Clean flag = 1",
+      "action": "Broker starts a new Session",
+      "to": "New Session"
+    }
+  ]
+}

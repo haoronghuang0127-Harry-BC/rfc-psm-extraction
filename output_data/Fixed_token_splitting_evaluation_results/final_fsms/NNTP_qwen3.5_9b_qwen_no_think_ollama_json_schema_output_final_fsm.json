@@ -1,0 +1,95 @@
+{
+  "states": [
+    "Initial Connection",
+    "Reader Mode",
+    "Transit Mode",
+    "Closed",
+    "READER"
+  ],
+  "transitions": [
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "200 Service available, posting allowed",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "201 Service available, posting prohibited",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "400 Service temporarily unavailable",
+      "to": "Closed"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "502 Service permanently unavailable",
+      "to": "Closed"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "MODE READER",
+      "action": "200 Posting allowed",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "MODE READER",
+      "action": "201 Posting prohibited",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "MODE READER",
+      "action": "502 Reading service permanently unavailable",
+      "to": "Closed"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "",
+      "action": "200 Posting allowed",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "",
+      "action": "201 Posting prohibited",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "MODE READER",
+      "action": "502 Transit service only",
+      "to": "Closed"
+    },
+    {
+      "from": "Transit Mode",
+      "event": "",
+      "action": "200 Posting allowed",
+      "to": "Transit Mode"
+    },
+    {
+      "from": "Transit Mode",
+      "event": "",
+      "action": "201 Posting prohibited",
+      "to": "Transit Mode"
+    },
+    {
+      "from": "Transit Mode",
+      "event": "MODE READER",
+      "action": "200 Reader mode, posting permitted",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Transit Mode",
+      "event": "MODE READER",
+      "action": "201 NNTP Service Ready, posting prohibited",
+      "to": "Reader Mode"
+    }
+  ]
+}

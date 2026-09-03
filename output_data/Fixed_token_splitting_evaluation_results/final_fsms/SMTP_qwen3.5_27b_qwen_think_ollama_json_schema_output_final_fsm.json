@@ -1,0 +1,190 @@
+{
+  "states": [
+    "Session Initiated",
+    "Mail Transaction",
+    "Data Transfer",
+    "initial state",
+    "transaction in progress",
+    "Connection Established",
+    "Session Initialized",
+    "Mail Transaction Open",
+    "Data Input",
+    "Connection Closed"
+  ],
+  "transitions": [
+    {
+      "from": "Session Initiated",
+      "event": "MAIL FROM",
+      "action": "250 OK",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "DATA",
+      "action": "354 Intermediate reply",
+      "to": "Data Transfer"
+    },
+    {
+      "from": "Data Transfer",
+      "event": "End of mail data indicator",
+      "action": "250 OK",
+      "to": "Session Initiated"
+    },
+    {
+      "from": "initial state",
+      "event": "EHLO",
+      "action": "Server identifies itself; confirms initial state",
+      "to": "initial state"
+    },
+    {
+      "from": "initial state",
+      "event": "HELO",
+      "action": "Server identifies itself; confirms initial state",
+      "to": "initial state"
+    },
+    {
+      "from": "initial state",
+      "event": "MAIL",
+      "action": "Clears reverse-path buffer, forward-path buffer, and mail data buffer; inserts reverse-path information",
+      "to": "transaction in progress"
+    },
+    {
+      "from": "transaction in progress",
+      "event": "RCPT",
+      "action": "Appends forward-path argument to the forward-path buffer",
+      "to": "transaction in progress"
+    },
+    {
+      "from": "transaction in progress",
+      "event": "DATA",
+      "action": "Appends mail data; processes stored mail transaction information; clears buffers",
+      "to": "initial state"
+    },
+    {
+      "from": "initial state",
+      "event": "RSET",
+      "action": "Discards stored sender, recipients, and mail data; clears all buffers and state tables",
+      "to": "initial state"
+    },
+    {
+      "from": "transaction in progress",
+      "event": "RSET",
+      "action": "Discards stored sender, recipients, and mail data; clears all buffers and state tables",
+      "to": "initial state"
+    },
+    {
+      "from": "initial state",
+      "event": "VRFY",
+      "action": "No effect on reverse-path buffer, forward-path buffer, or mail data buffer",
+      "to": "initial state"
+    },
+    {
+      "from": "transaction in progress",
+      "event": "VRFY",
+      "action": "No effect on reverse-path buffer, forward-path buffer, or mail data buffer",
+      "to": "transaction in progress"
+    },
+    {
+      "from": "initial state",
+      "event": "EXPN",
+      "action": "No effect on reverse-path buffer, forward-path buffer, or mail data buffer",
+      "to": "initial state"
+    },
+    {
+      "from": "transaction in progress",
+      "event": "EXPN",
+      "action": "No effect on reverse-path buffer, forward-path buffer, or mail data buffer",
+      "to": "transaction in progress"
+    },
+    {
+      "from": "initial state",
+      "event": "HELP",
+      "action": "No effect on reverse-path buffer, forward-path buffer, or mail data buffer",
+      "to": "initial state"
+    },
+    {
+      "from": "transaction in progress",
+      "event": "HELP",
+      "action": "No effect on reverse-path buffer, forward-path buffer, or mail data buffer",
+      "to": "transaction in progress"
+    },
+    {
+      "from": "initial state",
+      "event": "NOOP",
+      "action": "No effect on reverse-path buffer, forward-path buffer, or mail data buffer",
+      "to": "initial state"
+    },
+    {
+      "from": "transaction in progress",
+      "event": "NOOP",
+      "action": "No effect on reverse-path buffer, forward-path buffer, or mail data buffer",
+      "to": "transaction in progress"
+    },
+    {
+      "from": "Connection Established",
+      "event": "EHLO",
+      "action": "initialize session",
+      "to": "Session Initialized"
+    },
+    {
+      "from": "Session Initialized",
+      "event": "EHLO",
+      "action": "clear all buffers and reset the state exactly as if a RSET command had been issued",
+      "to": "Session Initialized"
+    },
+    {
+      "from": "Session Initialized",
+      "event": "MAIL",
+      "action": "begins a mail transaction",
+      "to": "Mail Transaction Open"
+    },
+    {
+      "from": "Mail Transaction Open",
+      "event": "RCPT",
+      "action": "",
+      "to": "Mail Transaction Open"
+    },
+    {
+      "from": "Mail Transaction Open",
+      "event": "DATA",
+      "action": "354 Start mail input",
+      "to": "Data Input"
+    },
+    {
+      "from": "Data Input",
+      "event": "<CRLF>.<CRLF>",
+      "action": "successful DATA command",
+      "to": "Session Initialized"
+    },
+    {
+      "from": "Mail Transaction Open",
+      "event": "RSET",
+      "action": "aborted",
+      "to": "Session Initialized"
+    },
+    {
+      "from": "Mail Transaction Open",
+      "event": "EHLO",
+      "action": "aborted",
+      "to": "Session Initialized"
+    },
+    {
+      "from": "Connection Established",
+      "event": "QUIT",
+      "action": "request connection closure",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "Session Initialized",
+      "event": "QUIT",
+      "action": "request connection closure",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "Mail Transaction Open",
+      "event": "QUIT",
+      "action": "aborted... request connection closure",
+      "to": "Connection Closed"
+    }
+  ]
+}

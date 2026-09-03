@@ -1,0 +1,19 @@
+[
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [\n    \"AUTHORIZATION\",\n    \"TRANSACTION\",\n    \"UPDATE\"\n  ],\n  \"transitions\": [\n    {\n      \"from\": \"AUTHORIZATION\",\n      \"event\": \"client identifies itself successfully\",\n      \"action\": \"server acquires resources associated with the client's maildrop\",\n      \"to\": \"TRANSACTION\"\n    },\n    {\n      \"from\": \"TRANSACTION\",\n      \"event\": \"QUIT command\",\n      \"action\": \"POP3 server releases any resources acquired during the TRANSACTION state and says goodbye\",\n      \"to\": \"UPDATE\"\n    }\n  ]\n}",
+  "{\n  \"states\": [\n    \"AUTHORIZATION\",\n    \"TRANSACTION\",\n    \"UPDATE\"\n  ],\n  \"transitions\": [\n    {\n      \"from\": \"AUTHORIZATION\",\n      \"event\": \"authentication command (access granted)\",\n      \"action\": \"acquires an exclusive-access lock on the maildrop, responds with a positive status indicator\",\n      \"to\": \"TRANSACTION\"\n    },\n    {\n      \"from\": \"AUTHORIZATION\",\n      \"event\": \"authentication command (access denied)\",\n      \"action\": \"responds with a negative status indicator\",\n      \"to\": \"AUTHORIZATION\"\n    }\n  ]\n}",
+  "{\n  \"states\": [\n    \"TRANSACTION\",\n    \"UPDATE\"\n  ],\n  \"transitions\": [\n    {\n      \"from\": \"TRANSACTION\",\n      \"event\": \"QUIT\",\n      \"action\": \"\",\n      \"to\": \"UPDATE\"\n    }\n  ]\n}",
+  "{\n  \"states\": [\n    \"UPDATE\",\n    \"TRANSACTION\",\n    \"AUTHORIZATION\"\n  ],\n  \"transitions\": [\n    {\n      \"from\": \"TRANSACTION\",\n      \"event\": \"QUIT\",\n      \"action\": \"removes all messages marked as deleted from the maildrop and replies as to the status of this operation; releases any exclusive-access lock on the maildrop and closes the TCP connection\",\n      \"to\": \"UPDATE\"\n    }\n  ]\n}",
+  "{\n  \"states\": [\n    \"AUTHORIZATION state\",\n    \"TRANSACTION state\",\n    \"UPDATE state\"\n  ],\n  \"transitions\": [\n    {\n      \"from\": \"AUTHORIZATION state\",\n      \"event\": \"APOP name digest\",\n      \"action\": \"+OK maildrop locked and ready\",\n      \"to\": \"TRANSACTION state\"\n    },\n    {\n      \"from\": \"AUTHORIZATION state\",\n      \"event\": \"APOP name digest\",\n      \"action\": \"-ERR permission denied\",\n      \"to\": \"AUTHORIZATION state\"\n    }\n  ]\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [\n    \"AUTHORIZATION state\",\n    \"TRANSACTION state\"\n  ],\n  \"transitions\": []\n}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\n  \"states\": [\n    \"AUTHORIZATION\"\n  ],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}"
+]

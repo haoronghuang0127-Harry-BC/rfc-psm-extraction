@@ -1,0 +1,65 @@
+{
+  "states": [
+    "Disconnected",
+    "Token Upload",
+    "Connection Setup",
+    "Authorized Session",
+    "Reauthentication"
+  ],
+  "transitions": [
+    {
+      "from": "Disconnected",
+      "event": "CONNECT",
+      "action": "Validate token/auth data",
+      "to": "Connection Setup"
+    },
+    {
+      "from": "Connection Setup",
+      "event": "CONNACK Success",
+      "action": "Cache token, validate scope",
+      "to": "Authorized Session"
+    },
+    {
+      "from": "Connection Setup",
+      "event": "CONNACK Failure",
+      "action": "Send DISCONNECT (Reason 0x87)",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Disconnected",
+      "event": "CONNECT + PUBLISH to authz-info",
+      "action": "Publish token",
+      "to": "Token Upload"
+    },
+    {
+      "from": "Token Upload",
+      "event": "DISCONNECT",
+      "action": "Close connection",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Authorized Session",
+      "event": "AUTH (Reason 0x19)",
+      "action": "Initiate reauth flow",
+      "to": "Reauthentication"
+    },
+    {
+      "from": "Reauthentication",
+      "event": "AUTH Success",
+      "action": "Update token cache",
+      "to": "Authorized Session"
+    },
+    {
+      "from": "Reauthentication",
+      "event": "AUTH Failure",
+      "action": "Send DISCONNECT (Reason 0x87)",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Authorized Session",
+      "event": "Token Expiration or Authorization Failure",
+      "action": "Send DISCONNECT (Reason 0x87)",
+      "to": "Disconnected"
+    }
+  ]
+}

@@ -1,0 +1,275 @@
+{
+  "states": [
+    "CLOSED",
+    "LISTEN",
+    "SYN-SENT",
+    "SYN-RECEIVED",
+    "ESTABLISHED",
+    "FIN-WAIT-1",
+    "FIN-WAIT-2",
+    "CLOSE-WAIT",
+    "CLOSING",
+    "LAST-ACK",
+    "TIME-WAIT"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "OPEN (passive)",
+      "action": "Create TCB, enter LISTEN state",
+      "to": "LISTEN"
+    },
+    {
+      "from": "CLOSED",
+      "event": "OPEN (active)",
+      "action": "Create TCB, select ISS, send SYN segment, set SND.UNA to ISS, SND.NXT to ISS+1",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "LISTEN",
+      "event": "OPEN (active)",
+      "action": "Change connection from passive to active, select ISS, send SYN segment, set SND.UNA to ISS, SND.NXT to ISS+1",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv RST",
+      "action": "Ignore",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv ACK",
+      "action": "Send RST segment <SEQ=SEG.ACK><CTL=RST>",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv SYN",
+      "action": "Set RCV.NXT to SEG.SEQ+1, IRS to SEG.SEQ, select ISS, send SYN segment <SEQ=ISS><ACK=RCV.NXT><CTL=SYN,ACK>, set SND.NXT to ISS+1, SND.UNA to ISS",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "CLOSE",
+      "action": "Delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "ABORT",
+      "action": "Delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "rcv SYN,ACK (acceptable ACK)",
+      "action": "Set RCV.NXT to SEG.SEQ+1, IRS to SEG.SEQ, advance SND.UNA to SEG.ACK, enter ESTABLISHED, send ACK segment <SEQ=SND.NXT><ACK=RCV.NXT><CTL=ACK>",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "rcv SYN (simultaneous open)",
+      "action": "Set RCV.NXT to SEG.SEQ+1, IRS to SEG.SEQ, enter SYN-RECEIVED, send SYN,ACK segment <SEQ=ISS><ACK=RCV.NXT><CTL=SYN,ACK>",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "rcv RST (acceptable ACK)",
+      "action": "Signal user 'connection reset', drop segment, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "CLOSE",
+      "action": "Delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "ABORT",
+      "action": "Send RST segment <SEQ=SND.NXT><CTL=RST>, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "rcv ACK (acceptable)",
+      "action": "Enter ESTABLISHED state, set SND.WND to SEG.WND, SND.WL1 to SEG.SEQ, SND.WL2 to SEG.ACK",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "rcv RST (passive OPEN)",
+      "action": "Return to LISTEN state",
+      "to": "LISTEN"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "rcv RST (active OPEN)",
+      "action": "Signal user 'connection refused', delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "CLOSE (no pending data)",
+      "action": "Form FIN segment and send it",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "rcv FIN",
+      "action": "Signal user 'connection closing', advance RCV.NXT over FIN, send ACK for FIN",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "CLOSE",
+      "action": "Queue until preceding SENDs segmentized, form FIN segment and send it",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "rcv FIN",
+      "action": "Signal user 'connection closing', advance RCV.NXT over FIN, send ACK for FIN",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "ABORT",
+      "action": "Send RST segment <SEQ=SND.NXT><CTL=RST>, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "rcv RST",
+      "action": "Signal user 'connection reset', flush queues, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "rcv ACK (of FIN)",
+      "action": "Enter FIN-WAIT-2 state",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "rcv FIN (and ACK of our FIN)",
+      "action": "Enter TIME-WAIT state, start time-wait timer",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "rcv FIN (no ACK of our FIN)",
+      "action": "Enter CLOSING state",
+      "to": "CLOSING"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "ABORT",
+      "action": "Send RST segment <SEQ=SND.NXT><CTL=RST>, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "rcv RST",
+      "action": "Signal user 'connection reset', flush queues, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "rcv FIN",
+      "action": "Enter TIME-WAIT state, start time-wait timer",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "ABORT",
+      "action": "Send RST segment <SEQ=SND.NXT><CTL=RST>, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "rcv RST",
+      "action": "Signal user 'connection reset', flush queues, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "CLOSE",
+      "action": "Queue until preceding SENDs segmentized, send FIN segment",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "ABORT",
+      "action": "Send RST segment <SEQ=SND.NXT><CTL=RST>, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "rcv RST",
+      "action": "Signal user 'connection reset', flush queues, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "rcv ACK (of our FIN)",
+      "action": "Enter TIME-WAIT state",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "ABORT",
+      "action": "Send RST segment <SEQ=SND.NXT><CTL=RST>, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "rcv RST",
+      "action": "Enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "rcv ACK (of our FIN)",
+      "action": "Delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "ABORT",
+      "action": "Send RST segment <SEQ=SND.NXT><CTL=RST>, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "rcv RST",
+      "action": "Enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "TIME-WAIT TIMEOUT",
+      "action": "Delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "rcv ACK (retransmission of remote FIN)",
+      "action": "Acknowledge it, restart 2 MSL timeout",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "ABORT",
+      "action": "Delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "rcv RST",
+      "action": "Enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    }
+  ]
+}

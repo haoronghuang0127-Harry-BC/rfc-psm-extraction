@@ -1,0 +1,170 @@
+{
+  "states": [
+    "idle",
+    "mail",
+    "rcpt",
+    "data",
+    "Initial State",
+    "Mail Transaction",
+    "INITIAL",
+    "MAIL_TRANSACTION_OPEN"
+  ],
+  "transitions": [
+    {
+      "from": "idle",
+      "event": "MAIL FROM",
+      "action": "reset all its state tables and buffers, including any recipients or mail data; returns a '250 OK' reply",
+      "to": "mail"
+    },
+    {
+      "from": "mail",
+      "event": "RCPT TO",
+      "action": "stores the forward-path; returns a '250 OK' reply",
+      "to": "rcpt"
+    },
+    {
+      "from": "rcpt",
+      "event": "RCPT TO",
+      "action": "stores the forward-path; returns a '250 OK' reply",
+      "to": "rcpt"
+    },
+    {
+      "from": "rcpt",
+      "event": "DATA",
+      "action": "considers all succeeding lines up to but not including the end of mail data indicator to be the message text; returns a 354 Intermediate reply",
+      "to": "data"
+    },
+    {
+      "from": "data",
+      "event": ".",
+      "action": "end of mail data indicator also confirms the mail transaction and tells the SMTP server to now process the stored recipients and mail data; returns a '250 OK' reply",
+      "to": "idle"
+    },
+    {
+      "from": "Initial State",
+      "event": "EHLO",
+      "action": "250 OK reply... confirm initial state",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "HELO",
+      "action": "250 OK reply... confirm initial state",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "MAIL FROM:",
+      "action": "clears buffers, inserts reverse-path",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RCPT TO:",
+      "action": "appends forward-path argument",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "DATA",
+      "action": "process stored mail transaction information, buffers cleared",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RSET",
+      "action": "aborted, all buffers and state tables cleared",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "NOOP",
+      "action": "send 250 OK reply",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "NOOP",
+      "action": "send 250 OK reply",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Initial State",
+      "event": "HELP",
+      "action": "send helpful information",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "HELP",
+      "action": "send helpful information",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Initial State",
+      "event": "VRFY",
+      "action": "confirm user or mailbox",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "VRFY",
+      "action": "confirm user or mailbox",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Initial State",
+      "event": "EXPN",
+      "action": "confirm mailing list membership",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "EXPN",
+      "action": "confirm mailing list membership",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "INITIAL",
+      "event": "EHLO",
+      "action": "initialize session",
+      "to": "INITIAL"
+    },
+    {
+      "from": "MAIL_TRANSACTION_OPEN",
+      "event": "EHLO",
+      "action": "reset state",
+      "to": "INITIAL"
+    },
+    {
+      "from": "INITIAL",
+      "event": "MAIL",
+      "action": "begins a mail transaction",
+      "to": "MAIL_TRANSACTION_OPEN"
+    },
+    {
+      "from": "MAIL_TRANSACTION_OPEN",
+      "event": "RCPT",
+      "action": "",
+      "to": "MAIL_TRANSACTION_OPEN"
+    },
+    {
+      "from": "MAIL_TRANSACTION_OPEN",
+      "event": "DATA",
+      "action": "conclude transaction",
+      "to": "INITIAL"
+    },
+    {
+      "from": "INITIAL",
+      "event": "RSET",
+      "action": "reset state",
+      "to": "INITIAL"
+    },
+    {
+      "from": "MAIL_TRANSACTION_OPEN",
+      "event": "RSET",
+      "action": "abort transaction",
+      "to": "INITIAL"
+    }
+  ]
+}

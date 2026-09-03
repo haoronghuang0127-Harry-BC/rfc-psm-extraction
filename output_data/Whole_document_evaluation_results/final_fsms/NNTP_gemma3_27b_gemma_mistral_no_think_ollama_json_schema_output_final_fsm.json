@@ -1,0 +1,33 @@
+{
+  "states": [
+    "Initial connection",
+    "Transit mode",
+    "Reader mode"
+  ],
+  "transitions": [
+    {
+      "from": "Initial connection",
+      "event": "200",
+      "action": "Service available, posting allowed",
+      "to": "Transit mode"
+    },
+    {
+      "from": "Initial connection",
+      "event": "201",
+      "action": "Service available, posting prohibited",
+      "to": "Transit mode"
+    },
+    {
+      "from": "Transit mode",
+      "event": "MODE READER",
+      "action": "Switch to reader mode",
+      "to": "Reader mode"
+    },
+    {
+      "from": "Reader mode",
+      "event": "MODE READER",
+      "action": "No change",
+      "to": "Reader mode"
+    }
+  ]
+}

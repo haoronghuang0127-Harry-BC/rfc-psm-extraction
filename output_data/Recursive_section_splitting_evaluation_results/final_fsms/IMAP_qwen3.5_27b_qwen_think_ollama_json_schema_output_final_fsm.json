@@ -1,0 +1,192 @@
+{
+  "states": [
+    "Not Authenticated",
+    "Authenticated",
+    "Selected",
+    "Logout",
+    "IDLE",
+    "Command Processing"
+  ],
+  "transitions": [
+    {
+      "from": "Not Authenticated",
+      "event": "successful LOGIN or AUTHENTICATE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "successful SELECT or EXAMINE command",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "CLOSE or UNSELECT command, unsolicited CLOSED response code, or failed SELECT or EXAMINE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "successful SELECT or EXAMINE command",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "server MUST send an untagged BYE response and a tagged OK response",
+      "to": "Logout"
+    },
+    {
+      "from": "Authenticated",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "server MUST send an untagged BYE response and a tagged OK response",
+      "to": "Logout"
+    },
+    {
+      "from": "Selected",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "server MUST send an untagged BYE response and a tagged OK response",
+      "to": "Logout"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "AUTHENTICATE",
+      "action": "OK - authenticate completed, now in authenticated state",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "LOGIN",
+      "action": "OK - login completed, now in authenticated state",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "STARTTLS",
+      "action": "OK - starttls completed, begin TLS negotiation",
+      "to": "Not Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "ENABLE",
+      "action": "OK - Relevant capabilities enabled; BAD - No arguments, or syntax error in an argument; * ENABLED response",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "SELECT",
+      "action": "select a mailbox for access and enter the selected state",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "EXAMINE",
+      "action": "select a mailbox for access and enter the selected state",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "SELECT",
+      "action": "OK - select completed, now in selected state; REQUIRED untagged responses: FLAGS, EXISTS, LIST, PERMANENTFLAGS, UIDNEXT, UIDVALIDITY",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "SELECT",
+      "action": "NO - select failure, now in authenticated state",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "SELECT",
+      "action": "OK - select completed, now in selected state; untagged OK response with [CLOSED] response code; REQUIRED untagged responses: FLAGS, EXISTS, LIST, PERMANENTFLAGS, UIDNEXT, UIDVALIDITY",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "SELECT",
+      "action": "NO - select failure, now in authenticated state",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "EXAMINE",
+      "action": "OK - examine completed, now in selected state",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "EXAMINE",
+      "action": "NO - examine failure, now in authenticated state",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "EXAMINE",
+      "action": "BAD - command unknown or arguments invalid",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "DELETE",
+      "action": "OK - delete completed; NO - delete failure; BAD - command unknown or arguments invalid; OPTIONAL untagged response: LIST",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "RENAME",
+      "action": "OK - rename completed; NO - rename failure: can't rename mailbox with that name, can't rename to mailbox with that name; BAD - command unknown or arguments invalid; OPTIONAL untagged response: LIST",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "UNSUBSCRIBE",
+      "action": "OK - unsubscribe completed\nNO - unsubscribe failure: can't unsubscribe that name\nBAD - command unknown or arguments invalid",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Command Processing",
+      "event": "IDLE",
+      "action": "server requests a response to the IDLE command using the continuation ('+') response",
+      "to": "IDLE"
+    },
+    {
+      "from": "IDLE",
+      "event": "DONE",
+      "action": "server ... MUST immediately send the tagged response to the IDLE command",
+      "to": "Command Processing"
+    },
+    {
+      "from": "Selected",
+      "event": "CLOSE",
+      "action": "OK - close completed, now in authenticated state",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "UNSELECT",
+      "action": "OK - unselect completed",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "STORE",
+      "action": "OK - store completed; NO - store error: can't store that data; BAD - command unknown or arguments invalid; untagged FETCH (unless .SILENT)",
+      "to": "Selected"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "PREAUTH response",
+      "action": "moves the connection directly to the authenticated state",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "SELECT or EXAMINE command",
+      "action": "CLOSED response code",
+      "to": "Selected"
+    }
+  ]
+}

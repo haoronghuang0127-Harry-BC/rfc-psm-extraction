@@ -1,0 +1,67 @@
+{
+  "states": [
+    "Transit mode",
+    "Reading mode",
+    "Transit Mode",
+    "Reader Mode",
+    "INVALID",
+    "GROUP_SELECTED",
+    "READER"
+  ],
+  "transitions": [
+    {
+      "from": "Transit mode",
+      "event": "MODE READER",
+      "action": "Server advertises READER capability, stops advertising MODE-READER",
+      "to": "Reading mode"
+    },
+    {
+      "from": "Transit Mode",
+      "event": "MODE READER",
+      "action": "return 200 or 201 response",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "INVALID",
+      "event": "GROUP",
+      "action": "Group successfully selected",
+      "to": "GROUP_SELECTED"
+    },
+    {
+      "from": "INVALID",
+      "event": "LISTGROUP",
+      "action": "Article numbers follow",
+      "to": "GROUP_SELECTED"
+    },
+    {
+      "from": "GROUP_SELECTED",
+      "event": "GROUP",
+      "action": "Group successfully selected",
+      "to": "GROUP_SELECTED"
+    },
+    {
+      "from": "GROUP_SELECTED",
+      "event": "LISTGROUP",
+      "action": "Article numbers follow",
+      "to": "GROUP_SELECTED"
+    },
+    {
+      "from": "GROUP_SELECTED",
+      "event": "ARTICLE",
+      "action": "Article follows",
+      "to": "GROUP_SELECTED"
+    },
+    {
+      "from": "GROUP_SELECTED",
+      "event": "LAST",
+      "action": "Article found",
+      "to": "GROUP_SELECTED"
+    },
+    {
+      "from": "GROUP_SELECTED",
+      "event": "NEXT",
+      "action": "Article found",
+      "to": "GROUP_SELECTED"
+    }
+  ]
+}

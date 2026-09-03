@@ -1,0 +1,158 @@
+{
+  "states": [
+    "INIT",
+    "INIT-REBOOT",
+    "REBOOTING",
+    "SELECTING",
+    "REQUESTING",
+    "BOUND",
+    "RENEWING",
+    "REBINDING"
+  ],
+  "transitions": [
+    {
+      "from": "INIT",
+      "event": "DHCPREQUEST",
+      "action": "client times out and retransmits the DHCPREQUEST message if the client receives neither a DHCPACK or a DHCPNAK message",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPREQUEST",
+      "action": "client receives DHCPACK message with configuration parameters",
+      "to": "BOUND"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPNAK",
+      "action": "Restart",
+      "to": "INIT-REBOOT"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPNAK",
+      "action": "Discard offer",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPOFFER",
+      "action": "Collect replies",
+      "to": "SELECTING"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPREQUEST",
+      "action": "send DHCPNAK if requested IP address is incorrect or on the wrong network",
+      "to": "INIT-REBOOT"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPNAK",
+      "action": "Restart",
+      "to": "INIT-REBOOT"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPNAK",
+      "action": "Discard offer",
+      "to": "INIT-REBOOT"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPREQUEST",
+      "action": "insert the address of the selected server in 'server identifier', 'ciaddr' MUST be zero, 'requested IP address' MUST be filled in with the yiaddr value from the chosen DHCPOFFER",
+      "to": "SELECTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPNAK",
+      "action": "Halt network",
+      "to": "INIT"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPNAK",
+      "action": "Halt network",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPRELEASE",
+      "action": "client relinquishes network address and cancels remaining lease",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "T1 expires",
+      "action": "Send DHCPREQUEST to leasing server",
+      "to": "RENEWING"
+    },
+    {
+      "from": "BOUND",
+      "event": "T2 expires",
+      "action": "Broadcast DHCPREQUEST",
+      "to": "REBINDING"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPNAK",
+      "action": "Halt network",
+      "to": "INIT"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPREQUEST",
+      "action": "client's IP address is filled in with 'ciaddr', unicast message",
+      "to": "RENEWING"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPNAK",
+      "action": "Halt network",
+      "to": "INIT"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPREQUEST",
+      "action": "client's IP address is filled in with 'ciaddr', broadcast message",
+      "to": "REBINDING"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPNAK",
+      "action": "Halt network",
+      "to": "INIT"
+    }
+  ]
+}

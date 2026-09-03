@@ -1,0 +1,128 @@
+{
+  "states": [
+    "BOUND",
+    "RENEW",
+    "REBINDING",
+    "INIT",
+    "RENEWING",
+    "SELECTING",
+    "INIT-REBOOT",
+    "REQUESTING"
+  ],
+  "transitions": [
+    {
+      "from": "INIT",
+      "event": "DHCPDECLINE",
+      "action": "restarts the configuration process",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPNAK",
+      "action": "restarts the configuration process",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "timeout after retransmission algorithm",
+      "action": "reverts to INIT state and restarts the initialization process",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPDECLINE",
+      "action": "restarts the configuration process by requesting a new network address",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPNAK",
+      "action": "request a new address by restarting the configuration process",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "timeout after retransmission algorithm",
+      "action": "choose to use the previously allocated network address and configuration parameters for the remainder of the unexpired lease",
+      "to": "BOUND"
+    },
+    {
+      "from": "INIT",
+      "event": "Send DHCPDISCOVER",
+      "action": "",
+      "to": "SELECTING"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPNAK/Restart",
+      "action": "",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "Send DHCPREQUEST",
+      "action": "",
+      "to": "REQUESTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPOFFER/Collect replies",
+      "action": "Select offer/send DHCPREQUEST",
+      "to": "REQUESTING"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPOFFER/Discard",
+      "action": "",
+      "to": "REQUESTING"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPNAK/Lease expired/Halt network",
+      "action": "",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "T1 expires/Send DHCPREQUEST to leasing server",
+      "action": "",
+      "to": "RENEWING"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPOFFER, DHCPACK, DHCPNAK/Discard",
+      "action": "",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPACK/Record lease, set timers T1, T2",
+      "action": "",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEWING",
+      "event": "T2 expires/Broadcast DHCPREQUEST",
+      "action": "",
+      "to": "REBINDING"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPACK/Record lease, set timers T1, T2",
+      "action": "",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPNAK/Halt network",
+      "action": "",
+      "to": "INIT"
+    }
+  ]
+}

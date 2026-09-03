@@ -1,0 +1,158 @@
+{
+  "states": [
+    "Transit mode",
+    "Reading mode",
+    "Initial Connection",
+    "Reader Mode",
+    "Transit Mode",
+    "Session Closed",
+    "Invalid Newsgroup Selected",
+    "Valid Newsgroup Selected"
+  ],
+  "transitions": [
+    {
+      "from": "Transit mode",
+      "event": "MODE READER",
+      "action": "switches to Reading mode",
+      "to": "Reading mode"
+    },
+    {
+      "from": "Transit mode",
+      "event": "CAPABILITIES",
+      "action": "",
+      "to": "Transit mode"
+    },
+    {
+      "from": "Reading mode",
+      "event": "",
+      "action": "",
+      "to": "Reading mode"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "200 Service available, posting allowed",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "201 Service available, posting prohibited",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "400 Service temporarily unavailable",
+      "to": "Session Closed"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "502 Service permanently unavailable",
+      "to": "Session Closed"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "QUIT",
+      "action": "205 Connection closing",
+      "to": "Session Closed"
+    },
+    {
+      "from": "Transit Mode",
+      "event": "MODE READER",
+      "action": "200/201",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Transit Mode",
+      "event": "MODE READER",
+      "action": "502 Reading service permanently unavailable",
+      "to": "Session Closed"
+    },
+    {
+      "from": "Invalid Newsgroup Selected",
+      "event": "GROUP group",
+      "action": "211 response (group selected)",
+      "to": "Valid Newsgroup Selected"
+    },
+    {
+      "from": "Invalid Newsgroup Selected",
+      "event": "GROUP invalid_group",
+      "action": "411 response",
+      "to": "Invalid Newsgroup Selected"
+    },
+    {
+      "from": "Valid Newsgroup Selected",
+      "event": "GROUP group",
+      "action": "211 response (reselect same group)",
+      "to": "Valid Newsgroup Selected"
+    },
+    {
+      "from": "Valid Newsgroup Selected",
+      "event": "GROUP different_group",
+      "action": "211 response (select new group)",
+      "to": "Valid Newsgroup Selected"
+    },
+    {
+      "from": "Valid Newsgroup Selected",
+      "event": "GROUP invalid_group",
+      "action": "411 response",
+      "to": "Valid Newsgroup Selected"
+    },
+    {
+      "from": "Invalid Newsgroup Selected",
+      "event": "LISTGROUP [group [range]]",
+      "action": "211 response (group selected)",
+      "to": "Valid Newsgroup Selected"
+    },
+    {
+      "from": "Invalid Newsgroup Selected",
+      "event": "LISTGROUP invalid_group",
+      "action": "411 response",
+      "to": "Invalid Newsgroup Selected"
+    },
+    {
+      "from": "Valid Newsgroup Selected",
+      "event": "LISTGROUP [group [range]]",
+      "action": "211 response (reselect same group)",
+      "to": "Valid Newsgroup Selected"
+    },
+    {
+      "from": "Valid Newsgroup Selected",
+      "event": "LISTGROUP different_group",
+      "action": "211 response (select new group)",
+      "to": "Valid Newsgroup Selected"
+    },
+    {
+      "from": "Valid Newsgroup Selected",
+      "event": "LISTGROUP invalid_group",
+      "action": "411 response",
+      "to": "Valid Newsgroup Selected"
+    },
+    {
+      "from": "Invalid Newsgroup Selected",
+      "event": "LAST",
+      "action": "412 response",
+      "to": "Invalid Newsgroup Selected"
+    },
+    {
+      "from": "Valid Newsgroup Selected",
+      "event": "LAST",
+      "action": "223 response (previous article) or 420/422",
+      "to": "Valid Newsgroup Selected"
+    },
+    {
+      "from": "Invalid Newsgroup Selected",
+      "event": "NEXT",
+      "action": "412 response",
+      "to": "Invalid Newsgroup Selected"
+    },
+    {
+      "from": "Valid Newsgroup Selected",
+      "event": "NEXT",
+      "action": "223 response (next article) or 420/421",
+      "to": "Valid Newsgroup Selected"
+    }
+  ]
+}

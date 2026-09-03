@@ -1,0 +1,27 @@
+{
+  "states": [
+    "Client connects to publish token",
+    "Reconnect with client authentication",
+    "Connected"
+  ],
+  "transitions": [
+    {
+      "from": "Client connects to publish token",
+      "event": "publish token to 'authz-info' topic",
+      "action": "disconnects and expects to reconnect with client authentication",
+      "to": "Reconnect with client authentication"
+    },
+    {
+      "from": "Connected",
+      "event": "CONNACK",
+      "action": "Send CONNACK with reason code 0x87 or other applicable reason code",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "CONNACK",
+      "action": "Send CONNACK with reason code 0x00 (Success), set Session Present accordingly",
+      "to": "Connected"
+    }
+  ]
+}

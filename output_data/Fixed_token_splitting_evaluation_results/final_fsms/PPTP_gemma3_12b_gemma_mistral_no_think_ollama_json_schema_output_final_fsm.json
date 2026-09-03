@@ -1,0 +1,171 @@
+{
+  "states": [
+    "PAC",
+    "PNS",
+    "Control Connection",
+    "Tunnel",
+    "Session",
+    "PAC-PNS control connection",
+    "Stop-Control-Connection-Request",
+    "Stop-Control-Connection-Reply",
+    "Echo-Request",
+    "Echo-Reply",
+    "Outgoing-Call-Request",
+    "Outgoing-Call-Reply",
+    "Incoming-Call-Request",
+    "Incoming-Call-Reply",
+    "idle",
+    "wait_ctl_reply",
+    "established",
+    "wait_stop_reply",
+    "wait_reply",
+    "wait_connect",
+    "wait_disconnect"
+  ],
+  "transitions": [
+    {
+      "from": "PAC",
+      "event": "",
+      "action": "responsible for functions 1, 2, and possibly 3",
+      "to": "PNS"
+    },
+    {
+      "from": "PNS",
+      "event": "",
+      "action": "responsible for function 3 and is responsible for functions 4, 5, and 6",
+      "to": "PAC"
+    },
+    {
+      "from": "Control Connection",
+      "event": "Start-Control-Connection-Request",
+      "action": "establish the control connection",
+      "to": "Control Connection"
+    },
+    {
+      "from": "Control Connection",
+      "event": "Start-Control-Connection-Reply",
+      "action": "exchange information about basic operating capabilities",
+      "to": "Control Connection"
+    },
+    {
+      "from": "Tunnel",
+      "event": "PPP packets",
+      "action": "carry user session PPP packets",
+      "to": "Tunnel"
+    },
+    {
+      "from": "Session",
+      "event": "PPP connection",
+      "action": "maintain state for each user",
+      "to": "Session"
+    },
+    {
+      "from": "idle",
+      "event": "TCP Open Indication",
+      "action": "Send Start Control Connection Request",
+      "to": "wait_ctl_reply"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Receive Start Ctl Connection Reply",
+      "action": "Version OK",
+      "to": "established"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Receive Start Ctl Connection Reply",
+      "action": "Version Not OK",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "established",
+      "event": "",
+      "action": "Local Terminate /Send Stop Control Request",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "established",
+      "event": "Receive Stop Control Connection Request",
+      "action": "Send Stop Control Reply",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "wait_stop_reply",
+      "event": "Receive Stop Control Connection Reply",
+      "action": "Close TCP",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Start-Control-Connection-Request",
+      "action": "send Start-Control-Connection-Reply",
+      "to": "established"
+    },
+    {
+      "from": "idle",
+      "event": "Start-Control-Connection-Request",
+      "action": "send Start-Connection-Reply, close TCP connection, remain in idle state",
+      "to": "idle"
+    },
+    {
+      "from": "established",
+      "event": "Stop-Control-Connection-Request",
+      "action": "send Stop-Control-Connection-Request, enter wait_stop_reply state",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "wait_stop_reply",
+      "event": "Stop-Control-Connection-Reply",
+      "action": "close TCP connection, control connection becomes idle",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Incoming-Call-Request",
+      "action": "send Incoming-Call-Request, move to wait_reply state",
+      "to": "wait_reply"
+    },
+    {
+      "from": "wait_reply",
+      "event": "Incoming-Call-Reply",
+      "action": "send Incoming-Call-Connected message, enter established state",
+      "to": "established"
+    },
+    {
+      "from": "wait_reply",
+      "event": "Incoming-Call-Reply",
+      "action": "move back into the idle state",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Outgoing-Call-Request",
+      "action": "send Outgoing-Call-Reply with Error",
+      "to": "idle"
+    },
+    {
+      "from": "wait_connect",
+      "event": "Incoming Call Connect",
+      "action": "move into established state",
+      "to": "established"
+    },
+    {
+      "from": "established",
+      "event": "Call-Disconnect-Notify",
+      "action": "send Call-Disconnect-Notify",
+      "to": "idle"
+    },
+    {
+      "from": "established",
+      "event": "Call-Clear-Request",
+      "action": "send Call-Clear-Request, enter wait_disconnect state",
+      "to": "wait_disconnect"
+    },
+    {
+      "from": "wait_disconnect",
+      "event": "Call-Disconnect-Notify",
+      "action": "move back to the idle state",
+      "to": "idle"
+    }
+  ]
+}

@@ -1,0 +1,331 @@
+{
+  "states": [
+    "Connection",
+    "Session",
+    "Initial greeting",
+    "Client/server interactions",
+    "Not Authenticated State",
+    "Authenticated State",
+    "Selected State",
+    "Logout State",
+    "authenticated state",
+    "selected state",
+    "IDLE",
+    "Active",
+    "TLS Negotiation",
+    "Selected Mailbox",
+    "Logged Out",
+    "TLS 1.2",
+    "TLS 1.3",
+    "STARTTLS Command",
+    "TLS negotiation on Implicit TLS port",
+    "TLS negotiation using STARTTLS command on a cleartext port",
+    "IMAP on a cleartext port",
+    "TLS negotiated",
+    "SASL security layer with confidentiality protection negotiated",
+    "Unauthenticated",
+    "Authenticated"
+  ],
+  "transitions": [
+    {
+      "from": "Initial greeting",
+      "event": "",
+      "action": "Client/server interactions begin",
+      "to": "Client/server interactions"
+    },
+    {
+      "from": "Client/server interactions",
+      "event": "Client command",
+      "action": "Server data and server completion result response",
+      "to": "Client/server interactions"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "connection without pre-authentication (OK greeting)",
+      "action": "",
+      "to": "Not Authenticated State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "pre-authenticated connection (PREAUTH greeting)",
+      "action": "",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "rejected connection (BYE greeting)",
+      "action": "",
+      "to": "Logout State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "successful LOGIN or AUTHENTICATE command",
+      "action": "",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "successful SELECT or EXAMINE command",
+      "action": "",
+      "to": "Selected State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "CLOSE or UNSELECT command, unsolicited CLOSED response code, or failed SELECT or EXAMINE command",
+      "action": "",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Selected State",
+      "event": "CLOSE or UNSELECT command, unsolicited CLOSED response code, or failed SELECT or EXAMINE command",
+      "action": "",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "",
+      "to": "Logout State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "",
+      "to": "Logout State"
+    },
+    {
+      "from": "Selected State",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "",
+      "to": "Logout State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "AUTHENTICATE",
+      "action": "authenticate completed",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "LOGIN",
+      "action": "login completed",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "STARTTLS",
+      "action": "starttls completed",
+      "to": "Not Authenticated State"
+    },
+    {
+      "from": "authenticated state",
+      "event": "ENABLE",
+      "action": "OK -  Relevant capabilities enabled, BAD -  No arguments, or syntax error in an argument",
+      "to": "authenticated state"
+    },
+    {
+      "from": "authenticated state",
+      "event": "SELECT",
+      "action": "FLAGS, EXISTS, LIST, PERMANENTFLAGS, UIDNEXT, UIDVALIDITY",
+      "to": "selected state"
+    },
+    {
+      "from": "authenticated state",
+      "event": "SELECT",
+      "action": "NO -  select failure",
+      "to": "authenticated state"
+    },
+    {
+      "from": "selected state",
+      "event": "SELECT",
+      "action": "OK [CLOSED]",
+      "to": "authenticated state"
+    },
+    {
+      "from": "authenticated state",
+      "event": "EXAMINE",
+      "action": "FLAGS, EXISTS, LIST, PERMANENTFLAGS, UIDNEXT, UIDVALIDITY, [READ-ONLY]",
+      "to": "selected state"
+    },
+    {
+      "from": "authenticated state",
+      "event": "EXAMINE",
+      "action": "",
+      "to": "authenticated state"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "APPEND",
+      "action": "append completed",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "APPEND",
+      "action": "append error: can't append to that mailbox, error in flags or date/time or message text",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "APPEND",
+      "action": "command unknown or arguments invalid",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Active",
+      "event": "IDLE",
+      "action": "continuation data will be requested",
+      "to": "IDLE"
+    },
+    {
+      "from": "IDLE",
+      "event": "DONE",
+      "action": "OK -  IDLE completed after client sent \"DONE\"",
+      "to": "Active"
+    },
+    {
+      "from": "IDLE",
+      "event": "",
+      "action": "NO -  failure: the server will not allow the IDLE command at this time",
+      "to": "Active"
+    },
+    {
+      "from": "IDLE",
+      "event": "",
+      "action": "BAD -  command unknown or arguments invalid",
+      "to": "Active"
+    },
+    {
+      "from": "selected state",
+      "event": "CLOSE",
+      "action": "close completed, now in authenticated state",
+      "to": "authenticated state"
+    },
+    {
+      "from": "selected state",
+      "event": "UNSELECT",
+      "action": "unselect completed",
+      "to": "authenticated state"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "PREAUTH",
+      "action": "connection authenticated",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "BYE",
+      "action": "connection closed",
+      "to": "Unauthenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "BYE",
+      "action": "connection closed",
+      "to": "Unauthenticated"
+    },
+    {
+      "from": "TLS Negotiation",
+      "event": "AUTHENTICATE SCRAM-SHA-256",
+      "action": "SCRAM-SHA-256 authentication successful",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "select inbox",
+      "action": "SELECT completed",
+      "to": "Selected Mailbox"
+    },
+    {
+      "from": "Selected Mailbox",
+      "event": "logout",
+      "action": "LOGOUT completed",
+      "to": "Logged Out"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "login",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "authenticate",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "STARTTLS",
+      "action": "",
+      "to": "Not Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "select",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "examine",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "CLOSE",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "UNSELECT",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "STARTTLS Command",
+      "event": "STARTTLS",
+      "action": "TLS negotiation",
+      "to": "TLS Negotiation"
+    },
+    {
+      "from": "TLS Negotiation",
+      "event": "TLS 1.2 negotiation",
+      "action": "TLS 1.2 established",
+      "to": "TLS 1.2"
+    },
+    {
+      "from": "TLS Negotiation",
+      "event": "TLS 1.3 negotiation",
+      "action": "TLS 1.3 established",
+      "to": "TLS 1.3"
+    },
+    {
+      "from": "authenticated",
+      "event": "",
+      "action": "ignore responses other than CAPABILITY and server status responses, as well as any response codes other than CAPABILITY",
+      "to": "authenticated"
+    },
+    {
+      "from": "selected",
+      "event": "",
+      "action": "ignore responses / response codes related to message and mailbox status such as FLAGS, EXIST, EXPUNGE, and FETCH",
+      "to": "selected"
+    },
+    {
+      "from": "TLS negotiated",
+      "event": "",
+      "action": "process ALERT response code",
+      "to": "TLS negotiated"
+    },
+    {
+      "from": "SASL security layer with confidentiality protection negotiated",
+      "event": "",
+      "action": "process ALERT response code",
+      "to": "SASL security layer with confidentiality protection negotiated"
+    }
+  ]
+}

@@ -1,0 +1,450 @@
+{
+  "states": [
+    "Idle",
+    "Connect",
+    "Active",
+    "OpenSent",
+    "OpenConfirm",
+    "Established"
+  ],
+  "transitions": [
+    {
+      "from": "Idle",
+      "event": "ManualStart",
+      "action": "initializes all BGP resources for the peer connection, sets ConnectRetryCounter to zero, starts the ConnectRetryTimer with the initial value, initiates a TCP connection to the other BGP peer, listens for a connection that may be initiated by the remote BGP peer, changes its state to Connect",
+      "to": "Connect"
+    },
+    {
+      "from": "Idle",
+      "event": "AutomaticStart",
+      "action": "initializes all BGP resources for the peer connection, sets ConnectRetryCounter to zero, starts the ConnectRetryTimer with the initial value, initiates a TCP connection to the other BGP peer, listens for a connection that may be initiated by the remote BGP peer, changes its state to Connect",
+      "to": "Connect"
+    },
+    {
+      "from": "Idle",
+      "event": "ManualStart_with_PassiveTcpEstablishment",
+      "action": "initializes all BGP resources, sets the ConnectRetryCounter to zero, starts the ConnectRetryTimer with the initial value, listens for a connection that may be initiated by the remote peer, changes its state to Active",
+      "to": "Active"
+    },
+    {
+      "from": "Idle",
+      "event": "AutomaticStart_with_PassiveTcpEstablishment",
+      "action": "initializes all BGP resources, sets the ConnectRetryCounter to zero, starts the ConnectRetryTimer with the initial value, listens for a connection that may be initiated by the remote peer, changes its state to Active",
+      "to": "Active"
+    },
+    {
+      "from": "Idle",
+      "event": "AutomaticStart_with_DampPeerOscillations",
+      "action": "prevents peer oscillations",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "AutomaticStart_with_DampPeerOscillations_and_PassiveTcpEstablishment",
+      "action": "prevents peer oscillations",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "IdleHoldTimer_Expires",
+      "action": "prevents peer oscillations",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "ManualStop",
+      "action": "drops the TCP connection, releases all BGP resources, sets ConnectRetryCounter to zero, stops the ConnectRetryTimer and sets ConnectRetryTimer to zero, changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "ConnectRetryTimer_Expires",
+      "action": "drops the TCP connection, restarts the ConnectRetryTimer, stops the DelayOpenTimer and resets the timer to zero, initiates a TCP connection to the other BGP peer, continues to listen for a connection that may be initiated by the remote BGP peer, stays in the Connect state",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "DelayOpenTimer_Expires",
+      "action": "sends an OPEN message to its peer, sets the HoldTimer to a large value, changes its state to OpenSent",
+      "to": "OpenSent"
+    },
+    {
+      "from": "Connect",
+      "event": "TcpConnection_Valid",
+      "action": "TCP connection is processed",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "Tcp_CR_Invalid",
+      "action": "rejects the TCP connection",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "TCP connection succeeds",
+      "action": "stops the ConnectRetryTimer (if running) and sets the ConnectRetryTimer to zero, sets the DelayOpenTimer to the initial value, stays in the Connect state",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "TCP connection succeeds",
+      "action": "stops the ConnectRetryTimer (if running) and sets the ConnectRetryTimer to zero, completes BGP initialization, sends an OPEN message to its peer, sets the HoldTimer to a large value, changes its state to OpenSent",
+      "to": "OpenSent"
+    },
+    {
+      "from": "Connect",
+      "event": "TCP connection fails",
+      "action": "restarts the ConnectRetryTimer with the initial value, stops the DelayOpenTimer and resets its value to zero, continues to listen for a connection that may be initiated by the remote BGP peer, changes its state to Active",
+      "to": "Active"
+    },
+    {
+      "from": "Connect",
+      "event": "TCP connection fails",
+      "action": "stops the ConnectRetryTimer to zero, drops the TCP connection, releases all BGP resources, changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "OPEN message received while DelayOpenTimer is running",
+      "action": "stops the ConnectRetryTimer (if running) and sets the ConnectRetryTimer to zero, completes the BGP initialization, stops and clears the DelayOpenTimer (sets the value to zero), sends an OPEN message, sends a KEEPALIVE message, if the HoldTimer initial value is non-zero starts the KeepaliveTimer with the initial value and resets the HoldTimer to the negotiated value else resets the KeepaliveTimer and resets the HoldTimer value to zero, changes its state to OpenConfirm",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "Connect",
+      "event": "BGP message header checking detects an error",
+      "action": "(optionally) If the SendNOTIFICATIONwithoutOPEN attribute is set to TRUE then sends a NOTIFICATION message with the appropriate error code, stops the ConnectRetryTimer (if running) and sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "OPEN message checking detects an error",
+      "action": "(optionally) If the SendNOTIFICATIONwithoutOPEN attribute is set to TRUE then sends a NOTIFICATION message with the appropriate error code, stops the ConnectRetryTimer (if running) and sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "NOTIFICATION message received with a version error",
+      "action": "stops the ConnectRetryTimer (if running) and sets the ConnectRetryTimer to zero, stops and resets the DelayOpenTimer (sets to zero), releases all BGP resources, drops the TCP connection, changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "NOTIFICATION message received with a version error",
+      "action": "stops the ConnectRetryTimer and sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, performs peer oscillation damping if the DampPeerOscillations attribute is set to True, changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "any other event",
+      "action": "if the ConnectRetryTimer is running stops and resets the ConnectRetryTimer (sets to zero), if the DelayOpenTimer is running stops and resets the DelayOpenTimer (sets to zero), releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, performs peer oscillation damping if the DampPeerOscillations attribute is set to True, changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "ManualStop",
+      "action": "If the DelayOpenTimer is running and the SendNOTIFICATIONwithoutOPEN session attribute is set sends a NOTIFICATION with a Cease, releases all BGP resources including stopping the DelayOpenTimer, drops the TCP connection, sets ConnectRetryCounter to zero, stops the ConnectRetryTimer and sets the ConnectRetryTimer to zero, changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "ConnectRetryTimer_Expires",
+      "action": "restarts the ConnectRetryTimer (with initial value), initiates a TCP connection to the other BGP peer, continues to listen for a TCP connection that may be initiated by a remote BGP peer, changes its state to Connect",
+      "to": "Connect"
+    },
+    {
+      "from": "Active",
+      "event": "DelayOpenTimer_Expires",
+      "action": "sets the ConnectRetryTimer to zero, stops and clears the DelayOpenTimer (set to zero), completes the BGP initialization, sends the OPEN message to its remote peer, sets its hold timer to a large value, changes its state to OpenSent",
+      "to": "OpenSent"
+    },
+    {
+      "from": "Active",
+      "event": "TcpConnection_Valid",
+      "action": "processes the TCP connection flags and stays in the Active state",
+      "to": "Active"
+    },
+    {
+      "from": "Active",
+      "event": "Tcp_CR_Invalid",
+      "action": "rejects the TCP connection and stays in the Active State",
+      "to": "Active"
+    },
+    {
+      "from": "Active",
+      "event": "TCP connection succeeds",
+      "action": "stops the ConnectRetryTimer and sets the ConnectRetryTimer to zero, sets the DelayOpenTimer to the initial value (DelayOpenTime), stays in the Active state",
+      "to": "Active"
+    },
+    {
+      "from": "Active",
+      "event": "TCP connection succeeds",
+      "action": "sets the ConnectRetryTimer to zero, completes the BGP initialization, sends the OPEN message to its peer, sets its HoldTimer to a large value, changes its state to OpenSent",
+      "to": "OpenSent"
+    },
+    {
+      "from": "Active",
+      "event": "TcpConnectionFails",
+      "action": "restarts the ConnectRetryTimer (with the initial value), stops and clears the DelayOpenTimer (sets the value to zero), releases all BGP resource, increments the ConnectRetryCounter by 1, optionally performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "OPEN message received and DelayOpenTimer is running",
+      "action": "stops the ConnectRetryTimer (if running) and sets the ConnectRetryTimer to zero, stops and clears the DelayOpenTimer (sets to zero), completes the BGP initialization, sends an OPEN message, sends a KEEPALIVE message, if the HoldTimer value is non-zero starts the KeepaliveTimer to initial value and resets the HoldTimer to the negotiated value else resets the KeepaliveTimer (set to zero) and resets the HoldTimer to zero, changes its state to OpenConfirm",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "Active",
+      "event": "BGP message header checking detects an error",
+      "action": "(optionally) sends a NOTIFICATION message with the appropriate error code if the SendNOTIFICATIONwithoutOPEN attribute is set to TRUE, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "OPEN message checking detects an error",
+      "action": "(optionally) sends a NOTIFICATION message with the appropriate error code if the SendNOTIFICATIONwithoutOPEN attribute is set to TRUE, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "NOTIFICATION message received with a version error",
+      "action": "stops the ConnectRetryTimer (if running) and sets the ConnectRetryTimer to zero, stops and resets the DelayOpenTimer (sets to zero), releases all BGP resources, drops the TCP connection, changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "NOTIFICATION message received with a version error",
+      "action": "sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "any other event",
+      "action": "sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by one, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "ManualStop",
+      "action": "sends the NOTIFICATION with a Cease, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, sets the ConnectRetryCounter to zero, changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "AutomaticStop",
+      "action": "sends the NOTIFICATION with a Cease, sets the ConnectRetryTimer to zero",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "",
+      "action": "sends a NOTIFICATION message with a Cease, releases all BGP resources, drops the TCP connection, sets the ConnectRetryCounter to zero, sets the ConnectRetryTimer to zero, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "",
+      "action": "sends a NOTIFICATION message with a Cease, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "",
+      "action": "sends a NOTIFICATION message with the Error Code Hold Timer Expired, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "",
+      "action": "sends a NOTIFICATION message with the appropriate error code, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "",
+      "action": "sends a NOTIFICATION with a Cease, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "",
+      "action": "sends a NOTIFICATION message with the appropriate error code, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "",
+      "action": "sends a NOTIFICATION with a Cease, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "",
+      "action": "sends a NOTIFICATION message with a code of Finite State Machine Error, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "",
+      "action": "sends a NOTIFICATION message with the appropriate error code, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "",
+      "action": "sends a NOTIFICATION with a Cease, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "",
+      "action": "sends a NOTIFICATION message with the appropriate error code, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "",
+      "action": "sends a NOTIFICATION with a Cease, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "",
+      "action": "sends a NOTIFICATION message with a code of Finite State Machine Error, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "",
+      "action": "sends a NOTIFICATION with a Cease, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "",
+      "action": "sends a NOTIFICATION with a Cease, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "",
+      "action": "sends a NOTIFICATION with a Cease, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "",
+      "action": "sends a NOTIFICATION with a Cease, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection (send TCP FIN), increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "",
+      "action": "sends a NOTIFICATION message with the appropriate error code, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "",
+      "action": "sends a NOTIFICATION with a Cease, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "",
+      "action": "sends a NOTIFICATION with a Cease, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection (send TCP FIN), increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "",
+      "action": "sends a NOTIFICATION message with a code of Finite State Machine Error, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "",
+      "action": "sends a NOTIFICATION message with a Cease, releases all BGP resources, drops the TCP connection, sets the ConnectRetryCounter to zero, sets the ConnectRetryTimer to zero, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "",
+      "action": "sends a NOTIFICATION message with a Cease, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "",
+      "action": "sends a NOTIFICATION message with the Error Code Hold Timer Expired, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "",
+      "action": "sends a NOTIFICATION message with the appropriate error code, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "",
+      "action": "sends a NOTIFICATION with a Cease, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection (send TCP FIN), increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "",
+      "action": "sends a NOTIFICATION message with the appropriate error code, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "",
+      "action": "sends a NOTIFICATION with a Cease, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "",
+      "action": "sends a NOTIFICATION message with a code of Finite State Machine Error, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "",
+      "action": "restarts the HoldTimer and changes its state to Established",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "",
+      "action": "sends a NOTIFICATION message with a Cease, sets the ConnectRetryTimer to zero, deletes all routes associated with this connection, releases BGP resources, drops the TCP connection, sets the ConnectRetryCounter to zero, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "",
+      "action": "sends a NOTIFICATION with a Cease, sets the ConnectRetryTimer to zero, deletes all routes associated with this connection, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "",
+      "action": "sends a NOTIFICATION message with the Error Code Hold Timer Expired, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "",
+      "action": "sends a NOTIFICATION message with an Update error, sets the ConnectRetryTimer to zero, deletes all routes associated with this connection, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "",
+      "action": "sends a NOTIFICATION message with the Error Code Finite State Machine Error, deletes all routes associated with this connection, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1, (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and changes its state to Idle",
+      "to": "Idle"
+    }
+  ]
+}

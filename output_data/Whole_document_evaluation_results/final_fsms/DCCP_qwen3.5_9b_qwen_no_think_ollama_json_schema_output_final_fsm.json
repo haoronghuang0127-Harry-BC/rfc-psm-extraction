@@ -1,0 +1,99 @@
+{
+  "states": [
+    "CLOSED",
+    "LISTEN",
+    "REQUEST",
+    "RESPOND",
+    "PARTOPEN",
+    "OPEN",
+    "CLOSEREQ",
+    "CLOSING",
+    "TIMEWAIT"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "snd Request",
+      "action": "",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "rcv Response",
+      "action": "",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "snd Response",
+      "action": "",
+      "to": "RESPOND"
+    },
+    {
+      "from": "RESPOND",
+      "event": "rcv Request",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "snd Ack, DataAck",
+      "action": "",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "rcv packet",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "snd Data, Ack, DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "rcv CloseReq",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "snd CloseReq",
+      "action": "",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "rcv Close",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "snd Close",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "rcv Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "2MSL timer expires",
+      "action": "",
+      "to": "CLOSED"
+    }
+  ]
+}

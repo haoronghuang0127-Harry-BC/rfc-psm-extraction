@@ -1,0 +1,252 @@
+{
+  "states": [
+    "active",
+    "passive",
+    "Control connection opened",
+    "User identified",
+    "Account information required",
+    "File transfer in progress",
+    "Logged Out",
+    "User Name Received",
+    "Password Required",
+    "Account Required",
+    "Logged In",
+    "File Action Pending",
+    "Data Connection Open",
+    "B",
+    "W",
+    "S",
+    "F",
+    "E"
+  ],
+  "transitions": [
+    {
+      "from": "Control connection opened",
+      "event": "USER",
+      "action": "flush any user, password, and account information already supplied; begin login sequence again",
+      "to": "User identified"
+    },
+    {
+      "from": "User identified",
+      "event": "PASS",
+      "action": "complete user identification for access control",
+      "to": "Account information required"
+    },
+    {
+      "from": "User identified",
+      "event": "PASS",
+      "action": "return reply code 230 if account not required for login",
+      "to": "Control connection opened"
+    },
+    {
+      "from": "Account information required",
+      "event": "ACCT",
+      "action": "provide account information",
+      "to": "Control connection opened"
+    },
+    {
+      "from": "Control connection opened",
+      "event": "REIN",
+      "action": "terminate USER, flush all I/O and account information, reset parameters to default settings, leave control connection open",
+      "to": "Control connection opened"
+    },
+    {
+      "from": "Control connection opened",
+      "event": "QUIT",
+      "action": "terminate USER and close control connection if file transfer not in progress",
+      "to": "Control connection opened"
+    },
+    {
+      "from": "File transfer in progress",
+      "event": "QUIT",
+      "action": "keep connection open for result response then close it",
+      "to": "Control connection opened"
+    },
+    {
+      "from": "File transfer in progress",
+      "event": "ABOR",
+      "action": "abort FTP service command and associated data transfer, close data connection, return 426 reply then 226 reply",
+      "to": "Control connection opened"
+    },
+    {
+      "from": "File transfer in progress",
+      "event": "unexpected close on control connection",
+      "action": "take effective action of ABOR and QUIT",
+      "to": "Control connection opened"
+    },
+    {
+      "from": "Logged Out",
+      "event": "USER",
+      "action": "331 User name okay, need password",
+      "to": "User Name Received"
+    },
+    {
+      "from": "User Name Received",
+      "event": "PASS",
+      "action": "230 User logged in, proceed",
+      "to": "Logged In"
+    },
+    {
+      "from": "User Name Received",
+      "event": "PASS",
+      "action": "332 Need account for login",
+      "to": "Account Required"
+    },
+    {
+      "from": "Account Required",
+      "event": "ACCT",
+      "action": "230 User logged in, proceed",
+      "to": "Logged In"
+    },
+    {
+      "from": "Logged In",
+      "event": "RETR or STOR",
+      "action": "150 File status okay; about to open data connection",
+      "to": "Data Connection Open"
+    },
+    {
+      "from": "Logged In",
+      "event": "RNFR",
+      "action": "350 Requested file action pending further information",
+      "to": "File Action Pending"
+    },
+    {
+      "from": "File Action Pending",
+      "event": "RNTO",
+      "action": "250 Requested file action okay, completed",
+      "to": "Logged In"
+    },
+    {
+      "from": "Data Connection Open",
+      "event": "Transfer Complete",
+      "action": "226 Closing data connection",
+      "to": "Logged In"
+    },
+    {
+      "from": "B",
+      "event": "cmd",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "2",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "4,5",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "W",
+      "event": "1,3",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "W",
+      "event": "1",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "B",
+      "event": "RNFR",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "1,2",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "W",
+      "event": "3",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "B",
+      "event": "RNTO",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "1,3",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "B",
+      "event": "REST",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "1,2",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "W",
+      "event": "3",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "B",
+      "event": "cmd",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "1,3",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "B",
+      "event": "USER",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "1",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "W",
+      "event": "2",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "B",
+      "event": "PASS",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "1,3",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "B",
+      "event": "ACCT",
+      "action": "",
+      "to": "W"
+    }
+  ]
+}

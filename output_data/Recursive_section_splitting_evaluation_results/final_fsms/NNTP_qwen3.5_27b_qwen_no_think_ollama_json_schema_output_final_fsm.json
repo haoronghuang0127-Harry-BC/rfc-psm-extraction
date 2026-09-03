@@ -1,0 +1,395 @@
+{
+  "states": [
+    "Connection Established",
+    "Waiting for Command",
+    "Waiting for Multi-line Data",
+    "Connection Closed",
+    "State where capability is available",
+    "State where capability is not available",
+    "Transit mode",
+    "Reading mode",
+    "Initial Connection",
+    "Transit Mode",
+    "Reader Mode",
+    "invalid",
+    "valid",
+    "No newsgroup selected",
+    "Newsgroup selected",
+    "Idle",
+    "Waiting for Article Data"
+  ],
+  "transitions": [
+    {
+      "from": "Connection Established",
+      "event": "",
+      "action": "Server sends greeting",
+      "to": "Waiting for Command"
+    },
+    {
+      "from": "Waiting for Command",
+      "event": "Command received",
+      "action": "Reset autologout timer; Send response",
+      "to": "Waiting for Command"
+    },
+    {
+      "from": "Waiting for Command",
+      "event": "3xx response sent",
+      "action": "",
+      "to": "Waiting for Multi-line Data"
+    },
+    {
+      "from": "Waiting for Multi-line Data",
+      "event": "Significant data received",
+      "action": "Reset autologout timer",
+      "to": "Waiting for Multi-line Data"
+    },
+    {
+      "from": "Waiting for Command",
+      "event": "Autologout timer expires",
+      "action": "Close connection without response",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "Transit mode",
+      "event": "MODE READER",
+      "action": "MUST NOT advertise the MODE-READER capability; MUST advertise the READER capability; MAY NOT advertise the IHAVE capability",
+      "to": "Reading mode"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "200 Service available, posting allowed",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "201 Service available, posting prohibited",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "400 Service temporarily unavailable; close connection",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "502 Service permanently unavailable; close connection",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Transit Mode",
+      "event": "MODE READER",
+      "action": "200 Posting allowed; switch to Reader Mode",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Transit Mode",
+      "event": "MODE READER",
+      "action": "201 Posting prohibited; switch to Reader Mode",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Transit Mode",
+      "event": "MODE READER",
+      "action": "502 Reading service permanently unavailable; close connection",
+      "to": "Transit Mode"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "QUIT",
+      "action": "205 Connection closing; close connection",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "invalid",
+      "event": "GROUP group (group exists)",
+      "action": "211 number low high group; set currently selected newsgroup to group; set current article number to first article in group",
+      "to": "valid"
+    },
+    {
+      "from": "invalid",
+      "event": "GROUP group (group does not exist)",
+      "action": "411 No such newsgroup",
+      "to": "invalid"
+    },
+    {
+      "from": "invalid",
+      "event": "LISTGROUP [group] (group exists)",
+      "action": "211 number low high group; set currently selected newsgroup to group; set current article number to first article in group",
+      "to": "valid"
+    },
+    {
+      "from": "invalid",
+      "event": "LISTGROUP [group] (group does not exist)",
+      "action": "411 No such newsgroup",
+      "to": "invalid"
+    },
+    {
+      "from": "invalid",
+      "event": "LAST",
+      "action": "412 No newsgroup selected",
+      "to": "invalid"
+    },
+    {
+      "from": "invalid",
+      "event": "NEXT",
+      "action": "412 No newsgroup selected",
+      "to": "invalid"
+    },
+    {
+      "from": "valid",
+      "event": "GROUP group (group exists)",
+      "action": "211 number low high group; set currently selected newsgroup to group; set current article number to first article in group",
+      "to": "valid"
+    },
+    {
+      "from": "valid",
+      "event": "GROUP group (group does not exist)",
+      "action": "411 No such newsgroup",
+      "to": "valid"
+    },
+    {
+      "from": "valid",
+      "event": "LISTGROUP [group] (group exists)",
+      "action": "211 number low high group; set currently selected newsgroup to group; set current article number to first article in group",
+      "to": "valid"
+    },
+    {
+      "from": "valid",
+      "event": "LISTGROUP [group] (group does not exist)",
+      "action": "411 No such newsgroup",
+      "to": "valid"
+    },
+    {
+      "from": "valid",
+      "event": "LAST (previous article exists)",
+      "action": "223 n message-id; set current article number to previous article",
+      "to": "valid"
+    },
+    {
+      "from": "valid",
+      "event": "LAST (no previous article)",
+      "action": "422 No previous article in this group",
+      "to": "valid"
+    },
+    {
+      "from": "valid",
+      "event": "NEXT (next article exists)",
+      "action": "223 n message-id; set current article number to next article",
+      "to": "valid"
+    },
+    {
+      "from": "valid",
+      "event": "NEXT (no next article)",
+      "action": "421 No next article in this group",
+      "to": "valid"
+    },
+    {
+      "from": "No newsgroup selected",
+      "event": "ARTICLE number",
+      "action": "412 No newsgroup selected",
+      "to": "No newsgroup selected"
+    },
+    {
+      "from": "No newsgroup selected",
+      "event": "ARTICLE",
+      "action": "412 No newsgroup selected",
+      "to": "No newsgroup selected"
+    },
+    {
+      "from": "No newsgroup selected",
+      "event": "HEAD number",
+      "action": "412 No newsgroup selected",
+      "to": "No newsgroup selected"
+    },
+    {
+      "from": "No newsgroup selected",
+      "event": "HEAD",
+      "action": "412 No newsgroup selected",
+      "to": "No newsgroup selected"
+    },
+    {
+      "from": "No newsgroup selected",
+      "event": "BODY number",
+      "action": "412 No newsgroup selected",
+      "to": "No newsgroup selected"
+    },
+    {
+      "from": "No newsgroup selected",
+      "event": "BODY",
+      "action": "412 No newsgroup selected",
+      "to": "No newsgroup selected"
+    },
+    {
+      "from": "No newsgroup selected",
+      "event": "STAT number",
+      "action": "412 No newsgroup selected",
+      "to": "No newsgroup selected"
+    },
+    {
+      "from": "No newsgroup selected",
+      "event": "STAT",
+      "action": "412 No newsgroup selected",
+      "to": "No newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected",
+      "event": "ARTICLE number",
+      "action": "220 n message-id Article follows (multi-line)",
+      "to": "Newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected",
+      "event": "ARTICLE number",
+      "action": "423 No article with that number",
+      "to": "Newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected",
+      "event": "ARTICLE",
+      "action": "220 n message-id Article follows (multi-line)",
+      "to": "Newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected",
+      "event": "ARTICLE",
+      "action": "420 Current article number is invalid",
+      "to": "Newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected",
+      "event": "HEAD number",
+      "action": "221 n message-id Headers follow (multi-line)",
+      "to": "Newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected",
+      "event": "HEAD number",
+      "action": "423 No article with that number",
+      "to": "Newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected",
+      "event": "HEAD",
+      "action": "221 n message-id Headers follow (multi-line)",
+      "to": "Newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected",
+      "event": "HEAD",
+      "action": "420 Current article number is invalid",
+      "to": "Newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected",
+      "event": "BODY number",
+      "action": "222 n message-id Body follows (multi-line)",
+      "to": "Newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected",
+      "event": "BODY number",
+      "action": "423 No article with that number",
+      "to": "Newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected",
+      "event": "BODY",
+      "action": "222 n message-id Body follows (multi-line)",
+      "to": "Newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected",
+      "event": "BODY",
+      "action": "420 Current article number is invalid",
+      "to": "Newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected",
+      "event": "STAT number",
+      "action": "223 n message-id Article exists",
+      "to": "Newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected",
+      "event": "STAT number",
+      "action": "423 No article with that number",
+      "to": "Newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected",
+      "event": "STAT",
+      "action": "223 n message-id Article exists",
+      "to": "Newsgroup selected"
+    },
+    {
+      "from": "Newsgroup selected",
+      "event": "STAT",
+      "action": "420 Current article number is invalid",
+      "to": "Newsgroup selected"
+    },
+    {
+      "from": "Idle",
+      "event": "POST",
+      "action": "340 Send article to be posted",
+      "to": "Waiting for Article Data"
+    },
+    {
+      "from": "Idle",
+      "event": "POST",
+      "action": "440 Posting not permitted",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "IHAVE message-id",
+      "action": "335 Send article to be transferred",
+      "to": "Waiting for Article Data"
+    },
+    {
+      "from": "Idle",
+      "event": "IHAVE message-id",
+      "action": "435 Article not wanted",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "IHAVE message-id",
+      "action": "436 Transfer not possible; try again later",
+      "to": "Idle"
+    },
+    {
+      "from": "Waiting for Article Data",
+      "event": "",
+      "action": "240 Article received OK",
+      "to": "Idle"
+    },
+    {
+      "from": "Waiting for Article Data",
+      "event": "",
+      "action": "441 Posting failed",
+      "to": "Idle"
+    },
+    {
+      "from": "Waiting for Article Data",
+      "event": "",
+      "action": "235 Article transferred OK",
+      "to": "Idle"
+    },
+    {
+      "from": "Waiting for Article Data",
+      "event": "",
+      "action": "436 Transfer failed; try again later",
+      "to": "Idle"
+    },
+    {
+      "from": "Waiting for Article Data",
+      "event": "",
+      "action": "437 Transfer rejected; do not retry",
+      "to": "Idle"
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "states": [
+    "Not Authenticated",
+    "Authenticated",
+    "Selected",
+    "Disconnected",
+    "Connection",
+    "Session"
+  ],
+  "transitions": [
+    {
+      "from": "Not Authenticated",
+      "event": "LOGIN or AUTHENTICATE",
+      "action": "OK Response",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "STARTTLS",
+      "action": "remains in the non-authenticated state",
+      "to": "Not Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "server MUST send an untagged BYE response and a tagged OK response",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "SELECT or EXAMINE",
+      "action": "OK Response",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "server MUST send an untagged BYE response and a tagged OK response",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Selected",
+      "event": "CLOSE or UNSELECT command, unsolicited CLOSED response code, or failed SELECT or EXAMINE command",
+      "action": "CLOSED Response Code or OK Response",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "server MUST send an untagged BYE response and a tagged OK response",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connection",
+      "event": "SELECT or EXAMINE command",
+      "action": "",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "CLOSE command, UNSELECT command",
+      "action": "",
+      "to": "Connection"
+    }
+  ]
+}

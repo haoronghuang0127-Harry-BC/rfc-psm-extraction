@@ -1,0 +1,76 @@
+{
+  "states": [
+    "Calling",
+    "Proceeding",
+    "Completed",
+    "Terminated"
+  ],
+  "transitions": [
+    {
+      "from": "Calling",
+      "event": "INVITE sent",
+      "action": "",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer A fires",
+      "action": "retransmit request, reset timer",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer B fires",
+      "action": "inform TU of timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "1xx response received",
+      "action": "",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Calling",
+      "event": "300-699 response received",
+      "action": "generate ACK, pass response to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer E fires (unreliable)",
+      "action": "retransmit request",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer F fires",
+      "action": "inform TU of timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx response received",
+      "action": "generate ACK, pass response to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699 response received",
+      "action": "generate ACK, pass response to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer D fires (unreliable)",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "2xx response received (retransmission)",
+      "action": "retransmit ACK",
+      "to": "Completed"
+    }
+  ]
+}

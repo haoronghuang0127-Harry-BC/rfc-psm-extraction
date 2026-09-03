@@ -1,0 +1,89 @@
+{
+  "states": [
+    "Connection Establishment",
+    "EHLO/HELO",
+    "MAIL",
+    "RCPT",
+    "DATA",
+    "RSET",
+    "NOOP",
+    "QUIT",
+    "VRFY",
+    "EXPN",
+    "HELP"
+  ],
+  "transitions": [
+    {
+      "from": "Connection Establishment",
+      "event": "",
+      "action": "220 <domain> Service ready",
+      "to": "EHLO/HELO"
+    },
+    {
+      "from": "EHLO/HELO",
+      "event": "EHLO or HELO command",
+      "action": "250 OK or 504/550/502",
+      "to": "MAIL"
+    },
+    {
+      "from": "MAIL",
+      "event": "MAIL command",
+      "action": "250 OK",
+      "to": "RCPT"
+    },
+    {
+      "from": "RCPT",
+      "event": "RCPT command",
+      "action": "250/550/551",
+      "to": "DATA"
+    },
+    {
+      "from": "DATA",
+      "event": "DATA command",
+      "action": "354 Start mail input; end with <CRLF>.<CRLF>",
+      "to": "DATA"
+    },
+    {
+      "from": "DATA",
+      "event": "end of mail data indication",
+      "action": "250 OK",
+      "to": "RSET"
+    },
+    {
+      "from": "RSET",
+      "event": "RSET command",
+      "action": "250",
+      "to": "EHLO/HELO"
+    },
+    {
+      "from": "NOOP",
+      "event": "NOOP command",
+      "action": "250",
+      "to": "NOOP"
+    },
+    {
+      "from": "QUIT",
+      "event": "QUIT command",
+      "action": "221 <domain> Service closing transmission channel",
+      "to": "QUIT"
+    },
+    {
+      "from": "VRFY",
+      "event": "VRFY command",
+      "action": "250/251/252/550/551/553/502/504",
+      "to": "VRFY"
+    },
+    {
+      "from": "EXPN",
+      "event": "EXPN command",
+      "action": "250/252/550/500/502",
+      "to": "EXPN"
+    },
+    {
+      "from": "HELP",
+      "event": "HELP command",
+      "action": "211/214/502/504",
+      "to": "HELP"
+    }
+  ]
+}

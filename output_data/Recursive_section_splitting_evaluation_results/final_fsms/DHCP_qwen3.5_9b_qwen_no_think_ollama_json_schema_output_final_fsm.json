@@ -1,0 +1,97 @@
+{
+  "states": [
+    "INIT",
+    "INIT-REBOOT",
+    "SELECTING",
+    "REQUESTING",
+    "RENEWING",
+    "REBINDING",
+    "BOUND"
+  ],
+  "transitions": [
+    {
+      "from": "INIT",
+      "event": "",
+      "action": "Send DHCPDISCOVER",
+      "to": "SELECTING"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "",
+      "action": "Send DHCPREQUEST",
+      "to": "REQUESTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPOFFER",
+      "action": "Collect replies",
+      "to": "SELECTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPACK (not accept)",
+      "action": "Send DHCPDECLINE",
+      "to": "REQUESTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPOFFER/Collect replies",
+      "action": "Select offer, send DHCPREQUEST",
+      "to": "REQUESTING"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPNAK/Lease expired/Halt network",
+      "action": "",
+      "to": "INIT-REBOOT"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPOFFER/Discard",
+      "action": "",
+      "to": "SELECTING"
+    },
+    {
+      "from": "BOUND",
+      "event": "T1 expires/Send DHCPREQUEST",
+      "action": "",
+      "to": "RENEWING"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEWING",
+      "event": "T2 expires/Broadcast DHCPREQUEST",
+      "action": "",
+      "to": "REBINDING"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPNAK/Halt network",
+      "action": "",
+      "to": "INIT-REBOOT"
+    },
+    {
+      "from": "BOUND",
+      "event": "T2 expires/Broadcast DHCPREQUEST",
+      "action": "",
+      "to": "REBINDING"
+    }
+  ]
+}

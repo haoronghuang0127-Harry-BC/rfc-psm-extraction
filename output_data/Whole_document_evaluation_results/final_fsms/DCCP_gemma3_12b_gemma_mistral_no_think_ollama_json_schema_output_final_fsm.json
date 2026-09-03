@@ -1,0 +1,69 @@
+{
+  "states": [
+    "CLOSED",
+    "LISTEN",
+    "REQUEST",
+    "RESPOND",
+    "PARTOPEN",
+    "OPEN",
+    "CLOSEREQ",
+    "CLOSING",
+    "TIMEWAIT"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "DCCP-Request",
+      "action": "Send DCCP-Request",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "DCCP-Response",
+      "action": "Send DCCP-Ack",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "DCCP-Data",
+      "action": "Send DCCP-Data",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "DCCP-Request",
+      "action": "Send DCCP-Response",
+      "to": "RESPOND"
+    },
+    {
+      "from": "OPEN",
+      "event": "DCCP-CloseReq",
+      "action": "Send DCCP-CloseReq",
+      "to": "CLOSING"
+    },
+    {
+      "from": "OPEN",
+      "event": "DCCP-Close",
+      "action": "Send DCCP-Close",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "DCCP-Reset",
+      "action": "Send DCCP-Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "OPEN",
+      "event": "DCCP-CloseReq",
+      "action": "Send DCCP-CloseReq",
+      "to": "CLOSEREQ"
+    }
+  ]
+}

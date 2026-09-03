@@ -1,0 +1,938 @@
+{
+  "states": [
+    "Initial",
+    "Mail Transaction",
+    "Connection Shutdown",
+    "Ancillary Services",
+    "EHLO",
+    "HELO",
+    "Buffer",
+    "State Table",
+    "Session Initiation",
+    "Client Initiation",
+    "MAIL Command",
+    "RCPT Command",
+    "DATA Command",
+    "Relay SMTP server",
+    "SMTP client",
+    "Final delivery system",
+    "SMTP Session",
+    "Connection Closed",
+    "Alias",
+    "List",
+    "Initial state",
+    "Mail transaction in progress",
+    "Connection closed",
+    "Session Initialized",
+    "Session Closed",
+    "Service ready",
+    "Service closing transmission channel",
+    "Service not available",
+    "Mail action okay",
+    "Mail action not taken",
+    "Mail action aborted",
+    "Mail action failed",
+    "Mail action not recognized",
+    "Mail action not implemented",
+    "Bad sequence of commands",
+    "Start mail input",
+    "Syntax error",
+    "Syntax error in parameters",
+    "Command parameter not implemented",
+    "User not local",
+    "Mailbox unavailable",
+    "Insufficient system storage",
+    "Exceeded storage allocation",
+    "Mailbox name not allowed",
+    "Transaction failed",
+    "System status",
+    "Help message",
+    "Connection Establishment",
+    "Locating the Target Host",
+    "MX Record Found",
+    "MX Record Not Found",
+    "CNAME Record Found",
+    "Non-existent Domain Error",
+    "Temporary Error",
+    "Empty List of MXs",
+    "Usable MX Record",
+    "Unusable MX Record",
+    "Address Record Found",
+    "Address Record Not Found",
+    "Message Queued",
+    "Message Retried",
+    "Message Delivered",
+    "Message Relayed",
+    "Message Handed Off",
+    "Message Returned as Undeliverable",
+    "Ready",
+    "Data Input",
+    "Closing Transmission Channel"
+  ],
+  "transitions": [
+    {
+      "from": "Initial",
+      "event": "",
+      "action": "establishes a two-way transmission channel to an SMTP server",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "transmission of mail message",
+      "action": "server responds to each command with a reply",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "request to shut down the connection",
+      "action": "",
+      "to": "Connection Shutdown"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "request for ancillary services",
+      "action": "",
+      "to": "Ancillary Services"
+    },
+    {
+      "from": "EHLO",
+      "event": "",
+      "action": "",
+      "to": "EHLO"
+    },
+    {
+      "from": "HELO",
+      "event": "",
+      "action": "",
+      "to": "HELO"
+    },
+    {
+      "from": "Buffer",
+      "event": "clear the buffer",
+      "action": "discard the information in the buffer",
+      "to": "Buffer"
+    },
+    {
+      "from": "State Table",
+      "event": "reset the state table",
+      "action": "return the state to some previous state",
+      "to": "State Table"
+    },
+    {
+      "from": "Session Initiation",
+      "event": "",
+      "action": "server responds with an opening message",
+      "to": "Session Initiation"
+    },
+    {
+      "from": "Session Initiation",
+      "event": "QUIT",
+      "action": "close the connection",
+      "to": "Session Initiation"
+    },
+    {
+      "from": "Client Initiation",
+      "event": "EHLO",
+      "action": "Server provides list of supported extensions",
+      "to": "Client Initiation"
+    },
+    {
+      "from": "Client Initiation",
+      "event": "HELO",
+      "action": "",
+      "to": "Client Initiation"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "MAIL",
+      "action": "reset state tables and buffers",
+      "to": "MAIL Command"
+    },
+    {
+      "from": "MAIL Command",
+      "event": "RCPT",
+      "action": "store forward-path",
+      "to": "RCPT Command"
+    },
+    {
+      "from": "RCPT Command",
+      "event": "DATA",
+      "action": "consider succeeding lines as message text",
+      "to": "DATA Command"
+    },
+    {
+      "from": "DATA Command",
+      "event": "end of mail data indicator",
+      "action": "process stored recipients and mail data",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Relay SMTP server",
+      "event": "Accepts relay task",
+      "action": "Establishes transmission channel to next SMTP server",
+      "to": "SMTP client"
+    },
+    {
+      "from": "Relay SMTP server",
+      "event": "Declines relay task",
+      "action": "Returns 550 response",
+      "to": "Relay SMTP server"
+    },
+    {
+      "from": "SMTP client",
+      "event": "Sends mail",
+      "action": "",
+      "to": "Final delivery system"
+    },
+    {
+      "from": "Relay SMTP server",
+      "event": "Finds destination incorrect or mail undeliverable",
+      "action": "Constructs and sends undeliverable mail notification",
+      "to": "Relay SMTP server"
+    },
+    {
+      "from": "SMTP Session",
+      "event": "QUIT",
+      "action": "221 reply",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "SMTP Session",
+      "event": "shutdown",
+      "action": "421 response code",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "SMTP Session",
+      "event": "timeout",
+      "action": "",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "SMTP Session",
+      "event": "connection close, reset, or other communications failure",
+      "action": "",
+      "to": "SMTP Session"
+    },
+    {
+      "from": "Initial state",
+      "event": "EHLO",
+      "action": "250 OK",
+      "to": "Initial state"
+    },
+    {
+      "from": "Initial state",
+      "event": "HELO",
+      "action": "250 OK",
+      "to": "Initial state"
+    },
+    {
+      "from": "Initial state",
+      "event": "MAIL",
+      "action": "",
+      "to": "Mail transaction in progress"
+    },
+    {
+      "from": "Mail transaction in progress",
+      "event": "RCPT",
+      "action": "",
+      "to": "Mail transaction in progress"
+    },
+    {
+      "from": "Mail transaction in progress",
+      "event": "DATA",
+      "action": "354",
+      "to": "Mail transaction in progress"
+    },
+    {
+      "from": "Mail transaction in progress",
+      "event": "end of mail data indication",
+      "action": "250 OK",
+      "to": "Initial state"
+    },
+    {
+      "from": "Initial state",
+      "event": "RSET",
+      "action": "250 OK",
+      "to": "Initial state"
+    },
+    {
+      "from": "Mail transaction in progress",
+      "event": "RSET",
+      "action": "250 OK",
+      "to": "Initial state"
+    },
+    {
+      "from": "Initial state",
+      "event": "QUIT",
+      "action": "221 OK",
+      "to": "Connection closed"
+    },
+    {
+      "from": "Mail transaction in progress",
+      "event": "QUIT",
+      "action": "221 OK",
+      "to": "Connection closed"
+    },
+    {
+      "from": "Session Initialized",
+      "event": "EHLO",
+      "action": "clear all buffers and reset the state",
+      "to": "Session Initialized"
+    },
+    {
+      "from": "Session Initialized",
+      "event": "MAIL",
+      "action": "",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RSET",
+      "action": "",
+      "to": "Session Initialized"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "EHLO",
+      "action": "clear all buffers and reset the state",
+      "to": "Session Initialized"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "QUIT",
+      "action": "",
+      "to": "Session Closed"
+    },
+    {
+      "from": "Session Initialized",
+      "event": "QUIT",
+      "action": "",
+      "to": "Session Closed"
+    },
+    {
+      "from": "Service ready",
+      "event": "220",
+      "action": "Service ready",
+      "to": "Service ready"
+    },
+    {
+      "from": "Service ready",
+      "event": "221",
+      "action": "Service closing transmission channel",
+      "to": "Service closing transmission channel"
+    },
+    {
+      "from": "Service ready",
+      "event": "421",
+      "action": "Service not available",
+      "to": "Service not available"
+    },
+    {
+      "from": "Service ready",
+      "event": "250",
+      "action": "Requested mail action okay, completed",
+      "to": "Mail action okay"
+    },
+    {
+      "from": "Service ready",
+      "event": "251",
+      "action": "User not local; will forward to <forward-path>",
+      "to": "User not local"
+    },
+    {
+      "from": "Service ready",
+      "event": "252",
+      "action": "Cannot VRFY user, but will accept message and attempt delivery",
+      "to": "Mail action okay"
+    },
+    {
+      "from": "Service ready",
+      "event": "450",
+      "action": "Requested mail action not taken: mailbox unavailable",
+      "to": "Mailbox unavailable"
+    },
+    {
+      "from": "Service ready",
+      "event": "451",
+      "action": "Requested action aborted: error in processing",
+      "to": "Mail action aborted"
+    },
+    {
+      "from": "Service ready",
+      "event": "452",
+      "action": "Requested action not taken: insufficient system storage",
+      "to": "Insufficient system storage"
+    },
+    {
+      "from": "Service ready",
+      "event": "455",
+      "action": "Server unable to accommodate parameters",
+      "to": "Mail action not taken"
+    },
+    {
+      "from": "Service ready",
+      "event": "550",
+      "action": "Requested action not taken: mailbox unavailable",
+      "to": "Mailbox unavailable"
+    },
+    {
+      "from": "Service ready",
+      "event": "551",
+      "action": "User not local; please try <forward-path>",
+      "to": "User not local"
+    },
+    {
+      "from": "Service ready",
+      "event": "552",
+      "action": "Requested mail action aborted: exceeded storage allocation",
+      "to": "Exceeded storage allocation"
+    },
+    {
+      "from": "Service ready",
+      "event": "553",
+      "action": "Requested action not taken: mailbox name not allowed",
+      "to": "Mailbox name not allowed"
+    },
+    {
+      "from": "Service ready",
+      "event": "554",
+      "action": "Transaction failed",
+      "to": "Transaction failed"
+    },
+    {
+      "from": "Service ready",
+      "event": "555",
+      "action": "MAIL FROM/RCPT TO parameters not recognized or not implemented",
+      "to": "Mail action not recognized"
+    },
+    {
+      "from": "Service ready",
+      "event": "354",
+      "action": "Start mail input; end with <CRLF>.<CRLF>",
+      "to": "Start mail input"
+    },
+    {
+      "from": "Service ready",
+      "event": "500",
+      "action": "Syntax error, command unrecognized",
+      "to": "Syntax error"
+    },
+    {
+      "from": "Service ready",
+      "event": "501",
+      "action": "Syntax error in parameters or arguments",
+      "to": "Syntax error in parameters"
+    },
+    {
+      "from": "Service ready",
+      "event": "502",
+      "action": "Command not implemented",
+      "to": "Mail action not implemented"
+    },
+    {
+      "from": "Service ready",
+      "event": "503",
+      "action": "Bad sequence of commands",
+      "to": "Bad sequence of commands"
+    },
+    {
+      "from": "Service ready",
+      "event": "504",
+      "action": "Command parameter not implemented",
+      "to": "Command parameter not implemented"
+    },
+    {
+      "from": "Service ready",
+      "event": "211",
+      "action": "System status, or system help reply",
+      "to": "System status"
+    },
+    {
+      "from": "Service ready",
+      "event": "214",
+      "action": "Help message",
+      "to": "Help message"
+    },
+    {
+      "from": "Connection Establishment",
+      "event": "S: 220",
+      "action": "",
+      "to": "EHLO or HELO"
+    },
+    {
+      "from": "Connection Establishment",
+      "event": "E: 554",
+      "action": "",
+      "to": "Connection Establishment"
+    },
+    {
+      "from": "EHLO or HELO",
+      "event": "S: 250",
+      "action": "",
+      "to": "MAIL"
+    },
+    {
+      "from": "EHLO or HELO",
+      "event": "E: 504",
+      "action": "",
+      "to": "EHLO or HELO"
+    },
+    {
+      "from": "EHLO or HELO",
+      "event": "E: 550",
+      "action": "",
+      "to": "EHLO or HELO"
+    },
+    {
+      "from": "EHLO or HELO",
+      "event": "E: 502",
+      "action": "",
+      "to": "EHLO or HELO"
+    },
+    {
+      "from": "MAIL",
+      "event": "S: 250",
+      "action": "",
+      "to": "RCPT"
+    },
+    {
+      "from": "MAIL",
+      "event": "E: 552",
+      "action": "",
+      "to": "MAIL"
+    },
+    {
+      "from": "MAIL",
+      "event": "E: 451",
+      "action": "",
+      "to": "MAIL"
+    },
+    {
+      "from": "MAIL",
+      "event": "E: 452",
+      "action": "",
+      "to": "MAIL"
+    },
+    {
+      "from": "MAIL",
+      "event": "E: 550",
+      "action": "",
+      "to": "MAIL"
+    },
+    {
+      "from": "MAIL",
+      "event": "E: 553",
+      "action": "",
+      "to": "MAIL"
+    },
+    {
+      "from": "MAIL",
+      "event": "E: 503",
+      "action": "",
+      "to": "MAIL"
+    },
+    {
+      "from": "MAIL",
+      "event": "E: 455",
+      "action": "",
+      "to": "MAIL"
+    },
+    {
+      "from": "MAIL",
+      "event": "E: 555",
+      "action": "",
+      "to": "MAIL"
+    },
+    {
+      "from": "RCPT",
+      "event": "S: 250",
+      "action": "",
+      "to": "DATA"
+    },
+    {
+      "from": "RCPT",
+      "event": "S: 251",
+      "action": "",
+      "to": "DATA"
+    },
+    {
+      "from": "RCPT",
+      "event": "E: 550",
+      "action": "",
+      "to": "RCPT"
+    },
+    {
+      "from": "RCPT",
+      "event": "E: 551",
+      "action": "",
+      "to": "RCPT"
+    },
+    {
+      "from": "RCPT",
+      "event": "E: 552",
+      "action": "",
+      "to": "RCPT"
+    },
+    {
+      "from": "RCPT",
+      "event": "E: 553",
+      "action": "",
+      "to": "RCPT"
+    },
+    {
+      "from": "RCPT",
+      "event": "E: 450",
+      "action": "",
+      "to": "RCPT"
+    },
+    {
+      "from": "RCPT",
+      "event": "E: 451",
+      "action": "",
+      "to": "RCPT"
+    },
+    {
+      "from": "RCPT",
+      "event": "E: 452",
+      "action": "",
+      "to": "RCPT"
+    },
+    {
+      "from": "RCPT",
+      "event": "E: 503",
+      "action": "",
+      "to": "RCPT"
+    },
+    {
+      "from": "RCPT",
+      "event": "E: 455",
+      "action": "",
+      "to": "RCPT"
+    },
+    {
+      "from": "RCPT",
+      "event": "E: 555",
+      "action": "",
+      "to": "RCPT"
+    },
+    {
+      "from": "DATA",
+      "event": "I: 354 -> data -> S: 250",
+      "action": "",
+      "to": "DATA"
+    },
+    {
+      "from": "DATA",
+      "event": "I: 354 -> data -> E: 552",
+      "action": "",
+      "to": "DATA"
+    },
+    {
+      "from": "DATA",
+      "event": "I: 354 -> data -> E: 554",
+      "action": "",
+      "to": "DATA"
+    },
+    {
+      "from": "DATA",
+      "event": "I: 354 -> data -> E: 451",
+      "action": "",
+      "to": "DATA"
+    },
+    {
+      "from": "DATA",
+      "event": "I: 354 -> data -> E: 452",
+      "action": "",
+      "to": "DATA"
+    },
+    {
+      "from": "DATA",
+      "event": "I: 354 -> data -> E: 450",
+      "action": "",
+      "to": "DATA"
+    },
+    {
+      "from": "DATA",
+      "event": "I: 354 -> data -> E: 550",
+      "action": "",
+      "to": "DATA"
+    },
+    {
+      "from": "DATA",
+      "event": "E: 503",
+      "action": "",
+      "to": "DATA"
+    },
+    {
+      "from": "DATA",
+      "event": "E: 554",
+      "action": "",
+      "to": "DATA"
+    },
+    {
+      "from": "RSET",
+      "event": "S: 250",
+      "action": "",
+      "to": "RSET"
+    },
+    {
+      "from": "VRFY",
+      "event": "S: 250",
+      "action": "",
+      "to": "VRFY"
+    },
+    {
+      "from": "VRFY",
+      "event": "S: 251",
+      "action": "",
+      "to": "VRFY"
+    },
+    {
+      "from": "VRFY",
+      "event": "S: 252",
+      "action": "",
+      "to": "VRFY"
+    },
+    {
+      "from": "VRFY",
+      "event": "E: 550",
+      "action": "",
+      "to": "VRFY"
+    },
+    {
+      "from": "VRFY",
+      "event": "E: 551",
+      "action": "",
+      "to": "VRFY"
+    },
+    {
+      "from": "VRFY",
+      "event": "E: 553",
+      "action": "",
+      "to": "VRFY"
+    },
+    {
+      "from": "VRFY",
+      "event": "E: 502",
+      "action": "",
+      "to": "VRFY"
+    },
+    {
+      "from": "VRFY",
+      "event": "E: 504",
+      "action": "",
+      "to": "VRFY"
+    },
+    {
+      "from": "EXPN",
+      "event": "S: 250",
+      "action": "",
+      "to": "EXPN"
+    },
+    {
+      "from": "EXPN",
+      "event": "S: 252",
+      "action": "",
+      "to": "EXPN"
+    },
+    {
+      "from": "EXPN",
+      "event": "E: 550",
+      "action": "",
+      "to": "EXPN"
+    },
+    {
+      "from": "EXPN",
+      "event": "E: 500",
+      "action": "",
+      "to": "EXPN"
+    },
+    {
+      "from": "EXPN",
+      "event": "E: 502",
+      "action": "",
+      "to": "EXPN"
+    },
+    {
+      "from": "EXPN",
+      "event": "E: 504",
+      "action": "",
+      "to": "EXPN"
+    },
+    {
+      "from": "HELP",
+      "event": "S: 211",
+      "action": "",
+      "to": "HELP"
+    },
+    {
+      "from": "HELP",
+      "event": "S: 214",
+      "action": "",
+      "to": "HELP"
+    },
+    {
+      "from": "HELP",
+      "event": "E: 502",
+      "action": "",
+      "to": "HELP"
+    },
+    {
+      "from": "HELP",
+      "event": "E: 504",
+      "action": "",
+      "to": "HELP"
+    },
+    {
+      "from": "NOOP",
+      "event": "S: 250",
+      "action": "",
+      "to": "NOOP"
+    },
+    {
+      "from": "QUIT",
+      "event": "S: 221",
+      "action": "",
+      "to": "QUIT"
+    },
+    {
+      "from": "Locating the Target Host",
+      "event": "MX record found",
+      "action": "Process MX record",
+      "to": "MX Record Found"
+    },
+    {
+      "from": "Locating the Target Host",
+      "event": "MX record not found",
+      "action": "Treat as implicit MX",
+      "to": "MX Record Not Found"
+    },
+    {
+      "from": "Locating the Target Host",
+      "event": "CNAME record found",
+      "action": "Process CNAME record",
+      "to": "CNAME Record Found"
+    },
+    {
+      "from": "Locating the Target Host",
+      "event": "Non-existent domain error",
+      "action": "Report error",
+      "to": "Non-existent Domain Error"
+    },
+    {
+      "from": "Locating the Target Host",
+      "event": "Temporary error",
+      "action": "Queue message",
+      "to": "Temporary Error"
+    },
+    {
+      "from": "Locating the Target Host",
+      "event": "Empty list of MXs",
+      "action": "Treat as implicit MX",
+      "to": "Empty List of MXs"
+    },
+    {
+      "from": "MX Record Found",
+      "event": "Usable MX record",
+      "action": "Use MX record",
+      "to": "Usable MX Record"
+    },
+    {
+      "from": "MX Record Found",
+      "event": "Unusable MX record",
+      "action": "Report error",
+      "to": "Unusable MX Record"
+    },
+    {
+      "from": "Usable MX Record",
+      "event": "Address record found",
+      "action": "Use address record",
+      "to": "Address Record Found"
+    },
+    {
+      "from": "Usable MX Record",
+      "event": "Address record not found",
+      "action": "Report error",
+      "to": "Address Record Not Found"
+    },
+    {
+      "from": "Temporary Error",
+      "event": "",
+      "action": "Retry message",
+      "to": "Message Retried"
+    },
+    {
+      "from": "Message Retried",
+      "event": "Message delivered",
+      "action": "",
+      "to": "Message Delivered"
+    },
+    {
+      "from": "Message Retried",
+      "event": "Message relayed",
+      "action": "",
+      "to": "Message Relayed"
+    },
+    {
+      "from": "Message Retried",
+      "event": "Message handed off",
+      "action": "",
+      "to": "Message Handed Off"
+    },
+    {
+      "from": "Message Retried",
+      "event": "Message returned as undeliverable",
+      "action": "",
+      "to": "Message Returned as Undeliverable"
+    },
+    {
+      "from": "Ready",
+      "event": "EHLO",
+      "action": "250-foo.com greets bar.com\n250-8BITMIME\n250-SIZE\n250-DSN\n250 HELP",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "MAIL FROM",
+      "action": "250 OK",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RCPT TO",
+      "action": "250 OK",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RCPT TO",
+      "action": "550 No such user here",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "DATA",
+      "action": "354 Start mail input; end with <CRLF>.<CRLF>",
+      "to": "Data Input"
+    },
+    {
+      "from": "Data Input",
+      "event": ".",
+      "action": "250 OK",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RSET",
+      "action": "250 OK",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "QUIT",
+      "action": "221 foo.com Service closing transmission channel",
+      "to": "Closing Transmission Channel"
+    }
+  ]
+}

@@ -1,0 +1,939 @@
+{
+  "states": [
+    "active",
+    "passive",
+    "STREAM MODE",
+    "BLOCK MODE",
+    "COMPRESSED MODE",
+    "Initial state",
+    "User login sequence",
+    "File transfer in progress",
+    "Data connection open",
+    "Aborted state",
+    "Logged out state",
+    "logged in",
+    "not logged in",
+    "service ready",
+    "service closing",
+    "file action pending",
+    "file action okay",
+    "file unavailable",
+    "command okay",
+    "awaiting input",
+    "Entering Passive Mode",
+    "Okay",
+    "file transfer completed",
+    "data connection closed",
+    "B",
+    "W",
+    "S",
+    "E",
+    "F",
+    "Connected",
+    "Transferring",
+    "Access Denied",
+    "Directory Created"
+  ],
+  "transitions": [
+    {
+      "from": "active",
+      "event": "",
+      "action": "",
+      "to": "active"
+    },
+    {
+      "from": "passive",
+      "event": "",
+      "action": "",
+      "to": "passive"
+    },
+    {
+      "from": "STREAM MODE",
+      "event": "EOR",
+      "action": "two-byte control code",
+      "to": "STREAM MODE"
+    },
+    {
+      "from": "STREAM MODE",
+      "event": "EOF",
+      "action": "two-byte control code",
+      "to": "STREAM MODE"
+    },
+    {
+      "from": "STREAM MODE",
+      "event": "file structure EOF",
+      "action": "close data connection",
+      "to": "STREAM MODE"
+    },
+    {
+      "from": "BLOCK MODE",
+      "event": "EOR",
+      "action": "descriptor code",
+      "to": "BLOCK MODE"
+    },
+    {
+      "from": "BLOCK MODE",
+      "event": "EOF",
+      "action": "descriptor code",
+      "to": "BLOCK MODE"
+    },
+    {
+      "from": "BLOCK MODE",
+      "event": "restart marker",
+      "action": "embedded in data stream",
+      "to": "BLOCK MODE"
+    },
+    {
+      "from": "COMPRESSED MODE",
+      "event": "n bytes of regular data",
+      "action": "precede with byte indicating n",
+      "to": "COMPRESSED MODE"
+    },
+    {
+      "from": "COMPRESSED MODE",
+      "event": "n replications of data byte d",
+      "action": "two bytes indicating n and d",
+      "to": "COMPRESSED MODE"
+    },
+    {
+      "from": "COMPRESSED MODE",
+      "event": "n filler bytes",
+      "action": "compressed into a single byte",
+      "to": "COMPRESSED MODE"
+    },
+    {
+      "from": "COMPRESSED MODE",
+      "event": "escape sequence",
+      "action": "double byte with descriptor codes",
+      "to": "COMPRESSED MODE"
+    },
+    {
+      "from": "Initial state",
+      "event": "USER",
+      "action": "",
+      "to": "User login sequence"
+    },
+    {
+      "from": "User login sequence",
+      "event": "PASS",
+      "action": "reply code 332 or 230",
+      "to": "User login sequence"
+    },
+    {
+      "from": "User login sequence",
+      "event": "ACCT",
+      "action": "reply code 332 or 532",
+      "to": "User login sequence"
+    },
+    {
+      "from": "User login sequence",
+      "event": "USER",
+      "action": "flush user info, begin login sequence",
+      "to": "User login sequence"
+    },
+    {
+      "from": "User login sequence",
+      "event": "CWD",
+      "action": "",
+      "to": "User login sequence"
+    },
+    {
+      "from": "User login sequence",
+      "event": "CDUP",
+      "action": "",
+      "to": "User login sequence"
+    },
+    {
+      "from": "User login sequence",
+      "event": "SMNT",
+      "action": "",
+      "to": "User login sequence"
+    },
+    {
+      "from": "User login sequence",
+      "event": "REIN",
+      "action": "reset parameters, open control connection",
+      "to": "User login sequence"
+    },
+    {
+      "from": "User login sequence",
+      "event": "QUIT",
+      "action": "close control connection",
+      "to": "Logged out state"
+    },
+    {
+      "from": "User login sequence",
+      "event": "PORT",
+      "action": "",
+      "to": "User login sequence"
+    },
+    {
+      "from": "User login sequence",
+      "event": "PASV",
+      "action": "listen on data port",
+      "to": "Data connection open"
+    },
+    {
+      "from": "User login sequence",
+      "event": "TYPE",
+      "action": "",
+      "to": "User login sequence"
+    },
+    {
+      "from": "User login sequence",
+      "event": "STRU",
+      "action": "",
+      "to": "User login sequence"
+    },
+    {
+      "from": "User login sequence",
+      "event": "MODE",
+      "action": "",
+      "to": "User login sequence"
+    },
+    {
+      "from": "User login sequence",
+      "event": "RETR",
+      "action": "",
+      "to": "File transfer in progress"
+    },
+    {
+      "from": "User login sequence",
+      "event": "STOR",
+      "action": "",
+      "to": "File transfer in progress"
+    },
+    {
+      "from": "User login sequence",
+      "event": "STOU",
+      "action": "",
+      "to": "File transfer in progress"
+    },
+    {
+      "from": "User login sequence",
+      "event": "APPE",
+      "action": "",
+      "to": "File transfer in progress"
+    },
+    {
+      "from": "User login sequence",
+      "event": "ALLO",
+      "action": "",
+      "to": "User login sequence"
+    },
+    {
+      "from": "User login sequence",
+      "event": "REST",
+      "action": "",
+      "to": "File transfer in progress"
+    },
+    {
+      "from": "User login sequence",
+      "event": "RNFR",
+      "action": "",
+      "to": "User login sequence"
+    },
+    {
+      "from": "User login sequence",
+      "event": "RNTO",
+      "action": "",
+      "to": "User login sequence"
+    },
+    {
+      "from": "User login sequence",
+      "event": "ABOR",
+      "action": "close data connection",
+      "to": "Aborted state"
+    },
+    {
+      "from": "User login sequence",
+      "event": "DELE",
+      "action": "",
+      "to": "User login sequence"
+    },
+    {
+      "from": "User login sequence",
+      "event": "RMD",
+      "action": "",
+      "to": "User login sequence"
+    },
+    {
+      "from": "User login sequence",
+      "event": "MKD",
+      "action": "",
+      "to": "User login sequence"
+    },
+    {
+      "from": "User login sequence",
+      "event": "PWD",
+      "action": "",
+      "to": "User login sequence"
+    },
+    {
+      "from": "User login sequence",
+      "event": "LIST",
+      "action": "",
+      "to": "File transfer in progress"
+    },
+    {
+      "from": "User login sequence",
+      "event": "NLST",
+      "action": "",
+      "to": "File transfer in progress"
+    },
+    {
+      "from": "User login sequence",
+      "event": "SITE",
+      "action": "",
+      "to": "User login sequence"
+    },
+    {
+      "from": "User login sequence",
+      "event": "SYST",
+      "action": "",
+      "to": "User login sequence"
+    },
+    {
+      "from": "User login sequence",
+      "event": "STAT",
+      "action": "",
+      "to": "User login sequence"
+    },
+    {
+      "from": "User login sequence",
+      "event": "HELP",
+      "action": "",
+      "to": "User login sequence"
+    },
+    {
+      "from": "User login sequence",
+      "event": "NOOP",
+      "action": "",
+      "to": "User login sequence"
+    },
+    {
+      "from": "File transfer in progress",
+      "event": "ABOR",
+      "action": "close data connection",
+      "to": "Aborted state"
+    },
+    {
+      "from": "File transfer in progress",
+      "event": "QUIT",
+      "action": "close control connection",
+      "to": "Logged out state"
+    },
+    {
+      "from": "not logged in",
+      "event": "USER",
+      "action": "need password",
+      "to": "logged in"
+    },
+    {
+      "from": "logged in",
+      "event": "PASS",
+      "action": "proceed",
+      "to": "logged in"
+    },
+    {
+      "from": "logged in",
+      "event": "ACCT",
+      "action": "",
+      "to": "logged in"
+    },
+    {
+      "from": "not logged in",
+      "event": "USER",
+      "action": "need account for login",
+      "to": "logged in"
+    },
+    {
+      "from": "not logged in",
+      "event": "USER",
+      "action": "need account for storing files",
+      "to": "logged in"
+    },
+    {
+      "from": "service ready",
+      "event": "command",
+      "action": "command okay",
+      "to": "service ready"
+    },
+    {
+      "from": "service ready",
+      "event": "command",
+      "action": "command not implemented",
+      "to": "service ready"
+    },
+    {
+      "from": "service ready",
+      "event": "command",
+      "action": "syntax error",
+      "to": "service ready"
+    },
+    {
+      "from": "service ready",
+      "event": "command",
+      "action": "bad sequence of commands",
+      "to": "service ready"
+    },
+    {
+      "from": "service ready",
+      "event": "command",
+      "action": "command not implemented for that parameter",
+      "to": "service ready"
+    },
+    {
+      "from": "service ready",
+      "event": "command",
+      "action": "restart marker reply",
+      "to": "service ready"
+    },
+    {
+      "from": "service ready",
+      "event": "command",
+      "action": "system status, or system help reply",
+      "to": "service ready"
+    },
+    {
+      "from": "service ready",
+      "event": "command",
+      "action": "directory status",
+      "to": "service ready"
+    },
+    {
+      "from": "service ready",
+      "event": "command",
+      "action": "file status",
+      "to": "service ready"
+    },
+    {
+      "from": "service ready",
+      "event": "command",
+      "action": "help message",
+      "to": "service ready"
+    },
+    {
+      "from": "service ready",
+      "event": "command",
+      "action": "NAME system type",
+      "to": "service ready"
+    },
+    {
+      "from": "service ready",
+      "event": "command",
+      "action": "service ready for new user",
+      "to": "service ready"
+    },
+    {
+      "from": "service ready",
+      "event": "command",
+      "action": "service closing control connection",
+      "to": "service closing"
+    },
+    {
+      "from": "service ready",
+      "event": "command",
+      "action": "data connection already open; transfer starting",
+      "to": "data connection open"
+    },
+    {
+      "from": "service ready",
+      "event": "command",
+      "action": "data connection open; no transfer in progress",
+      "to": "data connection open"
+    },
+    {
+      "from": "service ready",
+      "event": "command",
+      "action": "can't open data connection",
+      "to": "service ready"
+    },
+    {
+      "from": "service ready",
+      "event": "command",
+      "action": "closing data connection",
+      "to": "service ready"
+    },
+    {
+      "from": "service ready",
+      "event": "command",
+      "action": "user logged in, proceed",
+      "to": "service ready"
+    },
+    {
+      "from": "service ready",
+      "event": "command",
+      "action": "file status okay; about to open data connection",
+      "to": "file action pending"
+    },
+    {
+      "from": "file action pending",
+      "event": "command",
+      "action": "requested file action okay, completed",
+      "to": "file action okay"
+    },
+    {
+      "from": "file action pending",
+      "event": "command",
+      "action": "requested action not taken",
+      "to": "file unavailable"
+    },
+    {
+      "from": "file action okay",
+      "event": "command",
+      "action": "",
+      "to": "file action okay"
+    },
+    {
+      "from": "file unavailable",
+      "event": "command",
+      "action": "",
+      "to": "file unavailable"
+    },
+    {
+      "from": "service closing",
+      "event": "command",
+      "action": "service not available, closing control connection",
+      "to": "service closing"
+    },
+    {
+      "from": "awaiting input",
+      "event": "USER",
+      "action": "230",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "PASS",
+      "action": "230",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "ACCT",
+      "action": "230",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "CWD",
+      "action": "250",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "CDUP",
+      "action": "200",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "SMNT",
+      "action": "202, 250",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "QUIT",
+      "action": "221",
+      "to": "data connection closed"
+    },
+    {
+      "from": "awaiting input",
+      "event": "REIN",
+      "action": "120",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "PORT",
+      "action": "200",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "PASV",
+      "action": "227",
+      "to": "Entering Passive Mode"
+    },
+    {
+      "from": "Entering Passive Mode",
+      "event": "PORT A1,A2,A3,A4,a1,a2",
+      "action": "200",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "MODE",
+      "action": "200",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "TYPE",
+      "action": "200",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "STRU",
+      "action": "200",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "ALLO",
+      "action": "200",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "REST",
+      "action": "500, 501, 502, 421, 530",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "STOR",
+      "action": "125, 150",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "STOU",
+      "action": "125, 150",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "RETR",
+      "action": "125, 150",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "LIST",
+      "action": "125, 150",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "NLST",
+      "action": "125, 150",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "APPE",
+      "action": "125, 150",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "RNFR",
+      "action": "450, 550",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "RNTO",
+      "action": "250",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "DELE",
+      "action": "250",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "RMD",
+      "action": "250",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "MKD",
+      "action": "257",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "PWD",
+      "action": "257",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "ABOR",
+      "action": "225, 226",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "SYST",
+      "action": "215",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "STAT",
+      "action": "211, 212, 213",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "HELP",
+      "action": "211, 214",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "SITE",
+      "action": "200",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "NOOP",
+      "action": "200",
+      "to": "awaiting input"
+    },
+    {
+      "from": "awaiting input",
+      "event": "226",
+      "action": "",
+      "to": "file transfer completed"
+    },
+    {
+      "from": "awaiting input",
+      "event": "250",
+      "action": "",
+      "to": "file transfer completed"
+    },
+    {
+      "from": "file transfer completed",
+      "event": "",
+      "action": "",
+      "to": "data connection closed"
+    },
+    {
+      "from": "B",
+      "event": "cmd",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "2",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "4,5",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "W",
+      "event": "1,3",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "B",
+      "event": "cmd",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "2",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "4,5",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "W",
+      "event": "3",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "B",
+      "event": "RNFR",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "1,2",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "W",
+      "event": "3",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "4,5",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "B",
+      "event": "REST",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "1,2",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "W",
+      "event": "3",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "4,5",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "B",
+      "event": "USER",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "2",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "W",
+      "event": "3",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "4,5",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "W",
+      "event": "PASS",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "2",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "3",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "W",
+      "event": "ACCT",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "4,5",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "Connected",
+      "event": "USER Doe",
+      "action": "331 User name ok, need password",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "PASS mumble",
+      "action": "230 User logged in",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "RETR test.pl1",
+      "action": "150 File status okay; about to open data connection",
+      "to": "Transferring"
+    },
+    {
+      "from": "Transferring",
+      "event": "",
+      "action": "226 Closing data connection, file transfer successful",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "TYPE I",
+      "action": "200 Command OK",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "STOR >udd>cn>fd",
+      "action": "550 Access denied",
+      "to": "Access Denied"
+    },
+    {
+      "from": "Access Denied",
+      "event": "QUIT",
+      "action": "Server closes all connections",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "QUIT",
+      "action": "Server closes all connections",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "MKD pathname",
+      "action": "return 257 \"<directory-name>\" <commentary>",
+      "to": "Directory Created"
+    },
+    {
+      "from": "Connected",
+      "event": "MKD pathname",
+      "action": "return 521-\"/usr/dm/pathname\" directory already exists; 521 taking no action.",
+      "to": "Connected"
+    },
+    {
+      "from": "Directory Created",
+      "event": "CWD <directory-name>",
+      "action": "return 200 directory changed to <directory-name>",
+      "to": "Connected"
+    }
+  ]
+}

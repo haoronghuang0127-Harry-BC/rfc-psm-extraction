@@ -1,0 +1,33 @@
+{
+  "states": [
+    "Connecting",
+    "Connected",
+    "Disconnected"
+  ],
+  "transitions": [
+    {
+      "from": "Connecting",
+      "event": "CONNECT without a token",
+      "action": "fail",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "Client-Broker PUBLISH authorization failure",
+      "action": "ignore the PUBLISH packet and disconnect the Client",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "SUBSCRIBE authorization failure",
+      "action": "return code is 0x80 in SUBACK",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "Broker-Client PUBLISH authorization failure",
+      "action": "disconnecting the Client",
+      "to": "Disconnected"
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "states": [
+    "NoNewsgroupSelected",
+    "Reading mode",
+    "SelectedNewsgroup",
+    "Transit mode",
+    "reader mode",
+    "transit mode"
+  ],
+  "transitions": [
+    {
+      "from": "NoNewsgroupSelected",
+      "event": "ARTICLE",
+      "action": "Return 412 No newsgroup selected",
+      "to": "NoNewsgroupSelected"
+    },
+    {
+      "from": "NoNewsgroupSelected",
+      "event": "BODY",
+      "action": "Return 412 No newsgroup selected",
+      "to": "NoNewsgroupSelected"
+    },
+    {
+      "from": "NoNewsgroupSelected",
+      "event": "HEAD",
+      "action": "Return 412 No newsgroup selected",
+      "to": "NoNewsgroupSelected"
+    },
+    {
+      "from": "NoNewsgroupSelected",
+      "event": "STAT",
+      "action": "Return 412 No newsgroup selected",
+      "to": "NoNewsgroupSelected"
+    },
+    {
+      "from": "SelectedNewsgroup",
+      "event": "ARTICLE",
+      "action": "Article follows",
+      "to": "SelectedNewsgroup"
+    },
+    {
+      "from": "SelectedNewsgroup",
+      "event": "BODY",
+      "action": "Body follows",
+      "to": "SelectedNewsgroup"
+    },
+    {
+      "from": "SelectedNewsgroup",
+      "event": "HEAD",
+      "action": "Headers follow",
+      "to": "SelectedNewsgroup"
+    },
+    {
+      "from": "SelectedNewsgroup",
+      "event": "STAT",
+      "action": "Article exists",
+      "to": "SelectedNewsgroup"
+    },
+    {
+      "from": "Transit mode",
+      "event": "MODE READER",
+      "action": "",
+      "to": "Reading mode"
+    },
+    {
+      "from": "transit mode",
+      "event": "MODE READER",
+      "action": "200 or 201",
+      "to": "reader mode"
+    }
+  ]
+}

@@ -1,0 +1,179 @@
+{
+  "states": [
+    "LISTEN",
+    "SYN-SENT",
+    "SYN-RECEIVED",
+    "ESTABLISHED",
+    "FIN-WAIT-1",
+    "FIN-WAIT-2",
+    "CLOSE-WAIT",
+    "CLOSING",
+    "LAST-ACK",
+    "TIME-WAIT",
+    "CLOSED"
+  ],
+  "transitions": [
+    {
+      "from": "LISTEN",
+      "event": "passive OPEN",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSED",
+      "event": "active OPEN",
+      "action": "snd SYN",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "rcv SYN",
+      "action": "snd ACK",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "rcv ACK of SYN",
+      "action": "snd ACK",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "CLOSE",
+      "action": "snd FIN",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "rcv FIN",
+      "action": "snd ACK",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "rcv ACK of FIN",
+      "action": "",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "rcv ACK of FIN",
+      "action": "",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "CLOSE",
+      "action": "snd FIN",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "rcv ACK of FIN",
+      "action": "",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "Timeout=2MSL",
+      "action": "delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "",
+      "action": "delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSED",
+      "event": "",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "<SEQ=100><CTL=SYN>",
+      "action": "",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "<SEQ=300><ACK=101><CTL=SYN,ACK>",
+      "action": "",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "<SEQ=101><ACK=301><CTL=ACK>",
+      "action": "",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "<SEQ=300><ACK=91><CTL=SYN,ACK>",
+      "action": "",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "<SEQ=91><CTL=RST>",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "<SEQ=400><ACK=101><CTL=SYN,ACK>",
+      "action": "",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "CLOSED",
+      "event": "<SEQ=Z><CTL=SYN>",
+      "action": "",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "<SEQ=X><ACK=Z+1><CTL=SYN,ACK>",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "Close",
+      "action": "construct FIN segment, enter FIN-WAIT-1",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "FIN control signal",
+      "action": "ACK, tell user connection is closing, send FIN after user CLOSEs",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "ACK of FIN and FIN from peer",
+      "action": "ACK FIN",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "ACK",
+      "action": "delete connection",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "CLOSE",
+      "action": "send FIN after sending remaining data",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "",
+      "action": "linger 2 MSL",
+      "to": "CLOSED"
+    }
+  ]
+}

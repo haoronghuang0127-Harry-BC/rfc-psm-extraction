@@ -1,0 +1,155 @@
+{
+  "states": [
+    "CLOSED",
+    "LISTEN",
+    "SYN-SENT",
+    "SYN-RECEIVED",
+    "ESTABLISHED",
+    "FIN-WAIT-1",
+    "FIN-WAIT-2",
+    "CLOSE-WAIT",
+    "CLOSING",
+    "LAST-ACK",
+    "TIME-WAIT"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "",
+      "action": "Create TCB, enter LISTEN state",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "passive OPEN",
+      "action": "Create TCB, enter LISTEN state",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "active OPEN (remote socket specified)",
+      "action": "Select ISS, send SYN, enter SYN-SENT state",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv SYN",
+      "action": "Set RCV.NXT, IRS, select ISS, send SYN+ACK, enter SYN-RECEIVED state",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv RST",
+      "action": "Ignore RST",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv ACK",
+      "action": "Send RST, enter CLOSED state",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "rcv SYN+ACK (acceptable)",
+      "action": "Advance SND.UNA, remove retransmissions, enter ESTABLISHED state",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "rcv ACK (acceptable)",
+      "action": "Enter SYN-RECEIVED state",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "rcv RST",
+      "action": "Signal error, delete TCB, enter CLOSED state",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "rcv ACK (acceptable)",
+      "action": "Enter ESTABLISHED state",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "passive OPEN",
+      "action": "Return to LISTEN state",
+      "to": "LISTEN"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "rcv SYN (acceptable)",
+      "action": "Enter ESTABLISHED state",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "rcv RST",
+      "action": "If passive OPEN: return to LISTEN; If active OPEN: signal error, enter CLOSED state",
+      "to": "LISTEN"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "CLOSE",
+      "action": "Send FIN, enter FIN-WAIT-1 state",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "rcv FIN",
+      "action": "Enter CLOSE-WAIT state",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "rcv ACK of our FIN",
+      "action": "Enter TIME-WAIT state",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "rcv FIN",
+      "action": "If our FIN acknowledged: enter TIME-WAIT; Else: enter CLOSING state",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "CLOSE",
+      "action": "Error (connection closing)",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "rcv FIN",
+      "action": "Enter TIME-WAIT state",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "CLOSE",
+      "action": "Send FIN, enter LAST-ACK state",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "CLOSING",
+      "event": "rcv ACK of our FIN",
+      "action": "Enter TIME-WAIT state",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "rcv ACK of our FIN",
+      "action": "Delete TCB, enter CLOSED state",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "TIME-WAIT TIMEOUT",
+      "action": "Delete TCB, enter CLOSED state",
+      "to": "CLOSED"
+    }
+  ]
+}

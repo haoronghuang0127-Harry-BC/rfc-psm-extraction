@@ -1,0 +1,227 @@
+{
+  "states": [
+    "INIT",
+    "INIT-REBOOT",
+    "REBOOTING",
+    "SELECTING",
+    "REQUESTING",
+    "BOUND",
+    "RENEW",
+    "RENEWING",
+    "REBINDING",
+    "DHCPDISCOVER",
+    "DHCPREQUEST",
+    "DHCPNAK",
+    "DHCPACK",
+    "DHCPDECLINE",
+    "T1 expires",
+    "T2 expires",
+    "DHCPOFFER"
+  ],
+  "transitions": [
+    {
+      "from": "INIT",
+      "event": "DHCPDISCOVER",
+      "action": "",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPREQUEST",
+      "action": "",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPNAK",
+      "action": "",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPACK",
+      "action": "",
+      "to": "BOUND"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPRELEASE",
+      "action": "",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPDECLINE",
+      "action": "restarts the configuration process",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPNAK",
+      "action": "",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPREQUEST",
+      "action": "",
+      "to": "RENEWING"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPPACK",
+      "action": "",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPNAK",
+      "action": "",
+      "to": "INIT"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPPACK",
+      "action": "",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPNAK",
+      "action": "",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPREQUEST",
+      "action": "send DHCPNAK message if 'requested IP address' is incorrect, or is on the wrong network",
+      "to": "INIT-REBOOT"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPDISCOVER",
+      "action": "select the \"best\" offer",
+      "to": "SELECTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPREQUEST",
+      "action": "insert the address of the selected server in 'server identifier', 'ciaddr' MUST be zero, 'requested IP address' MUST be filled in with the yiaddr value from the chosen DHCPOFFER",
+      "to": "SELECTING"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPREQUEST",
+      "action": "extend lease",
+      "to": "RENEWING"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPREQUEST",
+      "action": "check 'ciaddr' for correctness before replying",
+      "to": "REBINDING"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPREQUEST",
+      "action": "",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBOOTING",
+      "event": "DHCPNAK/Discard offer",
+      "action": "Send DHCPDISCOVER",
+      "to": "INIT"
+    },
+    {
+      "from": "REBOOTING",
+      "event": "DHCPPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPOFFER",
+      "action": "Collect replies",
+      "to": "SELECTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPREQUEST",
+      "action": "send DHCPREQUEST",
+      "to": "REQUESTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPNAK, Lease expired",
+      "action": "Halt network",
+      "to": "SELECTING"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPNAK",
+      "action": "Discard",
+      "to": "REQUESTING"
+    },
+    {
+      "from": "BOUND",
+      "event": "T1 expires",
+      "action": "Send DHCPREQUEST to leasing server",
+      "to": "RENEWING"
+    },
+    {
+      "from": "BOUND",
+      "event": "T2 expires",
+      "action": "Broadcast DHCPREQUEST",
+      "to": "REBINDING"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPOFFER, DHCPPACK, DHCPNAK/Discard",
+      "action": "Discard",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEWING",
+      "event": "",
+      "action": "",
+      "to": "REBINDING"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "BOUND",
+      "event": "",
+      "action": "",
+      "to": "RENEW"
+    },
+    {
+      "from": "RENEW",
+      "event": "",
+      "action": "",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEW",
+      "event": "",
+      "action": "",
+      "to": "REBINDING"
+    }
+  ]
+}

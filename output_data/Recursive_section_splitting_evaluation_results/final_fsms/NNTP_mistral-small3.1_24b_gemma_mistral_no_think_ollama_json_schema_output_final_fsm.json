@@ -1,0 +1,579 @@
+{
+  "states": [
+    "Connected",
+    "Connection",
+    "Reader mode",
+    "Authenticated",
+    "Encrypted link established",
+    "Virtual host selected",
+    "Unauthenticated",
+    "Transit mode",
+    "Reading mode",
+    "Pipelining",
+    "Non-pipelining",
+    "Initial Connection",
+    "Service Available, Posting Allowed",
+    "Service Available, Posting Prohibited",
+    "Service Temporarily Unavailable",
+    "Service Permanently Unavailable",
+    "Reader Mode",
+    "Session End",
+    "Invalid Group",
+    "Valid Group",
+    "Empty Group",
+    "No newsgroup selected",
+    "Current article number is invalid",
+    "Article exists",
+    "No article with that message-id",
+    "No article with that number",
+    "Article follows",
+    "Headers follow",
+    "Body follows",
+    "Article Posting",
+    "Article Transfer",
+    "Consistent",
+    "Inconsistent",
+    "No articles in that range",
+    "Overview information follows",
+    "Client sends command-line",
+    "Client sends command-datastream",
+    "Server sends response",
+    "Client sends command-continuation"
+  ],
+  "transitions": [
+    {
+      "from": "Connected",
+      "event": "",
+      "action": "Server sends greeting",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "Inactivity timeout",
+      "action": "Server closes connection",
+      "to": "Connected"
+    },
+    {
+      "from": "Connection",
+      "event": "MODE READER",
+      "action": "200 Reader mode, posting permitted",
+      "to": "Reader mode"
+    },
+    {
+      "from": "Reader mode",
+      "event": "XSECRET",
+      "action": "290 Password for fred accepted",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Connection",
+      "event": "XENCRYPT",
+      "action": "283 Encrypted link established",
+      "to": "Encrypted link established"
+    },
+    {
+      "from": "Connection",
+      "event": "XHOST",
+      "action": "290 binary.news.example.org virtual host selected",
+      "to": "Virtual host selected"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "CAPABILITIES",
+      "action": "returns a capability list",
+      "to": "Unauthenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "CAPABILITIES",
+      "action": "returns a capability list",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Transit mode",
+      "event": "MODE READER",
+      "action": "",
+      "to": "Reading mode"
+    },
+    {
+      "from": "Pipelining",
+      "event": "command that MUST NOT be pipelined",
+      "action": "end any pipeline of commands",
+      "to": "Non-pipelining"
+    },
+    {
+      "from": "Non-pipelining",
+      "event": "receives the CRLF at the end of the response",
+      "action": "",
+      "to": "Pipelining"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "200 Service available, posting allowed",
+      "to": "Service Available, Posting Allowed"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "201 Service available, posting prohibited",
+      "to": "Service Available, Posting Prohibited"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "400 Service temporarily unavailable",
+      "to": "Service Temporarily Unavailable"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "502 Service permanently unavailable",
+      "to": "Service Permanently Unavailable"
+    },
+    {
+      "from": "Service Available, Posting Allowed",
+      "event": "QUIT",
+      "action": "205 Connection closing",
+      "to": "Session End"
+    },
+    {
+      "from": "Service Available, Posting Prohibited",
+      "event": "QUIT",
+      "action": "205 Connection closing",
+      "to": "Session End"
+    },
+    {
+      "from": "Service Temporarily Unavailable",
+      "event": "",
+      "action": "",
+      "to": "Session End"
+    },
+    {
+      "from": "Service Permanently Unavailable",
+      "event": "",
+      "action": "",
+      "to": "Session End"
+    },
+    {
+      "from": "Transit Mode",
+      "event": "MODE READER",
+      "action": "200 Reader mode, posting permitted",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Transit Mode",
+      "event": "MODE READER",
+      "action": "502 Transit service only",
+      "to": "Session End"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "QUIT",
+      "action": "205 Connection closing",
+      "to": "Session End"
+    },
+    {
+      "from": "Invalid Group",
+      "event": "GROUP",
+      "action": "211 number low high group",
+      "to": "Valid Group"
+    },
+    {
+      "from": "Invalid Group",
+      "event": "GROUP",
+      "action": "411",
+      "to": "Invalid Group"
+    },
+    {
+      "from": "Valid Group",
+      "event": "GROUP",
+      "action": "211 number low high group",
+      "to": "Valid Group"
+    },
+    {
+      "from": "Valid Group",
+      "event": "GROUP",
+      "action": "411",
+      "to": "Invalid Group"
+    },
+    {
+      "from": "Valid Group",
+      "event": "LAST",
+      "action": "223 n message-id",
+      "to": "Valid Group"
+    },
+    {
+      "from": "Valid Group",
+      "event": "LAST",
+      "action": "422",
+      "to": "Valid Group"
+    },
+    {
+      "from": "Valid Group",
+      "event": "LAST",
+      "action": "420",
+      "to": "Invalid Group"
+    },
+    {
+      "from": "Valid Group",
+      "event": "NEXT",
+      "action": "223 n message-id",
+      "to": "Valid Group"
+    },
+    {
+      "from": "Valid Group",
+      "event": "NEXT",
+      "action": "421",
+      "to": "Valid Group"
+    },
+    {
+      "from": "Valid Group",
+      "event": "NEXT",
+      "action": "420",
+      "to": "Invalid Group"
+    },
+    {
+      "from": "Empty Group",
+      "event": "GROUP",
+      "action": "211 0 4000 3999 example.currently.empty.newsgroup",
+      "to": "Empty Group"
+    },
+    {
+      "from": "Empty Group",
+      "event": "GROUP",
+      "action": "211 0 0 0 example.currently.empty.newsgroup",
+      "to": "Empty Group"
+    },
+    {
+      "from": "Empty Group",
+      "event": "GROUP",
+      "action": "211 0 4000 4321 example.currently.empty.newsgroup",
+      "to": "Empty Group"
+    },
+    {
+      "from": "Empty Group",
+      "event": "LAST",
+      "action": "420",
+      "to": "Invalid Group"
+    },
+    {
+      "from": "Empty Group",
+      "event": "NEXT",
+      "action": "420",
+      "to": "Invalid Group"
+    },
+    {
+      "from": "No newsgroup selected",
+      "event": "ARTICLE number",
+      "action": "412",
+      "to": "No newsgroup selected"
+    },
+    {
+      "from": "No newsgroup selected",
+      "event": "HEAD number",
+      "action": "412",
+      "to": "No newsgroup selected"
+    },
+    {
+      "from": "No newsgroup selected",
+      "event": "BODY number",
+      "action": "412",
+      "to": "No newsgroup selected"
+    },
+    {
+      "from": "No newsgroup selected",
+      "event": "STAT number",
+      "action": "412",
+      "to": "No newsgroup selected"
+    },
+    {
+      "from": "Current article number is invalid",
+      "event": "ARTICLE",
+      "action": "420",
+      "to": "Current article number is invalid"
+    },
+    {
+      "from": "Current article number is invalid",
+      "event": "HEAD",
+      "action": "420",
+      "to": "Current article number is invalid"
+    },
+    {
+      "from": "Current article number is invalid",
+      "event": "BODY",
+      "action": "420",
+      "to": "Current article number is invalid"
+    },
+    {
+      "from": "Current article number is invalid",
+      "event": "STAT",
+      "action": "420",
+      "to": "Current article number is invalid"
+    },
+    {
+      "from": "Article exists",
+      "event": "ARTICLE message-id",
+      "action": "220 0|n message-id",
+      "to": "Article follows"
+    },
+    {
+      "from": "Article exists",
+      "event": "ARTICLE number",
+      "action": "220 n message-id",
+      "to": "Article follows"
+    },
+    {
+      "from": "Article exists",
+      "event": "ARTICLE",
+      "action": "220 n message-id",
+      "to": "Article follows"
+    },
+    {
+      "from": "Article exists",
+      "event": "HEAD message-id",
+      "action": "221 0|n message-id",
+      "to": "Headers follow"
+    },
+    {
+      "from": "Article exists",
+      "event": "HEAD number",
+      "action": "221 n message-id",
+      "to": "Headers follow"
+    },
+    {
+      "from": "Article exists",
+      "event": "HEAD",
+      "action": "221 n message-id",
+      "to": "Headers follow"
+    },
+    {
+      "from": "Article exists",
+      "event": "BODY message-id",
+      "action": "222 0|n message-id",
+      "to": "Body follows"
+    },
+    {
+      "from": "Article exists",
+      "event": "BODY number",
+      "action": "222 n message-id",
+      "to": "Body follows"
+    },
+    {
+      "from": "Article exists",
+      "event": "BODY",
+      "action": "222 n message-id",
+      "to": "Body follows"
+    },
+    {
+      "from": "Article exists",
+      "event": "STAT message-id",
+      "action": "223 0|n message-id",
+      "to": "Article exists"
+    },
+    {
+      "from": "Article exists",
+      "event": "STAT number",
+      "action": "223 n message-id",
+      "to": "Article exists"
+    },
+    {
+      "from": "Article exists",
+      "event": "STAT",
+      "action": "223 n message-id",
+      "to": "Article exists"
+    },
+    {
+      "from": "No article with that message-id",
+      "event": "ARTICLE message-id",
+      "action": "430",
+      "to": "No article with that message-id"
+    },
+    {
+      "from": "No article with that message-id",
+      "event": "HEAD message-id",
+      "action": "430",
+      "to": "No article with that message-id"
+    },
+    {
+      "from": "No article with that message-id",
+      "event": "BODY message-id",
+      "action": "430",
+      "to": "No article with that message-id"
+    },
+    {
+      "from": "No article with that message-id",
+      "event": "STAT message-id",
+      "action": "430",
+      "to": "No article with that message-id"
+    },
+    {
+      "from": "No article with that number",
+      "event": "ARTICLE number",
+      "action": "423",
+      "to": "No article with that number"
+    },
+    {
+      "from": "No article with that number",
+      "event": "HEAD number",
+      "action": "423",
+      "to": "No article with that number"
+    },
+    {
+      "from": "No article with that number",
+      "event": "BODY number",
+      "action": "423",
+      "to": "No article with that number"
+    },
+    {
+      "from": "No article with that number",
+      "event": "STAT number",
+      "action": "423",
+      "to": "No article with that number"
+    },
+    {
+      "from": "Article Posting",
+      "event": "POST",
+      "action": "340 Send article to be posted",
+      "to": "Article Posting"
+    },
+    {
+      "from": "Article Posting",
+      "event": "POST",
+      "action": "440 Posting not permitted",
+      "to": "Article Posting"
+    },
+    {
+      "from": "Article Posting",
+      "event": "",
+      "action": "240 Article received OK",
+      "to": "Article Posting"
+    },
+    {
+      "from": "Article Posting",
+      "event": "",
+      "action": "441 Posting failed",
+      "to": "Article Posting"
+    },
+    {
+      "from": "Article Transfer",
+      "event": "IHAVE",
+      "action": "335 Send article to be transferred",
+      "to": "Article Transfer"
+    },
+    {
+      "from": "Article Transfer",
+      "event": "IHAVE",
+      "action": "435 Article not wanted",
+      "to": "Article Transfer"
+    },
+    {
+      "from": "Article Transfer",
+      "event": "IHAVE",
+      "action": "436 Transfer not possible; try again later",
+      "to": "Article Transfer"
+    },
+    {
+      "from": "Article Transfer",
+      "event": "",
+      "action": "235 Article transferred OK",
+      "to": "Article Transfer"
+    },
+    {
+      "from": "Article Transfer",
+      "event": "",
+      "action": "436 Transfer failed; try again later",
+      "to": "Article Transfer"
+    },
+    {
+      "from": "Article Transfer",
+      "event": "",
+      "action": "437 Transfer rejected; do not retry",
+      "to": "Article Transfer"
+    },
+    {
+      "from": "Consistent",
+      "event": "LIST OVERVIEW.FMT",
+      "action": "list all consistent fields",
+      "to": "Consistent"
+    },
+    {
+      "from": "Consistent",
+      "event": "change in stored fields",
+      "action": "remove fields from output",
+      "to": "Inconsistent"
+    },
+    {
+      "from": "Inconsistent",
+      "event": "database rebuilt or only new articles remain",
+      "action": "add new fields to output",
+      "to": "Consistent"
+    },
+    {
+      "from": "No newsgroup selected",
+      "event": "OVER",
+      "action": "412",
+      "to": "No newsgroup selected"
+    },
+    {
+      "from": "Current article number is invalid",
+      "event": "OVER",
+      "action": "420",
+      "to": "Current article number is invalid"
+    },
+    {
+      "from": "No article with that message-id",
+      "event": "OVER message-id",
+      "action": "430",
+      "to": "No article with that message-id"
+    },
+    {
+      "from": "No articles in that range",
+      "event": "OVER range",
+      "action": "423",
+      "to": "No articles in that range"
+    },
+    {
+      "from": "Overview information follows",
+      "event": "OVER message-id",
+      "action": "224",
+      "to": "Overview information follows"
+    },
+    {
+      "from": "Overview information follows",
+      "event": "OVER range",
+      "action": "224",
+      "to": "Overview information follows"
+    },
+    {
+      "from": "Overview information follows",
+      "event": "OVER",
+      "action": "224",
+      "to": "Overview information follows"
+    },
+    {
+      "from": "Client sends command-line",
+      "event": "command-line",
+      "action": "Server sends response",
+      "to": "Server sends response"
+    },
+    {
+      "from": "Client sends command-datastream",
+      "event": "command-datastream",
+      "action": "Server sends response",
+      "to": "Server sends response"
+    },
+    {
+      "from": "Server sends response",
+      "event": "3xx response",
+      "action": "Client sends command-continuation",
+      "to": "Client sends command-continuation"
+    },
+    {
+      "from": "Client sends command-continuation",
+      "event": "command-continuation",
+      "action": "Server sends response",
+      "to": "Server sends response"
+    }
+  ]
+}

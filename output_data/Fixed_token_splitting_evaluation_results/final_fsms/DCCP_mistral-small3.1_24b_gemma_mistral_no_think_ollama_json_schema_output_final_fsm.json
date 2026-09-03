@@ -1,0 +1,469 @@
+{
+  "states": [
+    "CLOSED",
+    "LISTEN",
+    "REQUEST",
+    "RESPOND",
+    "PARTOPEN",
+    "OPEN",
+    "CLOSEREQ",
+    "CLOSING",
+    "TIMEWAIT",
+    "STABLE",
+    "CHANGING",
+    "UNSTABLE",
+    "ECN capable",
+    "ECN incapable",
+    "HC-Receiver",
+    "HC-Sender",
+    "State 0",
+    "State 1",
+    "State 3"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "DCCP-Request",
+      "action": "",
+      "to": "REQUEST"
+    },
+    {
+      "from": "CLOSED",
+      "event": "DCCP-Request",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "CLOSED",
+      "event": "DCCP-Reset",
+      "action": "DCCP-Sync",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSED",
+      "event": "",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "DCCP-Request",
+      "action": "",
+      "to": "RESPOND"
+    },
+    {
+      "from": "LISTEN",
+      "event": "DCCP-Response",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "DCCP-CloseReq",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv Request",
+      "action": "Set S := new socket for this port pair, S.state = RESPOND, Choose S.ISS, Initialize S.GAR := S.ISS, Set S.ISR, S.GSR, S.SWL, S.SWH from packet or Init Cookies",
+      "to": "RESPOND"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv packet",
+      "action": "Generate Reset(No Connection) unless P.type == Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "REQUEST",
+      "event": "DCCP-Response",
+      "action": "",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "DCCP-Sync",
+      "action": "DCCP-Reset",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "P.type == Reset",
+      "action": "Generate Reset(Packet Error) Drop packet",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "P.type == Sync or P.type == SyncAck",
+      "action": "Update S.GSR, S.SWL, S.SWH",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "P.type == Sync or P.type == SyncAck",
+      "action": "Drop packet",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "P.type == CloseReq or P.type == Close or P.type == Reset",
+      "action": "Drop packet",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "P.type == Reset",
+      "action": "Send Sync packet acknowledging S.GSR",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "P.type != Reset",
+      "action": "Send Sync packet acknowledging P.seqno",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "P.type == CloseReq",
+      "action": "Send Sync packet acknowledging P.seqno",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "P.type == Response",
+      "action": "Send Sync packet acknowledging P.seqno",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "P.type == Request",
+      "action": "Send Sync packet acknowledging P.seqno",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "P.type == Request and P.seqno >= S.OSR",
+      "action": "Send Sync packet acknowledging P.seqno",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "P.type == Response and P.seqno >= S.OSR",
+      "action": "Send Sync packet acknowledging P.seqno",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "P.type == Data",
+      "action": "Send Sync packet acknowledging P.seqno",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "",
+      "action": "Mark packet as acknowledgeable",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "P.type == Reset",
+      "action": "Tear down connection S.state := TIMEWAIT Set TIMEWAIT timer Drop packet",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "REQUEST",
+      "event": "",
+      "action": "S.state := PARTOPEN Set PARTOPEN timer",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "rcv Response",
+      "action": "Set S.GSR, S.ISR, S.SWL, S.SWH",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "rcv Reset",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "RESPOND",
+      "event": "DCCP-Ack or DCCP-DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "rcv Ack/DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "timeout",
+      "action": "Generate Reset(Aborted)",
+      "to": "CLOSED"
+    },
+    {
+      "from": "RESPOND",
+      "event": "P.type == Request",
+      "action": "Send Response, possibly containing Init Cookie",
+      "to": "RESPOND"
+    },
+    {
+      "from": "RESPOND",
+      "event": "P.type == Request",
+      "action": "Destroy S",
+      "to": "RESPOND"
+    },
+    {
+      "from": "RESPOND",
+      "event": "P.type != Request",
+      "action": "S.OSR := P.seqno S.state := OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "rcv packet",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "P.type == Response",
+      "action": "Send Ack",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "P.type != Sync",
+      "action": "S.OSR := P.seqno S.state := OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "DCCP-CloseReq",
+      "action": "",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "OPEN",
+      "event": "rcv CloseReq",
+      "action": "snd Close",
+      "to": "CLOSING"
+    },
+    {
+      "from": "OPEN",
+      "event": "snd CloseReq",
+      "action": "",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "OPEN",
+      "event": "P.type == CloseReq and S.state < CLOSEREQ",
+      "action": "Generate Close S.state := CLOSING Set CLOSING timer",
+      "to": "CLOSING"
+    },
+    {
+      "from": "OPEN",
+      "event": "P.type == Sync",
+      "action": "Generate SyncAck",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "Data, Ack, DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "DCCP-Close",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "rcv Close",
+      "action": "snd Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "DCCP-Reset",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "rcv Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "P.type == Close",
+      "action": "Generate Reset(Closed) Tear down connection Drop packet",
+      "to": "CLOSING"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "DCCP-Reset",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "2MSL timer expires",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "STABLE",
+      "event": "rcv Change R",
+      "action": "calc new value, snd Confirm L",
+      "to": "CHANGING"
+    },
+    {
+      "from": "STABLE",
+      "event": "rcv Confirm R",
+      "action": "ignore",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "rcv Confirm R",
+      "action": "Set F.value := new value, Set F.state := STABLE",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "rcv empty Confirm R",
+      "action": "revert to old value",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "timeout/rcv non-ack",
+      "action": "snd Change L",
+      "to": "CHANGING"
+    },
+    {
+      "from": "CHANGING",
+      "event": "pref list changes",
+      "action": "",
+      "to": "UNSTABLE"
+    },
+    {
+      "from": "UNSTABLE",
+      "event": "snd Change L",
+      "action": "",
+      "to": "CHANGING"
+    },
+    {
+      "from": "UNSTABLE",
+      "event": "rcv Confirm/Change R",
+      "action": "ignore",
+      "to": "UNSTABLE"
+    },
+    {
+      "from": "ECN capable",
+      "event": "Change L(ECN Incapable, 1)",
+      "action": "send Confirm R(ECN Incapable, 1)",
+      "to": "ECN incapable"
+    },
+    {
+      "from": "ECN incapable",
+      "event": "Change L(ECN Incapable, 0)",
+      "action": "send Confirm R(ECN Incapable, 0)",
+      "to": "ECN capable"
+    },
+    {
+      "from": "HC-Receiver",
+      "event": "Packet Arrival",
+      "action": "Update acknowledgement buffer",
+      "to": "HC-Receiver"
+    },
+    {
+      "from": "HC-Receiver",
+      "event": "Old Packets",
+      "action": "Scan the table for the byte corresponding to S",
+      "to": "HC-Receiver"
+    },
+    {
+      "from": "HC-Receiver",
+      "event": "Sending Acknowledgements",
+      "action": "Generate an acknowledgement",
+      "to": "HC-Receiver"
+    },
+    {
+      "from": "HC-Receiver",
+      "event": "Clearing State",
+      "action": "Adjust the buffer's tail pointer and flip buf_nonce",
+      "to": "HC-Receiver"
+    },
+    {
+      "from": "HC-Sender",
+      "event": "Receive an acknowledgement",
+      "action": "Read off the Ack Vector",
+      "to": "HC-Sender"
+    },
+    {
+      "from": "State 0",
+      "event": "",
+      "action": "",
+      "to": "State 0"
+    },
+    {
+      "from": "State 0",
+      "event": "",
+      "action": "",
+      "to": "State 1"
+    },
+    {
+      "from": "State 0",
+      "event": "",
+      "action": "",
+      "to": "State 3"
+    },
+    {
+      "from": "State 1",
+      "event": "",
+      "action": "",
+      "to": "State 1"
+    },
+    {
+      "from": "State 1",
+      "event": "",
+      "action": "",
+      "to": "State 3"
+    },
+    {
+      "from": "State 3",
+      "event": "",
+      "action": "",
+      "to": "State 0"
+    },
+    {
+      "from": "State 3",
+      "event": "",
+      "action": "",
+      "to": "State 1"
+    },
+    {
+      "from": "State 3",
+      "event": "",
+      "action": "",
+      "to": "State 3"
+    }
+  ]
+}

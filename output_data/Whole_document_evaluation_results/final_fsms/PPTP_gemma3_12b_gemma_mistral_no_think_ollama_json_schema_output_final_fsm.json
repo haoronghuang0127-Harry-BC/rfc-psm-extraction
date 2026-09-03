@@ -1,0 +1,122 @@
+{
+  "states": [
+    "idle",
+    "wait_ctl_reply",
+    "established",
+    "wait_stop_reply",
+    "idle",
+    "wait_reply",
+    "established",
+    "wait_cs_ans",
+    "established",
+    "wait_disconnect",
+    "idle",
+    "wait_reply",
+    "established",
+    "wait_disconnect"
+  ],
+  "transitions": [
+    {
+      "from": "idle",
+      "event": "TCP Open Indication",
+      "action": "Send Start Control Connection Request",
+      "to": "wait_ctl_reply"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Receive Start Control Connection Reply",
+      "action": "Version OK",
+      "to": "established"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Version Not OK",
+      "action": "Send Stop Control Connection Request",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "established",
+      "event": "Receive Stop Control Connection Request",
+      "action": "Close TCP",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "wait_stop_reply",
+      "event": "Receive Stop Control Connection Reply",
+      "action": "Close TCP",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Start Control Connection Request",
+      "action": "Version Not OK/Send Start Control Connection Reply",
+      "to": "wait_reply"
+    },
+    {
+      "from": "wait_reply",
+      "event": "Receive Incoming Call Reply",
+      "action": "Accepting/Answer call; Send Call Connected",
+      "to": "established"
+    },
+    {
+      "from": "established",
+      "event": "Receive Call Clear Request",
+      "action": "Send Call Disconnect Notify",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Incoming Call Request",
+      "action": "Send Incoming Call Reply",
+      "to": "wait_reply"
+    },
+    {
+      "from": "wait_reply",
+      "event": "Receive Incoming Call Reply",
+      "action": "Not Accepting",
+      "to": "idle"
+    },
+    {
+      "from": "wait_reply",
+      "event": "Receive Incoming Call Reply",
+      "action": "Send Incoming Call Reply",
+      "to": "established"
+    },
+    {
+      "from": "established",
+      "event": "Receive Call Disconnect Notify",
+      "action": "Send Call Clear Request",
+      "to": "wait_disconnect"
+    },
+    {
+      "from": "wait_disconnect",
+      "event": "Receive Call Disconnect Notify",
+      "action": "Close TCP",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Outgoing Call Request",
+      "action": "Send Outgoing Call Reply",
+      "to": "wait_reply"
+    },
+    {
+      "from": "wait_reply",
+      "event": "Receive Outgoing Call Reply",
+      "action": "Error",
+      "to": "idle"
+    },
+    {
+      "from": "wait_reply",
+      "event": "Receive Outgoing Call Reply",
+      "action": "No Error",
+      "to": "established"
+    },
+    {
+      "from": "established",
+      "event": "Receive Call Clear Request",
+      "action": "Send Call Disconnect Notify",
+      "to": "idle"
+    }
+  ]
+}

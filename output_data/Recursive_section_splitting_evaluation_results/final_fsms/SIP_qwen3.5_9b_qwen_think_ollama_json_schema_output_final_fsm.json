@@ -1,0 +1,290 @@
+{
+  "states": [
+    "Calling",
+    "Completed",
+    "Confirmed",
+    "Proceeding",
+    "Terminated",
+    "Trying",
+    "early",
+    "confirmed",
+    "established",
+    "terminated",
+    "early-dialog",
+    "confirmed-dialog",
+    "stateful",
+    "stateless"
+  ],
+  "transitions": [
+    {
+      "from": "Calling",
+      "event": "Timer A fires",
+      "action": "retransmit request, reset timer A",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer B fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "reception of a provisional response",
+      "action": "pass to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Calling",
+      "event": "reception of a 2xx response",
+      "action": "pass to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "reception of a response with status code from 300-699",
+      "action": "pass the received response up to the TU, generate an ACK request, pass the ACK to the transport layer for transmission",
+      "to": "Completed"
+    },
+    {
+      "from": "Calling",
+      "event": "Transport Err.",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "reception of a provisional response",
+      "action": "pass to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "reception of a 2xx response",
+      "action": "pass to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "reception of a response with status code from 300-699",
+      "action": "pass the received response up to the TU, generate an ACK request, pass the ACK to the transport layer for transmission",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer E fires",
+      "action": "retransmit request, reset timer E",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer F fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Transport Err.",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer D fires",
+      "action": "move to the terminated state",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "response retransmission received",
+      "action": "re-pass ACK to transport layer",
+      "to": "Completed"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer E fires",
+      "action": "reset timer E, retransmit request",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer F fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "reception of a provisional response",
+      "action": "pass to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "reception of a final response (status codes 200-699)",
+      "action": "pass to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Trying",
+      "event": "Transport Err.",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "early-dialog",
+      "event": "2xx response completes offer/answer exchange",
+      "action": "creates a session",
+      "to": "confirmed-dialog"
+    },
+    {
+      "from": "early-dialog",
+      "event": "BYE",
+      "action": "session terminated",
+      "to": "terminated"
+    },
+    {
+      "from": "early-dialog",
+      "event": "Non-2xx final response to INVITE",
+      "action": "terminates all sessions and all dialogs",
+      "to": "terminated"
+    },
+    {
+      "from": "confirmed-dialog",
+      "event": "BYE",
+      "action": "session terminated",
+      "to": "terminated"
+    },
+    {
+      "from": "confirmed-dialog",
+      "event": "Non-2xx final response to INVITE",
+      "action": "terminates all sessions and all dialogs",
+      "to": "terminated"
+    },
+    {
+      "from": "early-dialog",
+      "event": "BYE response timeout / 481 / 408",
+      "action": "session and the dialog terminated",
+      "to": "terminated"
+    },
+    {
+      "from": "confirmed-dialog",
+      "event": "BYE response timeout / 481 / 408",
+      "action": "session and the dialog terminated",
+      "to": "terminated"
+    },
+    {
+      "from": "early",
+      "event": "Receive 2xx response",
+      "action": "Transition to confirmed state",
+      "to": "confirmed"
+    },
+    {
+      "from": "early",
+      "event": "Receive non-2xx final response",
+      "action": "Terminate early dialog",
+      "to": "terminated"
+    },
+    {
+      "from": "early",
+      "event": "64*T1 seconds",
+      "action": "Terminate early dialog",
+      "to": "terminated"
+    },
+    {
+      "from": "established",
+      "event": "Send BYE",
+      "action": "Terminate dialog",
+      "to": "terminated"
+    },
+    {
+      "from": "stateful",
+      "event": "",
+      "action": "all state is simply discarded. The proxy SHOULD NOT initiate a CANCEL request.",
+      "to": "stateless"
+    },
+    {
+      "from": "Trying",
+      "event": "1xx from TU",
+      "action": "send response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "Transport Error",
+      "action": "Inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "1xx from TU",
+      "action": "send response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx from TU",
+      "action": "send response",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699 from TU",
+      "action": "send response",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Transport Error",
+      "action": "Inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "ACK received",
+      "action": "",
+      "to": "Confirmed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer G fires",
+      "action": "send response",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer H fires",
+      "action": "Inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Transport Error",
+      "action": "Inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer J fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Request retransmission received",
+      "action": "send response",
+      "to": "Completed"
+    },
+    {
+      "from": "Confirmed",
+      "event": "Timer I fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Confirmed",
+      "event": "ACK received",
+      "action": "",
+      "to": "Confirmed"
+    }
+  ]
+}

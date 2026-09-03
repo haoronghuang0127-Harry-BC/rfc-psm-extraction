@@ -1,0 +1,147 @@
+{
+  "states": [
+    "Session Initiated",
+    "Mail Transaction Started",
+    "Data Transfer Mode",
+    "initial state",
+    "transaction in progress",
+    "Session initialized by EHLO",
+    "Mail transaction open",
+    "Connection Established",
+    "Data Input"
+  ],
+  "transitions": [
+    {
+      "from": "Session Initiated",
+      "event": "MAIL FROM:<reverse-path>",
+      "action": "reset all state tables and buffers; return 250 OK",
+      "to": "Mail Transaction Started"
+    },
+    {
+      "from": "Mail Transaction Started",
+      "event": "RCPT TO:<forward-path>",
+      "action": "store forward-path; return 250 OK",
+      "to": "Mail Transaction Started"
+    },
+    {
+      "from": "Mail Transaction Started",
+      "event": "DATA",
+      "action": "return 354 Intermediate reply",
+      "to": "Data Transfer Mode"
+    },
+    {
+      "from": "initial state",
+      "event": "EHLO",
+      "action": "confirm initial state, clear state tables and buffers",
+      "to": "initial state"
+    },
+    {
+      "from": "initial state",
+      "event": "HELO",
+      "action": "confirm initial state, clear state tables and buffers",
+      "to": "initial state"
+    },
+    {
+      "from": "initial state",
+      "event": "MAIL",
+      "action": "clear reverse-path buffer, forward-path buffer, and mail data buffer; insert reverse-path into reverse-path buffer",
+      "to": "transaction in progress"
+    },
+    {
+      "from": "transaction in progress",
+      "event": "RCPT",
+      "action": "append forward-path argument to forward-path buffer",
+      "to": "transaction in progress"
+    },
+    {
+      "from": "transaction in progress",
+      "event": "DATA",
+      "action": "append mail data to mail data buffer; send 354 response",
+      "to": "transaction in progress"
+    },
+    {
+      "from": "transaction in progress",
+      "event": "<CRLF>.<CRLF>",
+      "action": "process stored mail transaction information; clear reverse-path, forward-path, and mail data buffers; send OK or failure reply",
+      "to": "initial state"
+    },
+    {
+      "from": "transaction in progress",
+      "event": "RSET",
+      "action": "discard sender, recipients, and mail data; clear all buffers and state tables; send 250 OK",
+      "to": "initial state"
+    },
+    {
+      "from": "initial state",
+      "event": "RSET",
+      "action": "send 250 OK",
+      "to": "initial state"
+    },
+    {
+      "from": "transaction in progress",
+      "event": "QUIT",
+      "action": "abort uncompleted mail transaction; send 221 OK; close transmission channel",
+      "to": "initial state"
+    },
+    {
+      "from": "initial state",
+      "event": "QUIT",
+      "action": "send 221 OK; close transmission channel",
+      "to": "initial state"
+    },
+    {
+      "from": "Session initialized by EHLO",
+      "event": "EHLO",
+      "action": "clear all buffers and reset the state exactly as if a RSET command had been issued",
+      "to": "Session initialized by EHLO"
+    },
+    {
+      "from": "Session initialized by EHLO",
+      "event": "MAIL",
+      "action": "begins a mail transaction",
+      "to": "Mail transaction open"
+    },
+    {
+      "from": "Mail transaction open",
+      "event": "RSET",
+      "action": "aborts the mail transaction",
+      "to": "Session initialized by EHLO"
+    },
+    {
+      "from": "Mail transaction open",
+      "event": "EHLO",
+      "action": "aborts the mail transaction",
+      "to": "Session initialized by EHLO"
+    },
+    {
+      "from": "Mail transaction open",
+      "event": "QUIT",
+      "action": "aborts the mail transaction",
+      "to": "Session initialized by EHLO"
+    },
+    {
+      "from": "Connection Established",
+      "event": "DATA",
+      "action": "354 Start mail input; end with <CRLF>.<CRLF>",
+      "to": "Data Input"
+    },
+    {
+      "from": "Data Input",
+      "event": "<CRLF>.<CRLF>",
+      "action": "2yz positive completion status",
+      "to": "Connection Established"
+    },
+    {
+      "from": "Data Input",
+      "event": "<CRLF>.<CRLF>",
+      "action": "4yz temporary error status",
+      "to": "Connection Established"
+    },
+    {
+      "from": "Data Input",
+      "event": "<CRLF>.<CRLF>",
+      "action": "5yz permanent error status",
+      "to": "Connection Established"
+    }
+  ]
+}

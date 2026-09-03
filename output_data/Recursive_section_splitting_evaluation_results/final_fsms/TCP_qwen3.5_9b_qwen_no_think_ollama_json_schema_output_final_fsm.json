@@ -1,0 +1,989 @@
+{
+  "states": [
+    "CLOSED",
+    "LISTEN",
+    "SYN-SENT",
+    "SYN-RECEIVED",
+    "ESTABLISHED",
+    "FIN-WAIT-1",
+    "FIN-WAIT-2",
+    "CLOSE-WAIT",
+    "CLOSING",
+    "LAST-ACK",
+    "TIME-WAIT"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "passive OPEN",
+      "action": "create TCB",
+      "to": "LISTEN"
+    },
+    {
+      "from": "CLOSED",
+      "event": "active OPEN",
+      "action": "create TCB, snd SYN",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv RST",
+      "action": "delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv SYN",
+      "action": "snd SYN,ACK",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "rcv ACK of SYN",
+      "action": "",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "rcv SYN,ACK",
+      "action": "snd ACK",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "CLOSE",
+      "action": "delete TCB",
+      "to": "LISTEN"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "rcv RST",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "CLOSE",
+      "action": "snd FIN",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "rcv FIN",
+      "action": "snd ACK",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "rcv ACK of FIN",
+      "action": "",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "rcv FIN",
+      "action": "snd ACK",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "rcv ACK of FIN",
+      "action": "",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "snd FIN",
+      "action": "",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "CLOSING",
+      "event": "Timeout=2MSL",
+      "action": "delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "rcv ACK of FIN",
+      "action": "",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "Timeout=2MSL",
+      "action": "delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSED",
+      "event": "",
+      "action": "",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "LISTEN",
+      "event": "",
+      "action": "",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "",
+      "action": "",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "",
+      "action": "",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "CLOSED",
+      "event": "incoming segment (except reset)",
+      "action": "reset sent",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "acceptable reset",
+      "action": "return to LISTEN",
+      "to": "LISTEN"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "acceptable reset (ACK acknowledges SYN)",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "acceptable reset",
+      "action": "return to LISTEN",
+      "to": "LISTEN"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "reset (not previously in LISTEN)",
+      "action": "abort connection",
+      "to": "CLOSED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "unacceptable segment",
+      "action": "send empty ACK",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "security level mismatch",
+      "action": "reset sent",
+      "to": "CLOSED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "",
+      "action": "Local user initiates close; construct FIN segment and place on outgoing queue",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "Receive ACK for own FIN and receive FIN from remote peer",
+      "action": "ACK the received FIN",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "",
+      "action": "Receive unsolicited FIN from network; ACK it and tell user connection is closing",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "User responds with CLOSE (after receiving notification)",
+      "action": "Send FIN to other peer after sending remaining data",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "",
+      "action": "Receive FIN from remote peer; ACK it",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "",
+      "action": "Send ACK for received FIN",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "",
+      "action": "Wait 2 MSL; then delete connection",
+      "to": "CLOSED"
+    },
+    {
+      "from": "normal mode",
+      "event": "urgent pointer is in advance of the receive sequence number (RCV.NXT)",
+      "action": "tell the user to go into 'urgent mode'",
+      "to": "urgent mode"
+    },
+    {
+      "from": "urgent mode",
+      "event": "receive sequence number catches up to the urgent pointer",
+      "action": "tell user to go into 'normal mode'",
+      "to": "normal mode"
+    },
+    {
+      "from": "LISTEN",
+      "event": "OPEN (passive)",
+      "action": "creates a new connection record",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "SEND",
+      "action": "makes the passive call active",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "LISTEN",
+      "event": "incoming connection request",
+      "action": "binds local IP address",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "CLOSED STATE",
+      "event": "OPEN Call",
+      "action": "Create a new transmission control block (TCB)... Fill in local socket identifier... Verify the security and Diffserv value requested are allowed for this user... If passive, enter the LISTEN state... If active and the remote socket is unspecified, return \"error: remote socket unspecified\"; if active and the remote socket is specified, issue a SYN segment. An initial send sequence number (ISS) is selected. A SYN segment of the form <SEQ=ISS><CTL=SYN> is sent. Set SND.UNA to ISS, SND.NXT to ISS+1, enter SYN-SENT state",
+      "to": "LISTEN STATE"
+    },
+    {
+      "from": "CLOSED STATE",
+      "event": "OPEN Call",
+      "action": "Create a new transmission control block (TCB)... Fill in local socket identifier... Verify the security and Diffserv value requested are allowed for this user... If passive, enter the LISTEN state... If active and the remote socket is unspecified, return \"error: remote socket unspecified\"; if active and the remote socket is specified, issue a SYN segment. An initial send sequence number (ISS) is selected. A SYN segment of the form <SEQ=ISS><CTL=SYN> is sent. Set SND.UNA to ISS, SND.NXT to ISS+1, enter SYN-SENT state",
+      "to": "SYN-SENT STATE"
+    },
+    {
+      "from": "LISTEN STATE",
+      "event": "OPEN Call",
+      "action": "If the OPEN call is active and the remote socket is specified, then change the connection from passive to active, select an ISS. Send a SYN segment, set SND.UNA to ISS, SND.NXT to ISS+1. Enter SYN-SENT state... If there is no room to queue the request, respond with \"error: insufficient resources\". If the remote socket was not specified, then return \"error: remote socket unspecified\"",
+      "to": "SYN-SENT STATE"
+    },
+    {
+      "from": "CLOSED STATE",
+      "event": "OPEN Call",
+      "action": "Return \"error: connection already exists\"",
+      "to": "CLOSED STATE"
+    },
+    {
+      "from": "LISTEN STATE",
+      "event": "OPEN Call",
+      "action": "Return \"error: connection already exists\"",
+      "to": "LISTEN STATE"
+    },
+    {
+      "from": "SYN-SENT STATE",
+      "event": "OPEN Call",
+      "action": "Return \"error: connection already exists\"",
+      "to": "SYN-SENT STATE"
+    },
+    {
+      "from": "SYN-RECEIVED STATE",
+      "event": "OPEN Call",
+      "action": "Return \"error: connection already exists\"",
+      "to": "SYN-RECEIVED STATE"
+    },
+    {
+      "from": "ESTABLISHED STATE",
+      "event": "OPEN Call",
+      "action": "Return \"error: connection already exists\"",
+      "to": "ESTABLISHED STATE"
+    },
+    {
+      "from": "FIN-WAIT-1 STATE",
+      "event": "OPEN Call",
+      "action": "Return \"error: connection already exists\"",
+      "to": "FIN-WAIT-1 STATE"
+    },
+    {
+      "from": "FIN-WAIT-2 STATE",
+      "event": "OPEN Call",
+      "action": "Return \"error: connection already exists\"",
+      "to": "FIN-WAIT-2 STATE"
+    },
+    {
+      "from": "CLOSE-WAIT STATE",
+      "event": "OPEN Call",
+      "action": "Return \"error: connection already exists\"",
+      "to": "CLOSE-WAIT STATE"
+    },
+    {
+      "from": "CLOSING STATE",
+      "event": "OPEN Call",
+      "action": "Return \"error: connection already exists\"",
+      "to": "CLOSING STATE"
+    },
+    {
+      "from": "LAST-ACK STATE",
+      "event": "OPEN Call",
+      "action": "Return \"error: connection already exists\"",
+      "to": "LAST-ACK STATE"
+    },
+    {
+      "from": "TIME-WAIT STATE",
+      "event": "OPEN Call",
+      "action": "Return \"error: connection already exists\"",
+      "to": "TIME-WAIT STATE"
+    },
+    {
+      "from": "LISTEN",
+      "event": "",
+      "action": "return error: remote socket unspecified",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "",
+      "action": "change connection from passive to active, select an ISS. Send a SYN segment, set SND.UNA to ISS, SND.NXT to ISS+1. Enter SYN-SENT state.",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "LISTEN",
+      "event": "",
+      "action": "return error: insufficient resources",
+      "to": "LISTEN"
+    },
+    {
+      "from": "CLOSED",
+      "event": "",
+      "action": "return error: connection illegal for this process",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSED",
+      "event": "",
+      "action": "return error: connection does not exist",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "",
+      "action": "Queue the data for transmission after entering ESTABLISHED state. If no space to queue, respond with error: insufficient resources.",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "",
+      "action": "Segmentize the buffer and send it with a piggybacked acknowledgment (acknowledgment value = RCV.NXT). If there is insufficient space to remember this buffer, simply return error: insufficient resources.",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "",
+      "action": "If the URGENT flag is set, then SND.UP <- SND.NXT and set the urgent pointer in the outgoing segments.",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "",
+      "action": "Return error: connection closing and do not service request.",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "LISTEN",
+      "event": "",
+      "action": "Queue for processing after entering ESTABLISHED state. If there is no room to queue this request, respond with \"error: insufficient resources\".",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "",
+      "action": "Queue for processing after entering ESTABLISHED state. If there is no room to queue this request, respond with \"error: insufficient resources\".",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "",
+      "action": "Queue for processing after entering ESTABLISHED state. If there is no room to queue this request, respond with \"error: insufficient resources\".",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "",
+      "action": "Reassemble queued incoming segments into receive buffer and return to user. Mark \"push seen\" (PUSH) if this is the case.",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "",
+      "action": "If insufficient incoming segments are queued to satisfy the request, queue the request. If there is no queue space to remember the RECEIVE, respond with \"error: insufficient resources\".",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "",
+      "action": "If insufficient incoming segments are queued to satisfy the request, queue the request. If there is no queue space to remember the RECEIVE, respond with \"error: insufficient resources\".",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "",
+      "action": "Reassemble queued incoming segments into receive buffer and return to user. Mark \"push seen\" (PUSH) if this is the case.",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "",
+      "action": "Reassemble queued incoming segments into receive buffer and return to user. Mark \"push seen\" (PUSH) if this is the case.",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "",
+      "action": "If RCV.UP is in advance of the data currently being passed to the user, notify the user of the presence of urgent data.",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "",
+      "action": "If RCV.UP is in advance of the data currently being passed to the user, notify the user of the presence of urgent data.",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "",
+      "action": "Since the remote side has already sent FIN, RECEIVEs must be satisfied by data already on hand, but not yet delivered to the user. If no text is awaiting delivery, the RECEIVE will get an \"error: connection closing\" response. Otherwise, any remaining data can be used to satisfy the RECEIVE.",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "",
+      "action": "Return \"error: connection closing\".",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "LISTEN",
+      "event": "",
+      "action": "return error: closing; delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "",
+      "action": "return error: closing responses to queued SENDs or RECEIVEs; delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "",
+      "action": "form a FIN segment and send it; enter FIN-WAIT-1 state",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "",
+      "action": "queue until preceding SENDs are segmentized; form a FIN segment and send it; enter FIN-WAIT-1 state",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "",
+      "action": "return error: connection closing response",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "",
+      "action": "queue until preceding SENDs are segmentized; send a FIN segment; enter LAST-ACK state",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "",
+      "action": "return error: connection closing response",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "",
+      "action": "return error: connection does not exist",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "",
+      "action": "give queued SENDs and RECEIVEs connection reset notification; delete TCB; enter CLOSED state",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "",
+      "action": "send reset segment; give queued SENDs and RECEIVEs connection reset notification; flush segments; delete TCB; enter CLOSED state",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "",
+      "action": "respond with ok; delete TCB; enter CLOSED state",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSED",
+      "event": "SEGMENT ARRIVES",
+      "action": "discard all data; if RST present discard; else send RST with ACK bit off (SEQ=0, ACK=SEG.SEQ+SEG.LEN) or ACK bit on (SEQ=SEG.ACK)",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "RST",
+      "action": "ignore",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "ACK",
+      "action": "send reset <SEQ=SEG.ACK><CTL=RST>",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "SYN with mismatched security/compartment",
+      "action": "send reset <SEQ=0><ACK=SEG.SEQ+SEG.LEN><CTL=RST,ACK>",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "SYN with matching security/compartment",
+      "action": "set RCV.NXT to SEG.SEQ+1, IRS is set to SEG.SEQ, queue other control/text, select ISS, send SYN <SEQ=ISS><ACK=RCV.NXT><CTL=SYN,ACK>, change state to SYN-RECEIVED",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "other data or control (not containing SYN)",
+      "action": "drop segment",
+      "to": "LISTEN"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "SEGMENT ARRIVES (ACK bit set, acceptable)",
+      "action": "SND.UNA advanced to SEG.ACK; remove acknowledged retransmissions",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "SEGMENT ARRIVES (SYN bit set, security acceptable)",
+      "action": "RCV.NXT set to SEG.SEQ+1; IRS set to SEG.SEQ; SND.UNA advanced to SEG.ACK; remove acknowledged retransmissions; form SYN,ACK segment",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "SEGMENT ARRIVES (SYN bit set, security acceptable)",
+      "action": "SND.WND <- SEG.WND; SND.WL1 <- SEG.SEQ; SND.WL2 <- SEG.ACK; form SYN,ACK segment",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "SEGMENT ARRIVES (RST bit set, ACK acceptable)",
+      "action": "Signal error connection reset; drop segment; delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "SEGMENT ARRIVES (Security mismatch)",
+      "action": "Send RST; discard segment",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "",
+      "action": "return to LISTEN state",
+      "to": "LISTEN"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "RST bit set, passive OPEN",
+      "action": "return connection to LISTEN state",
+      "to": "LISTEN"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "RST bit set, active OPEN",
+      "action": "signal 'connection refused', flush retransmission queue, enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "SND.UNA < SEG.ACK <= SND.NXT",
+      "action": "enter ESTABLISHED state, set window variables",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "segment acknowledgment not acceptable",
+      "action": "send reset segment",
+      "to": "CLOSED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "RST bit set",
+      "action": "flush queues, signal 'connection reset', enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "RST bit set",
+      "action": "flush queues, signal 'connection reset', enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "RST bit set",
+      "action": "enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "RST bit set",
+      "action": "flush queues, signal 'connection reset', enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "RST bit set",
+      "action": "enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "RST bit set",
+      "action": "enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "RST bit set",
+      "action": "enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "FIN bit set",
+      "action": "signal 'connection closing', advance RCV.NXT, send ACK for FIN, enter CLOSE-WAIT state",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "FIN bit set, our FIN ACKed",
+      "action": "enter TIME-WAIT state, start time-wait timer, turn off other timers",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "FIN bit set, our FIN not ACKed",
+      "action": "enter CLOSING state",
+      "to": "CLOSING"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "FIN bit set",
+      "action": "enter TIME-WAIT state, start time-wait timer, turn off other timers",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "FIN bit set",
+      "action": "remain in CLOSE-WAIT state",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "FIN bit set",
+      "action": "remain in CLOSING state",
+      "to": "CLOSING"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "FIN bit set",
+      "action": "remain in LAST-ACK state",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "FIN bit set",
+      "action": "remain in TIME-WAIT state, restart 2 MSL timeout",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "passive OPEN",
+      "action": "return to LISTEN state",
+      "to": "LISTEN"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "ACK bit off",
+      "action": "drop segment",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "ACK bit off",
+      "action": "drop segment",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "ACK bit off",
+      "action": "drop segment",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "ACK bit off",
+      "action": "drop segment",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "ACK bit off",
+      "action": "drop segment",
+      "to": "CLOSING"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "ACK bit off",
+      "action": "drop segment",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "ACK bit off",
+      "action": "drop segment",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "security/compartment mismatch",
+      "action": "send reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "security/compartment mismatch",
+      "action": "send reset, flush queues, signal 'connection reset', enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "security/compartment mismatch",
+      "action": "send reset, flush queues, signal 'connection reset', enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "security/compartment mismatch",
+      "action": "send reset, flush queues, signal 'connection reset', enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "security/compartment mismatch",
+      "action": "send reset, flush queues, signal 'connection reset', enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "security/compartment mismatch",
+      "action": "send reset, flush queues, signal 'connection reset', enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "security/compartment mismatch",
+      "action": "send reset, flush queues, signal 'connection reset', enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "security/compartment mismatch",
+      "action": "send reset, flush queues, signal 'connection reset', enter CLOSED state, delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "passive OPEN",
+      "action": "return to LISTEN state",
+      "to": "LISTEN"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "SYN bit set",
+      "action": "send challenge ACK, drop segment",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "SYN bit set",
+      "action": "send challenge ACK, drop segment",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "SYN bit set",
+      "action": "send challenge ACK, drop segment",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "SYN bit set",
+      "action": "send challenge ACK, drop segment",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "SYN bit set",
+      "action": "send challenge ACK, drop segment",
+      "to": "CLOSING"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "SYN bit set",
+      "action": "send challenge ACK, drop segment",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "SYN bit set",
+      "action": "send challenge ACK, drop segment",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "ACK value not in range ((SND.UNA - MAX.SND.WND) <= SEG.ACK <= SND.NXT)",
+      "action": "discard segment, send ACK back",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "ACK value not in range ((SND.UNA - MAX.SND.WND) <= SEG.ACK <= SND.NXT)",
+      "action": "discard segment, send ACK back",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "ACK value not in range ((SND.UNA - MAX.SND.WND) <= SEG.ACK <= SND.NXT)",
+      "action": "discard segment, send ACK back",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "ACK value not in range ((SND.UNA - MAX.SND.WND) <= SEG.ACK <= SND.NXT)",
+      "action": "discard segment, send ACK back",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "ACK value not in range ((SND.UNA - MAX.SND.WND) <= SEG.ACK <= SND.NXT)",
+      "action": "discard segment, send ACK back",
+      "to": "CLOSING"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "ACK value not in range ((SND.UNA - MAX.SND.WND) <= SEG.ACK <= SND.NXT)",
+      "action": "discard segment, send ACK back",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "ACK value not in range ((SND.UNA - MAX.SND.WND) <= SEG.ACK <= SND.NXT)",
+      "action": "discard segment, send ACK back",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "SND.UNA < SEG.ACK <= SND.NXT",
+      "action": "enter ESTABLISHED state",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "duplicate ACK (SEG.ACK <= SND.UNA)",
+      "action": "ignore",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "FIN segment acknowledged",
+      "action": "enter FIN-WAIT-2 state",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "retransmission queue empty",
+      "action": "acknowledge CLOSE, do not delete TCB",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "ACK arrives",
+      "action": "process as ESTABLISHED state",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "ACK acknowledges our FIN",
+      "action": "enter TIME-WAIT state",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "FIN acknowledged",
+      "action": "delete TCB, enter CLOSED state",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "remote FIN retransmission",
+      "action": "acknowledge, restart 2 MSL timeout",
+      "to": "TIME-WAIT"
+    }
+  ]
+}

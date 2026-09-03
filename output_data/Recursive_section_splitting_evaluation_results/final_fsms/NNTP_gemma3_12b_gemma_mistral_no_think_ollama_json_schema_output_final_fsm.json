@@ -1,0 +1,333 @@
+{
+  "states": [
+    "Capability Negotiation",
+    "Initial Connection",
+    "Transit Mode",
+    "Reading Mode",
+    "Greeting Received",
+    "Command Processing",
+    "Pipeline Active",
+    "Session Established",
+    "Reader Mode",
+    "Invalid",
+    "Selected",
+    "Initial",
+    "Newsgroup Selected",
+    "Idle",
+    "Posting",
+    "Transferring",
+    "Overview/NOV database",
+    "Article Metadata",
+    "Overview Retrieval",
+    "HDR Processing",
+    "LIST Active",
+    "LIST ACTIVE.TIMES",
+    "LIST DISTRIB.PATS",
+    "LIST NEWSGROUPS",
+    "LIST XTRA.DATA",
+    "First session",
+    "Subsequent sessions"
+  ],
+  "transitions": [
+    {
+      "from": "Capability Negotiation",
+      "event": "CAPABILITIES command",
+      "action": "returns a capability list",
+      "to": "Capability Negotiation"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "MODE READER",
+      "action": "advertise MODE-READER capability, cease advertising after command execution",
+      "to": "Reading Mode"
+    },
+    {
+      "from": "Transit Mode",
+      "event": "MODE READER",
+      "action": "advertise MODE-READER capability, cease advertising after command execution",
+      "to": "Reading Mode"
+    },
+    {
+      "from": "Reading Mode",
+      "event": "MODE READER",
+      "action": "advertise READER capability, cease advertising MODE-READER capability, MAY cease advertising IHAVE capability",
+      "to": "Reading Mode"
+    },
+    {
+      "from": "Greeting Received",
+      "event": "",
+      "action": "send command",
+      "to": "Command Processing"
+    },
+    {
+      "from": "Command Processing",
+      "event": "command",
+      "action": "process command, allow pipelining",
+      "to": "Pipeline Active"
+    },
+    {
+      "from": "Pipeline Active",
+      "event": "command",
+      "action": "process command, allow pipelining",
+      "to": "Pipeline Active"
+    },
+    {
+      "from": "Command Processing",
+      "event": "MUST NOT be pipelined command",
+      "action": "end pipeline",
+      "to": "Command Processing"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "200",
+      "action": "permit posting",
+      "to": "Session Established"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "201",
+      "action": "prohibit posting",
+      "to": "Session Established"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "400",
+      "action": "close connection",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "502",
+      "action": "close connection",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Session Established",
+      "event": "MODE READER",
+      "action": "switch to reader mode",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Session Established",
+      "event": "QUIT",
+      "action": "send 205, close connection",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "QUIT",
+      "action": "send 205, close connection",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Idle",
+      "event": "POST",
+      "action": "340",
+      "to": "Posting"
+    },
+    {
+      "from": "Idle",
+      "event": "IHAVE",
+      "action": "335",
+      "to": "Transferring"
+    },
+    {
+      "from": "Posting",
+      "event": "article data",
+      "action": "240",
+      "to": "Idle"
+    },
+    {
+      "from": "Posting",
+      "event": "article data",
+      "action": "441",
+      "to": "Idle"
+    },
+    {
+      "from": "Transferring",
+      "event": "article data",
+      "action": "235",
+      "to": "Idle"
+    },
+    {
+      "from": "Transferring",
+      "event": "article data",
+      "action": "435",
+      "to": "Idle"
+    },
+    {
+      "from": "Transferring",
+      "event": "article data",
+      "action": "436",
+      "to": "Idle"
+    },
+    {
+      "from": "Transferring",
+      "event": "article data",
+      "action": "437",
+      "to": "Idle"
+    },
+    {
+      "from": "Initial",
+      "event": "HELP",
+      "action": "100 Help text follows",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "NEWGROUPS",
+      "action": "231 List of new newsgroups follows (multi-line)",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "NEWNEWS",
+      "action": "230 list of new articles follows (multi-line)",
+      "to": "Initial"
+    },
+    {
+      "from": "First session",
+      "event": "DATE command",
+      "action": "record result",
+      "to": "First session"
+    },
+    {
+      "from": "First session",
+      "event": "NEWNEWS command",
+      "action": "construct response",
+      "to": "First session"
+    },
+    {
+      "from": "Subsequent sessions",
+      "event": "DATE command",
+      "action": "hold result in temporary storage",
+      "to": "Subsequent sessions"
+    },
+    {
+      "from": "Subsequent sessions",
+      "event": "NEWNEWS command",
+      "action": "overwrite saved timestamp",
+      "to": "Subsequent sessions"
+    },
+    {
+      "from": "Idle",
+      "event": "LIST",
+      "action": "215 Information follows (multi-line)",
+      "to": "LIST Active"
+    },
+    {
+      "from": "Idle",
+      "event": "LIST ACTIVE",
+      "action": "215 list of newsgroups follows",
+      "to": "LIST Active"
+    },
+    {
+      "from": "Idle",
+      "event": "LIST ACTIVE.TIMES",
+      "action": "215 information follows",
+      "to": "LIST ACTIVE.TIMES"
+    },
+    {
+      "from": "Idle",
+      "event": "LIST DISTRIB.PATS",
+      "action": "215 information follows",
+      "to": "LIST DISTRIB.PATS"
+    },
+    {
+      "from": "Idle",
+      "event": "LIST NEWSGROUPS",
+      "action": "215 information follows",
+      "to": "LIST NEWSGROUPS"
+    },
+    {
+      "from": "Idle",
+      "event": "LIST XTRA.DATA",
+      "action": "503 Data item not stored",
+      "to": "Idle"
+    },
+    {
+      "from": "LIST Active",
+      "event": "wildmat",
+      "action": "215 list of newsgroups follows",
+      "to": "LIST Active"
+    },
+    {
+      "from": "LIST ACTIVE.TIMES",
+      "event": "wildmat",
+      "action": "215 information follows",
+      "to": "LIST ACTIVE.TIMES"
+    },
+    {
+      "from": "LIST DISTRIB.PATS",
+      "event": "argument",
+      "action": "MUST NOT be specified",
+      "to": "LIST DISTRIB.PATS"
+    },
+    {
+      "from": "Initial",
+      "event": "OVER",
+      "action": "Send OVER command",
+      "to": "Overview Retrieval"
+    },
+    {
+      "from": "Overview Retrieval",
+      "event": "",
+      "action": "Receive 224 response (Overview information follows)",
+      "to": "Overview Retrieval"
+    },
+    {
+      "from": "Initial",
+      "event": "OVER MSGID",
+      "action": "Send OVER command with MSGID capability",
+      "to": "Overview Retrieval"
+    },
+    {
+      "from": "Initial",
+      "event": "OVER range",
+      "action": "Send OVER command with range argument",
+      "to": "Overview Retrieval"
+    },
+    {
+      "from": "Idle",
+      "event": "HDR",
+      "action": "Initiate HDR processing",
+      "to": "HDR Processing"
+    },
+    {
+      "from": "HDR Processing",
+      "event": "225",
+      "action": "Return Headers follow (multi-line)",
+      "to": "Idle"
+    },
+    {
+      "from": "HDR Processing",
+      "event": "430",
+      "action": "Return No article with that message-id",
+      "to": "Idle"
+    },
+    {
+      "from": "HDR Processing",
+      "event": "412",
+      "action": "Return No newsgroup selected",
+      "to": "Idle"
+    },
+    {
+      "from": "HDR Processing",
+      "event": "423",
+      "action": "Return No articles in that range",
+      "to": "Idle"
+    },
+    {
+      "from": "HDR Processing",
+      "event": "420",
+      "action": "Return Current article number is invalid",
+      "to": "Idle"
+    },
+    {
+      "from": "HDR Processing",
+      "event": "503",
+      "action": "Return HDR not permitted",
+      "to": "Idle"
+    }
+  ]
+}

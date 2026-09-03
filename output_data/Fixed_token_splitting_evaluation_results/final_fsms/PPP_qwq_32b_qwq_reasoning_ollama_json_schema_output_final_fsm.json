@@ -1,0 +1,702 @@
+{
+  "states": [
+    "Initial",
+    "Starting",
+    "Closed",
+    "Stopped",
+    "Closing",
+    "Stopping",
+    "Req-Sent",
+    "Ack-Rcvd",
+    "Ack-Sent",
+    "Opened",
+    "Request-Sent",
+    "Ack-Received"
+  ],
+  "transitions": [
+    {
+      "from": "Initial",
+      "event": "Up",
+      "action": "irc,scr",
+      "to": "Starting"
+    },
+    {
+      "from": "Starting",
+      "event": "Down",
+      "action": "tld",
+      "to": "Initial"
+    },
+    {
+      "from": "Closed",
+      "event": "Down",
+      "action": "tld",
+      "to": "Initial"
+    },
+    {
+      "from": "Stopped",
+      "event": "Down",
+      "action": "tld",
+      "to": "Initial"
+    },
+    {
+      "from": "Closing",
+      "event": "Down",
+      "action": "tld",
+      "to": "Initial"
+    },
+    {
+      "from": "Stopping",
+      "event": "Down",
+      "action": "tld",
+      "to": "Initial"
+    },
+    {
+      "from": "Req-Sent",
+      "event": "Down",
+      "action": "tld",
+      "to": "Starting"
+    },
+    {
+      "from": "Ack-Rcvd",
+      "event": "Down",
+      "action": "tld",
+      "to": "Starting"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "Down",
+      "action": "tld",
+      "to": "Starting"
+    },
+    {
+      "from": "Opened",
+      "event": "Down",
+      "action": "tld,irc,str",
+      "to": "Stopping"
+    },
+    {
+      "from": "Initial",
+      "event": "Open",
+      "action": "tls",
+      "to": "Starting"
+    },
+    {
+      "from": "Closed",
+      "event": "Open",
+      "action": "irc,scr",
+      "to": "Starting"
+    },
+    {
+      "from": "Stopped",
+      "event": "Open",
+      "action": "irc,scr",
+      "to": "Starting"
+    },
+    {
+      "from": "Closing",
+      "event": "Open",
+      "action": "str",
+      "to": "Stopping"
+    },
+    {
+      "from": "Stopping",
+      "event": "Open",
+      "action": "str",
+      "to": "Stopping"
+    },
+    {
+      "from": "Initial",
+      "event": "Close",
+      "action": "tlf",
+      "to": "Closed"
+    },
+    {
+      "from": "Starting",
+      "event": "Close",
+      "action": "tlf",
+      "to": "Closed"
+    },
+    {
+      "from": "Closed",
+      "event": "Close",
+      "action": "tlf",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "Close",
+      "action": "tlf",
+      "to": "Closed"
+    },
+    {
+      "from": "Closing",
+      "event": "Close",
+      "action": "tlf",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopping",
+      "event": "Close",
+      "action": "tlf",
+      "to": "Closed"
+    },
+    {
+      "from": "Req-Sent",
+      "event": "Close",
+      "action": "irc,str",
+      "to": "Closing"
+    },
+    {
+      "from": "Ack-Rcvd",
+      "event": "Close",
+      "action": "irc,str",
+      "to": "Closing"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "Close",
+      "action": "irc,str",
+      "to": "Closing"
+    },
+    {
+      "from": "Opened",
+      "event": "Close",
+      "action": "",
+      "to": "Closing"
+    },
+    {
+      "from": "Initial",
+      "event": "TO+",
+      "action": "",
+      "to": "Starting"
+    },
+    {
+      "from": "Closing",
+      "event": "TO+",
+      "action": "str",
+      "to": "Closing"
+    },
+    {
+      "from": "Stopping",
+      "event": "TO+",
+      "action": "str",
+      "to": "Stopping"
+    },
+    {
+      "from": "Initial",
+      "event": "TO-",
+      "action": "",
+      "to": "Closed"
+    },
+    {
+      "from": "Closing",
+      "event": "TO-",
+      "action": "tlf",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopping",
+      "event": "TO-",
+      "action": "tlf",
+      "to": "Stopped"
+    },
+    {
+      "from": "Initial",
+      "event": "RCR+",
+      "action": "",
+      "to": "Closed"
+    },
+    {
+      "from": "Starting",
+      "event": "RCR+",
+      "action": "",
+      "to": "Starting"
+    },
+    {
+      "from": "Closed",
+      "event": "RCR+",
+      "action": "sta",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "RCR+",
+      "action": "irc,scr,sca",
+      "to": "Ack-Rcvd"
+    },
+    {
+      "from": "Closing",
+      "event": "RCR+",
+      "action": "",
+      "to": "Closing"
+    },
+    {
+      "from": "Stopping",
+      "event": "RCR+",
+      "action": "",
+      "to": "Stopping"
+    },
+    {
+      "from": "Initial",
+      "event": "RCR-",
+      "action": "",
+      "to": "Closed"
+    },
+    {
+      "from": "Starting",
+      "event": "RCR-",
+      "action": "",
+      "to": "Starting"
+    },
+    {
+      "from": "Closed",
+      "event": "RCR-",
+      "action": "sta",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "RCR-",
+      "action": "irc,scr,scn",
+      "to": "Req-Sent"
+    },
+    {
+      "from": "Closing",
+      "event": "RCR-",
+      "action": "",
+      "to": "Closing"
+    },
+    {
+      "from": "Stopping",
+      "event": "RCR-",
+      "action": "",
+      "to": "Stopping"
+    },
+    {
+      "from": "Initial",
+      "event": "RCA",
+      "action": "",
+      "to": "Closed"
+    },
+    {
+      "from": "Starting",
+      "event": "RCA",
+      "action": "",
+      "to": "Starting"
+    },
+    {
+      "from": "Closed",
+      "event": "RCA",
+      "action": "sta",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "RCA",
+      "action": "sta",
+      "to": "Stopped"
+    },
+    {
+      "from": "Closing",
+      "event": "RCA",
+      "action": "",
+      "to": "Closing"
+    },
+    {
+      "from": "Stopping",
+      "event": "RCA",
+      "action": "",
+      "to": "Stopping"
+    },
+    {
+      "from": "Initial",
+      "event": "RCN",
+      "action": "",
+      "to": "Closed"
+    },
+    {
+      "from": "Starting",
+      "event": "RCN",
+      "action": "",
+      "to": "Starting"
+    },
+    {
+      "from": "Closed",
+      "event": "RCN",
+      "action": "sta",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "RCN",
+      "action": "sta",
+      "to": "Stopped"
+    },
+    {
+      "from": "Closing",
+      "event": "RCN",
+      "action": "",
+      "to": "Closing"
+    },
+    {
+      "from": "Stopping",
+      "event": "RCN",
+      "action": "",
+      "to": "Stopping"
+    },
+    {
+      "from": "Initial",
+      "event": "RTR",
+      "action": "",
+      "to": "Closed"
+    },
+    {
+      "from": "Starting",
+      "event": "RTR",
+      "action": "",
+      "to": "Starting"
+    },
+    {
+      "from": "Closed",
+      "event": "RTR",
+      "action": "sta",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "RTR",
+      "action": "sta",
+      "to": "Stopped"
+    },
+    {
+      "from": "Closing",
+      "event": "RTR",
+      "action": "",
+      "to": "Closing"
+    },
+    {
+      "from": "Stopping",
+      "event": "RTR",
+      "action": "",
+      "to": "Stopping"
+    },
+    {
+      "from": "Initial",
+      "event": "RTA",
+      "action": "",
+      "to": "Closed"
+    },
+    {
+      "from": "Starting",
+      "event": "RTA",
+      "action": "",
+      "to": "Starting"
+    },
+    {
+      "from": "Closed",
+      "event": "RTA",
+      "action": "tlf",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "RTA",
+      "action": "tlf",
+      "to": "Stopped"
+    },
+    {
+      "from": "Closing",
+      "event": "RTA",
+      "action": "tlf",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopping",
+      "event": "RTA",
+      "action": "tlf",
+      "to": "Stopped"
+    },
+    {
+      "from": "Initial",
+      "event": "RUC",
+      "action": "",
+      "to": "Closed"
+    },
+    {
+      "from": "Starting",
+      "event": "RUC",
+      "action": "",
+      "to": "Starting"
+    },
+    {
+      "from": "Closed",
+      "event": "RUC",
+      "action": "scj",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "RUC",
+      "action": "scj",
+      "to": "Stopped"
+    },
+    {
+      "from": "Closing",
+      "event": "RUC",
+      "action": "",
+      "to": "Closing"
+    },
+    {
+      "from": "Stopping",
+      "event": "RUC",
+      "action": "",
+      "to": "Stopping"
+    },
+    {
+      "from": "Initial",
+      "event": "RXJ+",
+      "action": "",
+      "to": "Closed"
+    },
+    {
+      "from": "Starting",
+      "event": "RXJ+",
+      "action": "",
+      "to": "Starting"
+    },
+    {
+      "from": "Closed",
+      "event": "RXJ+",
+      "action": "",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "RXJ+",
+      "action": "",
+      "to": "Stopped"
+    },
+    {
+      "from": "Closing",
+      "event": "RXJ+",
+      "action": "",
+      "to": "Closing"
+    },
+    {
+      "from": "Stopping",
+      "event": "RXJ+",
+      "action": "",
+      "to": "Stopping"
+    },
+    {
+      "from": "Initial",
+      "event": "RXJ-",
+      "action": "",
+      "to": "Closed"
+    },
+    {
+      "from": "Starting",
+      "event": "RXJ-",
+      "action": "",
+      "to": "Starting"
+    },
+    {
+      "from": "Closed",
+      "event": "RXJ-",
+      "action": "tlf",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "RXJ-",
+      "action": "tlf",
+      "to": "Stopped"
+    },
+    {
+      "from": "Closing",
+      "event": "RXJ-",
+      "action": "tlf",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopping",
+      "event": "RXJ-",
+      "action": "tlf",
+      "to": "Stopped"
+    },
+    {
+      "from": "Initial",
+      "event": "RXR",
+      "action": "",
+      "to": "Closed"
+    },
+    {
+      "from": "Starting",
+      "event": "RXR",
+      "action": "",
+      "to": "Starting"
+    },
+    {
+      "from": "Closed",
+      "event": "RXR",
+      "action": "",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "RXR",
+      "action": "",
+      "to": "Stopped"
+    },
+    {
+      "from": "Closing",
+      "event": "RXR",
+      "action": "",
+      "to": "Closing"
+    },
+    {
+      "from": "Stopping",
+      "event": "RXR",
+      "action": "",
+      "to": "Stopping"
+    },
+    {
+      "from": "Starting",
+      "event": "Up",
+      "action": "Send Configure-Request",
+      "to": "Request-Sent"
+    },
+    {
+      "from": "Closed",
+      "event": "Receive-Configure-Request",
+      "action": "Send Terminate-Ack",
+      "to": "Stopped"
+    },
+    {
+      "from": "Stopped",
+      "event": "Receive-Configure-Request",
+      "action": "Send appropriate response",
+      "to": "Starting"
+    },
+    {
+      "from": "Stopped",
+      "event": "Receive-Configure-Request",
+      "action": "Send Terminate-Ack",
+      "to": "Closed"
+    },
+    {
+      "from": "Closing",
+      "event": "Receive-Terminate-Ack",
+      "action": "",
+      "to": "Closed"
+    },
+    {
+      "from": "Closing",
+      "event": "TO+",
+      "action": "Restart timer",
+      "to": "Closing"
+    },
+    {
+      "from": "Closing",
+      "event": "TO-",
+      "action": "",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopping",
+      "event": "Receive-Terminate-Ack",
+      "action": "",
+      "to": "Stopped"
+    },
+    {
+      "from": "Request-Sent",
+      "event": "Receive-Configure-Ack",
+      "action": "",
+      "to": "Ack-Received"
+    },
+    {
+      "from": "Request-Sent",
+      "event": "Receive-Configure-Nak/Rej",
+      "action": "",
+      "to": "Request-Sent"
+    },
+    {
+      "from": "Request-Sent",
+      "event": "TO+",
+      "action": "Restart timer",
+      "to": "Request-Sent"
+    },
+    {
+      "from": "Request-Sent",
+      "event": "TO-",
+      "action": "",
+      "to": "Stopped"
+    },
+    {
+      "from": "Ack-Received",
+      "event": "Receive-Configure-Ack",
+      "action": "Send Configure-Ack",
+      "to": "Ack-Sent"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "Receive-Configure-Ack",
+      "action": "",
+      "to": "Opened"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "TO+",
+      "action": "Restart timer",
+      "to": "Ack-Sent"
+    },
+    {
+      "from": "Ack-Sent",
+      "event": "TO-",
+      "action": "",
+      "to": "Stopped"
+    },
+    {
+      "from": "Opened",
+      "event": "Down",
+      "action": "This-Layer-Down",
+      "to": "Stopping"
+    },
+    {
+      "from": "Opened",
+      "event": "Close",
+      "action": "",
+      "to": "Closing"
+    },
+    {
+      "from": "Initial",
+      "event": "Open",
+      "action": "This-Layer-Started",
+      "to": "Starting"
+    },
+    {
+      "from": "Closed",
+      "event": "Down",
+      "action": "This-Layer-Finished",
+      "to": "Initial"
+    },
+    {
+      "from": "Stopped",
+      "event": "Down",
+      "action": "This-Layer-Finished",
+      "to": "Initial"
+    },
+    {
+      "from": "Closed",
+      "event": "Close",
+      "action": "",
+      "to": "Closed"
+    },
+    {
+      "from": "Stopped",
+      "event": "Close",
+      "action": "",
+      "to": "Closed"
+    }
+  ]
+}

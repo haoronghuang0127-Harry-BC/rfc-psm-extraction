@@ -1,0 +1,248 @@
+{
+  "states": [
+    "Establishing a two-way transmission channel",
+    "Mail transaction",
+    "Connection shutdown or other mail transactions",
+    "buffer",
+    "state table",
+    "Connection Establishment",
+    "Connection Open with Rejection",
+    "Greeting Received",
+    "EHLO/HELO Sent",
+    "Transaction Start",
+    "Recipient Specification",
+    "Data Transfer",
+    "Transaction Confirmation",
+    "Relaying",
+    "Delivery Notification",
+    "Active State",
+    "Initial State",
+    "Expanding Alias",
+    "Expanding List",
+    "Mail Transaction in Progress",
+    "Locating the Target Host",
+    "Resolving the Domain Name",
+    "Queued and Retrying",
+    "Error Condition",
+    "Initialized",
+    "Session Open",
+    "Mail Transaction Open",
+    "CONNECTION ESTABLISHED",
+    "EHLO or HELO",
+    "MAIL",
+    "RCPT",
+    "DATA",
+    "RSET",
+    "VRFY",
+    "EXPN",
+    "HELP",
+    "NOOP",
+    "QUIT",
+    "Idle",
+    "Connected",
+    "Data Input",
+    "Closing",
+    "Authenticated State",
+    "Unauthenticated State"
+  ],
+  "transitions": [
+    {
+      "from": "Establishing a two-way transmission channel",
+      "event": "message to transmit",
+      "action": "establish a two-way transmission channel",
+      "to": "Establishing a two-way transmission channel"
+    },
+    {
+      "from": "Establishing a two-way transmission channel",
+      "event": "determined a target domain",
+      "action": "establish a two-way transmission channel",
+      "to": "Establishing a two-way transmission channel"
+    },
+    {
+      "from": "Establishing a two-way transmission channel",
+      "event": "initial handshaking is completed",
+      "action": "initiate a mail transaction",
+      "to": "Mail transaction"
+    },
+    {
+      "from": "Mail transaction",
+      "event": "series of commands to specify the originator and destination of the mail and transmission of the message content",
+      "action": "respond to each command with a reply",
+      "to": "Mail transaction"
+    },
+    {
+      "from": "Mail transaction",
+      "event": "message has been transmitted",
+      "action": "request that the connection be shut down or initiate other mail transactions",
+      "to": "Connection shutdown or other mail transactions"
+    },
+    {
+      "from": "Connection Establishment",
+      "event": "",
+      "action": "220 code, optional software and version information",
+      "to": "Connection Establishment"
+    },
+    {
+      "from": "Connection Establishment",
+      "event": "",
+      "action": "554 response",
+      "to": "Connection Open with Rejection"
+    },
+    {
+      "from": "Greeting Received",
+      "event": "EHLO",
+      "action": "Server provides list of extensions",
+      "to": "EHLO/HELO Sent"
+    },
+    {
+      "from": "Greeting Received",
+      "event": "HELO",
+      "action": "Server does not return extended EHLO-style response",
+      "to": "EHLO/HELO Sent"
+    },
+    {
+      "from": "Transaction Start",
+      "event": "MAIL command",
+      "action": "Return 250 OK or error reply",
+      "to": "Recipient Specification"
+    },
+    {
+      "from": "Recipient Specification",
+      "event": "RCPT command",
+      "action": "Return 250 OK or 550 reply",
+      "to": "Recipient Specification"
+    },
+    {
+      "from": "Recipient Specification",
+      "event": "DATA command",
+      "action": "Return 354 Intermediate reply",
+      "to": "Data Transfer"
+    },
+    {
+      "from": "Data Transfer",
+      "event": "end of mail data indicator",
+      "action": "Return 250 OK",
+      "to": "Transaction Confirmation"
+    },
+    {
+      "from": "Relaying",
+      "event": "mail accepted",
+      "action": "establishes transmission channel to next SMTP server",
+      "to": "Relaying"
+    },
+    {
+      "from": "Relaying",
+      "event": "mail rejected",
+      "action": "returns 550 response",
+      "to": "Relaying"
+    },
+    {
+      "from": "Relaying",
+      "event": "delivery cannot be accomplished",
+      "action": "constructs undeliverable mail notification message and sends it to the originator",
+      "to": "Delivery Notification"
+    },
+    {
+      "from": "Delivery Notification",
+      "event": "",
+      "action": "sets reverse-path to null",
+      "to": "Delivery Notification"
+    },
+    {
+      "from": "Active State",
+      "event": "QUIT",
+      "action": "221 reply, close connection",
+      "to": "Active State"
+    },
+    {
+      "from": "Initial State",
+      "event": "EHLO or HELO",
+      "action": "250 OK, clear state tables and buffers",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "MAIL",
+      "action": "clear reverse-path, forward-path, and mail data buffers, insert reverse-path information",
+      "to": "Mail Transaction in Progress"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "RCPT",
+      "action": "append forward-path to forward-path buffer",
+      "to": "Mail Transaction in Progress"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "DATA",
+      "action": "append mail data to mail data buffer",
+      "to": "Mail Transaction in Progress"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "RSET",
+      "action": "discard stored sender, recipients, and mail data, clear buffers and state tables",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "QUIT",
+      "action": "send 221 OK reply, close transmission channel",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initialized",
+      "event": "EHLO",
+      "action": "Accept, clear buffers, reset state",
+      "to": "Session Open"
+    },
+    {
+      "from": "Session Open",
+      "event": "EHLO",
+      "action": "Clear buffers, reset state",
+      "to": "Session Open"
+    },
+    {
+      "from": "Initialized",
+      "event": "NOOP, HELP, EXPN, VRFY, RSET",
+      "action": "Process normally",
+      "to": "Initialized"
+    },
+    {
+      "from": "Session Open",
+      "event": "NOOP, HELP, EXPN, VRFY, RSET",
+      "action": "Process normally",
+      "to": "Session Open"
+    },
+    {
+      "from": "Session Open",
+      "event": "MAIL",
+      "action": "Begin mail transaction",
+      "to": "Mail Transaction Open"
+    },
+    {
+      "from": "Mail Transaction Open",
+      "event": "RSET, EHLO, QUIT",
+      "action": "Abort transaction",
+      "to": "Session Open"
+    },
+    {
+      "from": "Mail Transaction Open",
+      "event": "MAIL",
+      "action": "Reject",
+      "to": "Session Open"
+    },
+    {
+      "from": "Mail Transaction Open",
+      "event": "",
+      "action": "Must follow MAIL with RCPT, DATA, in order",
+      "to": "Mail Transaction Open"
+    },
+    {
+      "from": "Session Open",
+      "event": "QUIT",
+      "action": "Request connection closure",
+      "to": "Initialized"
+    }
+  ]
+}

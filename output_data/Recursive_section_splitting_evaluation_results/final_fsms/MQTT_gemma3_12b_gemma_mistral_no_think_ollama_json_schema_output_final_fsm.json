@@ -1,0 +1,306 @@
+{
+  "states": [
+    "CONNECT",
+    "CONNACK",
+    "AUTH",
+    "PUBLISH",
+    "PUBACK",
+    "PINGREQ",
+    "PINGRESP",
+    "DISCONNECT",
+    "Client Authorization Server Interface",
+    "Broker",
+    "RS-AS interface",
+    "Client",
+    "Pub/Sub Interface",
+    "Unauthenticated",
+    "Connected to Broker (authz-info)",
+    "Broker Key Store",
+    "Token Validation",
+    "Raw Public Key Mode",
+    "Pre-Shared Key Mode",
+    "Anonymous TLS Connection",
+    "Waiting for CONNACK",
+    "Broker Processing Before CONNACK",
+    "Authentication Using AUTH Property",
+    "Proof of Possession Using a Challenge from the TLS Session",
+    "Proof of Possession via Broker-generated Challenge/Response",
+    "Client Responding to Broker Challenge",
+    "Connection Request Received",
+    "Authorization Success",
+    "Unauthorized Request",
+    "Authorization Check",
+    "Publishing to Subscribers",
+    "Subscribing to Topics",
+    "Connected",
+    "Reauthenticating",
+    "Disconnected",
+    "Session Expiry Interval"
+  ],
+  "transitions": [
+    {
+      "from": "CONNECT",
+      "event": "",
+      "action": "requests to connect",
+      "to": "CONNACK"
+    },
+    {
+      "from": "CONNACK",
+      "event": "",
+      "action": "connection acknowledgment",
+      "to": "AUTH"
+    },
+    {
+      "from": "AUTH",
+      "event": "",
+      "action": "authentication exchange",
+      "to": "PUBLISH"
+    },
+    {
+      "from": "PUBLISH",
+      "event": "",
+      "action": "publish request",
+      "to": "PUBACK"
+    },
+    {
+      "from": "PUBLISH",
+      "event": "",
+      "action": "publish request",
+      "to": "PINGREQ"
+    },
+    {
+      "from": "PINGREQ",
+      "event": "",
+      "action": "signals Client is alive",
+      "to": "PINGRESP"
+    },
+    {
+      "from": "DISCONNECT",
+      "event": "",
+      "action": "indicates Network Connection is being closed",
+      "to": "CONNECT"
+    },
+    {
+      "from": "Client",
+      "event": "Token request",
+      "action": "Access token",
+      "to": "Client Authorization Server Interface"
+    },
+    {
+      "from": "Client Authorization Server Interface",
+      "event": "",
+      "action": "response",
+      "to": "Client"
+    },
+    {
+      "from": "Client",
+      "event": "Connection request + access token",
+      "action": "Connection response",
+      "to": "Broker"
+    },
+    {
+      "from": "Broker",
+      "event": "Introspection request (optional)",
+      "action": "",
+      "to": "RS-AS interface"
+    },
+    {
+      "from": "RS-AS interface",
+      "event": "Introspection response (optional)",
+      "action": "",
+      "to": "Broker"
+    },
+    {
+      "from": "Broker",
+      "event": "",
+      "action": "",
+      "to": "Pub/Sub Interface"
+    },
+    {
+      "from": "Connected to Broker (authz-info)",
+      "event": "PUBLISH to authz-info",
+      "action": "Store token in key store; verify token validity",
+      "to": "Token Validation"
+    },
+    {
+      "from": "Token Validation",
+      "event": "Token valid",
+      "action": "",
+      "to": "Connected to Broker (authz-info)"
+    },
+    {
+      "from": "Token Validation",
+      "event": "Token invalid",
+      "action": "Send DISCONNECT with reason code 0x87 or PUBACK/PUBREC with reason code 0x87",
+      "to": "Connected to Broker (authz-info)"
+    },
+    {
+      "from": "Token Validation",
+      "event": "Payload format invalid",
+      "action": "Send DISCONNECT with reason code 0x99",
+      "to": "Connected to Broker (authz-info)"
+    },
+    {
+      "from": "Broker Key Store",
+      "event": "",
+      "action": "Index all tokens received",
+      "to": "Broker Key Store"
+    },
+    {
+      "from": "Anonymous TLS Connection",
+      "event": "CONNECT packet",
+      "action": "wait for CONNACK",
+      "to": "Waiting for CONNACK"
+    },
+    {
+      "from": "Waiting for CONNACK",
+      "event": "AUTH packet from Broker",
+      "action": "send AUTH or DISCONNECT",
+      "to": "Waiting for CONNACK"
+    },
+    {
+      "from": "Waiting for CONNACK",
+      "event": "DISCONNECT packet from Broker",
+      "action": "send DISCONNECT",
+      "to": "Waiting for CONNACK"
+    },
+    {
+      "from": "Waiting for CONNACK",
+      "event": "Authentication Method Property (ace)",
+      "action": "Initiate authentication using AUTH property",
+      "to": "Authentication Using AUTH Property"
+    },
+    {
+      "from": "Authentication Using AUTH Property",
+      "event": "Broker does not support profile",
+      "action": "send CONNACK with reason code 0x8C",
+      "to": "Waiting for CONNACK"
+    },
+    {
+      "from": "Waiting for CONNACK",
+      "event": "Token Length and Token in CONNECT",
+      "action": "Broker responds with AUTH 0x18",
+      "to": "Proof of Possession via Broker-generated Challenge/Response"
+    },
+    {
+      "from": "Proof of Possession via Broker-generated Challenge/Response",
+      "event": "Broker sends AUTH packet with RS nonce",
+      "action": "Client responds with AUTH packet with Client nonce and signature/MAC",
+      "to": "Client Responding to Broker Challenge"
+    },
+    {
+      "from": "Client Responding to Broker Challenge",
+      "event": "Token validation",
+      "action": "send CONNACK 0x00 (Success)",
+      "to": "Waiting for CONNACK"
+    },
+    {
+      "from": "Connection Request Received",
+      "event": "",
+      "action": "MUST send a CONNACK packet to the Client.",
+      "to": "Unauthorized Request"
+    },
+    {
+      "from": "Connection Request Received",
+      "event": "",
+      "action": "MUST send a CONNACK packet to the Client.",
+      "to": "Authorization Success"
+    },
+    {
+      "from": "Unauthorized Request",
+      "event": "",
+      "action": "responds with the CONNACK reason code 0x87 (Not Authorized) or any other applicable reason code. MAY also trigger AS discovery and include a User Property",
+      "to": "Unauthorized Request"
+    },
+    {
+      "from": "Authorization Success",
+      "event": "",
+      "action": "set Session Present to 0 or 1. MUST be prepared to store the token during the connection and after disconnection for future use.",
+      "to": "Authorization Success"
+    },
+    {
+      "from": "Authorization Check",
+      "event": "PUBLISH packet",
+      "action": "match Topic Name against scope array",
+      "to": "Publishing to Subscribers"
+    },
+    {
+      "from": "Authorization Check",
+      "event": "PUBLISH packet",
+      "action": "return error if QoS >= 1; send PUBACK/PUBREC with reason code 0x87",
+      "to": "Authorization Check"
+    },
+    {
+      "from": "Authorization Check",
+      "event": "SUBSCRIBE packet",
+      "action": "match Topic Filter against scope field",
+      "to": "Subscribing to Topics"
+    },
+    {
+      "from": "Publishing to Subscribers",
+      "event": "",
+      "action": "publish message to valid subscribers",
+      "to": "Authorization Check"
+    },
+    {
+      "from": "Subscribing to Topics",
+      "event": "",
+      "action": "issue SUBACK packet with return codes",
+      "to": "Authorization Check"
+    },
+    {
+      "from": "Connected",
+      "event": "CONNECT, PUBLISH, or SUBSCRIBE packet received or sent",
+      "action": "check for token expiration",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "PINGREQ packet received",
+      "action": "SHOULD check for token expiration",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "Token expiration",
+      "action": "send PUBACK, SUBACK, or DISCONNECT with return code 'Not authorized', close Network Connection",
+      "to": "Reauthenticating"
+    },
+    {
+      "from": "Reauthenticating",
+      "event": "AUTH packet received",
+      "action": "accepts reauthentication requests if Client has already submitted a token",
+      "to": "Connected"
+    },
+    {
+      "from": "Reauthenticating",
+      "event": "Reauthentication fails",
+      "action": "send DISCONNECT packet with reason code 0x87 (Not Authorized)",
+      "to": "Reauthenticating"
+    },
+    {
+      "from": "Disconnected",
+      "event": "Client DISCONNECT",
+      "action": "Broker doesn't store Session State, keeps retained messages",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "Client DISCONNECT",
+      "action": "Broker MAY store Session State, including token and introspection result",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "network errors or server disconnection due to a protocol error",
+      "action": "Send Will Message",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "PUBLISH packet with RETAIN flag set",
+      "action": "Store the most recent message for the associated topic",
+      "to": "Connected"
+    }
+  ]
+}

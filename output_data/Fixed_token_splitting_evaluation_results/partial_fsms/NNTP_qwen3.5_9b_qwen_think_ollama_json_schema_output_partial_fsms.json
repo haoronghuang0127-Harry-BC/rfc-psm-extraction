@@ -1,0 +1,13 @@
+[
+  "{\"states\": [], \"transitions\": []}",
+  "{\n  \"states\": [\n    \"Transit mode\",\n    \"Reading mode\"\n  ],\n  \"transitions\": [\n    {\n      \"from\": \"Transit mode\",\n      \"event\": \"MODE READER\",\n      \"action\": \"Server advertises READER capability, stops advertising MODE-READER\",\n      \"to\": \"Reading mode\"\n    }\n  ]\n}",
+  "{\n  \"states\": [\n    \"Transit Mode\",\n    \"Reader Mode\"\n  ],\n  \"transitions\": [\n    {\n      \"from\": \"Transit Mode\",\n      \"event\": \"MODE READER\",\n      \"action\": \"return 200 or 201 response\",\n      \"to\": \"Reader Mode\"\n    }\n  ]\n}",
+  "{\n  \"states\": [\n    \"INVALID\",\n    \"GROUP_SELECTED\"\n  ],\n  \"transitions\": [\n    {\n      \"from\": \"INVALID\",\n      \"event\": \"GROUP\",\n      \"action\": \"Group successfully selected\",\n      \"to\": \"GROUP_SELECTED\"\n    },\n    {\n      \"from\": \"INVALID\",\n      \"event\": \"LISTGROUP\",\n      \"action\": \"Article numbers follow\",\n      \"to\": \"GROUP_SELECTED\"\n    },\n    {\n      \"from\": \"GROUP_SELECTED\",\n      \"event\": \"GROUP\",\n      \"action\": \"Group successfully selected\",\n      \"to\": \"GROUP_SELECTED\"\n    },\n    {\n      \"from\": \"GROUP_SELECTED\",\n      \"event\": \"LISTGROUP\",\n      \"action\": \"Article numbers follow\",\n      \"to\": \"GROUP_SELECTED\"\n    },\n    {\n      \"from\": \"GROUP_SELECTED\",\n      \"event\": \"ARTICLE\",\n      \"action\": \"Article follows\",\n      \"to\": \"GROUP_SELECTED\"\n    },\n    {\n      \"from\": \"GROUP_SELECTED\",\n      \"event\": \"LAST\",\n      \"action\": \"Article found\",\n      \"to\": \"GROUP_SELECTED\"\n    },\n    {\n      \"from\": \"GROUP_SELECTED\",\n      \"event\": \"NEXT\",\n      \"action\": \"Article found\",\n      \"to\": \"GROUP_SELECTED\"\n    }\n  ]\n}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\n  \"states\": [\n    \"READER\"\n  ],\n  \"transitions\": []\n}"
+]

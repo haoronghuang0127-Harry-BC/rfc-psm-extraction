@@ -1,0 +1,432 @@
+{
+  "states": [
+    "Connection",
+    "Session",
+    "Not Authenticated State",
+    "Authenticated State",
+    "Selected State",
+    "Logout State",
+    "Any State",
+    "SEARCH completed",
+    "SEARCH completed, result saved",
+    "NO",
+    "Authenticated",
+    "Not Authenticated",
+    "Mailbox Open",
+    "Mailbox Closed",
+    "IMAP4rev1",
+    "IMAP4rev2",
+    "SELECTED",
+    "UNSELECTED"
+  ],
+  "transitions": [
+    {
+      "from": "Connection",
+      "event": "SELECT or EXAMINE command",
+      "action": "",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "SELECT or EXAMINE of another mailbox",
+      "action": "",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "CLOSE command",
+      "action": "",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "UNSELECT command",
+      "action": "",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "connection termination",
+      "action": "",
+      "to": "Connection"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "successful LOGIN or AUTHENTICATE command",
+      "action": "",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "successful SELECT or EXAMINE command",
+      "action": "",
+      "to": "Selected State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "CLOSE or UNSELECT command",
+      "action": "",
+      "to": "Selected State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "failed SELECT or EXAMINE command",
+      "action": "",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Selected State",
+      "event": "LOGOUT command",
+      "action": "send untagged BYE response and a tagged OK response",
+      "to": "Logout State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "connection without pre-authentication (OK greeting)",
+      "action": "",
+      "to": "Not Authenticated State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "pre-authenticated connection (PREAUTH greeting)",
+      "action": "",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "rejected connection (BYE greeting)",
+      "action": "",
+      "to": "Not Authenticated State"
+    },
+    {
+      "from": "Any State",
+      "event": "CAPABILITY",
+      "action": "REQUIRED untagged response: CAPABILITY",
+      "to": "Any State"
+    },
+    {
+      "from": "Any State",
+      "event": "NOOP",
+      "action": "no specific responses for this command",
+      "to": "Any State"
+    },
+    {
+      "from": "Any State",
+      "event": "LOGOUT",
+      "action": "REQUIRED untagged response: BYE",
+      "to": "Any State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "STARTTLS",
+      "action": "no specific response for this command",
+      "to": "Not Authenticated State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "AUTHENTICATE",
+      "action": "continuation data can be requested",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "LOGIN",
+      "action": "",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "AUTHENTICATE PLAIN",
+      "action": "Success (tls protection)",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "AUTHENTICATE EXTERNAL",
+      "action": "Success (tls protection)",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "ENABLE",
+      "action": "ENABLED response",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "SELECT",
+      "action": "deselects any currently selected mailbox",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "EXAMINE",
+      "action": "identified as read-only",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "SEARCH completed",
+      "event": "FETCH $ (UID INTERNALDATE FLAGS BODY.PEEK[HEADER])",
+      "action": "FETCH responses",
+      "to": "FETCH completed"
+    },
+    {
+      "from": "SEARCH completed",
+      "event": "UID SEARCH UID $ SMALLER 4096",
+      "action": "ESEARCH response",
+      "to": "SEARCH completed"
+    },
+    {
+      "from": "SEARCH completed",
+      "event": "SEARCH CHARSET UTF-8 (OR $ 1,3000:3021) TEXT {8+} мать",
+      "action": "ESEARCH response",
+      "to": "SEARCH completed"
+    },
+    {
+      "from": "SEARCH completed",
+      "event": "SEARCH RETURN (SAVE) SINCE 1-Feb-1994 NOT FROM \"Smith\"",
+      "action": "OK SEARCH completed",
+      "to": "SEARCH completed, result saved"
+    },
+    {
+      "from": "SEARCH completed, result saved",
+      "event": "FETCH $ (UID INTERNALDATE FLAGS BODY.PEEK[HEADER])",
+      "action": "FETCH responses",
+      "to": "FETCH completed"
+    },
+    {
+      "from": "SEARCH completed, result saved",
+      "event": "SEARCH RETURN (SAVE) SINCE 1-Feb-1994 NOT FROM \"Smith\"",
+      "action": "OK SEARCH completed",
+      "to": "SEARCH completed, result saved"
+    },
+    {
+      "from": "SEARCH completed, result saved",
+      "event": "SEARCH RETURN (SAVE) CHARSET KOI8-R (OR $ 1,3000:3021) TEXT {4} XXXX",
+      "action": "NO [BADCHARSET UTF-8] KOI8-R is not supported",
+      "to": "NO"
+    },
+    {
+      "from": "NO",
+      "event": "",
+      "action": "",
+      "to": "NO"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "A003 APPEND",
+      "action": "A003 OK APPEND completed",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "A004 COPY",
+      "action": "A004 OK [COPYUID ...]",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "A005 UID COPY",
+      "action": "A005 OK No matching messages",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "A006 COPY",
+      "action": "A006 OK Done",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "A007 SELECT",
+      "action": "A007 OK [READ-WRITE] SELECT completed",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "A001 SELECT",
+      "action": "A001 OK [READ-WRITE] SELECT completed",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "A002 IDLE",
+      "action": "+ idling",
+      "to": "Idling"
+    },
+    {
+      "from": "Idling",
+      "event": "DONE",
+      "action": "A002 OK IDLE terminated",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "A003 EXPUNGE",
+      "action": "* EXPUNGE",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "A341 CLOSE",
+      "action": "A341 OK CLOSE completed",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Selected State",
+      "event": "A342 UNSELECT",
+      "action": "A342 OK Unselect completed",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "PREAUTH",
+      "action": "send CAPABILITY",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "LOGIN",
+      "action": "send OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "SELECT",
+      "action": "send READ-WRITE",
+      "to": "Mailbox Open"
+    },
+    {
+      "from": "Authenticated",
+      "event": "EXAMINE",
+      "action": "send READ-ONLY",
+      "to": "Mailbox Open"
+    },
+    {
+      "from": "Mailbox Open",
+      "event": "CLOSE",
+      "action": "",
+      "to": "Mailbox Closed"
+    },
+    {
+      "from": "Mailbox Open",
+      "event": "UNSELECT",
+      "action": "",
+      "to": "Mailbox Closed"
+    },
+    {
+      "from": "Mailbox Open",
+      "event": "SELECT",
+      "action": "send CLOSED",
+      "to": "Mailbox Open"
+    },
+    {
+      "from": "IMAP4rev1",
+      "event": "ENABLE IMAP4rev2",
+      "action": "issue \"ENABLE IMAP4rev2\" command",
+      "to": "IMAP4rev2"
+    },
+    {
+      "from": "UNSELECTED",
+      "event": "AUTHENTICATE",
+      "action": "AUTHENTICATIONFAILED",
+      "to": "UNSELECTED"
+    },
+    {
+      "from": "UNSELECTED",
+      "event": "STARTTLS",
+      "action": "",
+      "to": "UNSELECTED"
+    },
+    {
+      "from": "UNSELECTED",
+      "event": "ENABLE",
+      "action": "",
+      "to": "UNSELECTED"
+    },
+    {
+      "from": "UNSELECTED",
+      "event": "SELECT",
+      "action": "CLOSED",
+      "to": "SELECTED"
+    },
+    {
+      "from": "UNSELECTED",
+      "event": "EXAMINE",
+      "action": "CLOSED",
+      "to": "SELECTED"
+    },
+    {
+      "from": "SELECTED",
+      "event": "CLOSE",
+      "action": "",
+      "to": "UNSELECTED"
+    },
+    {
+      "from": "SELECTED",
+      "event": "LOGOUT",
+      "action": "",
+      "to": "UNSELECTED"
+    },
+    {
+      "from": "SELECTED",
+      "event": "IDLE",
+      "action": "",
+      "to": "SELECTED"
+    },
+    {
+      "from": "SELECTED",
+      "event": "NOOP",
+      "action": "",
+      "to": "SELECTED"
+    },
+    {
+      "from": "SELECTED",
+      "event": "APPEND",
+      "action": "APPENDUID",
+      "to": "SELECTED"
+    },
+    {
+      "from": "SELECTED",
+      "event": "COPY",
+      "action": "COPYUID",
+      "to": "SELECTED"
+    },
+    {
+      "from": "SELECTED",
+      "event": "MOVE",
+      "action": "",
+      "to": "SELECTED"
+    },
+    {
+      "from": "SELECTED",
+      "event": "DELETE",
+      "action": "",
+      "to": "SELECTED"
+    },
+    {
+      "from": "SELECTED",
+      "event": "EXPUNGE",
+      "action": "",
+      "to": "SELECTED"
+    },
+    {
+      "from": "SELECTED",
+      "event": "SEARCH",
+      "action": "",
+      "to": "SELECTED"
+    },
+    {
+      "from": "SELECTED",
+      "event": "FETCH",
+      "action": "",
+      "to": "SELECTED"
+    },
+    {
+      "from": "SELECTED",
+      "event": "STORE",
+      "action": "",
+      "to": "SELECTED"
+    }
+  ]
+}

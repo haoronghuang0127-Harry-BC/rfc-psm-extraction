@@ -1,0 +1,812 @@
+{
+  "states": [
+    "LISTEN",
+    "SYN-SENT",
+    "SYN-RECEIVED",
+    "ESTABLISHED",
+    "FIN-WAIT-1",
+    "FIN-WAIT-2",
+    "CLOSE-WAIT",
+    "CLOSING",
+    "LAST-ACK",
+    "TIME-WAIT",
+    "CLOSED",
+    "urgent mode",
+    "normal mode",
+    "closing state"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "passive OPEN",
+      "action": "create TCB",
+      "to": "LISTEN"
+    },
+    {
+      "from": "CLOSED",
+      "event": "active OPEN",
+      "action": "create TCB, snd SYN",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "CLOSED",
+      "event": "send SYN",
+      "action": "",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "CLOSED",
+      "event": "OPEN (passive)",
+      "action": "Create TCB; enter LISTEN state",
+      "to": "LISTEN"
+    },
+    {
+      "from": "CLOSED",
+      "event": "OPEN (active, remote socket specified)",
+      "action": "Create TCB; select ISS; send SYN segment <SEQ=ISS><CTL=SYN>; set SND.UNA to ISS; set SND.NXT to ISS+1",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "CLOSED",
+      "event": "receive incoming segment except RST",
+      "action": "send RST",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv RST",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv SYN",
+      "action": "snd SYN,ACK",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "CLOSE",
+      "action": "delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "receive SYN",
+      "action": "send SYN,ACK",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "receive RST",
+      "action": "ignore",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "passive OPEN call",
+      "action": "creates a new connection record in LISTEN state",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "OPEN (active, remote socket specified)",
+      "action": "Change connection from passive to active; select ISS; send SYN segment; set SND.UNA to ISS; set SND.NXT to ISS+1",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "LISTEN",
+      "event": "SEND (remote socket specified)",
+      "action": "Change connection from passive to active; select ISS; send SYN segment; set SND.UNA to ISS; set SND.NXT to ISS+1",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "LISTEN",
+      "event": "SEGMENT ARRIVES (SYN bit set, security match)",
+      "action": "Set RCV.NXT to SEG.SEQ+1; set IRS to SEG.SEQ; select ISS; send SYN segment <SEQ=ISS><ACK=RCV.NXT><CTL=SYN,ACK>; set SND.NXT to ISS+1; set SND.UNA to ISS",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "ABORT",
+      "action": "Return error: connection reset for outstanding RECEIVEs; Delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "receive segment with unacceptable ACK",
+      "action": "send RST",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "receive segment with mismatched security level or compartment",
+      "action": "send RST",
+      "to": "LISTEN"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "rcv SYN",
+      "action": "snd SYN,ACK",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "CLOSE",
+      "action": "delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "receive SYN,ACK",
+      "action": "send ACK",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "receive SYN",
+      "action": "send SYN,ACK",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "LISTEN on a port",
+      "action": "allow an application to LISTEN while connection block is in SYN-SENT state",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "SEGMENT ARRIVES (ACK acceptable, SYN bit on, security match)",
+      "action": "Set RCV.NXT to SEG.SEQ+1; set IRS to SEG.SEQ; advance SND.UNA to SEG.ACK; if SND.UNA > ISS change state to ESTABLISHED and send ACK <SEQ=SND.NXT><ACK=RCV.NXT><CTL=ACK>",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "SEGMENT ARRIVES (ACK acceptable, SYN bit on, security match)",
+      "action": "Set RCV.NXT to SEG.SEQ+1; set IRS to SEG.SEQ; advance SND.UNA to SEG.ACK; enter SYN-RECEIVED; form and send SYN,ACK segment <SEQ=ISS><ACK=RCV.NXT><CTL=SYN,ACK>; set SND.WND, SND.WL1, SND.WL2",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "SEGMENT ARRIVES (RST bit set, ACK acceptable)",
+      "action": "Signal user error: connection reset; drop segment; delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "ABORT",
+      "action": "Give connection reset notification to queued SENDs and RECEIVEs; Delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "receive segment with unacceptable ACK",
+      "action": "send RST",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "receive segment with mismatched security level or compartment",
+      "action": "send RST",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "rcv SYN,ACK",
+      "action": "snd ACK",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "CLOSE",
+      "action": "snd FIN",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "receive ACK",
+      "action": "",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "receive RST",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "LISTEN on a port",
+      "action": "allow an application to LISTEN while connection block is in SYN-RECEIVED state",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "RST bit set, passive OPEN",
+      "action": "return to LISTEN state and return; flush retransmission queue",
+      "to": "LISTEN"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "RST bit set, active OPEN",
+      "action": "signal user 'connection refused'; flush retransmission queue; delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "security/compartment mismatch",
+      "action": "send a reset and return",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "SYN bit set, passive OPEN",
+      "action": "return to LISTEN state and return",
+      "to": "LISTEN"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "ACK bit on, SND.UNA < SEG.ACK <= SND.NXT",
+      "action": "set SND.WND <- SEG.WND; set SND.WL1 <- SEG.SEQ; set SND.WL2 <- SEG.ACK",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "ACK bit on, acknowledgment not acceptable",
+      "action": "form and send reset segment <SEQ=SEG.ACK><CTL=RST>",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "receive segment with unacceptable ACK",
+      "action": "send RST",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "receive segment with mismatched security level or compartment",
+      "action": "send RST",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "user timeout expires",
+      "action": "flush all queues; signal user 'error: connection aborted due to user timeout'; delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "retransmission timeout expires",
+      "action": "send segment at front of retransmission queue again; reinitialize retransmission timer",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "CLOSE",
+      "action": "snd FIN",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "rcv FIN",
+      "action": "snd ACK",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "receive RST",
+      "action": "abort connection and inform user",
+      "to": "CLOSED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "receive unacceptable segment",
+      "action": "send empty acknowledgment segment",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "receive segment with mismatched security level or compartment",
+      "action": "send RST",
+      "to": "CLOSED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "Close",
+      "action": "send FIN segment",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "receive FIN",
+      "action": "send ACK",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "ABORT",
+      "action": "Send reset segment <SEQ=SND.NXT><CTL=RST>; give connection reset notification; flush queued segments; Delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "RST bit set",
+      "action": "signal 'reset' to outstanding RECEIVEs and SEND; flush segment queues; signal user 'connection reset'; delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "security/compartment mismatch",
+      "action": "send a reset; signal 'reset' to outstanding RECEIVEs and SEND; flush segment queues; signal user 'connection reset'; delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "FIN bit set",
+      "action": "signal user 'connection closing'; advance RCV.NXT over FIN; send acknowledgment for FIN",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "user timeout expires",
+      "action": "flush all queues; signal user 'error: connection aborted due to user timeout'; delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "retransmission timeout expires",
+      "action": "send segment at front of retransmission queue again; reinitialize retransmission timer",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "rcv ACK of FIN",
+      "action": "",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "rcv FIN",
+      "action": "snd ACK",
+      "to": "CLOSING"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "receive RST",
+      "action": "abort connection and inform user",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "receive unacceptable segment",
+      "action": "send empty acknowledgment segment",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "receive segment with mismatched security level or compartment",
+      "action": "send RST",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "receive ACK",
+      "action": "",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "receive FIN,ACK",
+      "action": "send ACK",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "ABORT",
+      "action": "Send reset segment <SEQ=SND.NXT><CTL=RST>; give connection reset notification; flush queued segments; Delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "RST bit set",
+      "action": "signal 'reset' to outstanding RECEIVEs and SEND; flush segment queues; signal user 'connection reset'; delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "security/compartment mismatch",
+      "action": "send a reset; signal 'reset' to outstanding RECEIVEs and SEND; flush segment queues; signal user 'connection reset'; delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "ACK bit on, FIN acknowledged",
+      "action": "continue processing in FIN-WAIT-2 state",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "FIN bit set, our FIN ACKed",
+      "action": "start time-wait timer; turn off other timers",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "FIN bit set, our FIN not ACKed",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "user timeout expires",
+      "action": "flush all queues; signal user 'error: connection aborted due to user timeout'; delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "retransmission timeout expires",
+      "action": "send segment at front of retransmission queue again; reinitialize retransmission timer",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "rcv FIN",
+      "action": "snd ACK",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "receive RST",
+      "action": "abort connection and inform user",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "receive unacceptable segment",
+      "action": "send empty acknowledgment segment",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "receive segment with mismatched security level or compartment",
+      "action": "send RST",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "receive FIN",
+      "action": "send ACK",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "ABORT",
+      "action": "Send reset segment <SEQ=SND.NXT><CTL=RST>; give connection reset notification; flush queued segments; Delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "RST bit set",
+      "action": "signal 'reset' to outstanding RECEIVEs and SEND; flush segment queues; signal user 'connection reset'; delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "security/compartment mismatch",
+      "action": "send a reset; signal 'reset' to outstanding RECEIVEs and SEND; flush segment queues; signal user 'connection reset'; delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "FIN bit set",
+      "action": "start time-wait timer; turn off other timers",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "user timeout expires",
+      "action": "flush all queues; signal user 'error: connection aborted due to user timeout'; delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "retransmission timeout expires",
+      "action": "send segment at front of retransmission queue again; reinitialize retransmission timer",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "CLOSE",
+      "action": "snd FIN",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "receive RST",
+      "action": "abort connection and inform user",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "receive unacceptable segment",
+      "action": "send empty acknowledgment segment",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "receive segment with mismatched security level or compartment",
+      "action": "send RST",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "Close",
+      "action": "send FIN segment",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "ABORT",
+      "action": "Send reset segment <SEQ=SND.NXT><CTL=RST>; give connection reset notification; flush queued segments; Delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "RST bit set",
+      "action": "signal 'reset' to outstanding RECEIVEs and SEND; flush segment queues; signal user 'connection reset'; delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "security/compartment mismatch",
+      "action": "send a reset; signal 'reset' to outstanding RECEIVEs and SEND; flush segment queues; signal user 'connection reset'; delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "FIN bit set",
+      "action": "",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "user timeout expires",
+      "action": "flush all queues; signal user 'error: connection aborted due to user timeout'; delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "retransmission timeout expires",
+      "action": "send segment at front of retransmission queue again; reinitialize retransmission timer",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "rcv ACK of FIN",
+      "action": "",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "receive RST",
+      "action": "abort connection and inform user",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "receive unacceptable segment",
+      "action": "send empty acknowledgment segment",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "receive segment with mismatched security level or compartment",
+      "action": "send RST",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "ABORT",
+      "action": "Respond with ok; delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "RST bit set",
+      "action": "enter CLOSED state, delete TCB, and return",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "security/compartment mismatch",
+      "action": "send a reset; signal 'reset' to outstanding RECEIVEs and SEND; flush segment queues; signal user 'connection reset'; delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "ACK acknowledges our FIN",
+      "action": "enter TIME-WAIT state",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "FIN bit set",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "user timeout expires",
+      "action": "flush all queues; signal user 'error: connection aborted due to user timeout'; delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "retransmission timeout expires",
+      "action": "send segment at front of retransmission queue again; reinitialize retransmission timer",
+      "to": "CLOSING"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "rcv ACK of FIN",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "receive RST",
+      "action": "abort connection and inform user",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "receive unacceptable segment",
+      "action": "send empty acknowledgment segment",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "receive segment with mismatched security level or compartment",
+      "action": "send RST",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "receive ACK",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "ABORT",
+      "action": "Respond with ok; delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "RST bit set",
+      "action": "enter CLOSED state, delete TCB, and return",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "security/compartment mismatch",
+      "action": "send a reset; signal 'reset' to outstanding RECEIVEs and SEND; flush segment queues; signal user 'connection reset'; delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "FIN acknowledged",
+      "action": "delete TCB, enter CLOSED state, and return",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "FIN bit set",
+      "action": "",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "user timeout expires",
+      "action": "flush all queues; signal user 'error: connection aborted due to user timeout'; delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "retransmission timeout expires",
+      "action": "send segment at front of retransmission queue again; reinitialize retransmission timer",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "Timeout=2MSL",
+      "action": "delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "receive RST",
+      "action": "abort connection and inform user",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "receive unacceptable segment",
+      "action": "send empty acknowledgment segment",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "receive segment with mismatched security level or compartment",
+      "action": "send RST",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "2 MSL timeout",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "ABORT",
+      "action": "Respond with ok; delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "RST bit set",
+      "action": "enter CLOSED state, delete TCB, and return",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "security/compartment mismatch",
+      "action": "send a reset; signal 'reset' to outstanding RECEIVEs and SEND; flush segment queues; signal user 'connection reset'; delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "FIN bit set (retransmission of remote FIN)",
+      "action": "Acknowledge it; restart 2 MSL timeout",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "user timeout expires",
+      "action": "flush all queues; signal user 'error: connection aborted due to user timeout'; delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "time-wait timeout expires",
+      "action": "delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "normal mode",
+      "event": "urgent pointer is in advance of RCV.NXT",
+      "action": "tell the user to go into urgent mode",
+      "to": "urgent mode"
+    },
+    {
+      "from": "urgent mode",
+      "event": "receive sequence number catches up to the urgent pointer",
+      "action": "tell user to go into normal mode",
+      "to": "normal mode"
+    },
+    {
+      "from": "urgent mode",
+      "event": "RECEIVE call with URGENT flag off",
+      "action": "user may now leave urgent mode",
+      "to": "urgent mode"
+    },
+    {
+      "from": "closing state",
+      "event": "CLOSE command",
+      "action": "connection remains in closing state for a short time until TCP peer replies",
+      "to": "closing state"
+    }
+  ]
+}

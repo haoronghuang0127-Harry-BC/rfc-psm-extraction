@@ -1,0 +1,803 @@
+{
+  "states": [
+    "Established",
+    "Ringing",
+    "Trying",
+    "client transaction",
+    "server transaction",
+    "transaction user",
+    "stateless proxy",
+    "stateful proxy",
+    "UAC",
+    "UAS",
+    "UAS processing request",
+    "Stateless UAS",
+    "UAS processing REGISTER request",
+    "early dialog",
+    "confirmed dialog",
+    "outside of a dialog",
+    "confirmed",
+    "INVITE transaction completed",
+    "early dialog",
+    "confirmed dialog",
+    "session established",
+    "session terminated",
+    "INVITE in progress",
+    "re-INVITE in progress",
+    "dialog established",
+    "dialog terminated",
+    "stateful",
+    "stateless",
+    "stateful proxy awaiting final response",
+    "proxy forwarding request",
+    "proxy awaiting response",
+    "receiving 503",
+    "receiving 407",
+    "receiving 401",
+    "receiving 3-6xx",
+    "forwarding request",
+    "processing CANCEL",
+    "Calling",
+    "Proceeding",
+    "Completed",
+    "Terminated",
+    "Keyring contains address-of-record",
+    "Certificate validated",
+    "Certificate not verified",
+    "Receiving request with S/MIME body",
+    "Receiving response with S/MIME body",
+    "TLS connection established",
+    "Unauthenticated",
+    "Authenticated",
+    "Established TLS connection",
+    "Non-compliant or compromised proxy",
+    "SIPS request received",
+    "SIP request received"
+  ],
+  "transitions": [
+    {
+      "from": "Established",
+      "event": "BYE",
+      "action": "200 OK",
+      "to": "Established"
+    },
+    {
+      "from": "Trying",
+      "event": "INVITE",
+      "action": "100 Trying",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "INVITE",
+      "action": "100 Trying",
+      "to": "Ringing"
+    },
+    {
+      "from": "Ringing",
+      "event": "200 OK",
+      "action": "200 OK",
+      "to": "Established"
+    },
+    {
+      "from": "Ringing",
+      "event": "488 Not Acceptable Here",
+      "action": "ACK",
+      "to": "Established"
+    },
+    {
+      "from": "client transaction",
+      "event": "request",
+      "action": "send",
+      "to": "server transaction"
+    },
+    {
+      "from": "server transaction",
+      "event": "response",
+      "action": "send",
+      "to": "client transaction"
+    },
+    {
+      "from": "transaction user",
+      "event": "request",
+      "action": "create client transaction",
+      "to": "client transaction"
+    },
+    {
+      "from": "transaction user",
+      "event": "cancel",
+      "action": "stop processing, revert state, generate error response",
+      "to": "client transaction"
+    },
+    {
+      "from": "stateful proxy",
+      "event": "",
+      "action": "maintain client and server transaction state machines",
+      "to": "stateful proxy"
+    },
+    {
+      "from": "stateless proxy",
+      "event": "",
+      "action": "forward request, forward response",
+      "to": "stateless proxy"
+    },
+    {
+      "from": "UAC",
+      "event": "sends request",
+      "action": "passes through proxy servers",
+      "to": "UAS"
+    },
+    {
+      "from": "UAS",
+      "event": "generates response",
+      "action": "forwards towards UAC",
+      "to": "UAC"
+    },
+    {
+      "from": "UAS processing request",
+      "event": "416 (Unsupported URI Scheme)",
+      "action": "retry request with SIP URI",
+      "to": "UAS processing request"
+    },
+    {
+      "from": "UAS processing request",
+      "event": "420 (Bad Extension)",
+      "action": "retry request omitting unsupported extensions",
+      "to": "UAS processing request"
+    },
+    {
+      "from": "UAS processing request",
+      "event": "405 (Method Not Allowed)",
+      "action": "generate 405 response, add Allow header",
+      "to": "UAS processing request"
+    },
+    {
+      "from": "UAS processing request",
+      "event": "Request-URI scheme not supported",
+      "action": "reject request with 416",
+      "to": "UAS processing request"
+    },
+    {
+      "from": "UAS processing request",
+      "event": "Request-URI not accepted",
+      "action": "reject request with 404",
+      "to": "UAS processing request"
+    },
+    {
+      "from": "UAS processing request",
+      "event": "To header tag missing, matching transaction found",
+      "action": "generate 482 (Loop Detected)",
+      "to": "UAS processing request"
+    },
+    {
+      "from": "UAS processing request",
+      "event": "Require header field with unsupported option-tag",
+      "action": "respond with 420 (Bad Extension), add Unsupported header",
+      "to": "UAS processing request"
+    },
+    {
+      "from": "UAS processing request",
+      "event": "Header field not understood",
+      "action": "ignore header field",
+      "to": "UAS processing request"
+    },
+    {
+      "from": "UAS processing request",
+      "event": "Content type, language, or encoding not understood",
+      "action": "reject request with 415 (Unsupported Media Type)",
+      "to": "UAS processing request"
+    },
+    {
+      "from": "UAS processing request",
+      "event": "Extension not supported",
+      "action": "rely on baseline SIP",
+      "to": "UAS processing request"
+    },
+    {
+      "from": "Stateless UAS",
+      "event": "request",
+      "action": "regenerate response",
+      "to": "Stateless UAS"
+    },
+    {
+      "from": "UAS processing REGISTER request",
+      "event": "CANCEL",
+      "action": "respond with 481 (Call Leg/Transaction Does Not Exist)",
+      "to": "UAS processing REGISTER request"
+    },
+    {
+      "from": "UAS processing REGISTER request",
+      "event": "final response for original request",
+      "action": "no effect",
+      "to": "UAS processing REGISTER request"
+    },
+    {
+      "from": "UAS processing REGISTER request",
+      "event": "INVITE",
+      "action": "respond with 487 (Request Terminated)",
+      "to": "UAS processing REGISTER request"
+    },
+    {
+      "from": "UAS processing REGISTER request",
+      "event": "",
+      "action": "respond with 200 (OK)",
+      "to": "UAS processing REGISTER request"
+    },
+    {
+      "from": "Stateless proxy",
+      "event": "CANCEL",
+      "action": "forward it",
+      "to": "Stateless proxy"
+    },
+    {
+      "from": "Stateful proxy",
+      "event": "CANCEL",
+      "action": "respond to it and generate some CANCEL requests of its own",
+      "to": "Stateful proxy"
+    },
+    {
+      "from": "Registrar processing REGISTER request",
+      "event": "REGISTER request",
+      "action": "process atomically",
+      "to": "Registrar processing REGISTER request"
+    },
+    {
+      "from": "early dialog",
+      "event": "2xx to INVITE",
+      "action": "",
+      "to": "confirmed dialog"
+    },
+    {
+      "from": "confirmed dialog",
+      "event": "re-INVITE",
+      "action": "update remote target URI",
+      "to": "confirmed dialog"
+    },
+    {
+      "from": "outside of a dialog",
+      "event": "INVITE",
+      "action": "construct request",
+      "to": "outside of a dialog"
+    },
+    {
+      "from": "outside of a dialog",
+      "event": "timeout",
+      "action": "treat as 408",
+      "to": "outside of a dialog"
+    },
+    {
+      "from": "outside of a dialog",
+      "event": "3xx response",
+      "action": "try new addresses",
+      "to": "outside of a dialog"
+    },
+    {
+      "from": "outside of a dialog",
+      "event": "4xx, 5xx, 6xx response",
+      "action": "terminate early dialogs",
+      "to": "outside of a dialog"
+    },
+    {
+      "from": "outside of a dialog",
+      "event": "2xx response",
+      "action": "construct new dialog",
+      "to": "confirmed"
+    },
+    {
+      "from": "early dialog",
+      "event": "request with tag",
+      "action": "apply processing rules",
+      "to": "early dialog"
+    },
+    {
+      "from": "early dialog",
+      "event": "2xx response",
+      "action": "transition to confirmed state, recompute route set",
+      "to": "confirmed"
+    },
+    {
+      "from": "confirmed",
+      "event": "request with tag",
+      "action": "apply processing rules",
+      "to": "confirmed"
+    },
+    {
+      "from": "confirmed",
+      "event": "target refresh request",
+      "action": "replace remote target URI",
+      "to": "confirmed"
+    },
+    {
+      "from": "confirmed",
+      "event": "481 or 408 response",
+      "action": "terminate dialog",
+      "to": "outside of a dialog"
+    },
+    {
+      "from": "INVITE received",
+      "event": "2xx received",
+      "action": "generate ACK",
+      "to": "session established"
+    },
+    {
+      "from": "session established",
+      "event": "BYE request",
+      "action": "terminate session",
+      "to": "session terminated"
+    },
+    {
+      "from": "session established",
+      "event": "non-2xx response to re-INVITE",
+      "action": "session parameters remain unchanged",
+      "to": "session established"
+    },
+    {
+      "from": "INVITE in progress",
+      "event": "2xx response",
+      "action": "establish dialog",
+      "to": "dialog established"
+    },
+    {
+      "from": "dialog established",
+      "event": "re-INVITE",
+      "action": "",
+      "to": "re-INVITE in progress"
+    },
+    {
+      "from": "re-INVITE in progress",
+      "event": "481 (Call/Transaction Does Not Exist)",
+      "action": "terminate dialog",
+      "to": "dialog terminated"
+    },
+    {
+      "from": "re-INVITE in progress",
+      "event": "408 (Request Timeout)",
+      "action": "terminate dialog",
+      "to": "dialog terminated"
+    },
+    {
+      "from": "INVITE in progress",
+      "event": "non-2xx final response",
+      "action": "terminate all sessions and dialogs",
+      "to": "session terminated"
+    },
+    {
+      "from": "early dialog",
+      "event": "BYE request",
+      "action": "terminate session",
+      "to": "session terminated"
+    },
+    {
+      "from": "INVITE transaction completed",
+      "event": "no more 2xx responses",
+      "action": "terminate early dialogs",
+      "to": "session terminated"
+    },
+    {
+      "from": "session established",
+      "event": "no ACK received",
+      "action": "generate BYE",
+      "to": "session terminated"
+    },
+    {
+      "from": "dialog established",
+      "event": "INVITE with lower CSeq",
+      "action": "return 500 (Server Internal Error)",
+      "to": "dialog established"
+    },
+    {
+      "from": "dialog established",
+      "event": "INVITE while INVITE in progress",
+      "action": "return 491 (Request Pending)",
+      "to": "dialog established"
+    },
+    {
+      "from": "stateful",
+      "event": "discard information",
+      "action": "transition to stateless",
+      "to": "stateless"
+    },
+    {
+      "from": "stateless",
+      "event": "",
+      "action": "forward request",
+      "to": "stateless"
+    },
+    {
+      "from": "stateful proxy awaiting final response",
+      "event": "6xx response received",
+      "action": "cancel all client pending transactions",
+      "to": "stateful proxy awaiting final response"
+    },
+    {
+      "from": "stateful proxy awaiting final response",
+      "event": "2xx response received",
+      "action": "forward 2xx response",
+      "to": "stateful proxy awaiting final response"
+    },
+    {
+      "from": "stateful proxy awaiting final response",
+      "event": "no final responses and all client transactions terminated",
+      "action": "choose best final response",
+      "to": "stateful proxy awaiting final response"
+    },
+    {
+      "from": "stateful proxy awaiting final response",
+      "event": "408 (Request Timeout)",
+      "action": "send 408 (Request Timeout) response",
+      "to": "stateful proxy awaiting final response"
+    },
+    {
+      "from": "stateless proxy",
+      "event": "response received",
+      "action": "process response",
+      "to": "stateless proxy"
+    },
+    {
+      "from": "proxy forwarding request",
+      "event": "provisional response (101-199)",
+      "action": "reset timer C",
+      "to": "proxy forwarding request"
+    },
+    {
+      "from": "proxy forwarding request",
+      "event": "2xx response",
+      "action": "forward 2xx response",
+      "to": "proxy forwarding request"
+    },
+    {
+      "from": "proxy forwarding request",
+      "event": "6xx response",
+      "action": "forward 6xx response",
+      "to": "proxy forwarding request"
+    },
+    {
+      "from": "proxy awaiting response",
+      "event": "final response received",
+      "action": "add response to context",
+      "to": "proxy awaiting response"
+    },
+    {
+      "from": "receiving 503",
+      "event": "",
+      "action": "generate a 500 response and forward that upstream",
+      "to": "forwarding request"
+    },
+    {
+      "from": "receiving 407",
+      "event": "",
+      "action": "forward the 407",
+      "to": "forwarding request"
+    },
+    {
+      "from": "receiving 401",
+      "event": "",
+      "action": "collect any WWW-Authenticate and Proxy-Authenticate header field values from all other 401 and 407 responses and add them to this response",
+      "to": "forwarding request"
+    },
+    {
+      "from": "receiving 3-6xx",
+      "event": "",
+      "action": "preserve the To tag",
+      "to": "forwarding request"
+    },
+    {
+      "from": "forwarding request",
+      "event": "transport error",
+      "action": "behave as if the forwarded request received a 503",
+      "to": "receiving 503"
+    },
+    {
+      "from": "processing CANCEL",
+      "event": "",
+      "action": "generate CANCEL requests for all pending client transactions",
+      "to": "forwarding request"
+    },
+    {
+      "from": "stateless proxy",
+      "event": "request",
+      "action": "validate request",
+      "to": "stateless proxy"
+    },
+    {
+      "from": "stateless proxy",
+      "event": "response",
+      "action": "inspect the sent-by value in the topmost Via header field value",
+      "to": "stateless proxy"
+    },
+    {
+      "from": "Calling",
+      "event": "INVITE from TU",
+      "action": "INVITE sent",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer A fires",
+      "action": "Reset A, INVITE sent",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer B fires",
+      "action": "inform TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Calling",
+      "event": "Transport Err.",
+      "action": "inform TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Calling",
+      "event": "1xx",
+      "action": "1xx to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Calling",
+      "event": "300-699",
+      "action": "ACK sent, resp. to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "1xx",
+      "action": "1xx to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699",
+      "action": "ACK sent, resp. to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer D fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Request",
+      "action": "resp. to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Transport Err.",
+      "action": "Inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Confirmed",
+      "event": "Timer I fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Confirmed",
+      "event": "Transport Err.",
+      "action": "Inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Terminated",
+      "event": "",
+      "action": "destroy",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "INVITE",
+      "action": "pass INV to TU",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "1xx from TU",
+      "action": "send response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "200-699 from TU",
+      "action": "send response",
+      "to": "Completed"
+    },
+    {
+      "from": "Trying",
+      "event": "Transport Err.",
+      "action": "Inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "1xx from TU",
+      "action": "send response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "200-699 from TU",
+      "action": "send response",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Request",
+      "action": "send response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Transport Err.",
+      "action": "Inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer J fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Request",
+      "action": "send response",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Transport Err.",
+      "action": "Inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Confirmed",
+      "event": "Timer I fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Confirmed",
+      "event": "Transport Err.",
+      "action": "Inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Terminated",
+      "event": "transport layer indicates a failure",
+      "action": "inform the TU that a failure has occurred",
+      "to": "Terminated"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "401 (Unauthorized)",
+      "action": "re-originate the request with the proper credentials",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "407 (Proxy Authentication Required)",
+      "action": "re-originate the request with the proper credentials",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "credentials rejected",
+      "action": "do not re-attempt requests",
+      "to": "Unauthenticated"
+    },
+    {
+      "from": "Receiving request with S/MIME body",
+      "event": "CMS body includes a certificate",
+      "action": "validate the certificate",
+      "to": "Certificate validated"
+    },
+    {
+      "from": "Receiving request with S/MIME body",
+      "event": "CMS body includes a certificate",
+      "action": "validate the certificate",
+      "to": "Certificate not verified"
+    },
+    {
+      "from": "Certificate validated",
+      "event": "Subject of certificate corresponds to From header field",
+      "action": "add this certificate to a local keyring, indexed by the address-of-record of the holder of the certificate",
+      "to": "Keyring contains address-of-record"
+    },
+    {
+      "from": "Certificate validated",
+      "event": "Subject of certificate does not correspond to From header field",
+      "action": "notify user of the status of the certificate and request explicit permission",
+      "to": "Receiving request with S/MIME body"
+    },
+    {
+      "from": "Certificate not verified",
+      "event": "Certificate is self-signed or signed by no known authority",
+      "action": "notify user of the status of the certificate and request explicit permission",
+      "to": "Receiving request with S/MIME body"
+    },
+    {
+      "from": "Certificate not verified",
+      "event": "Certificate cannot be verified",
+      "action": "notify user of the status of the certificate and request explicit permission",
+      "to": "Receiving request with S/MIME body"
+    },
+    {
+      "from": "Receiving response with S/MIME body",
+      "event": "CMS body includes a certificate",
+      "action": "validate the certificate",
+      "to": "Certificate validated"
+    },
+    {
+      "from": "Receiving response with S/MIME body",
+      "event": "CMS body includes a certificate",
+      "action": "validate the certificate",
+      "to": "Certificate not verified"
+    },
+    {
+      "from": "Certificate validated",
+      "event": "Subject of certificate corresponds to To header field",
+      "action": "add this certificate to a local keyring, indexed by the address-of-record of the holder of the certificate",
+      "to": "Keyring contains address-of-record"
+    },
+    {
+      "from": "Certificate validated",
+      "event": "Subject of certificate does not correspond to To header field",
+      "action": "notify user of the status of the certificate and request explicit permission",
+      "to": "Receiving response with S/MIME body"
+    },
+    {
+      "from": "Certificate not verified",
+      "event": "Certificate is self-signed or signed by no known authority",
+      "action": "notify user of the status of the certificate and request explicit permission",
+      "to": "Receiving response with S/MIME body"
+    },
+    {
+      "from": "Certificate not verified",
+      "event": "Certificate cannot be verified",
+      "action": "notify user of the status of the certificate and request explicit permission",
+      "to": "Receiving response with S/MIME body"
+    },
+    {
+      "from": "Keyring contains address-of-record",
+      "event": "Receives requests or responses with a From header field corresponding to a value in its keyring",
+      "action": "compare the certificate offered in these messages with the existing certificate in its keyring",
+      "to": "Certificate validated"
+    },
+    {
+      "from": "Established TLS connection",
+      "event": "TCP connection closure",
+      "action": "",
+      "to": "Established TLS connection"
+    },
+    {
+      "from": "Non-compliant or compromised proxy",
+      "event": "retarget request",
+      "action": "downgrade security",
+      "to": "SIP request received"
+    },
+    {
+      "from": "Non-compliant or compromised proxy",
+      "event": "retarget request",
+      "action": "upgrade security",
+      "to": "SIPS request received"
+    },
+    {
+      "from": "SIPS request received",
+      "event": "inspect To header",
+      "action": "check scheme",
+      "to": "SIPS request received"
+    },
+    {
+      "from": "SIPS request received",
+      "event": "inspect Via header",
+      "action": "check TLS usage",
+      "to": "SIPS request received"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "states": [
+    "Transit mode",
+    "Reading mode"
+  ],
+  "transitions": [
+    {
+      "from": "Transit mode",
+      "event": "MODE READER",
+      "action": "200 or 201 response; switch to Reading mode",
+      "to": "Reading mode"
+    },
+    {
+      "from": "Transit mode",
+      "event": "MODE READER",
+      "action": "502 response; close connection",
+      "to": "Transit mode"
+    }
+  ]
+}

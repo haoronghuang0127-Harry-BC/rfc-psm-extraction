@@ -1,0 +1,46 @@
+{
+  "states": [
+    "Initial",
+    "Starting",
+    "Closed",
+    "Stopped",
+    "Closing",
+    "Stopping",
+    "Request-Sent",
+    "Ack-Received",
+    "Ack-Sent",
+    "Opened"
+  ],
+  "transitions": [
+    {
+      "from": "Initial",
+      "event": "Up",
+      "action": "irc,scr",
+      "to": "Starting"
+    },
+    {
+      "from": "Starting",
+      "event": "Up",
+      "action": "irc,scr",
+      "to": "Request-Sent"
+    },
+    {
+      "from": "Closed",
+      "event": "RCR+",
+      "action": "sta",
+      "to": "Request-Sent"
+    },
+    {
+      "from": "Stopped",
+      "event": "RCR+",
+      "action": "scr,sca",
+      "to": "Request-Sent"
+    },
+    {
+      "from": "Opened",
+      "event": "Down",
+      "action": "tld",
+      "to": "Stopped"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+[
+  "{\n  \"states\": [\n    \"BOUND\",\n    \"RENEW\",\n    \"REBINDING\"\n  ],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [\n    \"SELECTING\"\n  ],\n  \"transitions\": []\n}",
+  "{\"states\": [], \"transitions\": []}"
+]

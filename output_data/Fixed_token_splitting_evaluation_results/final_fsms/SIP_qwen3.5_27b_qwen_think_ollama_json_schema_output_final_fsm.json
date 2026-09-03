@@ -1,0 +1,346 @@
+{
+  "states": [
+    "early",
+    "confirmed",
+    "terminated",
+    "Early Dialog",
+    "Established Dialog",
+    "Confirmed Dialog",
+    "Session Established",
+    "Session Terminated",
+    "INVITE Client Transaction Ongoing",
+    "INVITE Client Transaction Completed",
+    "INVITE Client Transaction Terminated",
+    "INVITE Server Transaction Ongoing",
+    "INVITE Server Transaction Confirmed",
+    "Stateful Proxy",
+    "Stateless Proxy",
+    "proceeding",
+    "Calling",
+    "Proceeding",
+    "Completed",
+    "Terminated",
+    "Trying",
+    "Confirmed"
+  ],
+  "transitions": [
+    {
+      "from": "early",
+      "event": "2xx final response arrives",
+      "action": "",
+      "to": "confirmed"
+    },
+    {
+      "from": "early",
+      "event": "2xx response matching existing dialog",
+      "action": "transitioned to the 'confirmed' state, route set recomputed",
+      "to": "confirmed"
+    },
+    {
+      "from": "early",
+      "event": "non-2xx final response",
+      "action": "considered terminated",
+      "to": "terminated"
+    },
+    {
+      "from": "confirmed",
+      "event": "BYE method",
+      "action": "terminate the dialog, sending a BYE",
+      "to": "terminated"
+    },
+    {
+      "from": "confirmed",
+      "event": "481 or 408 response",
+      "action": "SHOULD terminate the dialog",
+      "to": "terminated"
+    },
+    {
+      "from": "Early Dialog",
+      "event": "2xx response",
+      "action": "establishes a dialog",
+      "to": "Established Dialog"
+    },
+    {
+      "from": "Early Dialog",
+      "event": "non-2xx final response",
+      "action": "terminates all sessions... and all dialogs",
+      "to": "Session Terminated"
+    },
+    {
+      "from": "Early Dialog",
+      "event": "BYE request sent",
+      "action": "terminate session",
+      "to": "Session Terminated"
+    },
+    {
+      "from": "Confirmed Dialog",
+      "event": "BYE request received",
+      "action": "session associated with that dialog SHOULD terminate",
+      "to": "Session Terminated"
+    },
+    {
+      "from": "Confirmed Dialog",
+      "event": "64*T1 seconds without receiving an ACK",
+      "action": "session SHOULD be terminated... accomplished with a BYE",
+      "to": "Session Terminated"
+    },
+    {
+      "from": "INVITE Client Transaction Ongoing",
+      "event": "64*T1 seconds after reception of the first 2xx response",
+      "action": "considers the INVITE transaction completed",
+      "to": "INVITE Client Transaction Completed"
+    },
+    {
+      "from": "INVITE Server Transaction Ongoing",
+      "event": "ACK request for the response is received",
+      "action": "Response retransmissions cease",
+      "to": "INVITE Server Transaction Confirmed"
+    },
+    {
+      "from": "Stateful Proxy",
+      "event": "processing of a request",
+      "action": "all state is simply discarded",
+      "to": "Stateless Proxy"
+    },
+    {
+      "from": "proceeding",
+      "event": "forwarded final response",
+      "action": "generate CANCEL request for all pending client transactions associated with this response context",
+      "to": "terminated"
+    },
+    {
+      "from": "proceeding",
+      "event": "receives a 6xx response",
+      "action": "generate a CANCEL request for all pending client transactions associated with this response context",
+      "to": "terminated"
+    },
+    {
+      "from": "proceeding",
+      "event": "Timer C fires",
+      "action": "generate a CANCEL request matching that transaction",
+      "to": "terminated"
+    },
+    {
+      "from": "proceeding",
+      "event": "receive matching CANCEL request",
+      "action": "cancel any pending client transactions associated with a response context",
+      "to": "terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer A fires",
+      "action": "INVITE sent, Reset Timer A",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "1xx",
+      "action": "1xx to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Calling",
+      "event": "300-699",
+      "action": "ACK sent, resp. to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer B fires or Transport Err.",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "2xx",
+      "action": "2xx to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "1xx",
+      "action": "1xx to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699",
+      "action": "ACK sent, resp. to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx",
+      "action": "2xx to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "300-699",
+      "action": "ACK sent",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer D fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "provisional response received",
+      "action": "response MUST be passed to the TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "final response received",
+      "action": "response MUST be passed to the TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer F fires or Transport Error",
+      "action": "inform TU about the timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "final response received",
+      "action": "response MUST be passed to the TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer F fires or Transport Error",
+      "action": "inform TU of a timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer E fires",
+      "action": "request MUST be passed to the transport layer for retransmission, and Timer E MUST be reset",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer K fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx response from TU",
+      "action": "send response",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699 response from TU",
+      "action": "send response",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "101-199 response from TU",
+      "action": "send response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "request retransmission received",
+      "action": "pass most recent provisional response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Completed",
+      "event": "ACK received",
+      "action": "",
+      "to": "Confirmed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer H fires or Transport Error",
+      "action": "Inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer G fires",
+      "action": "send response",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "request retransmission received",
+      "action": "pass the response to the transport for retransmission",
+      "to": "Completed"
+    },
+    {
+      "from": "Confirmed",
+      "event": "Timer I fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "provisional response from TU",
+      "action": "send response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "final response from TU",
+      "action": "send response",
+      "to": "Completed"
+    },
+    {
+      "from": "Trying",
+      "event": "Transport Error",
+      "action": "Inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "final response from TU",
+      "action": "send response",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "provisional response from TU",
+      "action": "send response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "request retransmission received",
+      "action": "pass most recently sent provisional response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Transport Error",
+      "action": "Inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer J fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "request retransmission received",
+      "action": "pass the final response to the transport layer for retransmission",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Transport Error",
+      "action": "Inform TU",
+      "to": "Terminated"
+    }
+  ]
+}

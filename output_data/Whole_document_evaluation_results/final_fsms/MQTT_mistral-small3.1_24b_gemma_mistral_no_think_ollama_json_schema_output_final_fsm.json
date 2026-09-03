@@ -1,0 +1,124 @@
+{
+  "states": [
+    "Client",
+    "Authorization Server",
+    "Broker",
+    "Connected",
+    "Disconnected",
+    "Token Request",
+    "Token Response",
+    "Connection Request",
+    "Connection Response",
+    "Publish Request",
+    "Subscribe Request",
+    "Publish Response",
+    "Subscribe Response",
+    "Token Expiration",
+    "Reauthentication",
+    "Disconnect"
+  ],
+  "transitions": [
+    {
+      "from": "Client",
+      "event": "Token request",
+      "action": "Client sends token request to Authorization Server",
+      "to": "Token Request"
+    },
+    {
+      "from": "Authorization Server",
+      "event": "Token request received",
+      "action": "Authorization Server verifies request and issues token",
+      "to": "Token Response"
+    },
+    {
+      "from": "Client",
+      "event": "Token response received",
+      "action": "Client receives token",
+      "to": "Connected"
+    },
+    {
+      "from": "Client",
+      "event": "Connection request",
+      "action": "Client sends connection request to Broker",
+      "to": "Connection Request"
+    },
+    {
+      "from": "Broker",
+      "event": "Connection request received",
+      "action": "Broker verifies token and responds",
+      "to": "Connection Response"
+    },
+    {
+      "from": "Client",
+      "event": "Connection response received",
+      "action": "Client receives connection response",
+      "to": "Connected"
+    },
+    {
+      "from": "Client",
+      "event": "Publish request",
+      "action": "Client sends publish request to Broker",
+      "to": "Publish Request"
+    },
+    {
+      "from": "Broker",
+      "event": "Publish request received",
+      "action": "Broker verifies token and forwards message",
+      "to": "Publish Response"
+    },
+    {
+      "from": "Client",
+      "event": "Publish response received",
+      "action": "Client receives publish response",
+      "to": "Connected"
+    },
+    {
+      "from": "Client",
+      "event": "Subscribe request",
+      "action": "Client sends subscribe request to Broker",
+      "to": "Subscribe Request"
+    },
+    {
+      "from": "Broker",
+      "event": "Subscribe request received",
+      "action": "Broker verifies token and responds",
+      "to": "Subscribe Response"
+    },
+    {
+      "from": "Client",
+      "event": "Subscribe response received",
+      "action": "Client receives subscribe response",
+      "to": "Connected"
+    },
+    {
+      "from": "Client",
+      "event": "Token expiration",
+      "action": "Client's token expires",
+      "to": "Token Expiration"
+    },
+    {
+      "from": "Token Expiration",
+      "event": "Reauthentication",
+      "action": "Client sends reauthentication request",
+      "to": "Reauthentication"
+    },
+    {
+      "from": "Reauthentication",
+      "event": "Reauthentication response received",
+      "action": "Client receives reauthentication response",
+      "to": "Connected"
+    },
+    {
+      "from": "Client",
+      "event": "Disconnect",
+      "action": "Client sends disconnect request",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Broker",
+      "event": "Disconnect request received",
+      "action": "Broker closes connection",
+      "to": "Disconnected"
+    }
+  ]
+}

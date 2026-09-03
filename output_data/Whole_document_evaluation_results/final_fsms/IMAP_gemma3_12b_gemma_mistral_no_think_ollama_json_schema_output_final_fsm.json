@@ -1,0 +1,45 @@
+{
+  "states": [
+    "Not Authenticated",
+    "Authenticated",
+    "Selected"
+  ],
+  "transitions": [
+    {
+      "from": "Not Authenticated",
+      "event": "LOGIN",
+      "action": "OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "AUTHENTICATE",
+      "action": "OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "SELECT",
+      "action": "OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "EXAMINE",
+      "action": "OK",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "CLOSE",
+      "action": "OK",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "UNSELECT",
+      "action": "OK",
+      "to": "Authenticated"
+    }
+  ]
+}

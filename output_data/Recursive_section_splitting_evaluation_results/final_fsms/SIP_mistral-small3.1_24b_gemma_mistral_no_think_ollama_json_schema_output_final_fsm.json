@@ -1,0 +1,1907 @@
+{
+  "states": [
+    "Session Established",
+    "Session Terminated",
+    "Session Modification",
+    "Session Setup",
+    "Registration",
+    "client transaction",
+    "server transaction",
+    "Client Transaction State Machine",
+    "Server Transaction State Machine",
+    "Dialog",
+    "Call Stateful Proxy",
+    "Stateless Proxy",
+    "Stateful Proxy",
+    "Transaction Stateful Proxy",
+    "Loose Router",
+    "Strict Router",
+    "UAC Core",
+    "UAS Core",
+    "Proxy Core",
+    "Registrar",
+    "Redirect Server",
+    "Outbound Proxy",
+    "Parallel Search",
+    "Sequential Search",
+    "Regular Transaction",
+    "Processing Responses",
+    "Transaction Layer Error",
+    "Unrecognized Responses",
+    "Vias",
+    "Processing 3xx Responses",
+    "Processing 4xx Responses",
+    "Request Processing",
+    "Method Inspection",
+    "Header Inspection",
+    "Content Processing",
+    "Applying Extensions",
+    "Generating Response",
+    "Stateless UAS Behavior",
+    "Redirect Server Transaction State",
+    "Client Transaction",
+    "Server Transaction",
+    "Original Request",
+    "CANCEL Request",
+    "Registered",
+    "Unregistered",
+    "Processing REGISTER Request",
+    "Forwarding Request",
+    "Authenticating UAC",
+    "Authorizing User",
+    "Validating Address-of-Record",
+    "Processing Contact Header",
+    "Updating Bindings",
+    "Returning Response",
+    "UA",
+    "Proxy Server",
+    "early",
+    "confirmed",
+    "early dialog",
+    "established dialog",
+    "INVITE transaction completed",
+    "ongoing INVITE client transaction",
+    "ongoing INVITE server transaction",
+    "completed or terminated state",
+    "confirmed or terminated state",
+    "Session",
+    "Early Dialog",
+    "Confirmed Dialog",
+    "Stateless",
+    "Stateful",
+    "Server Transaction",
+    "Client Transaction",
+    "Proxy Core",
+    "Request Validation",
+    "Error Response",
+    "Request Forwarding",
+    "Determining Request Targets",
+    "proceeding",
+    "terminated",
+    "Handling CANCEL request",
+    "No matching response context",
+    "Matching response context",
+    "Stateless Proxy",
+    "Calling",
+    "Proceeding",
+    "Completed",
+    "Terminated",
+    "Trying",
+    "Content-Disposition: session",
+    "Content-Disposition: render",
+    "Content-Disposition: icon",
+    "Content-Disposition: alert",
+    "Trying",
+    "Ringing",
+    "Call Is Being Forwarded",
+    "Queued",
+    "Session Progress",
+    "Successful",
+    "Redirection",
+    "Request Failure",
+    "Server Failure",
+    "Global Failures",
+    "Unauthorized",
+    "Proxy Authentication Required",
+    "Authenticated",
+    "Unauthorized with multiple challenges",
+    "Proxy Authentication Required with multiple challenges",
+    "UAC Sends Request with S/MIME Body",
+    "UAS Receives Request with S/MIME Body",
+    "UAS Sends Response with S/MIME Body",
+    "UAC Receives Response with S/MIME Body",
+    "Certificate Validation",
+    "Certificate Notification",
+    "Certificate Authorization",
+    "Certificate Addition",
+    "Certificate Discrepancy Notification",
+    "Certificate Discrepancy Authorization",
+    "Reject Request with 493 Undecipherable",
+    "Reject Request with 415 Unsupported Media Type",
+    "Notify User of Unsecured Session",
+    "Receive Certificate in CMS SignedData",
+    "INVITE transaction",
+    "CANCEL transaction",
+    "BYE transaction",
+    "TCP connection",
+    "UDP connection",
+    "SIP transaction",
+    "SIP dialog",
+    "SIP transaction state machine",
+    "SIP client transaction state machine",
+    "SIP server transaction state machine",
+    "SIP transaction layer",
+    "SIP protocol layering",
+    "SIP message processing",
+    "SIP response processing",
+    "SIP request processing",
+    "SIP dialog identification",
+    "SIP loop detection",
+    "SIP Max-Forwards",
+    "SIP Route header field",
+    "SIP Record-Route header field",
+    "SIP Via header field",
+    "SIP branch parameter",
+    "SIP magic cookie",
+    "SIP transaction identification",
+    "SIP provisional responses",
+    "SIP 503 response",
+    "SIP DNS SRV lookup",
+    "SIP multicast",
+    "SIP unicast",
+    "SIP request merging",
+    "SIP glare handling",
+    "SIP re-INVITE",
+    "SIP 491 (Request Pending) error code",
+    "SIP 6xx response",
+    "SIP 2xx response",
+    "SIP 487 response",
+    "SIP 423 response",
+    "SIP Min-Expires",
+    "SIP Date header field",
+    "SIP Content-Language header field",
+    "SIP MIME-Version header field",
+    "SIP Alert-Info header field",
+    "SIP Error-Info header field",
+    "SIP Call-Info header field",
+    "SIP In-Reply-To header field",
+    "SIP Reply-To header field",
+    "SIP Supported header field",
+    "SIP Require header field",
+    "SIP Expires header field",
+    "SIP absolute time",
+    "SIP relative time",
+    "SIP SIP URI scheme",
+    "SIP SIPS URI scheme",
+    "SIP TLS",
+    "SIP SCTP",
+    "SIP UDP",
+    "SIP TCP",
+    "SIP PGP",
+    "SIP S/MIME",
+    "SIP basic authentication",
+    "SIP mutual authentication",
+    "SIP Digest credentials",
+    "SIP URI",
+    "SIP SIP URL",
+    "SIP SDP",
+    "SIP offer/answer exchange",
+    "SIP INVITE/200",
+    "SIP 200/ACK",
+    "SIP INVITE",
+    "SIP 200",
+    "SIP ACK",
+    "SIP CANCEL",
+    "SIP BYE",
+    "SIP REGISTER",
+    "SIP 1xx response",
+    "SIP 2xx response",
+    "SIP 3xx response",
+    "SIP 4xx response",
+    "SIP 5xx response",
+    "SIP 6xx response",
+    "SIP transaction timeout",
+    "SIP retransmit counts",
+    "SIP timeouts",
+    "SIP state machines",
+    "SIP client state machine",
+    "SIP server state machine",
+    "SIP transaction state machine",
+    "SIP dialog state machine",
+    "SIP registration state machine",
+    "SIP message state machine",
+    "SIP response state machine",
+    "SIP request state machine",
+    "SIP protocol state machine",
+    "SIP session state machine",
+    "SIP call state machine",
+    "SIP transaction identification state machine",
+    "SIP loop detection state machine",
+    "SIP Max-Forwards state machine",
+    "SIP Route header field state machine",
+    "SIP Record-Route header field state machine",
+    "SIP Via header field state machine",
+    "SIP branch parameter state machine",
+    "SIP magic cookie state machine",
+    "SIP transaction identification state machine",
+    "SIP provisional responses state machine",
+    "SIP 503 response state machine",
+    "SIP DNS SRV lookup state machine",
+    "SIP multicast state machine",
+    "SIP unicast state machine",
+    "SIP request merging state machine",
+    "SIP glare handling state machine",
+    "SIP re-INVITE state machine",
+    "SIP 491 (Request Pending) error code state machine",
+    "SIP 6xx response state machine",
+    "SIP 2xx response state machine",
+    "SIP 487 response state machine",
+    "SIP 423 response state machine",
+    "SIP Min-Expires state machine",
+    "SIP Date header field state machine",
+    "SIP Content-Language header field state machine",
+    "SIP Content-Disposition header field state machine",
+    "SIP MIME-Version header field state machine",
+    "SIP Alert-Info header field state machine",
+    "SIP Error-Info header field state machine",
+    "SIP Call-Info header field state machine",
+    "SIP In-Reply-To header field state machine",
+    "SIP Reply-To header field state machine",
+    "SIP Supported header field state machine",
+    "SIP Require header field state machine",
+    "SIP Expires header field state machine",
+    "SIP absolute time state machine",
+    "SIP relative time state machine",
+    "SIP SIP URI scheme state machine",
+    "SIP SIPS URI scheme state machine",
+    "SIP TLS state machine",
+    "SIP SCTP state machine",
+    "SIP UDP state machine",
+    "SIP TCP state machine",
+    "SIP PGP state machine",
+    "SIP S/MIME state machine",
+    "SIP basic authentication state machine",
+    "SIP mutual authentication state machine",
+    "SIP Digest credentials state machine",
+    "SIP URI state machine",
+    "SIP SIP URL state machine",
+    "SIP SDP state machine",
+    "SIP offer/answer exchange state machine",
+    "SIP INVITE/200 state machine",
+    "SIP 200/ACK state machine",
+    "SIP INVITE state machine",
+    "SIP 200 state machine",
+    "SIP ACK state machine",
+    "SIP CANCEL state machine",
+    "SIP BYE state machine",
+    "SIP REGISTER state machine",
+    "SIP 1xx response state machine",
+    "SIP 2xx response state machine",
+    "SIP 3xx response state machine",
+    "SIP 4xx response state machine",
+    "SIP 5xx response state machine",
+    "SIP 6xx response state machine",
+    "SIP transaction timeout state machine",
+    "SIP retransmit counts state machine",
+    "SIP timeouts state machine",
+    "SIP state machines state machine",
+    "SIP client state machine state machine",
+    "SIP server state machine state machine",
+    "SIP transaction state machine state machine",
+    "SIP dialog state machine state machine",
+    "SIP registration state machine state machine",
+    "SIP message state machine state machine",
+    "SIP response state machine state machine",
+    "SIP request state machine state machine",
+    "SIP protocol state machine state machine",
+    "SIP session state machine state machine",
+    "SIP call state machine state machine",
+    "SIP transaction identification state machine state machine",
+    "SIP loop detection state machine state machine",
+    "SIP Max-Forwards state machine state machine",
+    "SIP Route header field state machine state machine",
+    "SIP Record-Route header field state machine state machine",
+    "SIP Via header field state machine state machine",
+    "SIP branch parameter state machine state machine",
+    "SIP magic cookie state machine state machine",
+    "SIP transaction identification state machine state machine",
+    "SIP provisional responses state machine state machine",
+    "SIP 503 response state machine state machine",
+    "SIP DNS SRV lookup state machine state machine",
+    "SIP multicast state machine state machine",
+    "SIP unicast state machine state machine",
+    "SIP request merging state machine state machine",
+    "SIP glare handling state machine state machine",
+    "SIP re-INVITE state machine state machine",
+    "SIP 491 (Request Pending) error code state machine state machine",
+    "SIP 6xx response state machine state machine",
+    "SIP 2xx response state machine state machine",
+    "SIP 487 response state machine state machine",
+    "SIP 423 response state machine state machine",
+    "SIP Min-Expires state machine state machine",
+    "SIP Date header field state machine state machine",
+    "SIP Content-Language header field state machine state machine",
+    "SIP Content-Disposition header field state machine state machine",
+    "SIP MIME-Version header field state machine state machine",
+    "SIP Alert-Info header field state machine state machine",
+    "SIP Error-Info header field state machine state machine",
+    "SIP Call-Info header field state machine state machine",
+    "SIP In-Reply-To header field state machine state machine",
+    "SIP Reply-To header field state machine state machine",
+    "SIP Supported header field state machine state machine",
+    "SIP Require header field state machine state machine",
+    "SIP Expires header field state machine state machine",
+    "SIP absolute time state machine state machine",
+    "SIP relative time state machine state machine",
+    "SIP SIP URI scheme state machine state machine",
+    "SIP SIPS URI scheme state machine state machine",
+    "SIP TLS state machine state machine",
+    "SIP SCTP state machine state machine",
+    "SIP UDP state machine state machine",
+    "SIP TCP state machine state machine",
+    "SIP PGP state machine state machine",
+    "SIP S/MIME state machine state machine",
+    "SIP basic authentication state machine state machine",
+    "SIP mutual authentication state machine state machine",
+    "SIP Digest credentials state machine state machine",
+    "SIP URI state machine state machine",
+    "SIP SIP URL state machine state machine",
+    "SIP SDP state machine state machine",
+    "SIP offer/answer exchange state machine state machine",
+    "SIP INVITE/200 state machine state machine",
+    "SIP 200/ACK state machine state machine",
+    "SIP INVITE state machine state machine",
+    "SIP 200 state machine state machine",
+    "SIP ACK state machine state machine",
+    "SIP CANCEL state machine state machine",
+    "SIP BYE state machine state machine",
+    "SIP REGISTER state machine state machine",
+    "SIP 1xx response state machine state machine",
+    "SIP 2xx response state machine state machine",
+    "SIP 3xx response state machine state machine",
+    "SIP 4xx response state machine state machine",
+    "SIP 5xx response state machine state machine",
+    "SIP 6xx response state machine state machine",
+    "SIP transaction timeout state machine state machine",
+    "SIP retransmit counts state machine state machine",
+    "SIP timeouts state machine state machine"
+  ],
+  "transitions": [
+    {
+      "from": "Session Setup",
+      "event": "INVITE",
+      "action": "100 Trying",
+      "to": "Session Setup"
+    },
+    {
+      "from": "Session Setup",
+      "event": "180 Ringing",
+      "action": "",
+      "to": "Session Setup"
+    },
+    {
+      "from": "Session Setup",
+      "event": "200 OK",
+      "action": "ACK",
+      "to": "Session Established"
+    },
+    {
+      "from": "Session Established",
+      "event": "BYE",
+      "action": "200 OK",
+      "to": "Session Terminated"
+    },
+    {
+      "from": "Session Established",
+      "event": "re-INVITE",
+      "action": "200 OK",
+      "to": "Session Modification"
+    },
+    {
+      "from": "Session Modification",
+      "event": "ACK",
+      "action": "",
+      "to": "Session Established"
+    },
+    {
+      "from": "Session Modification",
+      "event": "488 Not Acceptable Here",
+      "action": "ACK",
+      "to": "Session Established"
+    },
+    {
+      "from": "Registration",
+      "event": "REGISTER",
+      "action": "",
+      "to": "Registration"
+    },
+    {
+      "from": "Client Transaction State Machine",
+      "event": "",
+      "action": "",
+      "to": "Server Transaction State Machine"
+    },
+    {
+      "from": "Server Transaction State Machine",
+      "event": "",
+      "action": "",
+      "to": "Client Transaction State Machine"
+    },
+    {
+      "from": "Client Transaction State Machine",
+      "event": "INVITE",
+      "action": "establishes Dialog",
+      "to": "Dialog"
+    },
+    {
+      "from": "Dialog",
+      "event": "BYE",
+      "action": "terminates Dialog",
+      "to": "Client Transaction State Machine"
+    },
+    {
+      "from": "Call Stateful Proxy",
+      "event": "",
+      "action": "",
+      "to": "Transaction Stateful Proxy"
+    },
+    {
+      "from": "Stateless Proxy",
+      "event": "",
+      "action": "",
+      "to": "Loose Router"
+    },
+    {
+      "from": "Stateless Proxy",
+      "event": "",
+      "action": "",
+      "to": "Strict Router"
+    },
+    {
+      "from": "Stateful Proxy",
+      "event": "",
+      "action": "",
+      "to": "Transaction Stateful Proxy"
+    },
+    {
+      "from": "UAC Core",
+      "event": "INVITE",
+      "action": "creates request",
+      "to": "Client Transaction State Machine"
+    },
+    {
+      "from": "UAS Core",
+      "event": "INVITE",
+      "action": "generates response",
+      "to": "Server Transaction State Machine"
+    },
+    {
+      "from": "Proxy Core",
+      "event": "INVITE",
+      "action": "forwards request",
+      "to": "Client Transaction State Machine"
+    },
+    {
+      "from": "Registrar",
+      "event": "REGISTER",
+      "action": "places information in location service",
+      "to": "Registrar"
+    },
+    {
+      "from": "Redirect Server",
+      "event": "INVITE",
+      "action": "generates 3xx response",
+      "to": "Redirect Server"
+    },
+    {
+      "from": "Outbound Proxy",
+      "event": "INVITE",
+      "action": "receives requests from client",
+      "to": "Outbound Proxy"
+    },
+    {
+      "from": "Parallel Search",
+      "event": "INVITE",
+      "action": "issues several requests",
+      "to": "Parallel Search"
+    },
+    {
+      "from": "Sequential Search",
+      "event": "INVITE",
+      "action": "attempts each contact address in sequence",
+      "to": "Sequential Search"
+    },
+    {
+      "from": "Regular Transaction",
+      "event": "INVITE",
+      "action": "processes transaction",
+      "to": "Regular Transaction"
+    },
+    {
+      "from": "Processing Responses",
+      "event": "timeout error",
+      "action": "treat as 408 (Request Timeout)",
+      "to": "Transaction Layer Error"
+    },
+    {
+      "from": "Processing Responses",
+      "event": "fatal transport error",
+      "action": "treat as 503 (Service Unavailable)",
+      "to": "Transaction Layer Error"
+    },
+    {
+      "from": "Processing Responses",
+      "event": "unrecognized final response",
+      "action": "treat as x00 response code of that class",
+      "to": "Unrecognized Responses"
+    },
+    {
+      "from": "Processing Responses",
+      "event": "unrecognized provisional response",
+      "action": "treat as 183 (Session Progress)",
+      "to": "Unrecognized Responses"
+    },
+    {
+      "from": "Processing Responses",
+      "event": "multiple Via header field values",
+      "action": "discard the message",
+      "to": "Vias"
+    },
+    {
+      "from": "Processing Responses",
+      "event": "3xx response",
+      "action": "use the URI(s) in the Contact header field to formulate one or more new requests",
+      "to": "Processing 3xx Responses"
+    },
+    {
+      "from": "Processing Responses",
+      "event": "401 (Unauthorized) or 407 (Proxy Authentication Required)",
+      "action": "follow the authorization procedures to retry the request with credentials",
+      "to": "Processing 4xx Responses"
+    },
+    {
+      "from": "Processing Responses",
+      "event": "413 (Request Entity Too Large)",
+      "action": "retry the request, either omitting the body or using one of a smaller length",
+      "to": "Processing 4xx Responses"
+    },
+    {
+      "from": "Processing Responses",
+      "event": "415 (Unsupported Media Type)",
+      "action": "retry sending the request, this time only using content with types listed in the Accept header field",
+      "to": "Processing 4xx Responses"
+    },
+    {
+      "from": "Processing Responses",
+      "event": "416 (Unsupported URI Scheme)",
+      "action": "retry the request, this time, using a SIP URI",
+      "to": "Processing 4xx Responses"
+    },
+    {
+      "from": "Processing Responses",
+      "event": "420 (Bad Extension)",
+      "action": "retry the request, this time omitting any extensions listed in the Unsupported header field",
+      "to": "Processing 4xx Responses"
+    },
+    {
+      "from": "Request Processing",
+      "event": "",
+      "action": "authenticate request",
+      "to": "Method Inspection"
+    },
+    {
+      "from": "Method Inspection",
+      "event": "UAS recognizes but does not support the method",
+      "action": "generate 405 (Method Not Allowed) response",
+      "to": "Generating Response"
+    },
+    {
+      "from": "Method Inspection",
+      "event": "UAS supports the method",
+      "action": "",
+      "to": "Header Inspection"
+    },
+    {
+      "from": "Header Inspection",
+      "event": "UAS does not understand a header field",
+      "action": "ignore the header field",
+      "to": "Header Inspection"
+    },
+    {
+      "from": "Header Inspection",
+      "event": "UAS understands all header fields",
+      "action": "",
+      "to": "Content Processing"
+    },
+    {
+      "from": "Content Processing",
+      "event": "UAS does not understand the content type, language, or encoding",
+      "action": "generate 415 (Unsupported Media Type) response",
+      "to": "Generating Response"
+    },
+    {
+      "from": "Content Processing",
+      "event": "UAS understands the content",
+      "action": "",
+      "to": "Applying Extensions"
+    },
+    {
+      "from": "Applying Extensions",
+      "event": "UAS needs an extension not supported by the client",
+      "action": "generate 421 (Extension Required) response",
+      "to": "Generating Response"
+    },
+    {
+      "from": "Applying Extensions",
+      "event": "UAS applies supported extensions",
+      "action": "",
+      "to": "Generating Response"
+    },
+    {
+      "from": "Generating Response",
+      "event": "",
+      "action": "construct and send response",
+      "to": "Request Processing"
+    },
+    {
+      "from": "Request Processing",
+      "event": "UAS is stateless",
+      "action": "",
+      "to": "Stateless UAS Behavior"
+    },
+    {
+      "from": "Stateless UAS Behavior",
+      "event": "receive request",
+      "action": "generate and send response",
+      "to": "Stateless UAS Behavior"
+    },
+    {
+      "from": "Redirect Server Transaction State",
+      "event": "Receive Request",
+      "action": "Gather list of alternative locations from location service and return 3xx response",
+      "to": "Redirect Server Transaction State"
+    },
+    {
+      "from": "Redirect Server Transaction State",
+      "event": "Receive CANCEL Request",
+      "action": "Return 2xx response",
+      "to": "Redirect Server Transaction State"
+    },
+    {
+      "from": "Client Transaction",
+      "event": "CANCEL Request",
+      "action": "construct CANCEL request, check for responses, send CANCEL if no final response received",
+      "to": "CANCEL Request"
+    },
+    {
+      "from": "CANCEL Request",
+      "event": "CANCEL request received",
+      "action": "match CANCEL request with original request, respond with 200 OK if transaction exists",
+      "to": "Server Transaction"
+    },
+    {
+      "from": "Server Transaction",
+      "event": "CANCEL request matches original request",
+      "action": "respond to original request with 487 Request Terminated if it was an INVITE, respond to CANCEL with 200 OK",
+      "to": "Server Transaction"
+    },
+    {
+      "from": "Original Request",
+      "event": "CANCEL Request",
+      "action": "stop processing original request, generate 487 Request Terminated if it was an INVITE",
+      "to": "Original Request"
+    },
+    {
+      "from": "Registration",
+      "event": "REGISTER request",
+      "action": "create a binding explicitly",
+      "to": "Location Service"
+    },
+    {
+      "from": "Unregistered",
+      "event": "REGISTER",
+      "action": "Add bindings",
+      "to": "Registered"
+    },
+    {
+      "from": "Registered",
+      "event": "REGISTER with expiration interval of 0",
+      "action": "Remove bindings",
+      "to": "Unregistered"
+    },
+    {
+      "from": "Registered",
+      "event": "REGISTER with new bindings",
+      "action": "Update bindings",
+      "to": "Registered"
+    },
+    {
+      "from": "Registered",
+      "event": "Expiration of bindings",
+      "action": "",
+      "to": "Unregistered"
+    },
+    {
+      "from": "Registered",
+      "event": "REGISTER with existing bindings",
+      "action": "Refresh bindings",
+      "to": "Registered"
+    },
+    {
+      "from": "Processing REGISTER Request",
+      "event": "Request-URI not accessible",
+      "action": "forward the request to the addressed domain",
+      "to": "Forwarding Request"
+    },
+    {
+      "from": "Processing REGISTER Request",
+      "event": "Request-URI accessible",
+      "action": "",
+      "to": "Authenticating UAC"
+    },
+    {
+      "from": "Authenticating UAC",
+      "event": "UAC authenticated",
+      "action": "",
+      "to": "Authorizing User"
+    },
+    {
+      "from": "Authenticating UAC",
+      "event": "UAC not authenticated",
+      "action": "take the From address as the asserted identity",
+      "to": "Authorizing User"
+    },
+    {
+      "from": "Authorizing User",
+      "event": "User authorized",
+      "action": "",
+      "to": "Validating Address-of-Record"
+    },
+    {
+      "from": "Authorizing User",
+      "event": "User not authorized",
+      "action": "return a 403 (Forbidden)",
+      "to": "Returning Response"
+    },
+    {
+      "from": "Validating Address-of-Record",
+      "event": "Address-of-Record valid",
+      "action": "",
+      "to": "Processing Contact Header"
+    },
+    {
+      "from": "Validating Address-of-Record",
+      "event": "Address-of-Record not valid",
+      "action": "send a 404 (Not Found)",
+      "to": "Returning Response"
+    },
+    {
+      "from": "Processing Contact Header",
+      "event": "Contact header field present",
+      "action": "",
+      "to": "Updating Bindings"
+    },
+    {
+      "from": "Processing Contact Header",
+      "event": "Contact header field not present",
+      "action": "",
+      "to": "Returning Response"
+    },
+    {
+      "from": "Updating Bindings",
+      "event": "Binding updates succeed",
+      "action": "return a 200 (OK) response",
+      "to": "Returning Response"
+    },
+    {
+      "from": "Updating Bindings",
+      "event": "Binding updates fail",
+      "action": "return a 500 (Server Error) response",
+      "to": "Returning Response"
+    },
+    {
+      "from": "UA",
+      "event": "OPTIONS",
+      "action": "query capabilities",
+      "to": "UA"
+    },
+    {
+      "from": "UA",
+      "event": "OPTIONS",
+      "action": "query capabilities",
+      "to": "Proxy Server"
+    },
+    {
+      "from": "Proxy Server",
+      "event": "OPTIONS",
+      "action": "respond with capabilities",
+      "to": "Proxy Server"
+    },
+    {
+      "from": "UA",
+      "event": "OPTIONS",
+      "action": "query capabilities",
+      "to": "Dialog"
+    },
+    {
+      "from": "Dialog",
+      "event": "OPTIONS",
+      "action": "respond with capabilities",
+      "to": "Dialog"
+    },
+    {
+      "from": "early",
+      "event": "2xx final response",
+      "action": "transition to confirmed state",
+      "to": "confirmed"
+    },
+    {
+      "from": "early",
+      "event": "other responses or no response",
+      "action": "terminate early dialog",
+      "to": "early"
+    },
+    {
+      "from": "early dialog",
+      "event": "non-2xx final response",
+      "action": "terminate early dialogs",
+      "to": "INVITE transaction completed"
+    },
+    {
+      "from": "early dialog",
+      "event": "2xx response",
+      "action": "transition to confirmed state",
+      "to": "confirmed"
+    },
+    {
+      "from": "confirmed",
+      "event": "ACK",
+      "action": "terminate early dialogs",
+      "to": "established dialog"
+    },
+    {
+      "from": "established dialog",
+      "event": "BYE",
+      "action": "terminate dialog",
+      "to": "INVITE transaction completed"
+    },
+    {
+      "from": "ongoing INVITE client transaction",
+      "event": "",
+      "action": "wait until the transaction reaches the completed or terminated state before initiating the new INVITE",
+      "to": "completed or terminated state"
+    },
+    {
+      "from": "ongoing INVITE server transaction",
+      "event": "",
+      "action": "wait until the transaction reaches the confirmed or terminated state before initiating the new INVITE",
+      "to": "confirmed or terminated state"
+    },
+    {
+      "from": "dialog",
+      "event": "receives a non-2xx final response to a re-INVITE",
+      "action": "session parameters MUST remain unchanged",
+      "to": "dialog"
+    },
+    {
+      "from": "dialog",
+      "event": "receives a 481 (Call/Transaction Does Not Exist), or a 408 (Request Timeout), or no response at all is received for the re-INVITE",
+      "action": "UAC will terminate the dialog",
+      "to": "dialog"
+    },
+    {
+      "from": "dialog",
+      "event": "receives a 491 response to a re-INVITE",
+      "action": "start a timer with a value T",
+      "to": "dialog"
+    },
+    {
+      "from": "Session",
+      "event": "BYE",
+      "action": "terminate session",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "non-2xx final response to INVITE",
+      "action": "terminate session and dialog",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "CANCEL",
+      "action": "terminate session",
+      "to": "Session"
+    },
+    {
+      "from": "Dialog",
+      "event": "BYE",
+      "action": "terminate session",
+      "to": "Dialog"
+    },
+    {
+      "from": "Early Dialog",
+      "event": "BYE",
+      "action": "",
+      "to": "Early Dialog"
+    },
+    {
+      "from": "Confirmed Dialog",
+      "event": "BYE",
+      "action": "terminate session",
+      "to": "Confirmed Dialog"
+    },
+    {
+      "from": "Confirmed Dialog",
+      "event": "ACK for 2xx response",
+      "action": "",
+      "to": "Confirmed Dialog"
+    },
+    {
+      "from": "Stateful",
+      "event": "",
+      "action": "discard state",
+      "to": "Stateless"
+    },
+    {
+      "from": "Server Transaction",
+      "event": "",
+      "action": "passes request to Proxy Core",
+      "to": "Proxy Core"
+    },
+    {
+      "from": "Proxy Core",
+      "event": "",
+      "action": "determines next-hop locations and forwards request to Client Transaction",
+      "to": "Client Transaction"
+    },
+    {
+      "from": "Client Transaction",
+      "event": "",
+      "action": "sends responses to Proxy Core",
+      "to": "Proxy Core"
+    },
+    {
+      "from": "Proxy Core",
+      "event": "",
+      "action": "sends responses to Server Transaction",
+      "to": "Server Transaction"
+    },
+    {
+      "from": "Request Validation",
+      "event": "Reasonable Syntax check fails",
+      "action": "respond with an error code",
+      "to": "Error Response"
+    },
+    {
+      "from": "Request Validation",
+      "event": "URI scheme check fails",
+      "action": "respond with a 416 (Unsupported URI Scheme) response",
+      "to": "Error Response"
+    },
+    {
+      "from": "Request Validation",
+      "event": "Max-Forwards check fails",
+      "action": "return a 483 (Too many hops) response",
+      "to": "Error Response"
+    },
+    {
+      "from": "Request Validation",
+      "event": "Loop Detection check fails",
+      "action": "return a 482 (Loop Detected) response",
+      "to": "Error Response"
+    },
+    {
+      "from": "Request Validation",
+      "event": "Proxy-Require check fails",
+      "action": "return a 420 (Bad Extension) response",
+      "to": "Error Response"
+    },
+    {
+      "from": "Request Validation",
+      "event": "Proxy-Authorization check fails",
+      "action": "respond as described in Section 22.3",
+      "to": "Error Response"
+    },
+    {
+      "from": "Determining Request Targets",
+      "event": "Request-URI contains maddr parameter",
+      "action": "Proceed to Request Forwarding",
+      "to": "Request Forwarding"
+    },
+    {
+      "from": "Determining Request Targets",
+      "event": "Domain of Request-URI indicates a domain this element is not responsible for",
+      "action": "Proceed to Request Forwarding",
+      "to": "Request Forwarding"
+    },
+    {
+      "from": "Determining Request Targets",
+      "event": "Request-URI does not provide sufficient information",
+      "action": "Return 485 (Ambiguous) response",
+      "to": "Determining Request Targets"
+    },
+    {
+      "from": "Determining Request Targets",
+      "event": "Request-URI indicates a resource this proxy is not responsible for",
+      "action": "Return 404 (Not Found) response",
+      "to": "Determining Request Targets"
+    },
+    {
+      "from": "Determining Request Targets",
+      "event": "Target set remains empty",
+      "action": "Return 480 (Temporarily Unavailable) response",
+      "to": "Determining Request Targets"
+    },
+    {
+      "from": "Request Forwarding",
+      "event": "",
+      "action": "Make a copy of the received request, Update the Request-URI, Update the Max-Forwards header field, Optionally add a Record-route header field value, Optionally add additional header fields, Postprocess routing information, Determine the next-hop address, port, and transport, Add a Via header field value, Add a Content-Length header field if necessary, Forward the new request, Set timer C",
+      "to": "Request Forwarding"
+    },
+    {
+      "from": "proceeding",
+      "event": "final response",
+      "action": "generate CANCEL requests",
+      "to": "terminated"
+    },
+    {
+      "from": "proceeding",
+      "event": "6xx response",
+      "action": "generate CANCEL requests",
+      "to": "terminated"
+    },
+    {
+      "from": "Handling CANCEL request",
+      "event": "Matching response context found",
+      "action": "Return 200 (OK) response to the CANCEL request, generate CANCEL requests for all pending client transactions in the context",
+      "to": "Matching response context"
+    },
+    {
+      "from": "Handling CANCEL request",
+      "event": "No matching response context found",
+      "action": "Statelessly forward the CANCEL request",
+      "to": "No matching response context"
+    },
+    {
+      "from": "Stateless Proxy",
+      "event": "",
+      "action": "forward request or response",
+      "to": "Stateless Proxy"
+    },
+    {
+      "from": "Stateless Proxy",
+      "event": "receive request",
+      "action": "validate request, choose target, forward request",
+      "to": "Stateless Proxy"
+    },
+    {
+      "from": "Stateless Proxy",
+      "event": "receive response",
+      "action": "inspect sent-by value in Via header, remove matching header, forward response",
+      "to": "Stateless Proxy"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer A fires",
+      "action": "Reset A, INVITE sent",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer B fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "1xx",
+      "action": "1xx to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Calling",
+      "event": "300-699",
+      "action": "ACK sent, resp. to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer B fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699",
+      "action": "ACK sent, resp. to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx",
+      "action": "2xx to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer D fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Transport Err.",
+      "action": "Inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer E fires",
+      "action": "send request",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer F fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "1xx",
+      "action": "resp. to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "200-699",
+      "action": "resp. to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer E fires",
+      "action": "send request",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer F fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "200-699",
+      "action": "resp. to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer K fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx response from TU",
+      "action": "pass response to transport layer for transmission",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699 response from TU",
+      "action": "pass response to transport layer for transmission",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "request retransmission",
+      "action": "pass most recent provisional response to transport layer for retransmission",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "provisional response from TU",
+      "action": "pass response to transport layer for transmission",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Completed",
+      "event": "ACK received",
+      "action": "",
+      "to": "Confirmed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer H fires",
+      "action": "indicate transaction failure to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "request retransmission",
+      "action": "pass response to transport layer for retransmission",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer G fires",
+      "action": "pass response to transport layer for retransmission",
+      "to": "Completed"
+    },
+    {
+      "from": "Confirmed",
+      "event": "Timer I fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "provisional response from TU",
+      "action": "pass response to transport layer for transmission",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "200-699 response from TU",
+      "action": "pass response to transport layer for transmission",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer J fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "request retransmission",
+      "action": "discard",
+      "to": "Trying"
+    },
+    {
+      "from": "Proceeding",
+      "event": "request retransmission",
+      "action": "pass most recent provisional response to transport layer for retransmission",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Request outside of a dialog",
+      "event": "",
+      "action": "The UA sends a request outside of a dialog, it contains a From tag only, providing 'half' of the dialog ID",
+      "to": "Dialog"
+    },
+    {
+      "from": "Dialog",
+      "event": "",
+      "action": "The dialog is completed from the response(s), each of which contributes the second half in the To header field",
+      "to": "Response"
+    },
+    {
+      "from": "Trying",
+      "event": "100 Trying",
+      "action": "The request has been received by the next-hop server and that some unspecified action is being taken on behalf of this call",
+      "to": "Trying"
+    },
+    {
+      "from": "Ringing",
+      "event": "180 Ringing",
+      "action": "The UA receiving the INVITE is trying to alert the user",
+      "to": "Ringing"
+    },
+    {
+      "from": "Call Is Being Forwarded",
+      "event": "181 Call Is Being Forwarded",
+      "action": "A server MAY use this status code to indicate that the call is being forwarded to a different set of destinations",
+      "to": "Call Is Being Forwarded"
+    },
+    {
+      "from": "Queued",
+      "event": "182 Queued",
+      "action": "The called party is temporarily unavailable, but the server has decided to queue the call rather than reject it",
+      "to": "Queued"
+    },
+    {
+      "from": "Session Progress",
+      "event": "183 Session Progress",
+      "action": "The 183 (Session Progress) response is used to convey information about the progress of the call that is not otherwise classified",
+      "to": "Session Progress"
+    },
+    {
+      "from": "Successful",
+      "event": "200 OK",
+      "action": "The request has succeeded",
+      "to": "Successful"
+    },
+    {
+      "from": "Redirection",
+      "event": "300 Multiple Choices",
+      "action": "The address in the request resolved to several choices, each with its own specific location",
+      "to": "Redirection"
+    },
+    {
+      "from": "Redirection",
+      "event": "301 Moved Permanently",
+      "action": "The user can no longer be found at the address in the Request-URI",
+      "to": "Redirection"
+    },
+    {
+      "from": "Redirection",
+      "event": "302 Moved Temporarily",
+      "action": "The requesting client SHOULD retry the request at the new address(es) given by the Contact header field",
+      "to": "Redirection"
+    },
+    {
+      "from": "Redirection",
+      "event": "305 Use Proxy",
+      "action": "The requested resource MUST be accessed through the proxy given by the Contact field",
+      "to": "Redirection"
+    },
+    {
+      "from": "Redirection",
+      "event": "380 Alternative Service",
+      "action": "The call was not successful, but alternative services are possible",
+      "to": "Redirection"
+    },
+    {
+      "from": "Request Failure",
+      "event": "400 Bad Request",
+      "action": "The request could not be understood due to malformed syntax",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "401 Unauthorized",
+      "action": "The request requires user authentication",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "402 Payment Required",
+      "action": "Reserved for future use",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "403 Forbidden",
+      "action": "The server understood the request, but is refusing to fulfill it",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "404 Not Found",
+      "action": "The server has definitive information that the user does not exist at the domain specified in the Request-URI",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "405 Method Not Allowed",
+      "action": "The method specified in the Request-Line is understood, but not allowed for the address identified by the Request-URI",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "406 Not Acceptable",
+      "action": "The resource identified by the request is only capable of generating response entities that have content characteristics not acceptable according to the Accept header field sent in the request",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "407 Proxy Authentication Required",
+      "action": "This code is similar to 401 (Unauthorized), but indicates that the client MUST first authenticate itself with the proxy",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "408 Request Timeout",
+      "action": "The server could not produce a response within a suitable amount of time",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "410 Gone",
+      "action": "The requested resource is no longer available at the server and no forwarding address is known",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "413 Request Entity Too Large",
+      "action": "The server is refusing to process a request because the request entity-body is larger than the server is willing or able to process",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "414 Request-URI Too Long",
+      "action": "The server is refusing to service the request because the Request-URI is longer than the server is willing to interpret",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "415 Unsupported Media Type",
+      "action": "The server is refusing to service the request because the message body of the request is in a format not supported by the server for the requested method",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "416 Unsupported URI Scheme",
+      "action": "The server cannot process the request because the scheme of the URI in the Request-URI is unknown to the server",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "420 Bad Extension",
+      "action": "The server did not understand the protocol extension specified in a Proxy-Require or Require header field",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "421 Extension Required",
+      "action": "The UAS needs a particular extension to process the request, but this extension is not listed in a Supported header field in the request",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "423 Interval Too Brief",
+      "action": "The server is rejecting the request because the expiration time of the resource refreshed by the request is too short",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "480 Temporarily Unavailable",
+      "action": "The callee's end system was contacted successfully but the callee is currently unavailable",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "481 Call/Transaction Does Not Exist",
+      "action": "This status indicates that the UAS received a request that does not match any existing dialog or transaction",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "482 Loop Detected",
+      "action": "The server has detected a loop",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "483 Too Many Hops",
+      "action": "The server received a request that contains a Max-Forwards header field with the value zero",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "484 Address Incomplete",
+      "action": "The server received a request with a Request-URI that was incomplete",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "485 Ambiguous",
+      "action": "The Request-URI was ambiguous",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "486 Busy Here",
+      "action": "The callee's end system was contacted successfully, but the callee is currently not willing or able to take additional calls at this end system",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "487 Request Terminated",
+      "action": "The request was terminated by a BYE or CANCEL request",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "488 Not Acceptable Here",
+      "action": "The response has the same meaning as 606 (Not Acceptable), but only applies to the specific resource addressed by the Request-URI",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "491 Request Pending",
+      "action": "The request was received by a UAS that had a pending request within the same dialog",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "493 Undecipherable",
+      "action": "The request was received by a UAS that contained an encrypted MIME body for which the recipient does not possess or will not provide an appropriate decryption key",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Server Failure",
+      "event": "500 Server Internal Error",
+      "action": "The server encountered an unexpected condition that prevented it from fulfilling the request",
+      "to": "Server Failure"
+    },
+    {
+      "from": "Server Failure",
+      "event": "501 Not Implemented",
+      "action": "The server does not support the functionality required to fulfill the request",
+      "to": "Server Failure"
+    },
+    {
+      "from": "Server Failure",
+      "event": "502 Bad Gateway",
+      "action": "The server, while acting as a gateway or proxy, received an invalid response from the downstream server it accessed in attempting to fulfill the request",
+      "to": "Server Failure"
+    },
+    {
+      "from": "Server Failure",
+      "event": "503 Service Unavailable",
+      "action": "The server is temporarily unable to process the request due to a temporary overloading or maintenance of the server",
+      "to": "Server Failure"
+    },
+    {
+      "from": "Server Failure",
+      "event": "504 Server Time-out",
+      "action": "The server did not receive a timely response from an external server it accessed in attempting to process the request",
+      "to": "Server Failure"
+    },
+    {
+      "from": "Server Failure",
+      "event": "505 Version Not Supported",
+      "action": "The server does not support, or refuses to support, the SIP protocol version that was used in the request",
+      "to": "Server Failure"
+    },
+    {
+      "from": "Server Failure",
+      "event": "513 Message Too Large",
+      "action": "The server was unable to process the request since the message length exceeded its capabilities",
+      "to": "Server Failure"
+    },
+    {
+      "from": "Global Failures",
+      "event": "600 Busy Everywhere",
+      "action": "The callee's end system was contacted successfully but the callee is busy and does not wish to take the call at this time",
+      "to": "Global Failures"
+    },
+    {
+      "from": "Global Failures",
+      "event": "603 Decline",
+      "action": "The callee's machine was successfully contacted but the user explicitly does not wish to or cannot participate",
+      "to": "Global Failures"
+    },
+    {
+      "from": "Global Failures",
+      "event": "604 Does Not Exist Anywhere",
+      "action": "The server has authoritative information that the user indicated in the Request-URI does not exist anywhere",
+      "to": "Global Failures"
+    },
+    {
+      "from": "Global Failures",
+      "event": "606 Not Acceptable",
+      "action": "The user's agent was contacted successfully but some aspects of the session description such as the requested media, bandwidth, or addressing style were not acceptable",
+      "to": "Global Failures"
+    },
+    {
+      "from": "Unauthorized",
+      "event": "401 (Unauthorized)",
+      "action": "UAC re-originates the request with proper credentials",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Unauthorized",
+      "event": "401 (Unauthorized)",
+      "action": "UAC attempts to retry the request with a username of 'anonymous' and no password",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Proxy Authentication Required",
+      "event": "407 (Proxy Authentication Required)",
+      "action": "UAC re-originates the request with proper credentials",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Proxy Authentication Required",
+      "event": "407 (Proxy Authentication Required)",
+      "action": "UAC attempts to retry the request with a username of 'anonymous' and no password",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Unauthorized with multiple challenges",
+      "event": "401 (Unauthorized) with multiple challenges",
+      "action": "UAC includes an Authorization value for each WWW-Authenticate value",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Proxy Authentication Required with multiple challenges",
+      "event": "407 (Proxy Authentication Required) with multiple challenges",
+      "action": "UAC includes a Proxy-Authorization value for each Proxy-Authenticate value",
+      "to": "Authenticated"
+    },
+    {
+      "from": "UAC Sends Request with S/MIME Body",
+      "event": "UAS Receives Request",
+      "action": "Validate Certificate",
+      "to": "Certificate Validation"
+    },
+    {
+      "from": "Certificate Validation",
+      "event": "Certificate Verification Failed",
+      "action": "Notify User of Certificate Status",
+      "to": "Certificate Notification"
+    },
+    {
+      "from": "Certificate Validation",
+      "event": "Certificate Verification Successful",
+      "action": "Add Certificate to Keyring",
+      "to": "Certificate Addition"
+    },
+    {
+      "from": "Certificate Notification",
+      "event": "User Authorizes Certificate",
+      "action": "Add Certificate to Keyring",
+      "to": "Certificate Addition"
+    },
+    {
+      "from": "UAS Sends Response with S/MIME Body",
+      "event": "UAC Receives Response",
+      "action": "Validate Certificate",
+      "to": "Certificate Validation"
+    },
+    {
+      "from": "UAC Receives Response with S/MIME Body",
+      "event": "Certificate Discrepancy Detected",
+      "action": "Notify User of Certificate Change",
+      "to": "Certificate Discrepancy Notification"
+    },
+    {
+      "from": "Certificate Discrepancy Notification",
+      "event": "User Authorizes Certificate",
+      "action": "Add Certificate to Keyring",
+      "to": "Certificate Addition"
+    },
+    {
+      "from": "UAC",
+      "event": "Receive Encrypted S/MIME Body with Unknown Key",
+      "action": "Reject Request with 493 Undecipherable",
+      "to": "Reject Request with 493 Undecipherable"
+    },
+    {
+      "from": "UAS",
+      "event": "Receive S/MIME Body with Unsupported Media Type",
+      "action": "Reject Request with 415 Unsupported Media Type",
+      "to": "Reject Request with 415 Unsupported Media Type"
+    },
+    {
+      "from": "UAC",
+      "event": "Receive Unsecured Response",
+      "action": "Notify User of Unsecured Session",
+      "to": "Notify User of Unsecured Session"
+    },
+    {
+      "from": "UAS",
+      "event": "Receive Unsecured Request",
+      "action": "Notify User of Unsecured Session",
+      "to": "Notify User of Unsecured Session"
+    },
+    {
+      "from": "UAC",
+      "event": "Receive Certificate in CMS SignedData",
+      "action": "Notify User of Certificate Change",
+      "to": "Receive Certificate in CMS SignedData"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "CANCEL",
+      "action": "UAS responds with 487",
+      "to": "CANCEL transaction"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "BYE",
+      "action": "BYE can only be sent on an existing call leg (now called a dialog)",
+      "to": "Dialog"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "TCP connection closure",
+      "action": "Eliminated coupling between TCP connection state and SIP processing",
+      "to": "SIP transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "INVITE",
+      "action": "INVITE transaction still terminates normally",
+      "to": "INVITE transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "CANCEL",
+      "action": "CANCEL and INVITE transactions are separated",
+      "to": "CANCEL transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "BYE",
+      "action": "CANCEL and BYE transactions are separated",
+      "to": "BYE transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "UDP",
+      "action": "UAs need to support both UDP and TCP",
+      "to": "UDP connection"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "TCP",
+      "action": "UAs need to support both UDP and TCP",
+      "to": "TCP connection"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "DNS SRV lookup",
+      "action": "Proxies collect all challenges and place them into the forwarded response",
+      "to": "SIP transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "Digest credentials",
+      "action": "URI needs to be quoted",
+      "to": "SIP transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "SDP",
+      "action": "SDP processing split off into a separate specification",
+      "to": "SIP transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "IPv6",
+      "action": "Added full support for IPv6 in URIs and in the Via header field",
+      "to": "SIP transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "Loop detection",
+      "action": "Loop detection made optional, supplanted by mandatory usage of Max-Forwards",
+      "to": "SIP transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "Tags",
+      "action": "Usage of tags is now mandatory",
+      "to": "SIP transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "Supported header field",
+      "action": "Added the Supported header field",
+      "to": "SIP transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "Route and Record-Route construction",
+      "action": "Handling of Route and Record-Route construction reworked",
+      "to": "SIP transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "CRLF",
+      "action": "Only CRLF allowed for line termination",
+      "to": "SIP transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "Route in CANCEL and ACK",
+      "action": "Usage of Route in CANCEL and ACK well specified",
+      "to": "SIP transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "UDP packet",
+      "action": "Removed usage of multiple requests in a single UDP packet",
+      "to": "SIP transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "Expires header field",
+      "action": "Usage of absolute time removed, relative times used instead",
+      "to": "SIP transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "Via header field",
+      "action": "Branch parameter of the Via header field value is now mandatory",
+      "to": "SIP transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "TCP connection closure",
+      "action": "Eliminated coupling between TCP connection state and SIP processing",
+      "to": "SIP transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "New transaction",
+      "action": "UA can initiate a new transaction to a peer while another is in progress",
+      "to": "SIP transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "PGP",
+      "action": "PGP removed, replaced with S/MIME",
+      "to": "SIP transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "SIPS URI scheme",
+      "action": "Added the SIPS URI scheme for end-to-end TLS",
+      "to": "SIP transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "TLS",
+      "action": "Additional security features added with TLS",
+      "to": "SIP transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "Provisional responses",
+      "action": "Proxy must forward provisional responses from 101 to 199 upstream",
+      "to": "SIP transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "503 response",
+      "action": "Receipt of a 503 should trigger an attempt to contact the next element in the result of a DNS SRV lookup",
+      "to": "SIP transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "UA authentication",
+      "action": "UA authentication of a server removed, mutual authentication procedures allowed",
+      "to": "SIP transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "BYE",
+      "action": "UA cannot send BYE for a call until it has received an ACK for the initial INVITE",
+      "to": "SIP transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "CANCEL",
+      "action": "UA or proxy cannot send CANCEL for a transaction until it gets a provisional response for the request",
+      "to": "SIP transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "Action parameter in registrations",
+      "action": "Action parameter in registrations deprecated",
+      "to": "SIP transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "Multicast",
+      "action": "Multicast plays a more limited role, protocol operation unaffected by usage of multicast",
+      "to": "SIP transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "Basic authentication",
+      "action": "Basic authentication removed entirely and its usage forbidden",
+      "to": "SIP transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "6xx response",
+      "action": "Proxies no longer forward a 6xx immediately on receiving it, instead CANCEL pending branches immediately",
+      "to": "SIP transaction"
+    },
+    {
+      "from": "SIP transaction",
+      "event": "Request merging",
+      "action": "Handling of merging done only at a UA, procedures defined for rejecting all but the first request",
+      "to": "SIP transaction"
+    }
+  ]
+}

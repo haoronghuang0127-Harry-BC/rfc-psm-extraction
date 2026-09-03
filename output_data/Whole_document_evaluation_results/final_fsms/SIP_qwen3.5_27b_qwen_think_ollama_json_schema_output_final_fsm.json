@@ -1,0 +1,271 @@
+{
+  "states": [
+    "INVITE-Client-Calling",
+    "INVITE-Client-Proceeding",
+    "INVITE-Client-Completed",
+    "INVITE-Client-Terminated",
+    "Non-INVITE-Client-Trying",
+    "Non-INVITE-Client-Proceeding",
+    "Non-INVITE-Client-Completed",
+    "Non-INVITE-Client-Terminated",
+    "INVITE-Server-Proceeding",
+    "INVITE-Server-Completed",
+    "INVITE-Server-Confirmed",
+    "INVITE-Server-Terminated",
+    "Non-INVITE-Server-Trying",
+    "Non-INVITE-Server-Proceeding",
+    "Non-INVITE-Server-Completed",
+    "Non-INVITE-Server-Terminated",
+    "Dialog-early",
+    "Dialog-confirmed",
+    "Dialog-Terminated"
+  ],
+  "transitions": [
+    {
+      "from": "INVITE-Client-Calling",
+      "event": "Timer A fires",
+      "action": "Retransmit INVITE, Reset Timer A",
+      "to": "INVITE-Client-Calling"
+    },
+    {
+      "from": "INVITE-Client-Calling",
+      "event": "1xx response",
+      "action": "Pass to TU",
+      "to": "INVITE-Client-Proceeding"
+    },
+    {
+      "from": "INVITE-Client-Calling",
+      "event": "300-699 response",
+      "action": "Generate ACK, Pass response to TU",
+      "to": "INVITE-Client-Completed"
+    },
+    {
+      "from": "INVITE-Client-Calling",
+      "event": "2xx response",
+      "action": "Pass response to TU",
+      "to": "INVITE-Client-Terminated"
+    },
+    {
+      "from": "INVITE-Client-Calling",
+      "event": "Timer B fires",
+      "action": "Inform TU of timeout",
+      "to": "INVITE-Client-Terminated"
+    },
+    {
+      "from": "INVITE-Client-Proceeding",
+      "event": "1xx response",
+      "action": "Pass to TU",
+      "to": "INVITE-Client-Proceeding"
+    },
+    {
+      "from": "INVITE-Client-Proceeding",
+      "event": "300-699 response",
+      "action": "Generate ACK, Pass response to TU",
+      "to": "INVITE-Client-Completed"
+    },
+    {
+      "from": "INVITE-Client-Proceeding",
+      "event": "2xx response",
+      "action": "Pass response to TU",
+      "to": "INVITE-Client-Terminated"
+    },
+    {
+      "from": "INVITE-Client-Completed",
+      "event": "Retransmission of final response",
+      "action": "Retransmit ACK",
+      "to": "INVITE-Client-Completed"
+    },
+    {
+      "from": "INVITE-Client-Completed",
+      "event": "Timer D fires",
+      "action": "",
+      "to": "INVITE-Client-Terminated"
+    },
+    {
+      "from": "Non-INVITE-Client-Trying",
+      "event": "Timer E fires",
+      "action": "Retransmit request, Reset Timer E",
+      "to": "Non-INVITE-Client-Trying"
+    },
+    {
+      "from": "Non-INVITE-Client-Trying",
+      "event": "1xx response",
+      "action": "Pass to TU",
+      "to": "Non-INVITE-Client-Proceeding"
+    },
+    {
+      "from": "Non-INVITE-Client-Trying",
+      "event": "200-699 response",
+      "action": "Pass to TU",
+      "to": "Non-INVITE-Client-Completed"
+    },
+    {
+      "from": "Non-INVITE-Client-Trying",
+      "event": "Timer F fires",
+      "action": "Inform TU of timeout",
+      "to": "Non-INVITE-Client-Terminated"
+    },
+    {
+      "from": "Non-INVITE-Client-Proceeding",
+      "event": "Timer E fires",
+      "action": "Retransmit request, Reset Timer E to T2",
+      "to": "Non-INVITE-Client-Proceeding"
+    },
+    {
+      "from": "Non-INVITE-Client-Proceeding",
+      "event": "1xx response",
+      "action": "Pass to TU",
+      "to": "Non-INVITE-Client-Proceeding"
+    },
+    {
+      "from": "Non-INVITE-Client-Proceeding",
+      "event": "200-699 response",
+      "action": "Pass to TU",
+      "to": "Non-INVITE-Client-Completed"
+    },
+    {
+      "from": "Non-INVITE-Client-Proceeding",
+      "event": "Timer F fires",
+      "action": "Inform TU of timeout",
+      "to": "Non-INVITE-Client-Terminated"
+    },
+    {
+      "from": "Non-INVITE-Client-Completed",
+      "event": "Timer K fires",
+      "action": "",
+      "to": "Non-INVITE-Client-Terminated"
+    },
+    {
+      "from": "INVITE-Server-Proceeding",
+      "event": "101-199 from TU",
+      "action": "Send response",
+      "to": "INVITE-Server-Proceeding"
+    },
+    {
+      "from": "INVITE-Server-Proceeding",
+      "event": "2xx from TU",
+      "action": "Send response",
+      "to": "INVITE-Server-Terminated"
+    },
+    {
+      "from": "INVITE-Server-Proceeding",
+      "event": "300-699 from TU",
+      "action": "Send response, Set Timer G and H",
+      "to": "INVITE-Server-Completed"
+    },
+    {
+      "from": "INVITE-Server-Proceeding",
+      "event": "Request retransmission",
+      "action": "Retransmit provisional response",
+      "to": "INVITE-Server-Proceeding"
+    },
+    {
+      "from": "INVITE-Server-Proceeding",
+      "event": "Transport Error",
+      "action": "Inform TU",
+      "to": "INVITE-Server-Terminated"
+    },
+    {
+      "from": "INVITE-Server-Completed",
+      "event": "Timer G fires",
+      "action": "Retransmit response, Reset Timer G",
+      "to": "INVITE-Server-Completed"
+    },
+    {
+      "from": "INVITE-Server-Completed",
+      "event": "ACK received",
+      "action": "",
+      "to": "INVITE-Server-Confirmed"
+    },
+    {
+      "from": "INVITE-Server-Completed",
+      "event": "Timer H fires",
+      "action": "Inform TU of transaction failure",
+      "to": "INVITE-Server-Terminated"
+    },
+    {
+      "from": "INVITE-Server-Completed",
+      "event": "Request retransmission",
+      "action": "Retransmit response",
+      "to": "INVITE-Server-Completed"
+    },
+    {
+      "from": "INVITE-Server-Confirmed",
+      "event": "Timer I fires",
+      "action": "",
+      "to": "INVITE-Server-Terminated"
+    },
+    {
+      "from": "Non-INVITE-Server-Trying",
+      "event": "Request retransmission",
+      "action": "Discard",
+      "to": "Non-INVITE-Server-Trying"
+    },
+    {
+      "from": "Non-INVITE-Server-Trying",
+      "event": "1xx from TU",
+      "action": "Send response",
+      "to": "Non-INVITE-Server-Proceeding"
+    },
+    {
+      "from": "Non-INVITE-Server-Trying",
+      "event": "200-699 from TU",
+      "action": "Send response, Set Timer J",
+      "to": "Non-INVITE-Server-Completed"
+    },
+    {
+      "from": "Non-INVITE-Server-Trying",
+      "event": "Transport Error",
+      "action": "Inform TU",
+      "to": "Non-INVITE-Server-Terminated"
+    },
+    {
+      "from": "Non-INVITE-Server-Proceeding",
+      "event": "1xx from TU",
+      "action": "Send response",
+      "to": "Non-INVITE-Server-Proceeding"
+    },
+    {
+      "from": "Non-INVITE-Server-Proceeding",
+      "event": "Request retransmission",
+      "action": "Retransmit provisional response",
+      "to": "Non-INVITE-Server-Proceeding"
+    },
+    {
+      "from": "Non-INVITE-Server-Proceeding",
+      "event": "200-699 from TU",
+      "action": "Send response, Set Timer J",
+      "to": "Non-INVITE-Server-Completed"
+    },
+    {
+      "from": "Non-INVITE-Server-Completed",
+      "event": "Timer J fires",
+      "action": "",
+      "to": "Non-INVITE-Server-Terminated"
+    },
+    {
+      "from": "Non-INVITE-Server-Completed",
+      "event": "Request retransmission",
+      "action": "Retransmit final response",
+      "to": "Non-INVITE-Server-Completed"
+    },
+    {
+      "from": "Dialog-early",
+      "event": "2xx final response",
+      "action": "",
+      "to": "Dialog-confirmed"
+    },
+    {
+      "from": "Dialog-early",
+      "event": "Non-2xx final response or no response",
+      "action": "",
+      "to": "Dialog-Terminated"
+    },
+    {
+      "from": "Dialog-confirmed",
+      "event": "BYE request",
+      "action": "Terminate session and dialog",
+      "to": "Dialog-Terminated"
+    }
+  ]
+}

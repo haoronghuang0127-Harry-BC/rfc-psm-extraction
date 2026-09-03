@@ -1,0 +1,240 @@
+{
+  "states": [
+    "BOUND",
+    "RENEW",
+    "REBINDING",
+    "automatic allocation",
+    "dynamic allocation",
+    "manual allocation",
+    "INIT",
+    "RENEWING",
+    "INIT-REBOOT",
+    "SELECTING",
+    "T1 expires",
+    "T2 expires"
+  ],
+  "transitions": [
+    {
+      "from": "BOUND",
+      "event": "release the address",
+      "action": "reassign address",
+      "to": "automatic allocation"
+    },
+    {
+      "from": "dynamic allocation",
+      "event": "lease expires",
+      "action": "reuse addresses",
+      "to": "automatic allocation"
+    },
+    {
+      "from": "automatic allocation",
+      "event": "client requests address",
+      "action": "assign address",
+      "to": "BOUND"
+    },
+    {
+      "from": "manual allocation",
+      "event": "client requests address",
+      "action": "convey assigned address",
+      "to": "BOUND"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPDISCOVER",
+      "action": "",
+      "to": "BOUND"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPREQUEST",
+      "action": "",
+      "to": "BOUND"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPRELEASE",
+      "action": "Discards lease",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPDECLINE",
+      "action": "restarts the configuration process",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPNAK",
+      "action": "restarts the configuration process",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "lease expires",
+      "action": "discontinue use of the previous network address",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPREQUEST",
+      "action": "",
+      "to": "RENEWING"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPACK",
+      "action": "",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPNAK",
+      "action": "restarts the configuration process",
+      "to": "INIT"
+    },
+    {
+      "from": "RENEWING",
+      "event": "timeout",
+      "action": "restarts the initialization process",
+      "to": "INIT"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPREQUEST",
+      "action": "",
+      "to": "REBINDING"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPACK",
+      "action": "",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPNAK",
+      "action": "restarts the configuration process",
+      "to": "INIT"
+    },
+    {
+      "from": "REBINDING",
+      "event": "timeout",
+      "action": "restarts the initialization process",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPDISCOVER",
+      "action": "sets 'ciaddr' to 0x00000000",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPOFFER",
+      "action": "selects one DHCPOFFER message, extracts server address",
+      "to": "BOUND"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPREQUEST",
+      "action": "'ciaddr' MUST be zero, 'requested IP address' option MUST be filled in with client's notion of its previously assigned address",
+      "to": "INIT-REBOOT"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPNAK",
+      "action": "Restart",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPNAK",
+      "action": "Discard offer",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPOFFER",
+      "action": "Collect replies",
+      "to": "SELECTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPREQUEST",
+      "action": "send DHCPREQUEST",
+      "to": "SELECTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPNAK",
+      "action": "Halt network",
+      "to": "SELECTING"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPREQUEST",
+      "action": "'ciaddr' MUST be filled in with client's IP address",
+      "to": "RENEWING"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEWING",
+      "event": "T1 expires",
+      "action": "Send DHCPREQUEST to leasing server",
+      "to": "RENEWING"
+    },
+    {
+      "from": "RENEWING",
+      "event": "T2 expires",
+      "action": "Broadcast DHCPREQUEST",
+      "to": "REBINDING"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPREQUEST",
+      "action": "'ciaddr' MUST be filled in with client's IP address",
+      "to": "REBINDING"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBINDING",
+      "event": "T2 expires",
+      "action": "Broadcast DHCPREQUEST",
+      "to": "REBINDING"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPOFFER",
+      "action": "Discard",
+      "to": "BOUND"
+    },
+    {
+      "from": "BOUND",
+      "event": "T1 expires",
+      "action": "Send DHCPREQUEST",
+      "to": "RENEWING"
+    },
+    {
+      "from": "BOUND",
+      "event": "T2 expires",
+      "action": "Broadcast DHCPREQUEST",
+      "to": "REBINDING"
+    }
+  ]
+}

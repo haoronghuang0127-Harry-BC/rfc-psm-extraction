@@ -1,0 +1,20 @@
+[
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [\"Client connects to publish token\", \"Reconnect with client authentication\"],\n  \"transitions\": [\n    {\n      \"from\": \"Client connects to publish token\",\n      \"event\": \"publish token to 'authz-info' topic\",\n      \"action\": \"disconnects and expects to reconnect with client authentication\",\n      \"to\": \"Reconnect with client authentication\"\n    }\n  ]\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [\"Connected\"],\n  \"transitions\": [\n    {\n      \"from\": \"Connected\",\n      \"event\": \"CONNACK\",\n      \"action\": \"Send CONNACK with reason code 0x87 or other applicable reason code\",\n      \"to\": \"Connected\"\n    },\n    {\n      \"from\": \"Connected\",\n      \"event\": \"CONNACK\",\n      \"action\": \"Send CONNACK with reason code 0x00 (Success), set Session Present accordingly\",\n      \"to\": \"Connected\"\n    }\n  ]\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}"
+]

@@ -1,0 +1,70 @@
+{
+  "states": [
+    "Not Authenticated",
+    "Authenticated",
+    "Selected",
+    "Logout"
+  ],
+  "transitions": [
+    {
+      "from": "Not Authenticated",
+      "event": "STARTTLS",
+      "action": "Begin TLS negotiation now",
+      "to": "Not Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "AUTHENTICATE",
+      "action": "Authentication successful",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "LOGIN",
+      "action": "Login completed",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "SELECT",
+      "action": "SELECT completed",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "EXAMINE",
+      "action": "EXAMINE completed",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "CLOSE",
+      "action": "CLOSE completed",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "UNSELECT",
+      "action": "Unselect completed",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "LOGOUT",
+      "action": "Logout completed",
+      "to": "Logout"
+    },
+    {
+      "from": "Authenticated",
+      "event": "LOGOUT",
+      "action": "Logout completed",
+      "to": "Logout"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "LOGOUT",
+      "action": "Logout completed",
+      "to": "Logout"
+    }
+  ]
+}

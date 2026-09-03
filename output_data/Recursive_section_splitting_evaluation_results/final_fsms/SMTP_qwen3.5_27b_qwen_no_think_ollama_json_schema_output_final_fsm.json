@@ -1,0 +1,225 @@
+{
+  "states": [
+    "Session Initiated",
+    "Connection Closed",
+    "No mail transaction in progress",
+    "Mail transaction in progress",
+    "initial state",
+    "transaction in progress",
+    "Session without mail transaction",
+    "Connection Established",
+    "Data Input Mode"
+  ],
+  "transitions": [
+    {
+      "from": "Session Initiated",
+      "event": "QUIT",
+      "action": "",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "Session Initiated",
+      "event": "intervening commands",
+      "action": "503 bad sequence of commands",
+      "to": "Session Initiated"
+    },
+    {
+      "from": "No mail transaction in progress",
+      "event": "MAIL FROM:<reverse-path>",
+      "action": "reset all state tables and buffers; return 250 OK or error reply",
+      "to": "Mail transaction in progress"
+    },
+    {
+      "from": "Mail transaction in progress",
+      "event": "RCPT TO:<forward-path>",
+      "action": "store forward-path; return 250 OK or 550 reply",
+      "to": "Mail transaction in progress"
+    },
+    {
+      "from": "No mail transaction in progress",
+      "event": "RCPT TO:<forward-path>",
+      "action": "return 503 Bad sequence of commands",
+      "to": "No mail transaction in progress"
+    },
+    {
+      "from": "Mail transaction in progress",
+      "event": "DATA",
+      "action": "return 354 Intermediate reply; receive message text until end of mail data indicator; return 250 OK or error reply",
+      "to": "No mail transaction in progress"
+    },
+    {
+      "from": "Mail transaction in progress",
+      "event": "DATA",
+      "action": "return 503 command out of sequence or 554 no valid recipients",
+      "to": "Mail transaction in progress"
+    },
+    {
+      "from": "initial state",
+      "event": "EHLO",
+      "action": "confirm initial state, clear all state tables and buffers",
+      "to": "initial state"
+    },
+    {
+      "from": "initial state",
+      "event": "HELO",
+      "action": "confirm initial state, clear all state tables and buffers",
+      "to": "initial state"
+    },
+    {
+      "from": "initial state",
+      "event": "MAIL",
+      "action": "clear reverse-path buffer, forward-path buffer, and mail data buffer; insert reverse-path into reverse-path buffer",
+      "to": "transaction in progress"
+    },
+    {
+      "from": "transaction in progress",
+      "event": "RCPT",
+      "action": "append forward-path argument to forward-path buffer",
+      "to": "transaction in progress"
+    },
+    {
+      "from": "transaction in progress",
+      "event": "DATA",
+      "action": "append mail data to mail data buffer; process stored transaction information; clear buffers on completion",
+      "to": "initial state"
+    },
+    {
+      "from": "transaction in progress",
+      "event": "RSET",
+      "action": "discard sender, recipients, and mail data; clear all buffers and state tables",
+      "to": "initial state"
+    },
+    {
+      "from": "transaction in progress",
+      "event": "QUIT",
+      "action": "abort uncompleted transaction; close transmission channel",
+      "to": "initial state"
+    },
+    {
+      "from": "Session without mail transaction",
+      "event": "EHLO",
+      "action": "clear all buffers and reset the state exactly as if a RSET command had been issued",
+      "to": "Session without mail transaction"
+    },
+    {
+      "from": "Mail transaction in progress",
+      "event": "EHLO",
+      "action": "clear all buffers and reset the state exactly as if a RSET command had been issued",
+      "to": "Session without mail transaction"
+    },
+    {
+      "from": "Session without mail transaction",
+      "event": "RSET",
+      "action": "",
+      "to": "Session without mail transaction"
+    },
+    {
+      "from": "Mail transaction in progress",
+      "event": "RSET",
+      "action": "abort the mail transaction",
+      "to": "Session without mail transaction"
+    },
+    {
+      "from": "Session without mail transaction",
+      "event": "MAIL",
+      "action": "begins a mail transaction",
+      "to": "Mail transaction in progress"
+    },
+    {
+      "from": "Session without mail transaction",
+      "event": "SEND",
+      "action": "begins a mail transaction",
+      "to": "Mail transaction in progress"
+    },
+    {
+      "from": "Session without mail transaction",
+      "event": "SOML",
+      "action": "begins a mail transaction",
+      "to": "Mail transaction in progress"
+    },
+    {
+      "from": "Session without mail transaction",
+      "event": "SAML",
+      "action": "begins a mail transaction",
+      "to": "Mail transaction in progress"
+    },
+    {
+      "from": "Mail transaction in progress",
+      "event": "QUIT",
+      "action": "abort the mail transaction",
+      "to": "Session without mail transaction"
+    },
+    {
+      "from": "Connection Established",
+      "event": "CONNECTION ESTABLISHMENT",
+      "action": "220",
+      "to": "Connection Established"
+    },
+    {
+      "from": "Connection Established",
+      "event": "EHLO or HELO",
+      "action": "250",
+      "to": "Connection Established"
+    },
+    {
+      "from": "Connection Established",
+      "event": "MAIL",
+      "action": "250",
+      "to": "Connection Established"
+    },
+    {
+      "from": "Connection Established",
+      "event": "RCPT",
+      "action": "250, 251",
+      "to": "Connection Established"
+    },
+    {
+      "from": "Connection Established",
+      "event": "DATA",
+      "action": "354",
+      "to": "Data Input Mode"
+    },
+    {
+      "from": "Data Input Mode",
+      "event": "data",
+      "action": "250",
+      "to": "Connection Established"
+    },
+    {
+      "from": "Connection Established",
+      "event": "RSET",
+      "action": "250",
+      "to": "Connection Established"
+    },
+    {
+      "from": "Connection Established",
+      "event": "VRFY",
+      "action": "250, 251, 252",
+      "to": "Connection Established"
+    },
+    {
+      "from": "Connection Established",
+      "event": "EXPN",
+      "action": "250, 252",
+      "to": "Connection Established"
+    },
+    {
+      "from": "Connection Established",
+      "event": "HELP",
+      "action": "211, 214",
+      "to": "Connection Established"
+    },
+    {
+      "from": "Connection Established",
+      "event": "NOOP",
+      "action": "250",
+      "to": "Connection Established"
+    },
+    {
+      "from": "Connection Established",
+      "event": "QUIT",
+      "action": "221",
+      "to": "Connection Established"
+    }
+  ]
+}

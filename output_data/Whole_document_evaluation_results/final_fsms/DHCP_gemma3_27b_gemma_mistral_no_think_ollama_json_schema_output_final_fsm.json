@@ -1,0 +1,72 @@
+{
+  "states": [
+    "INIT",
+    "REBOOTING",
+    "SELECTING",
+    "RENEWING",
+    "REBINDING",
+    "BOUND"
+  ],
+  "transitions": [
+    {
+      "from": "INIT",
+      "event": "DHCPDISCOVER",
+      "action": "send DHCPDISCOVER",
+      "to": "SELECTING"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPREQUEST",
+      "action": "send DHCPREQUEST",
+      "to": "REBOOTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPOFFER",
+      "action": "collect replies",
+      "to": "SELECTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPREQUEST",
+      "action": "send DHCPREQUEST",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPREQUEST",
+      "action": "send DHCPREQUEST",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEWING",
+      "event": "",
+      "action": "",
+      "to": "REBINDING"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPREQUEST",
+      "action": "send DHCPREQUEST",
+      "to": "BOUND"
+    },
+    {
+      "from": "BOUND",
+      "event": "T1",
+      "action": "send DHCPREQUEST",
+      "to": "RENEWING"
+    },
+    {
+      "from": "BOUND",
+      "event": "T2",
+      "action": "send DHCPREQUEST",
+      "to": "REBINDING"
+    },
+    {
+      "from": "BOUND",
+      "event": "lease expires",
+      "action": "stop network processing",
+      "to": "INIT"
+    }
+  ]
+}

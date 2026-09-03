@@ -1,0 +1,141 @@
+{
+  "states": [
+    "UAC Core",
+    "UAS Core",
+    "UAC",
+    "UAS",
+    "UAS processing request",
+    "Stateless UAS",
+    "UAC core",
+    "INVITE server transaction",
+    "client transport",
+    "dialog",
+    "early dialogs",
+    "established dialogs",
+    "transaction layer",
+    "transport layer",
+    "calling",
+    "Proceeding",
+    "Completed",
+    "Terminated",
+    "Trying",
+    "Confirmed",
+    "terminated"
+  ],
+  "transitions": [
+    {
+      "from": "calling",
+      "event": "Timer A fires",
+      "action": "reset A, INVITE sent",
+      "to": "calling"
+    },
+    {
+      "from": "calling",
+      "event": "Timer B fires",
+      "action": "inform TU",
+      "to": "calling"
+    },
+    {
+      "from": "calling",
+      "event": "1xx",
+      "action": "1xx to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699",
+      "action": "ACK sent, resp. to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Transport Err.",
+      "action": "Inform TU",
+      "to": "calling"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer D fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "2xx",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer E fires",
+      "action": "reset timer to MIN(2*T1, T2), retransmit request",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer F fires",
+      "action": "inform TU, transition to Terminated",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "provisional response received",
+      "action": "pass response to TU, transition to Proceeding",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "final response received (status codes 200-699)",
+      "action": "pass response to TU, transition to Completed",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer E fires",
+      "action": "retransmit request, reset timer to T2",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer F fires",
+      "action": "inform TU, transition to Terminated",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "final response received (status codes 200-699)",
+      "action": "pass response to TU, transition to Completed",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer K fires",
+      "action": "transition to Terminated",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer G fires",
+      "action": "retransmit response, reset timer G",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "ACK received",
+      "action": "transition to Confirmed",
+      "to": "Confirmed"
+    },
+    {
+      "from": "Confirmed",
+      "event": "Timer H fires",
+      "action": "transition to Terminated, indicate transaction failure",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "retransmission of request received",
+      "action": "retransmit most recent provisional response",
+      "to": "Proceeding"
+    }
+  ]
+}

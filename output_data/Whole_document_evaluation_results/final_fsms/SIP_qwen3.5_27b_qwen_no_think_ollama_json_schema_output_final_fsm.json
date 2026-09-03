@@ -1,0 +1,210 @@
+{
+  "states": [
+    "Calling",
+    "Proceeding",
+    "Completed",
+    "Terminated",
+    "Trying",
+    "Confirmed"
+  ],
+  "transitions": [
+    {
+      "from": "Calling",
+      "event": "INVITE from TU",
+      "action": "send INVITE; start Timer A (T1); start Timer B (64*T1)",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer A fires",
+      "action": "retransmit INVITE; reset Timer A (2*T1)",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer B fires or Transport Error",
+      "action": "inform TU of timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "1xx response received",
+      "action": "pass 1xx to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Calling",
+      "event": "2xx response received",
+      "action": "pass 2xx to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "300-699 response received",
+      "action": "pass response to TU; generate ACK; send ACK; start Timer D",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "1xx response received",
+      "action": "pass 1xx to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx response received",
+      "action": "pass 2xx to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699 response received",
+      "action": "pass response to TU; generate ACK; send ACK; start Timer D",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer B fires or Transport Error",
+      "action": "inform TU of timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "retransmission of final response received",
+      "action": "retransmit ACK",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer D fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "Request from TU",
+      "action": "send request; start Timer E (T1); start Timer F (64*T1)",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer E fires",
+      "action": "retransmit request; reset Timer E (MIN(2*T1, T2))",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer F fires or Transport Error",
+      "action": "inform TU of timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "1xx response received",
+      "action": "pass 1xx to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "200-699 response received",
+      "action": "pass response to TU; start Timer K (T4)",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer E fires",
+      "action": "retransmit request; reset Timer E (T2)",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "1xx response received",
+      "action": "pass 1xx to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "200-699 response received",
+      "action": "pass response to TU; start Timer K (T4)",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer F fires or Transport Error",
+      "action": "inform TU of timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "retransmission of response received",
+      "action": "",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer K fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "INVITE received",
+      "action": "send 100 Trying; pass INVITE to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "101-199 response from TU",
+      "action": "send response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx response from TU",
+      "action": "send response",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699 response from TU",
+      "action": "send response; start Timer G (T1); start Timer H (64*T1)",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Transport Error",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer G fires",
+      "action": "retransmit response; reset Timer G (MIN(2*T1, T2))",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "INVITE retransmission received",
+      "action": "retransmit response",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "ACK received",
+      "action": "",
+      "to": "Confirmed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer H fires or Transport Error",
+      "action": "inform TU of transaction failure",
+      "to": "Terminated"
+    },
+    {
+      "from": "Confirmed",
+      "event": "Timer I fires",
+      "action": "",
+      "to": "Terminated"
+    }
+  ]
+}

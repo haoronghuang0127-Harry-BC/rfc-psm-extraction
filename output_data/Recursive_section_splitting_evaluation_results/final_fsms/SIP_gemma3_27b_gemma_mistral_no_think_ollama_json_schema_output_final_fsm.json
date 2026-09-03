@@ -1,0 +1,742 @@
+{
+  "states": [
+    "User location",
+    "User availability",
+    "User capabilities",
+    "Session setup",
+    "Session management",
+    "Idle",
+    "Establishing Session",
+    "Session Established",
+    "Session Teardown",
+    "client transaction",
+    "server transaction",
+    "dialog",
+    "Client",
+    "Server",
+    "UAC",
+    "UAS",
+    "Proxy",
+    "Redirect Server",
+    "Registrar",
+    "Stateful Proxy",
+    "Stateless Proxy",
+    "Transaction User",
+    "Pending Transaction",
+    "Transaction Does Not Exist",
+    "Final Response Sent",
+    "Registered",
+    "Unregistered",
+    "early",
+    "confirmed",
+    "Provisional 1xx",
+    "Successful 2xx",
+    "Redirection 3xx",
+    "Request Failure 4xx",
+    "Server Failure 5xx",
+    "Global Failures 6xx",
+    "Unauthenticated",
+    "Authenticated",
+    "Open Connection",
+    "Closed Connection",
+    "Receiving Request",
+    "Receiving Response",
+    "Sending Response",
+    "Ringing",
+    "INVITE transaction",
+    "CANCEL transaction",
+    "BYE transaction"
+  ],
+  "transitions": [
+    {
+      "from": "User location",
+      "event": "",
+      "action": "",
+      "to": "User availability"
+    },
+    {
+      "from": "User availability",
+      "event": "",
+      "action": "",
+      "to": "User capabilities"
+    },
+    {
+      "from": "User capabilities",
+      "event": "",
+      "action": "",
+      "to": "Session setup"
+    },
+    {
+      "from": "Session setup",
+      "event": "",
+      "action": "",
+      "to": "Session management"
+    },
+    {
+      "from": "Idle",
+      "event": "INVITE",
+      "action": "send 100 Trying",
+      "to": "Establishing Session"
+    },
+    {
+      "from": "Establishing Session",
+      "event": "INVITE",
+      "action": "send 100 Trying",
+      "to": "Establishing Session"
+    },
+    {
+      "from": "Establishing Session",
+      "event": "180 Ringing",
+      "action": "",
+      "to": "Establishing Session"
+    },
+    {
+      "from": "Establishing Session",
+      "event": "200 OK",
+      "action": "send ACK",
+      "to": "Session Established"
+    },
+    {
+      "from": "Session Established",
+      "event": "re-INVITE",
+      "action": "send 200 OK or 488 Not Acceptable Here",
+      "to": "Session Established"
+    },
+    {
+      "from": "Session Established",
+      "event": "BYE",
+      "action": "send 200 OK",
+      "to": "Session Teardown"
+    },
+    {
+      "from": "Session Teardown",
+      "event": "200 OK",
+      "action": "",
+      "to": "Session Teardown"
+    },
+    {
+      "from": "client transaction",
+      "event": "CANCEL request",
+      "action": "stop further processing, revert to the state that existed before the transaction was initiated, and generate a specific error response",
+      "to": "server transaction"
+    },
+    {
+      "from": "Client",
+      "event": "INVITE request",
+      "action": "",
+      "to": "UAC"
+    },
+    {
+      "from": "Client",
+      "event": "SIP request",
+      "action": "",
+      "to": "UAS"
+    },
+    {
+      "from": "Server",
+      "event": "SIP request",
+      "action": "",
+      "to": "UAS"
+    },
+    {
+      "from": "Server",
+      "event": "SIP request",
+      "action": "",
+      "to": "Proxy"
+    },
+    {
+      "from": "Server",
+      "event": "SIP request",
+      "action": "",
+      "to": "Redirect Server"
+    },
+    {
+      "from": "Server",
+      "event": "REGISTER request",
+      "action": "",
+      "to": "Registrar"
+    },
+    {
+      "from": "UAC",
+      "event": "INVITE request",
+      "action": "",
+      "to": "UAC"
+    },
+    {
+      "from": "UAS",
+      "event": "SIP request",
+      "action": "",
+      "to": "UAS"
+    },
+    {
+      "from": "Proxy",
+      "event": "request",
+      "action": "routing",
+      "to": "Proxy"
+    },
+    {
+      "from": "Proxy",
+      "event": "request",
+      "action": "rewrites",
+      "to": "Proxy"
+    },
+    {
+      "from": "Redirect Server",
+      "event": "request",
+      "action": "3xx responses",
+      "to": "Client"
+    },
+    {
+      "from": "Registrar",
+      "event": "REGISTER request",
+      "action": "updates bindings",
+      "to": "Registrar"
+    },
+    {
+      "from": "Stateful Proxy",
+      "event": "INVITE request",
+      "action": "retains state",
+      "to": "Stateful Proxy"
+    },
+    {
+      "from": "Stateful Proxy",
+      "event": "BYE request",
+      "action": "retains state",
+      "to": "Stateful Proxy"
+    },
+    {
+      "from": "Stateless Proxy",
+      "event": "request",
+      "action": "forwards",
+      "to": "Stateless Proxy"
+    },
+    {
+      "from": "Pending Transaction",
+      "event": "CANCEL",
+      "action": "stop ringing, respond with 487",
+      "to": "Final Response Sent"
+    },
+    {
+      "from": "Pending Transaction",
+      "event": "CANCEL",
+      "action": "respond with 200 (OK)",
+      "to": "Pending Transaction"
+    },
+    {
+      "from": "Pending Transaction",
+      "event": "",
+      "action": "send final response",
+      "to": "Final Response Sent"
+    },
+    {
+      "from": "Transaction Does Not Exist",
+      "event": "CANCEL",
+      "action": "respond with 481 (Call Leg/Transaction Does Not Exist)",
+      "to": "Transaction Does Not Exist"
+    },
+    {
+      "from": "Final Response Sent",
+      "event": "CANCEL",
+      "action": "no effect",
+      "to": "Final Response Sent"
+    },
+    {
+      "from": "Unregistered",
+      "event": "REGISTER request",
+      "action": "create bindings in location service",
+      "to": "Registered"
+    },
+    {
+      "from": "Registered",
+      "event": "REGISTER request",
+      "action": "reading and writing mappings",
+      "to": "Registered"
+    },
+    {
+      "from": "early",
+      "event": "non-2xx final response",
+      "action": "terminate early dialog",
+      "to": "confirmed"
+    },
+    {
+      "from": "confirmed",
+      "event": "BYE",
+      "action": "terminate session and dialog",
+      "to": "confirmed"
+    },
+    {
+      "from": "Provisional 1xx",
+      "event": "100 Trying",
+      "action": "stops retransmissions of an INVITE",
+      "to": "Provisional 1xx"
+    },
+    {
+      "from": "Provisional 1xx",
+      "event": "180 Ringing",
+      "action": "initiate local ringback",
+      "to": "Provisional 1xx"
+    },
+    {
+      "from": "Provisional 1xx",
+      "event": "181 Call Is Being Forwarded",
+      "action": "",
+      "to": "Provisional 1xx"
+    },
+    {
+      "from": "Provisional 1xx",
+      "event": "182 Queued",
+      "action": "update the caller about the status of the queued call",
+      "to": "Provisional 1xx"
+    },
+    {
+      "from": "Provisional 1xx",
+      "event": "183 Session Progress",
+      "action": "convey more details about the call progress",
+      "to": "Provisional 1xx"
+    },
+    {
+      "from": "Successful 2xx",
+      "event": "200 OK",
+      "action": "The information returned with the response depends on the method used in the request",
+      "to": "Successful 2xx"
+    },
+    {
+      "from": "Redirection 3xx",
+      "event": "300 Multiple Choices",
+      "action": "UAs MAY use the Contact header field for automatic redirection",
+      "to": "Redirection 3xx"
+    },
+    {
+      "from": "Redirection 3xx",
+      "event": "301 Moved Permanently",
+      "action": "update any local directories",
+      "to": "Redirection 3xx"
+    },
+    {
+      "from": "Redirection 3xx",
+      "event": "302 Moved Temporarily",
+      "action": "cache this URI for the duration of the expiration time",
+      "to": "Redirection 3xx"
+    },
+    {
+      "from": "Redirection 3xx",
+      "event": "305 Use Proxy",
+      "action": "repeat this single request via the proxy",
+      "to": "Redirection 3xx"
+    },
+    {
+      "from": "Redirection 3xx",
+      "event": "380 Alternative Service",
+      "action": "",
+      "to": "Redirection 3xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "400 Bad Request",
+      "action": "identify the syntax problem",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "401 Unauthorized",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "402 Payment Required",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "403 Forbidden",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "404 Not Found",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "405 Method Not Allowed",
+      "action": "include an Allow header field",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "406 Not Acceptable",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "407 Proxy Authentication Required",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "408 Request Timeout",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "410 Gone",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "411 Length Required",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "413 Request Entity Too Large",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "414 Request-URI Too Long",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "415 Unsupported Media Type",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "416 Unsupported URI Scheme",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "420 Bad Extension",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "421 Extension Required",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "423 Interval Too Brief",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "480 Temporarily Unavailable",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "481 Call/Transaction Does Not Exist",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "482 Loop Detected",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "483 Too Many Hops",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "484 Address Incomplete",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "485 Ambiguous",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "486 Busy Here",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "487 Request Terminated",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "488 Not Acceptable Here",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "491 Request Pending",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "493 Undecipherable",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Server Failure 5xx",
+      "event": "500 Server Internal Error",
+      "action": "",
+      "to": "Server Failure 5xx"
+    },
+    {
+      "from": "Server Failure 5xx",
+      "event": "501 Not Implemented",
+      "action": "",
+      "to": "Server Failure 5xx"
+    },
+    {
+      "from": "Server Failure 5xx",
+      "event": "502 Bad Gateway",
+      "action": "",
+      "to": "Server Failure 5xx"
+    },
+    {
+      "from": "Server Failure 5xx",
+      "event": "503 Service Unavailable",
+      "action": "",
+      "to": "Server Failure 5xx"
+    },
+    {
+      "from": "Server Failure 5xx",
+      "event": "504 Server Time-out",
+      "action": "",
+      "to": "Server Failure 5xx"
+    },
+    {
+      "from": "Server Failure 5xx",
+      "event": "505 Version Not Supported",
+      "action": "",
+      "to": "Server Failure 5xx"
+    },
+    {
+      "from": "Server Failure 5xx",
+      "event": "513 Message Too Large",
+      "action": "",
+      "to": "Server Failure 5xx"
+    },
+    {
+      "from": "Global Failures 6xx",
+      "event": "600 Busy Everywhere",
+      "action": "",
+      "to": "Global Failures 6xx"
+    },
+    {
+      "from": "Global Failures 6xx",
+      "event": "603 Decline",
+      "action": "",
+      "to": "Global Failures 6xx"
+    },
+    {
+      "from": "Global Failures 6xx",
+      "event": "604 Does Not Exist Anywhere",
+      "action": "",
+      "to": "Global Failures 6xx"
+    },
+    {
+      "from": "Global Failures 6xx",
+      "event": "606 Not Acceptable",
+      "action": "",
+      "to": "Global Failures 6xx"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "request received",
+      "action": "challenge with 401 or 407",
+      "to": "Unauthenticated"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "request received",
+      "action": "challenge with 407",
+      "to": "Unauthenticated"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "401 (Unauthorized) or 407 (Proxy Authentication Required)",
+      "action": "re-originate request with credentials",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "credentials accepted",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "ACK",
+      "action": "accept credentials",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "CANCEL",
+      "action": "accept request",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "anonymous credentials",
+      "action": "accept",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Open Connection",
+      "event": "Receive Request",
+      "action": "Examine Via header",
+      "to": "Receiving Request"
+    },
+    {
+      "from": "Open Connection",
+      "event": "Receive Response",
+      "action": "Examine Via header",
+      "to": "Receiving Response"
+    },
+    {
+      "from": "Receiving Request",
+      "event": "Match to transaction",
+      "action": "Pass to transaction",
+      "to": "Open Connection"
+    },
+    {
+      "from": "Receiving Request",
+      "event": "No match",
+      "action": "Pass to core",
+      "to": "Open Connection"
+    },
+    {
+      "from": "Receiving Response",
+      "event": "Via header invalid",
+      "action": "Discard response",
+      "to": "Closed Connection"
+    },
+    {
+      "from": "Receiving Response",
+      "event": "Match to transaction",
+      "action": "Pass to transaction",
+      "to": "Closed Connection"
+    },
+    {
+      "from": "Receiving Response",
+      "event": "No match",
+      "action": "Pass to core",
+      "to": "Closed Connection"
+    },
+    {
+      "from": "Sending Response",
+      "event": "Reliable transport connection open",
+      "action": "Send response",
+      "to": "Closed Connection"
+    },
+    {
+      "from": "Sending Response",
+      "event": "Reliable transport connection closed",
+      "action": "Open new connection",
+      "to": "Open Connection"
+    },
+    {
+      "from": "Sending Response",
+      "event": "Multicast",
+      "action": "Send to multicast address",
+      "to": "Closed Connection"
+    },
+    {
+      "from": "Sending Response",
+      "event": "Unreliable unicast, received parameter present",
+      "action": "Send to received address",
+      "to": "Closed Connection"
+    },
+    {
+      "from": "Sending Response",
+      "event": "Unreliable unicast, no received parameter",
+      "action": "Send to sent-by address",
+      "to": "Closed Connection"
+    },
+    {
+      "from": "Registered",
+      "event": "INVITE",
+      "action": "",
+      "to": "Session Established"
+    },
+    {
+      "from": "Session Established",
+      "event": "100 Trying",
+      "action": "",
+      "to": "Session Established"
+    },
+    {
+      "from": "Session Established",
+      "event": "180 Ringing",
+      "action": "",
+      "to": "Ringing"
+    },
+    {
+      "from": "Ringing",
+      "event": "200 OK",
+      "action": "",
+      "to": "Session Established"
+    },
+    {
+      "from": "Session Established",
+      "event": "BYE",
+      "action": "200 OK",
+      "to": "Registered"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "2xx",
+      "action": "send BYE",
+      "to": "BYE transaction"
+    },
+    {
+      "from": "INVITE transaction",
+      "event": "CANCEL",
+      "action": "",
+      "to": "CANCEL transaction"
+    },
+    {
+      "from": "CANCEL transaction",
+      "event": "487",
+      "action": "",
+      "to": "dialog"
+    },
+    {
+      "from": "BYE transaction",
+      "event": "",
+      "action": "",
+      "to": "dialog"
+    }
+  ]
+}

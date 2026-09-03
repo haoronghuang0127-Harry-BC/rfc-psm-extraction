@@ -1,0 +1,93 @@
+{
+  "states": [
+    "Disconnected",
+    "Connected",
+    "Session Resumed"
+  ],
+  "transitions": [
+    {
+      "from": "Disconnected",
+      "event": "CONNECT packet with Clean Start flag set to 1",
+      "action": "Broker sends CONNACK with Session Present flag set to 0",
+      "to": "Connected"
+    },
+    {
+      "from": "Disconnected",
+      "event": "CONNECT packet with Clean Start flag set to 0 and existing Session associated with Client Identifier",
+      "action": "Broker resumes communications based on existing Session state; sends CONNACK with Session Present flag set to 1",
+      "to": "Session Resumed"
+    },
+    {
+      "from": "Connected",
+      "event": "DISCONNECT packet or Network Connection closure",
+      "action": "Broker closes Network Connection; if Session Expiry Interval is 0, discards Session State",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Session Resumed",
+      "event": "DISCONNECT packet or Network Connection closure",
+      "action": "Broker closes Network Connection; maintains Session State if Session Expiry Interval is not 0",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "AUTH packet with reason code 0x19 (Reauthentication)",
+      "action": "Broker validates new token; if successful, updates authorization state",
+      "to": "Connected"
+    },
+    {
+      "from": "Session Resumed",
+      "event": "AUTH packet with reason code 0x19 (Reauthentication)",
+      "action": "Broker validates new token; if successful, updates authorization state",
+      "to": "Session Resumed"
+    },
+    {
+      "from": "Connected",
+      "event": "Token expiration detected on PUBLISH, SUBSCRIBE, or PINGREQ",
+      "action": "Broker sends DISCONNECT packet with reason code 0x87 (Not authorized) and closes Network Connection",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Session Resumed",
+      "event": "Token expiration detected on PUBLISH, SUBSCRIBE, or PINGREQ",
+      "action": "Broker sends DISCONNECT packet with reason code 0x87 (Not authorized) and closes Network Connection",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "PUBLISH packet authorization failure",
+      "action": "Broker sends PUBACK or PUBREC with reason code 0x87 (Not authorized) for QoS >= 1, or DISCONNECT for QoS 0",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Session Resumed",
+      "event": "PUBLISH packet authorization failure",
+      "action": "Broker sends PUBACK or PUBREC with reason code 0x87 (Not authorized) for QoS >= 1, or DISCONNECT for QoS 0",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "SUBSCRIBE packet authorization failure",
+      "action": "Broker sends SUBACK with return code 0x87 (Not authorized) for unauthorized Topic Filters",
+      "to": "Connected"
+    },
+    {
+      "from": "Session Resumed",
+      "event": "SUBSCRIBE packet authorization failure",
+      "action": "Broker sends SUBACK with return code 0x87 (Not authorized) for unauthorized Topic Filters",
+      "to": "Session Resumed"
+    },
+    {
+      "from": "Connected",
+      "event": "Client Identifier collision from another Client",
+      "action": "Broker sends DISCONNECT packet with reason code 0x8E (Session taken over) to existing Client and closes connection",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Session Resumed",
+      "event": "Client Identifier collision from another Client",
+      "action": "Broker sends DISCONNECT packet with reason code 0x8E (Session taken over) to existing Client and closes connection",
+      "to": "Disconnected"
+    }
+  ]
+}

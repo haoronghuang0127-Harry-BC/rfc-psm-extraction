@@ -1,0 +1,123 @@
+{
+  "states": [
+    "CLOSED",
+    "LISTEN",
+    "REQUEST",
+    "RESPOND",
+    "PARTOPEN",
+    "OPEN",
+    "CLOSEREQ",
+    "CLOSING",
+    "TIMEWAIT"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSED",
+      "event": "rcv Request",
+      "action": "Generate a new socket and switch to that socket",
+      "to": "RESPOND"
+    },
+    {
+      "from": "CLOSED",
+      "event": "rcv Reset",
+      "action": "Generate Reset(No Connection)",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv Request",
+      "action": "Generate a new socket and switch to that socket",
+      "to": "RESPOND"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv Reset",
+      "action": "Generate Reset(No Connection)",
+      "to": "LISTEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "rcv Response",
+      "action": "Set sequence number variables corresponding to the other endpoint",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "rcv Reset",
+      "action": "Set sequence number variables corresponding to the other endpoint",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "rcv packet",
+      "action": "Generate Reset(Packet Error)",
+      "to": "CLOSED"
+    },
+    {
+      "from": "RESPOND",
+      "event": "rcv Request",
+      "action": "Send Response",
+      "to": "RESPOND"
+    },
+    {
+      "from": "RESPOND",
+      "event": "rcv packet",
+      "action": "S.OSR := P.seqno",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "rcv Response",
+      "action": "Send Ack",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "rcv packet",
+      "action": "S.OSR := P.seqno",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "rcv CloseReq",
+      "action": "Generate Close",
+      "to": "CLOSING"
+    },
+    {
+      "from": "OPEN",
+      "event": "rcv Close",
+      "action": "Generate Reset(Closed)",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "OPEN",
+      "event": "rcv Reset",
+      "action": "Tear down connection",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "rcv Close",
+      "action": "Generate Reset(Closed)",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "rcv Reset",
+      "action": "Tear down connection",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "2MSL timer expires",
+      "action": "",
+      "to": "CLOSED"
+    }
+  ]
+}

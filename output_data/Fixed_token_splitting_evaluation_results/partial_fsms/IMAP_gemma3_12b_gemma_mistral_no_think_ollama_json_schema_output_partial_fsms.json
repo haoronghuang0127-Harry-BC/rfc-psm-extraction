@@ -1,0 +1,20 @@
+[
+  "{\"states\": [\"Connection\", \"Session\"], \"transitions\": [{\"from\": \"Connection\", \"event\": \"\", \"action\": \"initial greeting from the server\", \"to\": \"Session\"}]}",
+  "{\"states\": [\"Not Authenticated State\", \"Authenticated State\", \"Selected State\", \"Logout State\"], \"transitions\": [{\"from\": \"Not Authenticated State\", \"event\": \"successful LOGIN or AUTHENTICATE command\", \"action\": \"\", \"to\": \"Authenticated State\"}, {\"from\": \"Authenticated State\", \"event\": \"successful SELECT or EXAMINE command\", \"action\": \"\", \"to\": \"Selected State\"}, {\"from\": \"Authenticated State\", \"event\": \"CLOSE or UNSELECT command, unsolicited CLOSED response code, or failed SELECT or EXAMINE command\", \"action\": \"\", \"to\": \"Not Authenticated State\"}, {\"from\": \"Selected State\", \"event\": \"LOGOUT command\", \"action\": \"send an untagged BYE response and a tagged OK response to the LOGOUT command\", \"to\": \"Logout State\"}, {\"from\": \"Selected State\", \"event\": \"server shutdown, or connection closed\", \"action\": \"\", \"to\": \"Logout State\"}, {\"from\": \"Logout State\", \"event\": \"both sides close the connection\", \"action\": \"\", \"to\": \"Logout State\"}]}",
+  "{\"states\": [\"Any State\", \"Not Authenticated State\", \"Authenticated State\"], \"transitions\": [\n  {\n    \"from\": \"Any State\",\n    \"event\": \"CAPABILITY\",\n    \"action\": \"OK\",\n    \"to\": \"Any State\"\n  },\n  {\n    \"from\": \"Any State\",\n    \"event\": \"NOOP\",\n    \"action\": \"OK\",\n    \"to\": \"Any State\"\n  },\n  {\n    \"from\": \"Any State\",\n    \"event\": \"LOGOUT\",\n    \"action\": \"OK\",\n    \"to\": \"Any State\"\n  },\n  {\n    \"from\": \"Not Authenticated State\",\n    \"event\": \"AUTHENTICATE\",\n    \"action\": \"OK\",\n    \"to\": \"Authenticated State\"\n  },\n  {\n    \"from\": \"Not Authenticated State\",\n    \"event\": \"LOGIN\",\n    \"action\": \"OK\",\n    \"to\": \"Authenticated State\"\n  },\n  {\n    \"from\": \"Not Authenticated State\",\n    \"event\": \"STARTTLS\",\n    \"action\": \"OK\",\n    \"to\": \"Not Authenticated State\"\n  },\n  {\n    \"from\": \"Authenticated State\",\n    \"event\": \"STARTTLS\",\n    \"action\": \"OK\",\n    \"to\": \"Not Authenticated State\"\n  }\n]}",
+  "{\"states\": [\"authenticated state\", \"selected state\"], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [\"authenticated state\", \"selected state\"], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [\"Authenticated\",\"Unauthenticated\"], \"transitions\": [{\"from\": \"Unauthenticated\", \"event\": \"d login\", \"action\": \"S: d NO [CONTACTADMIN]\", \"to\": \"Unauthenticated\"}, {\"from\": \"Unauthenticated\", \"event\": \"d login\", \"action\": \"S: d NO [EXPIRED]\", \"to\": \"Unauthenticated\"}, {\"from\": \"Unauthenticated\", \"event\": \"a LOGIN\", \"action\": \"S: a NO [UNAVAILABLE]\", \"to\": \"Unauthenticated\"}]}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [\"UNAVAILABLE\", \"UNDELETED\", \"UNDRAFT\", \"UNFLAGGED\", \"UNKEYWORD <flag>\", \"UNKNOWN-CTE\", \"UNSEEN\", \"UNSEEN (status item)\", \"UNSELECT\", \"UNSUBSCRIBE\", \"Unique Identifier (UID)\"], \"transitions\": []}"
+]

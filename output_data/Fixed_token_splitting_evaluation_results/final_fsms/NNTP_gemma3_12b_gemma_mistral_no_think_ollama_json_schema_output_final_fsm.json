@@ -1,0 +1,129 @@
+{
+  "states": [
+    "Initial State",
+    "Authenticated State",
+    "Encrypted State",
+    "Virtual Host Selected State",
+    "Archive Server Offline State",
+    "Power Supply Failed State",
+    "Initial Connection",
+    "Reader Mode",
+    "Transit Mode",
+    "invalid",
+    "selected",
+    "LIST ACTIVE.TIMES",
+    "LIST DISTRIB.PATS",
+    "LIST NEWSGROUPS",
+    "READER"
+  ],
+  "transitions": [
+    {
+      "from": "Initial State",
+      "event": "IHAVE i.am.an.article.you.will.want@example.com",
+      "action": "500 Permission denied",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "GROUP secret.group",
+      "action": "480 Permission denied",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "XSECRET fred flintstone",
+      "action": "290 Password for fred accepted",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "GROUP secret.group",
+      "action": "211 5 1 20 secret.group selected",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Initial State",
+      "event": "GROUP secret.group",
+      "action": "483 Secure connection required",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "XENCRYPT",
+      "action": "283 Encrypted link established",
+      "to": "Encrypted State"
+    },
+    {
+      "from": "Encrypted State",
+      "event": "GROUP secret.group",
+      "action": "211 5 1 20 secret.group selected",
+      "to": "Encrypted State"
+    },
+    {
+      "from": "Initial State",
+      "event": "GROUP binary.group",
+      "action": "401 XHOST Not on this virtual host",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "XHOST binary.news.example.org",
+      "action": "290 binary.news.example.org virtual host selected",
+      "to": "Virtual Host Selected State"
+    },
+    {
+      "from": "Virtual Host Selected State",
+      "event": "GROUP binary.group",
+      "action": "211 5 1 77 binary.group selected",
+      "to": "Virtual Host Selected State"
+    },
+    {
+      "from": "Initial State",
+      "event": "GROUP archive.local",
+      "action": "403 Archive server temporarily offline",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "ARTICLE 123",
+      "action": "400 Power supply failed, running on UPS",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "200",
+      "action": "Service available, posting allowed",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "201",
+      "action": "Service available, posting prohibited",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "400",
+      "action": "Service temporarily unavailable",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "502",
+      "action": "Service permanently unavailable",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "MODE READER",
+      "action": "Switch modes",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "QUIT",
+      "action": "Connection closing",
+      "to": "Initial Connection"
+    }
+  ]
+}

@@ -1,0 +1,167 @@
+{
+  "states": [
+    "LISTEN",
+    "SYN-SENT",
+    "SYN-RECEIVED",
+    "ESTABLISHED",
+    "FIN-WAIT-1",
+    "FIN-WAIT-2",
+    "CLOSE-WAIT",
+    "CLOSING",
+    "LAST-ACK",
+    "TIME-WAIT",
+    "CLOSED"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "passive OPEN",
+      "action": "Create TCB... enter LISTEN state",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "active OPEN",
+      "action": "issue a SYN segment... enter SYN-SENT state",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv SYN",
+      "action": "Set RCV.NXT... change to SYN-RECEIVED",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "rcv SYN,ACK",
+      "action": "Enter SYN-RECEIVED",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "rcv ACK of SYN",
+      "action": "Enter ESTABLISHED state",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "CLOSE call / snd FIN",
+      "action": "form a FIN segment... enter FIN-WAIT-1 state",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "rcv FIN",
+      "action": "Enter the CLOSE-WAIT state",
+      "to": "CLOSE-WAIT"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "rcv ACK of FIN",
+      "action": "enter FIN-WAIT-2",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "rcv FIN",
+      "action": "enter the CLOSING state",
+      "to": "CLOSING"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "rcv FIN",
+      "action": "Enter the TIME-WAIT state",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "snd FIN",
+      "action": "send a FIN segment, enter LAST-ACK state",
+      "to": "LAST-ACK"
+    },
+    {
+      "from": "CLOSING",
+      "event": "rcv ACK of FIN",
+      "action": "enter the TIME-WAIT state",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "rcv ACK of FIN",
+      "action": "delete the TCB, enter CLOSED state",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "TIME-WAIT TIMEOUT",
+      "action": "delete the TCB, enter CLOSED state",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "rcv FIN",
+      "action": "Acknowledge it, and restart the 2 MSL timeout",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "rcv RST",
+      "action": "Delete the TCB... enter CLOSED state",
+      "to": "CLOSED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "rcv RST",
+      "action": "abort the connection... enter CLOSED state",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv RST",
+      "action": "return this connection to LISTEN state",
+      "to": "LISTEN"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "rcv RST",
+      "action": "return this connection to LISTEN state (if passive) or CLOSED (if active)",
+      "to": "LISTEN"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "rcv RST",
+      "action": "enter the CLOSED state",
+      "to": "CLOSED"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "rcv RST",
+      "action": "enter the CLOSED state",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "rcv RST",
+      "action": "enter the CLOSED state",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "rcv RST",
+      "action": "enter the CLOSED state",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LAST-ACK",
+      "event": "rcv RST",
+      "action": "enter the CLOSED state",
+      "to": "CLOSED"
+    },
+    {
+      "from": "ANY STATE",
+      "event": "USER TIMEOUT",
+      "action": "flush all queues... delete the TCB, enter CLOSED state",
+      "to": "CLOSED"
+    }
+  ]
+}

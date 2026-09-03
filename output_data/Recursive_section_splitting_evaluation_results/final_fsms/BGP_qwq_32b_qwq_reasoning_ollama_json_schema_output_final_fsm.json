@@ -1,0 +1,360 @@
+{
+  "states": [
+    "Idle",
+    "Connect",
+    "Active",
+    "OpenSent",
+    "OpenConfirm",
+    "Established"
+  ],
+  "transitions": [
+    {
+      "from": "Idle",
+      "event": "ManualStart",
+      "action": "initialize resources, set ConnectRetryCounter to zero, start ConnectRetryTimer, initiate TCP connection, listen for connection, change to Connect",
+      "to": "Connect"
+    },
+    {
+      "from": "Idle",
+      "event": "AutomaticStart",
+      "action": "initialize resources, set ConnectRetryCounter to zero, start ConnectRetryTimer, initiate TCP connection, listen for connection, change to Connect",
+      "to": "Connect"
+    },
+    {
+      "from": "Idle",
+      "event": "ManualStart_with_PassiveTcpEstablishment",
+      "action": "initialize resources, set ConnectRetryCounter to zero, start ConnectRetryTimer, listen for connection, change to Active",
+      "to": "Active"
+    },
+    {
+      "from": "Idle",
+      "event": "AutomaticStart_with_PassiveTcpEstablishment",
+      "action": "initialize resources, set ConnectRetryCounter to zero, start ConnectRetryTimer, listen for connection, change to Active",
+      "to": "Active"
+    },
+    {
+      "from": "Idle",
+      "event": "AutomaticStart_with_DampPeerOscillations",
+      "action": "prevent peer oscillations",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "AutomaticStart_with_DampPeerOscillations_and_PassiveTcpEstablishment",
+      "action": "prevent peer oscillations",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "IdleHoldTimer_Expires",
+      "action": "prevent peer oscillations",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "ManualStop",
+      "action": "drop TCP connection, release resources, set ConnectRetryCounter to zero, stop ConnectRetryTimer, change to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "ConnectRetryTimer_Expires",
+      "action": "drop TCP connection, restart ConnectRetryTimer, stop DelayOpenTimer, initiate TCP connection, listen for connection",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "DelayOpenTimer_Expires",
+      "action": "send OPEN, set HoldTimer, change to OpenSent",
+      "to": "OpenSent"
+    },
+    {
+      "from": "Connect",
+      "event": "TcpConnection_Valid",
+      "action": "",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "Tcp_CR_Invalid",
+      "action": "reject TCP connection",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "TCP connection succeeds",
+      "action": "if DelayOpen is TRUE: stop ConnectRetryTimer, set DelayOpenTimer; else: complete BGP init, send OPEN, set HoldTimer, change to OpenSent",
+      "to": "OpenSent"
+    },
+    {
+      "from": "Connect",
+      "event": "TCP connection fails",
+      "action": "if DelayOpenTimer running: restart ConnectRetryTimer, stop DelayOpenTimer, change to Active; else: stop ConnectRetryTimer, drop TCP, release resources, change to Idle",
+      "to": "Active"
+    },
+    {
+      "from": "Connect",
+      "event": "OPEN message received while DelayOpenTimer is running",
+      "action": "stop ConnectRetryTimer, complete BGP init, stop DelayOpenTimer, send OPEN/KEEPALIVE, set timers, change to OpenConfirm",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "Connect",
+      "event": "BGP message header checking error",
+      "action": "optionally send NOTIFICATION, stop ConnectRetryTimer, release resources, drop TCP, increment ConnectRetryCounter, damping",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "NOTIFICATION message with version error",
+      "action": "stop ConnectRetryTimer, release resources, drop TCP, damping",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "Other events (Events 8,10-11,13,19,23,25-28)",
+      "action": "stop timers, release resources, drop TCP, increment counter, damping",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "ManualStop",
+      "action": "send NOTIFICATION, release resources, drop TCP, set counters, change to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "ConnectRetryTimer_Expires",
+      "action": "restart ConnectRetryTimer, initiate TCP, listen, change to Connect",
+      "to": "Connect"
+    },
+    {
+      "from": "Active",
+      "event": "DelayOpenTimer_Expires",
+      "action": "send OPEN, set HoldTimer, change to OpenSent",
+      "to": "OpenSent"
+    },
+    {
+      "from": "Active",
+      "event": "TcpConnection_Valid",
+      "action": "",
+      "to": "Active"
+    },
+    {
+      "from": "Active",
+      "event": "Tcp_CR_Invalid",
+      "action": "reject TCP connection",
+      "to": "Active"
+    },
+    {
+      "from": "Active",
+      "event": "TCP connection succeeds",
+      "action": "if DelayOpen is TRUE: stop ConnectRetryTimer, set DelayOpenTimer; else: send OPEN, set HoldTimer, change to OpenSent",
+      "to": "OpenSent"
+    },
+    {
+      "from": "Active",
+      "event": "TCP connection fails",
+      "action": "restart ConnectRetryTimer, stop DelayOpenTimer, release resources, increment counter, damping",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "OPEN message received with DelayOpenTimer running",
+      "action": "stop timers, complete BGP init, send messages, set timers, change to OpenConfirm",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "Active",
+      "event": "BGP message header checking error",
+      "action": "optionally send NOTIFICATION, release resources, drop TCP, increment counter, damping",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "NOTIFICATION message with version error",
+      "action": "stop timers, release resources, drop TCP, damping",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "Other events (Events 8,10-11,13,19,23,25-28)",
+      "action": "release resources, drop TCP, increment counter, damping",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "ManualStop",
+      "action": "send NOTIFICATION, release resources, drop TCP, set counters, change to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "AutomaticStop",
+      "action": "send NOTIFICATION, release resources, drop TCP, increment counter, damping",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "HoldTimer_Expires",
+      "action": "send NOTIFICATION, release resources, drop TCP, increment counter, damping",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "TcpConnectionFails",
+      "action": "close connection, restart ConnectRetryTimer, listen, change to Active",
+      "to": "Active"
+    },
+    {
+      "from": "OpenSent",
+      "event": "OPEN message received (no errors)",
+      "action": "reset timers, send KEEPALIVE, set timers, change to OpenConfirm",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenSent",
+      "event": "BGP message header or OPEN error",
+      "action": "send NOTIFICATION, release resources, drop TCP, increment counter, damping",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "OpenCollisionDump",
+      "action": "send NOTIFICATION, release resources, drop TCP, increment counter, damping",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "NOTIFICATION with version error",
+      "action": "release resources, drop TCP",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "Other events",
+      "action": "send NOTIFICATION, release resources, drop TCP, increment counter, damping",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "ManualStop",
+      "action": "send NOTIFICATION, release resources, drop TCP, set counters, change to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "AutomaticStop",
+      "action": "send NOTIFICATION, release resources, drop TCP, increment counter, damping",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "HoldTimer_Expires",
+      "action": "send NOTIFICATION, release resources, drop TCP, increment counter, damping",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "KeepaliveTimer_Expires",
+      "action": "send KEEPALIVE, restart timer",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "TcpConnectionFails or NOTIFICATION",
+      "action": "release resources, drop TCP, increment counter, damping",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "NOTIFICATION with version error",
+      "action": "release resources, drop TCP",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "OPEN message with collision",
+      "action": "send NOTIFICATION, release resources, drop TCP, increment counter, damping",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "BGP message header or OPEN error",
+      "action": "send NOTIFICATION, release resources, drop TCP, increment counter, damping",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "OpenCollisionDump",
+      "action": "send NOTIFICATION, release resources, drop TCP, increment counter, damping",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "KEEPALIVE message",
+      "action": "restart HoldTimer",
+      "to": "Established"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "Other events",
+      "action": "send NOTIFICATION, release resources, drop TCP, increment counter, damping",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "ManualStop",
+      "action": "send NOTIFICATION, release resources, drop TCP, set counters, change to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "AutomaticStop",
+      "action": "send NOTIFICATION, release resources, drop TCP, increment counter, damping",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "HoldTimer_Expires",
+      "action": "send NOTIFICATION, release resources, drop TCP, increment counter, damping",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "KeepaliveTimer_Expires",
+      "action": "send KEEPALIVE, restart timer",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "NOTIFICATION or TcpConnectionFails",
+      "action": "release resources, drop TCP, increment counter, damping",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "KEEPALIVE message",
+      "action": "restart HoldTimer",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "UPDATE message",
+      "action": "process message, restart HoldTimer",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "UPDATE error",
+      "action": "send NOTIFICATION, release resources, drop TCP, increment counter, damping",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "Other events",
+      "action": "send NOTIFICATION, release resources, drop TCP, increment counter, damping",
+      "to": "Idle"
+    }
+  ]
+}

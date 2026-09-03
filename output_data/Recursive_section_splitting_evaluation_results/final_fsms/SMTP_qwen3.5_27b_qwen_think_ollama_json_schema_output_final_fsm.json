@@ -1,0 +1,192 @@
+{
+  "states": [
+    "No Mail Transaction",
+    "Mail From Set",
+    "Recipients Set",
+    "Data Transfer",
+    "SMTP Connection",
+    "Connection Closed",
+    "initial state",
+    "mail transaction in progress",
+    "Session Not Initialized",
+    "Session Initialized",
+    "Mail Transaction Open",
+    "Session Closed"
+  ],
+  "transitions": [
+    {
+      "from": "No Mail Transaction",
+      "event": "MAIL FROM:<reverse-path>",
+      "action": "250 OK",
+      "to": "Mail From Set"
+    },
+    {
+      "from": "Mail From Set",
+      "event": "RCPT TO:<forward-path>",
+      "action": "250 OK",
+      "to": "Recipients Set"
+    },
+    {
+      "from": "Recipients Set",
+      "event": "RCPT TO:<forward-path>",
+      "action": "250 OK",
+      "to": "Recipients Set"
+    },
+    {
+      "from": "Recipients Set",
+      "event": "DATA",
+      "action": "354 Intermediate reply",
+      "to": "Data Transfer"
+    },
+    {
+      "from": "Data Transfer",
+      "event": "end of mail data indicator",
+      "action": "250 OK",
+      "to": "No Mail Transaction"
+    },
+    {
+      "from": "SMTP Connection",
+      "event": "QUIT command",
+      "action": "respond with a 221 reply, close connection",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "SMTP Connection",
+      "event": "detecting the need to shut down the SMTP service",
+      "action": "return a 421 response code, close connection",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "SMTP Connection",
+      "event": "timeout waiting for client to send command or data",
+      "action": "close connection",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "SMTP Connection",
+      "event": "command that is not understood",
+      "action": "issue a 500 reply, await further instructions",
+      "to": "SMTP Connection"
+    },
+    {
+      "from": "SMTP Connection",
+      "event": "forcibly shut down via external means",
+      "action": "attempt to send a 421 response code, exit",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "initial state",
+      "event": "MAIL",
+      "action": "clears the reverse-path buffer, the forward-path buffer, and the mail data buffer, and it inserts the reverse-path information from its argument clause into the reverse-path buffer",
+      "to": "mail transaction in progress"
+    },
+    {
+      "from": "mail transaction in progress",
+      "event": "RCPT",
+      "action": "appends its forward-path argument to the forward-path buffer",
+      "to": "mail transaction in progress"
+    },
+    {
+      "from": "mail transaction in progress",
+      "event": "end of mail data indication",
+      "action": "process the stored mail transaction information, consumes the information in the reverse-path buffer, the forward-path buffer, and the mail data buffer, and on the completion of this command these buffers are cleared; send an OK reply or failure reply",
+      "to": "initial state"
+    },
+    {
+      "from": "mail transaction in progress",
+      "event": "RSET",
+      "action": "stored sender, recipients, and mail data MUST be discarded, and all buffers and state tables cleared; send a '250 OK' reply",
+      "to": "initial state"
+    },
+    {
+      "from": "initial state",
+      "event": "RSET",
+      "action": "stored sender, recipients, and mail data MUST be discarded, and all buffers and state tables cleared; send a '250 OK' reply",
+      "to": "initial state"
+    },
+    {
+      "from": "Session Not Initialized",
+      "event": "EHLO",
+      "action": "initialized by the use of the EHLO command",
+      "to": "Session Initialized"
+    },
+    {
+      "from": "Session Not Initialized",
+      "event": "EHLO",
+      "action": "501, 500, 502, or 550 failure replies MUST be returned... stay in the same state",
+      "to": "Session Not Initialized"
+    },
+    {
+      "from": "Session Not Initialized",
+      "event": "QUIT",
+      "action": "request connection closure",
+      "to": "Session Closed"
+    },
+    {
+      "from": "Session Initialized",
+      "event": "MAIL",
+      "action": "begins a mail transaction",
+      "to": "Mail Transaction Open"
+    },
+    {
+      "from": "Session Initialized",
+      "event": "MAIL",
+      "action": "501 failure reply MUST be returned... stay in the same state",
+      "to": "Session Initialized"
+    },
+    {
+      "from": "Session Initialized",
+      "event": "EHLO",
+      "action": "reset the state exactly as if a RSET command had been issued",
+      "to": "Session Initialized"
+    },
+    {
+      "from": "Session Initialized",
+      "event": "EHLO",
+      "action": "501, 500, 502, or 550 failure replies MUST be returned... stay in the same state",
+      "to": "Session Initialized"
+    },
+    {
+      "from": "Session Initialized",
+      "event": "RSET",
+      "action": "reset the state exactly as if a RSET command had been issued",
+      "to": "Session Initialized"
+    },
+    {
+      "from": "Session Initialized",
+      "event": "QUIT",
+      "action": "request connection closure",
+      "to": "Session Closed"
+    },
+    {
+      "from": "Mail Transaction Open",
+      "event": "DATA",
+      "action": "successfully concluded with a successful DATA command",
+      "to": "Session Initialized"
+    },
+    {
+      "from": "Mail Transaction Open",
+      "event": "RCPT or DATA out of order",
+      "action": "503 failure reply MUST be returned... stay in the same state",
+      "to": "Mail Transaction Open"
+    },
+    {
+      "from": "Mail Transaction Open",
+      "event": "RSET",
+      "action": "aborted by the RSET",
+      "to": "Session Initialized"
+    },
+    {
+      "from": "Mail Transaction Open",
+      "event": "EHLO",
+      "action": "reset the state exactly as if a RSET command had been issued",
+      "to": "Session Initialized"
+    },
+    {
+      "from": "Mail Transaction Open",
+      "event": "QUIT",
+      "action": "request connection closure",
+      "to": "Session Closed"
+    }
+  ]
+}

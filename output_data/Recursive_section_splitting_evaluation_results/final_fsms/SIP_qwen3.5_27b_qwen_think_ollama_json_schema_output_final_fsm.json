@@ -1,0 +1,316 @@
+{
+  "states": [
+    "early",
+    "confirmed",
+    "Existing Session",
+    "Terminated Dialog",
+    "early dialog",
+    "confirmed dialog",
+    "terminated",
+    "Stateful",
+    "Stateless",
+    "proceeding state",
+    "Calling",
+    "Trying",
+    "Proceeding",
+    "Completed",
+    "Terminated",
+    "Confirmed"
+  ],
+  "transitions": [
+    {
+      "from": "early",
+      "event": "2xx final response arrives",
+      "action": "",
+      "to": "confirmed"
+    },
+    {
+      "from": "Existing Session",
+      "event": "Receive non-2xx final response to re-INVITE (not 481/408/timeout)",
+      "action": "Session parameters remain unchanged",
+      "to": "Existing Session"
+    },
+    {
+      "from": "Existing Session",
+      "event": "Receive 481/408/Timeout on re-INVITE",
+      "action": "Terminate the dialog",
+      "to": "Terminated Dialog"
+    },
+    {
+      "from": "Existing Session",
+      "event": "Generate 2xx response and never receive ACK",
+      "action": "Generate BYE to terminate the dialog",
+      "to": "Terminated Dialog"
+    },
+    {
+      "from": "Existing Session",
+      "event": "Receive second INVITE before final response to first INVITE",
+      "action": "Return 500 (Server Internal Error) response",
+      "to": "Existing Session"
+    },
+    {
+      "from": "Existing Session",
+      "event": "Receive INVITE while sent INVITE in progress",
+      "action": "Return 491 (Request Pending) response",
+      "to": "Existing Session"
+    },
+    {
+      "from": "Existing Session",
+      "event": "Receive re-INVITE with changed session description",
+      "action": "Adjust session parameters accordingly",
+      "to": "Existing Session"
+    },
+    {
+      "from": "early dialog",
+      "event": "BYE request",
+      "action": "terminate session",
+      "to": "terminated"
+    },
+    {
+      "from": "confirmed dialog",
+      "event": "BYE request",
+      "action": "terminate session, terminate dialog",
+      "to": "terminated"
+    },
+    {
+      "from": "early dialog",
+      "event": "non-2xx final response",
+      "action": "terminate sessions, terminate dialogs",
+      "to": "terminated"
+    },
+    {
+      "from": "confirmed dialog",
+      "event": "non-2xx final response",
+      "action": "terminate sessions, terminate dialogs",
+      "to": "terminated"
+    },
+    {
+      "from": "Stateful",
+      "event": "",
+      "action": "all state is simply discarded",
+      "to": "Stateless"
+    },
+    {
+      "from": "proceeding state",
+      "event": "receives a 6xx response",
+      "action": "generate a CANCEL request",
+      "to": "terminated"
+    },
+    {
+      "from": "proceeding state",
+      "event": "forwarded response was a final response",
+      "action": "generate a CANCEL request",
+      "to": "terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer A fires",
+      "action": "retransmit request, reset timer with value of 2*T1",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "1xx response",
+      "action": "pass response to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Calling",
+      "event": "300-699 response",
+      "action": "pass received response up to TU, generate ACK request, pass ACK to transport layer, start timer D",
+      "to": "Completed"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer B fires or Transport Error",
+      "action": "inform TU of timeout, destroy transaction",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "1xx response",
+      "action": "pass response to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699 response",
+      "action": "pass received response up to TU, generate ACK request, pass ACK to transport layer, start timer D",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx response",
+      "action": "pass response to TU, destroy transaction",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "retransmission of final response",
+      "action": "re-pass ACK to transport layer",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer D fires",
+      "action": "move to terminated state, destroy transaction",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer E fires",
+      "action": "retransmit request, reset timer",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "1xx response",
+      "action": "pass response to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "200-699 response",
+      "action": "pass response to TU, set Timer K",
+      "to": "Completed"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer F fires or Transport Error",
+      "action": "inform TU of timeout, destroy transaction",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer E fires",
+      "action": "retransmit request, reset timer with value of T2",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "200-699 response",
+      "action": "pass response to TU, set Timer K",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer F fires or Transport Error",
+      "action": "inform TU of timeout, destroy transaction",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer K fires",
+      "action": "transition to terminated state, destroy transaction",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "TU passes a 2xx response",
+      "action": "pass this response to the transport layer for transmission",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "TU passes a response with status code from 300 to 699",
+      "action": "response MUST be passed to the transport layer for transmission, and timer G is set",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "request retransmission is received",
+      "action": "most recent provisional response that was received from the TU MUST be passed to the transport layer for retransmission",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "TU passes any number of provisional responses",
+      "action": "each of these MUST be passed to the transport layer for transmission",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Completed",
+      "event": "timer G fires",
+      "action": "response is passed to the transport layer once more for retransmission, and timer G is set",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "request retransmission is received",
+      "action": "server SHOULD pass the response to the transport for retransmission",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "ACK is received",
+      "action": "",
+      "to": "Confirmed"
+    },
+    {
+      "from": "Completed",
+      "event": "timer H fires",
+      "action": "indicate to the TU that a transaction failure has occurred",
+      "to": "Terminated"
+    },
+    {
+      "from": "Confirmed",
+      "event": "Timer I fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "TU passes a provisional response",
+      "action": "response MUST be passed to the transport layer for transmission",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "TU passes a final response (status codes 200-699)",
+      "action": "response MUST be passed to the transport layer for transmission",
+      "to": "Completed"
+    },
+    {
+      "from": "Trying",
+      "event": "request retransmissions",
+      "action": "discarded",
+      "to": "Trying"
+    },
+    {
+      "from": "Proceeding",
+      "event": "TU passes a final response (status codes 200-699)",
+      "action": "response MUST be passed to the transport layer for transmission",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer J fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "retransmission of the request is received",
+      "action": "pass the final response to the transport layer for retransmission",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Transport Error",
+      "action": "Inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Transport Error",
+      "action": "Inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "Transport Error",
+      "action": "Inform TU",
+      "to": "Terminated"
+    }
+  ]
+}

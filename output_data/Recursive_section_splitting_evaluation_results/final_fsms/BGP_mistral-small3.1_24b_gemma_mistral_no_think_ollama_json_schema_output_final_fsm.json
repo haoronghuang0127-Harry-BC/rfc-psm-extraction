@@ -1,0 +1,56 @@
+{
+  "states": [
+    "Adj-RIB-In",
+    "Adj-RIB-Out",
+    "Loc-RIB",
+    "TCP connection formed",
+    "KEEPALIVE message sent",
+    "NOTIFICATION message sent",
+    "connection closed",
+    "Idle",
+    "Connect",
+    "Active",
+    "OpenSent",
+    "OpenConfirm",
+    "Established",
+    "BGP FSM"
+  ],
+  "transitions": [
+    {
+      "from": "TCP connection formed",
+      "event": "KEEPALIVE message sent",
+      "action": "",
+      "to": "KEEPALIVE message sent"
+    },
+    {
+      "from": "TCP connection formed",
+      "event": "error condition",
+      "action": "NOTIFICATION message sent",
+      "to": "connection closed"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "connection collision",
+      "action": "send NOTIFICATION message with Error Code Cease",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "connection collision",
+      "action": "send NOTIFICATION message with Error Code Cease",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "connection collision",
+      "action": "send NOTIFICATION message with Error Code Cease",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "UPDATE message received",
+      "action": "Check each field for validity, process optional attributes, update Adj-RIB-In, run Decision Process",
+      "to": "Established"
+    }
+  ]
+}

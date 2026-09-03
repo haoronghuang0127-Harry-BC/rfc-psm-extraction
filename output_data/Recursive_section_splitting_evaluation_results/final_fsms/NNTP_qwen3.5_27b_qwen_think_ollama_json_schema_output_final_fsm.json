@@ -1,0 +1,188 @@
+{
+  "states": [
+    "Transit Mode",
+    "Reader Mode",
+    "Connection Closed",
+    "No Group Selected",
+    "Group Selected, Article Valid",
+    "Group Selected, Article Invalid",
+    "Command Ready",
+    "Data Transfer"
+  ],
+  "transitions": [
+    {
+      "from": "Transit Mode",
+      "event": "MODE READER",
+      "action": "advertise READER capability, stop advertising MODE-READER capability",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Transit Mode",
+      "event": "MODE READER",
+      "action": "200 or 201 response",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Transit Mode",
+      "event": "QUIT",
+      "action": "205 response, close connection",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "QUIT",
+      "action": "205 response, close connection",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "No Group Selected",
+      "event": "GROUP group",
+      "action": "211 number low high group (non-empty)",
+      "to": "Group Selected, Article Valid"
+    },
+    {
+      "from": "No Group Selected",
+      "event": "GROUP group",
+      "action": "211 number low high group (empty)",
+      "to": "Group Selected, Article Invalid"
+    },
+    {
+      "from": "No Group Selected",
+      "event": "GROUP group",
+      "action": "411 No such newsgroup",
+      "to": "No Group Selected"
+    },
+    {
+      "from": "No Group Selected",
+      "event": "LISTGROUP group",
+      "action": "211 number low high group (non-empty)",
+      "to": "Group Selected, Article Valid"
+    },
+    {
+      "from": "No Group Selected",
+      "event": "LISTGROUP group",
+      "action": "211 number low high group (empty)",
+      "to": "Group Selected, Article Invalid"
+    },
+    {
+      "from": "No Group Selected",
+      "event": "LISTGROUP group",
+      "action": "411 No such newsgroup",
+      "to": "No Group Selected"
+    },
+    {
+      "from": "No Group Selected",
+      "event": "LISTGROUP",
+      "action": "412 No newsgroup selected",
+      "to": "No Group Selected"
+    },
+    {
+      "from": "Group Selected, Article Valid",
+      "event": "LAST",
+      "action": "223 n message-id",
+      "to": "Group Selected, Article Valid"
+    },
+    {
+      "from": "Group Selected, Article Valid",
+      "event": "LAST",
+      "action": "422 No previous article in this group",
+      "to": "Group Selected, Article Valid"
+    },
+    {
+      "from": "Group Selected, Article Valid",
+      "event": "NEXT",
+      "action": "223 n message-id",
+      "to": "Group Selected, Article Valid"
+    },
+    {
+      "from": "Group Selected, Article Valid",
+      "event": "NEXT",
+      "action": "421 No next article in this group",
+      "to": "Group Selected, Article Valid"
+    },
+    {
+      "from": "Group Selected, Article Invalid",
+      "event": "LAST",
+      "action": "420 Current article number is invalid",
+      "to": "Group Selected, Article Invalid"
+    },
+    {
+      "from": "Group Selected, Article Invalid",
+      "event": "NEXT",
+      "action": "420 Current article number is invalid",
+      "to": "Group Selected, Article Invalid"
+    },
+    {
+      "from": "No Group Selected",
+      "event": "LAST",
+      "action": "412 No newsgroup selected",
+      "to": "No Group Selected"
+    },
+    {
+      "from": "No Group Selected",
+      "event": "NEXT",
+      "action": "412 No newsgroup selected",
+      "to": "No Group Selected"
+    },
+    {
+      "from": "Command Ready",
+      "event": "POST",
+      "action": "340 Send article to be posted",
+      "to": "Data Transfer"
+    },
+    {
+      "from": "Command Ready",
+      "event": "POST",
+      "action": "440 Posting not permitted",
+      "to": "Command Ready"
+    },
+    {
+      "from": "Data Transfer",
+      "event": "Article Data (ends with .)",
+      "action": "240 Article received OK",
+      "to": "Command Ready"
+    },
+    {
+      "from": "Data Transfer",
+      "event": "Article Data (ends with .)",
+      "action": "441 Posting failed",
+      "to": "Command Ready"
+    },
+    {
+      "from": "Command Ready",
+      "event": "IHAVE message-id",
+      "action": "335 Send article to be transferred",
+      "to": "Data Transfer"
+    },
+    {
+      "from": "Command Ready",
+      "event": "IHAVE message-id",
+      "action": "435 Article not wanted",
+      "to": "Command Ready"
+    },
+    {
+      "from": "Command Ready",
+      "event": "IHAVE message-id",
+      "action": "436 Transfer not possible; try again later",
+      "to": "Command Ready"
+    },
+    {
+      "from": "Data Transfer",
+      "event": "Article Data (ends with .)",
+      "action": "235 Article transferred OK",
+      "to": "Command Ready"
+    },
+    {
+      "from": "Data Transfer",
+      "event": "Article Data (ends with .)",
+      "action": "436 Transfer failed; try again later",
+      "to": "Command Ready"
+    },
+    {
+      "from": "Data Transfer",
+      "event": "Article Data (ends with .)",
+      "action": "437 Transfer rejected; do not retry",
+      "to": "Command Ready"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "states": [
+    "Initial",
+    "Authenticated"
+  ],
+  "transitions": [
+    {
+      "from": "Initial",
+      "event": "",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "token expiration",
+      "action": "send PUBACK/SUBACK/DISCONNECT with reason code Not authorized",
+      "to": "Initial"
+    },
+    {
+      "from": "Authenticated",
+      "event": "reauthentication request",
+      "action": "validate new token",
+      "to": "Authenticated"
+    }
+  ]
+}

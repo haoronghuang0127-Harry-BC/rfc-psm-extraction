@@ -1,0 +1,155 @@
+{
+  "states": [
+    "active",
+    "passive",
+    "Control Connection Opened",
+    "User Session Active",
+    "File Transfer In Progress",
+    "Connection Closed",
+    "B",
+    "W",
+    "S",
+    "F",
+    "E"
+  ],
+  "transitions": [
+    {
+      "from": "Control Connection Opened",
+      "event": "USER",
+      "action": "Identifies user",
+      "to": "User Session Active"
+    },
+    {
+      "from": "User Session Active",
+      "event": "REIN",
+      "action": "Terminates USER, flushes I/O and account information, resets parameters",
+      "to": "Control Connection Opened"
+    },
+    {
+      "from": "User Session Active",
+      "event": "QUIT",
+      "action": "Terminates USER, closes control connection",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "File Transfer In Progress",
+      "event": "QUIT",
+      "action": "Remains open for result response then closes control connection",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "User Session Active",
+      "event": "RETR / STOR / APPE / LIST / NLST",
+      "action": "Data transfer starts over data connection",
+      "to": "File Transfer In Progress"
+    },
+    {
+      "from": "File Transfer In Progress",
+      "event": "ABOR",
+      "action": "Aborts FTP service command, closes data connection",
+      "to": "User Session Active"
+    },
+    {
+      "from": "B",
+      "event": "cmd",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "2",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "4,5",
+      "action": "",
+      "to": "F"
+    },
+    {
+      "from": "W",
+      "event": "1,3",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "W",
+      "event": "1",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "3",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "B",
+      "event": "RNFR",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "1,2",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "W",
+      "event": "3",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "4,5",
+      "action": "",
+      "to": "S"
+    },
+    {
+      "from": "W",
+      "event": "RNTO",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "B",
+      "event": "REST",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "B",
+      "event": "USER",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "2",
+      "action": "",
+      "to": "E"
+    },
+    {
+      "from": "W",
+      "event": "PASS",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "ACCT",
+      "action": "",
+      "to": "W"
+    },
+    {
+      "from": "W",
+      "event": "1,3",
+      "action": "",
+      "to": "F"
+    }
+  ]
+}

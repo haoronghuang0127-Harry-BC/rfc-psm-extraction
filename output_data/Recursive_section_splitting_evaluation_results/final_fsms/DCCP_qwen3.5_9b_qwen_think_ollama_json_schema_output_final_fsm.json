@@ -1,0 +1,284 @@
+{
+  "states": [
+    "Bidirectional",
+    "CHANGING",
+    "CLOSED",
+    "CLOSEREQ",
+    "CLOSING",
+    "LISTEN",
+    "OPEN",
+    "PARTOPEN",
+    "REQUEST",
+    "RESPOND",
+    "STABLE",
+    "TIMEWAIT",
+    "Unidirectional",
+    "UNSTABLE"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "DCCP-Request",
+      "action": "Send DCCP-Request",
+      "to": "REQUEST"
+    },
+    {
+      "from": "LISTEN",
+      "event": "DCCP-Request",
+      "action": "Receive DCCP-Request",
+      "to": "RESPOND"
+    },
+    {
+      "from": "REQUEST",
+      "event": "DCCP-Response",
+      "action": "Receive DCCP-Response",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "DCCP-Ack",
+      "action": "Send DCCP-Ack",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "DCCP-Ack",
+      "action": "Receive DCCP-Ack",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "DCCP-CloseReq",
+      "action": "Send DCCP-CloseReq",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "OPEN",
+      "event": "DCCP-Close",
+      "action": "Send DCCP-Close",
+      "to": "CLOSING"
+    },
+    {
+      "from": "OPEN",
+      "event": "DCCP-Close",
+      "action": "Receive DCCP-Close",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "DCCP-Reset",
+      "action": "Send DCCP-Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "DCCP-Reset",
+      "action": "Receive DCCP-Reset",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "DCCP-Reset",
+      "action": "Send DCCP-Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "2MSL",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "STABLE",
+      "event": "snd Change L",
+      "action": "send Change option",
+      "to": "CHANGING"
+    },
+    {
+      "from": "CHANGING",
+      "event": "rcv Confirm R",
+      "action": "accept value, Set F.state := STABLE",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "pref list changes",
+      "action": "change preference list",
+      "to": "UNSTABLE"
+    },
+    {
+      "from": "UNSTABLE",
+      "event": "snd Change L",
+      "action": "transmit Change option",
+      "to": "CHANGING"
+    },
+    {
+      "from": "CHANGING",
+      "event": "rcv empty Confirm R",
+      "action": "revert to old value, Set F.state := STABLE",
+      "to": "STABLE"
+    },
+    {
+      "from": "CLOSED",
+      "event": "",
+      "action": "enter REQUEST state",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "DCCP-Response",
+      "action": "",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "timeout",
+      "action": "send DCCP-Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "receive valid packet",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "timeout",
+      "action": "send DCCP-Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "DCCP-Request",
+      "action": "send DCCP-Response",
+      "to": "RESPOND"
+    },
+    {
+      "from": "RESPOND",
+      "event": "DCCP-Ack",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "timeout",
+      "action": "send DCCP-Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "OPEN",
+      "event": "CloseReq",
+      "action": "Send Close",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "Reset",
+      "action": "Hold TIMEWAIT",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "Timeout",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "OPEN",
+      "event": "CloseReq",
+      "action": "Enter CLOSEREQ",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "Close",
+      "action": "Send Reset",
+      "to": "LISTEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "Close",
+      "action": "Send Reset",
+      "to": "LISTEN"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "Timeout",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "CLOSED",
+      "event": "passive open",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "CLOSED",
+      "event": "active open",
+      "action": "",
+      "to": "REQUEST"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv Request",
+      "action": "",
+      "to": "RESPOND"
+    },
+    {
+      "from": "REQUEST",
+      "event": "rcv Response",
+      "action": "",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "rcv Ack/DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "rcv packet",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "snd CloseReq",
+      "action": "",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "OPEN",
+      "event": "rcv CloseReq",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "rcv Close",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "rcv Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "Bidirectional",
+      "event": "B goes quiescent",
+      "action": "Switch ack pattern",
+      "to": "Unidirectional"
+    },
+    {
+      "from": "Unidirectional",
+      "event": "Receive Data/DataAck",
+      "action": "Switch ack pattern",
+      "to": "Bidirectional"
+    }
+  ]
+}

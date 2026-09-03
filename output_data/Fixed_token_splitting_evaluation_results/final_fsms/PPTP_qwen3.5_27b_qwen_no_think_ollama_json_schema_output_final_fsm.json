@@ -1,0 +1,220 @@
+{
+  "states": [
+    "Control Connection Established",
+    "Session",
+    "idle",
+    "wait_ctl_reply",
+    "established",
+    "wait_stop_reply",
+    "wait_reply",
+    "wait_connect",
+    "wait_disconnect",
+    "wait_cs_ans"
+  ],
+  "transitions": [
+    {
+      "from": "Control Connection Established",
+      "event": "Start-Control-Connection-Request",
+      "action": "Send Start-Control-Connection-Reply",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "Control Connection Established",
+      "event": "Outgoing-Call-Request",
+      "action": "Initiate session",
+      "to": "Session"
+    },
+    {
+      "from": "Control Connection Established",
+      "event": "Incoming-Call-Request",
+      "action": "Respond to inbound request",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "Call-Clear-Request",
+      "action": "Release session",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "Session",
+      "event": "Call-Disconnect-Notify",
+      "action": "Release session",
+      "to": "Control Connection Established"
+    },
+    {
+      "from": "idle",
+      "event": "TCP Open Indication",
+      "action": "Send Start Control Connection Request",
+      "to": "wait_ctl_reply"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Receive Start Ctl Connection Reply Version OK",
+      "action": "",
+      "to": "established"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Receive Start Ctl Connection Reply Version Not OK",
+      "action": "Send Stop Control Request",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "established",
+      "event": "Local Terminate",
+      "action": "Send Stop Control Request",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "established",
+      "event": "Receive Stop Control Connection Request",
+      "action": "Send Stop Control Reply, Close TCP",
+      "to": "idle"
+    },
+    {
+      "from": "wait_stop_reply",
+      "event": "Receive Stop Control Connection Reply",
+      "action": "Close TCP",
+      "to": "idle"
+    },
+    {
+      "from": "established",
+      "event": "local termination",
+      "action": "send Stop-Control-Connection-Request",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "established",
+      "event": "receive Stop-Control-Connection-Request",
+      "action": "send Stop-Control-Connection-Reply and close TCP connection",
+      "to": "idle"
+    },
+    {
+      "from": "wait_stop_reply",
+      "event": "receive Stop-Control-Connection-Reply",
+      "action": "close TCP connection",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "detect incoming call",
+      "action": "send Incoming-Call-Request",
+      "to": "wait_reply"
+    },
+    {
+      "from": "wait_reply",
+      "event": "receive Incoming-Call-Reply indicating non-willingness to accept",
+      "action": "",
+      "to": "idle"
+    },
+    {
+      "from": "wait_reply",
+      "event": "receive Incoming-Call-Reply indicating acceptance",
+      "action": "send Incoming-Call-Connected and answer call",
+      "to": "established"
+    },
+    {
+      "from": "established",
+      "event": "telco event or local reason",
+      "action": "send Call-Disconnect-Notify",
+      "to": "idle"
+    },
+    {
+      "from": "established",
+      "event": "receive Call-Clear-Request",
+      "action": "send Call-Disconnect-Notify",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "receive Incoming-Call-Request not acceptable",
+      "action": "send Incoming-Call-Reply",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "receive Incoming-Call-Request acceptable",
+      "action": "send Incoming-Call-Reply indicating accept",
+      "to": "wait_connect"
+    },
+    {
+      "from": "wait_connect",
+      "event": "receive Incoming-Call-Connect",
+      "action": "",
+      "to": "established"
+    },
+    {
+      "from": "wait_connect",
+      "event": "receive Call-Disconnect-Notify",
+      "action": "",
+      "to": "idle"
+    },
+    {
+      "from": "established",
+      "event": "receive Call-Disconnect-Notify",
+      "action": "",
+      "to": "idle"
+    },
+    {
+      "from": "established",
+      "event": "local terminate",
+      "action": "send Call-Clear-Request",
+      "to": "wait_disconnect"
+    },
+    {
+      "from": "wait_disconnect",
+      "event": "receive Call-Disconnect-Notify",
+      "action": "",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "receive Outgoing-Call-Request in error",
+      "action": "send Outgoing-Call-Reply with error",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "receive Outgoing-Call-Request no error",
+      "action": "allocate channel, place outbound call",
+      "to": "wait_cs_ans"
+    },
+    {
+      "from": "wait_cs_ans",
+      "event": "call incomplete or timer expires",
+      "action": "send Outgoing-Call-Reply with error",
+      "to": "idle"
+    },
+    {
+      "from": "wait_cs_ans",
+      "event": "circuit switched connection established",
+      "action": "send Outgoing-Call-Reply indicating success",
+      "to": "established"
+    },
+    {
+      "from": "established",
+      "event": "receive Call-Clear-Request or telco disconnect",
+      "action": "release call and send Call-Disconnect-Notify",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "send Outgoing-Call-Request",
+      "action": "",
+      "to": "wait_reply"
+    },
+    {
+      "from": "wait_reply",
+      "event": "receive Outgoing-Call-Reply with error",
+      "action": "",
+      "to": "idle"
+    },
+    {
+      "from": "wait_reply",
+      "event": "receive Outgoing-Call-Reply no error",
+      "action": "",
+      "to": "established"
+    }
+  ]
+}

@@ -1,0 +1,327 @@
+{
+  "states": [
+    "Connection",
+    "Session",
+    "Not Authenticated",
+    "Authenticated",
+    "Selected",
+    "Logout",
+    "Any State",
+    "Not Authenticated State",
+    "authenticated state",
+    "selected state",
+    "SELECTED",
+    "EXAMINED",
+    "SEARCHED",
+    "Unauthenticated",
+    "NAMESPACE Response",
+    "STATUS Response",
+    "ESEARCH Response",
+    "FLAGS Response",
+    "EXISTS Response",
+    "EXPUNGE Response",
+    "FETCH Response"
+  ],
+  "transitions": [
+    {
+      "from": "Connection",
+      "event": "SELECT or EXAMINE command",
+      "action": "",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "SELECT or EXAMINE of another mailbox",
+      "action": "",
+      "to": "Session"
+    },
+    {
+      "from": "Session",
+      "event": "CLOSE command",
+      "action": "",
+      "to": "Connection"
+    },
+    {
+      "from": "Session",
+      "event": "UNSELECT command",
+      "action": "",
+      "to": "Connection"
+    },
+    {
+      "from": "Session",
+      "event": "connection termination",
+      "action": "",
+      "to": "Connection"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "connection without pre-authentication (OK greeting)",
+      "action": "",
+      "to": "Not Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "pre-authenticated connection (PREAUTH greeting)",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "rejected connection (BYE greeting)",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "successful LOGIN or AUTHENTICATE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "successful SELECT or EXAMINE command",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "CLOSE or UNSELECT command, unsolicited CLOSED response code, or failed SELECT or EXAMINE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "CLOSE or UNSELECT command, unsolicited CLOSED response code, or failed SELECT or EXAMINE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Authenticated",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Selected",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Any State",
+      "event": "CAPABILITY",
+      "action": "REQUIRED untagged response: CAPABILITY",
+      "to": "Any State"
+    },
+    {
+      "from": "Any State",
+      "event": "NOOP",
+      "action": "no specific responses for this command",
+      "to": "Any State"
+    },
+    {
+      "from": "Any State",
+      "event": "LOGOUT",
+      "action": "REQUIRED untagged response: BYE",
+      "to": "Any State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "STARTTLS",
+      "action": "no specific response for this command",
+      "to": "Not Authenticated State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "AUTHENTICATE",
+      "action": "continuation data can be requested",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Not Authenticated State",
+      "event": "LOGIN",
+      "action": "",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "authenticated state",
+      "event": "SELECT",
+      "action": "FLAGS, EXISTS, LIST, PERMANENTFLAGS, UIDNEXT, UIDVALIDITY",
+      "to": "selected state"
+    },
+    {
+      "from": "authenticated state",
+      "event": "EXAMINE",
+      "action": "FLAGS, EXISTS, LIST, PERMANENTFLAGS, UIDNEXT, UIDVALIDITY",
+      "to": "selected state"
+    },
+    {
+      "from": "selected state",
+      "event": "SELECT",
+      "action": "CLOSED, FLAGS, EXISTS, LIST, PERMANENTFLAGS, UIDNEXT, UIDVALIDITY",
+      "to": "selected state"
+    },
+    {
+      "from": "Selected",
+      "event": "CLOSE",
+      "action": "OK - close completed",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "UNSELECT",
+      "action": "OK - unselect completed",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "EXPUNGE",
+      "action": "OK - expunge completed",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "SEARCH",
+      "action": "OK - search completed",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "IDLE",
+      "action": "OK - IDLE completed after client sent \"DONE\"",
+      "to": "Selected"
+    },
+    {
+      "from": "SELECTED",
+      "event": "SEARCH RETURN (SAVE)",
+      "action": "search result variable set to the list of messages found",
+      "to": "SEARCHED"
+    },
+    {
+      "from": "EXAMINED",
+      "event": "SEARCH RETURN (SAVE)",
+      "action": "search result variable set to the list of messages found",
+      "to": "SEARCHED"
+    },
+    {
+      "from": "SEARCHED",
+      "event": "EXPUNGE",
+      "action": "message listed in the search result variable is automatically removed from the list",
+      "to": "SEARCHED"
+    },
+    {
+      "from": "SEARCHED",
+      "event": "new UIDVALIDITY value",
+      "action": "search variable reset to the empty sequence",
+      "to": "SELECTED"
+    },
+    {
+      "from": "SEARCHED",
+      "event": "SEARCH RETURN (SAVE)",
+      "action": "search result variable set to the list of messages found",
+      "to": "SEARCHED"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "PREAUTH",
+      "action": "Indicate that the connection has already been authenticated by external means",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "BYE",
+      "action": "Indicate that the server is about to close the connection",
+      "to": "Unauthenticated"
+    },
+    {
+      "from": "NAMESPACE Response",
+      "event": "NAMESPACE command",
+      "action": "NAMESPACE response",
+      "to": "NAMESPACE Response"
+    },
+    {
+      "from": "STATUS Response",
+      "event": "STATUS command",
+      "action": "STATUS response",
+      "to": "STATUS Response"
+    },
+    {
+      "from": "ESEARCH Response",
+      "event": "SEARCH or UID SEARCH command",
+      "action": "ESEARCH response",
+      "to": "ESEARCH Response"
+    },
+    {
+      "from": "FLAGS Response",
+      "event": "SELECT or EXAMINE command",
+      "action": "FLAGS response",
+      "to": "FLAGS Response"
+    },
+    {
+      "from": "EXISTS Response",
+      "event": "SELECT or EXAMINE command",
+      "action": "EXISTS response",
+      "to": "EXISTS Response"
+    },
+    {
+      "from": "EXPUNGE Response",
+      "event": "EXPUNGE command",
+      "action": "EXPUNGE response",
+      "to": "EXPUNGE Response"
+    },
+    {
+      "from": "FETCH Response",
+      "event": "FETCH or STORE command",
+      "action": "FETCH response",
+      "to": "FETCH Response"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "STARTTLS",
+      "action": "Proceed with TLS negotiation",
+      "to": "Not Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "AUTHENTICATE",
+      "action": "SCRAM-SHA-256 authentication successful",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "ENABLE",
+      "action": "Some capabilities enabled",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "SELECT",
+      "action": "SELECT completed",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "FETCH",
+      "action": "FETCH completed",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "STORE",
+      "action": "+FLAGS completed",
+      "to": "Selected"
+    },
+    {
+      "from": "Selected",
+      "event": "LOGOUT",
+      "action": "LOGOUT completed",
+      "to": "Not Authenticated"
+    }
+  ]
+}

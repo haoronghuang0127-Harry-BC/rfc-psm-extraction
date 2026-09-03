@@ -1,0 +1,4 @@
+[
+  "{\"states\": [\"AUTHORIZATION\", \"TRANSACTION\", \"UPDATE\"], \"transitions\": [\n  {\n    \"from\": \"AUTHORIZATION\",\n    \"event\": \"USER\",\n    \"action\": \"+OK name is a valid mailbox\\n-ERR never heard of mailbox name\",\n    \"to\": \"AUTHORIZATION\"\n  },\n  {\n    \"from\": \"TRANSACTION\",\n    \"event\": \"QUIT\",\n    \"action\": \"+OK\\n-ERR some deleted messages not removed\",\n    \"to\": \"UPDATE\"\n  }\n]}",
+  "{\"states\": [\"AUTHORIZATION\", \"TRANSACTION\"], \"transitions\": [\n  {\n    \"from\": \"AUTHORIZATION\",\n    \"event\": \"USER\",\n    \"action\": \"+OK mrose is a real hoopy frood\",\n    \"to\": \"AUTHORIZATION\"\n  },\n  {\n    \"from\": \"AUTHORIZATION\",\n    \"event\": \"PASS\",\n    \"action\": \"+OK maildrop locked and ready\",\n    \"to\": \"TRANSACTION\"\n  },\n  {\n    \"from\": \"AUTHORIZATION\",\n    \"event\": \"APOP\",\n    \"action\": \"+OK maildrop locked and ready\",\n    \"to\": \"TRANSACTION\"\n  }\n]}"
+]

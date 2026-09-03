@@ -1,0 +1,156 @@
+{
+  "states": [
+    "CLOSED",
+    "LISTEN",
+    "REQUEST",
+    "RESPOND",
+    "PARTOPEN",
+    "OPEN",
+    "CLOSEREQ",
+    "CLOSING",
+    "TIMEWAIT",
+    "STABLE",
+    "CHANGING",
+    "UNSTABLE"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "DCCP-Request",
+      "action": "",
+      "to": "REQUEST"
+    },
+    {
+      "from": "LISTEN",
+      "event": "DCCP-Request",
+      "action": "",
+      "to": "RESPOND"
+    },
+    {
+      "from": "RESPOND",
+      "event": "Ack, DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "DCCP-Response",
+      "action": "",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "Ack, DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "Data, Ack, DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv Request or contains a valid Init Cookie option",
+      "action": "Generate a new socket and switch to that socket; Set S := new socket for this port pair; S.state = RESPOND; Choose S.ISS (initial seqno) or set from Init Cookies; Initialize S.GAR := S.ISS; Set S.ISR, S.GSR, S.SWL, S.SWH from packet or Init Cookies",
+      "to": "RESPOND"
+    },
+    {
+      "from": "RESPOND",
+      "event": "rcv Ack/DataAck",
+      "action": "transition to OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "refuse connection",
+      "action": "Generate DCCP-Reset packet with Reset Code 7, 8, or 9",
+      "to": "CLOSED"
+    },
+    {
+      "from": "OPEN",
+      "event": "rcv valid DCCP-Ack",
+      "action": "transition to OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "timeout",
+      "action": "send DCCP-Reset with Reset Code 2, Aborted",
+      "to": "CLOSED"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "rcv packet",
+      "action": "transition to OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "CLOSING",
+      "event": "rcv Close",
+      "action": "respond with DCCP-Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "rcv Reset",
+      "action": "transition to TIMEWAIT",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "2MSL timer expires",
+      "action": "transition to CLOSED",
+      "to": "CLOSED"
+    },
+    {
+      "from": "OPEN",
+      "event": "DCCP-CloseReq",
+      "action": "respond with DCCP-Sync packet and ignore the DCCP-CloseReq",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "rcv Close",
+      "action": "respond with Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "OPEN",
+      "event": "receive a valid DCCP-Reset packet",
+      "action": "hold TIMEWAIT state",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "REQUEST",
+      "event": "Response",
+      "action": "S.state := PARTOPEN; Set PARTOPEN timer; Continue with S.state == PARTOPEN",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "Request",
+      "action": "Send Response, possibly containing Init Cookie; If Init Cookie was sent, Destroy S and return",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "Response",
+      "action": "Send Ack",
+      "to": "OPEN"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "",
+      "action": "Generate Close; S.state := CLOSING; Set CLOSING timer",
+      "to": "CLOSING"
+    },
+    {
+      "from": "OPEN",
+      "event": "Close",
+      "action": "Generate Reset(Closed); Tear down connection; Drop packet and return",
+      "to": "TIMEWAIT"
+    }
+  ]
+}

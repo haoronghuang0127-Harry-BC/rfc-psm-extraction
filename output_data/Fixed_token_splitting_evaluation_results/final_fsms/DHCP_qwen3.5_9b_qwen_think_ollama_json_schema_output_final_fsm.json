@@ -1,0 +1,9 @@
+{
+  "states": [
+    "BOUND",
+    "RENEW",
+    "REBINDING",
+    "SELECTING"
+  ],
+  "transitions": []
+}

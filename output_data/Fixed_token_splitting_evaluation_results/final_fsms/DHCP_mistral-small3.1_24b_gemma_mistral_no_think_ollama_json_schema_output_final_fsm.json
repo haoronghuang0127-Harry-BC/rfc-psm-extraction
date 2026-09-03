@@ -1,0 +1,137 @@
+{
+  "states": [
+    "BOUND",
+    "RENEW",
+    "REBINDING",
+    "SELECTING",
+    "INIT-REBOOT",
+    "RENEWING",
+    "INIT",
+    "REBOOTING",
+    "REQUESTING",
+    "DHCPACK received",
+    "DHCPRELEASE sent"
+  ],
+  "transitions": [
+    {
+      "from": "BOUND",
+      "event": "",
+      "action": "",
+      "to": "RENEW"
+    },
+    {
+      "from": "BOUND",
+      "event": "",
+      "action": "",
+      "to": "REBINDING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPREQUEST",
+      "action": "Client inserts the address of the selected server in 'server identifier', 'ciaddr' MUST be zero, 'requested IP address' MUST be filled in with the yiaddr value from the chosen DHCPOFFER",
+      "to": "SELECTING"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPREQUEST",
+      "action": "Server SHOULD send a DHCPNAK message to the client if the 'requested IP address' is incorrect, or is on the wrong network.",
+      "to": "INIT-REBOOT"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPREQUEST",
+      "action": "Server SHOULD send a DHCPNAK message to the client if the network is correct but the client's notion of its IP address is incorrect.",
+      "to": "INIT-REBOOT"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPREQUEST",
+      "action": "Server MUST remain silent if it has no record of this client.",
+      "to": "INIT-REBOOT"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPREQUEST",
+      "action": "Server may choose not to extend the lease but should return a DHCPACK message regardless.",
+      "to": "RENEWING"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPREQUEST",
+      "action": "Server SHOULD check 'ciaddr' for correctness before replying to the DHCPREQUEST.",
+      "to": "REBINDING"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPDISCOVER",
+      "action": "Client broadcasts the DHCPDISCOVER on the local hardware broadcast address to the 0xffffffff IP broadcast address and 'DHCP server' UDP port.",
+      "to": "SELECTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPOFFER",
+      "action": "Client collects DHCPOFFER messages over a period of time, selects one DHCPOFFER message and extracts the server address from the 'server identifier' option in the DHCPOFFER message.",
+      "to": "REQUESTING"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPACK",
+      "action": "Client records the lease expiration time as the sum of the time at which the original request was sent and the duration of the lease from the DHCPACK message.",
+      "to": "BOUND"
+    },
+    {
+      "from": "BOUND",
+      "event": "T1 expires",
+      "action": "Client sends a DHCPREQUEST message to the server to extend its lease.",
+      "to": "RENEWING"
+    },
+    {
+      "from": "RENEWING",
+      "event": "T2 expires",
+      "action": "Client sends a DHCPREQUEST message to extend its lease.",
+      "to": "REBINDING"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPACK",
+      "action": "Client records the lease expiration time as the sum of the time at which the DHCPREQUEST message was sent and the duration of the lease in the DHCPACK message.",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPACK",
+      "action": "Client records the lease expiration time as the sum of the time at which the DHCPREQUEST message was sent and the duration of the lease in the DHCPACK message.",
+      "to": "BOUND"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPREQUEST",
+      "action": "Client broadcasts the DHCPREQUEST on the local hardware broadcast address to the 'DHCP server' UDP port.",
+      "to": "REBOOTING"
+    },
+    {
+      "from": "REBOOTING",
+      "event": "DHCPACK",
+      "action": "Client records the lease expiration time as the sum of the time at which the DHCPREQUEST message was sent and the duration of the lease from the DHCPACK message.",
+      "to": "BOUND"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPINFORM",
+      "action": "Client unicasts the DHCPINFORM to the DHCP server if it knows the server's address, otherwise it broadcasts the message to the limited (all 1s) broadcast address.",
+      "to": "BOUND"
+    },
+    {
+      "from": "DHCPACK received",
+      "event": "DHCPACK allocating previous network address",
+      "action": "continue network processing",
+      "to": "DHCPACK received"
+    },
+    {
+      "from": "DHCPACK received",
+      "event": "DHCPACK allocating new network address",
+      "action": "notify local users of the problem",
+      "to": "DHCPRELEASE sent"
+    }
+  ]
+}

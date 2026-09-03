@@ -1,0 +1,19 @@
+[
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [\n    \"Connecting\",\n    \"Connected\",\n    \"Disconnected\"\n  ],\n  \"transitions\": [\n    {\n      \"from\": \"Connecting\",\n      \"event\": \"CONNECT without a token\",\n      \"action\": \"fail\",\n      \"to\": \"Disconnected\"\n    },\n    {\n      \"from\": \"Connected\",\n      \"event\": \"Client-Broker PUBLISH authorization failure\",\n      \"action\": \"ignore the PUBLISH packet and disconnect the Client\",\n      \"to\": \"Disconnected\"\n    },\n    {\n      \"from\": \"Connected\",\n      \"event\": \"SUBSCRIBE authorization failure\",\n      \"action\": \"return code is 0x80 in SUBACK\",\n      \"to\": \"Connected\"\n    },\n    {\n      \"from\": \"Connected\",\n      \"event\": \"Broker-Client PUBLISH authorization failure\",\n      \"action\": \"disconnecting the Client\",\n      \"to\": \"Disconnected\"\n    }\n  ]\n}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}"
+]
