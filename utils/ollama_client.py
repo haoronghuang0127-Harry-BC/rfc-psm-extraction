@@ -248,20 +248,24 @@ def call_ollama_chat(ollama_url: str, model: str, prompt: str, options: dict[str
             content_value: object = message_value.get("content", "")
             thinking_value: object = message_value.get("thinking", "")
 
-            # the final answer must be a non-empty string
-            if not isinstance(content_value, str) or not content_value.strip():
-                raise RuntimeError("Ollama chat returned an empty final response.")
+            # Keep completed model calls even when no final answer was produced.
+            # Downstream processing will save the corresponding final FSM as null.
+            if not isinstance(content_value, str):
+                content_value = ""
 
             # thinking is optional
             if not isinstance(thinking_value, str):
                 thinking_value = ""
 
-            # reject an output truncated by the token limit
+            output_error: str | None = None
+
             if response_value.get("done_reason") == "length":
-                raise RuntimeError("Ollama chat stopped because the output length limit was reached.")
+                output_error = "output_length_limit"
+            elif not content_value.strip():
+                output_error = "empty_final_response"
 
             # check structured output returned by Ollama
-            if output_format is not None:
+            if output_format is not None and output_error is None:
                 try:
                     json.loads(content_value)
                 except json.JSONDecodeError as error:
@@ -276,6 +280,9 @@ def call_ollama_chat(ollama_url: str, model: str, prompt: str, options: dict[str
             # convert chat fields into the same fields used by /api/generate
             response_data["response"] = content_value
             response_data["thinking"] = thinking_value
+
+            if output_error is not None:
+                response_data["output_error"] = output_error
 
             return response_data
 

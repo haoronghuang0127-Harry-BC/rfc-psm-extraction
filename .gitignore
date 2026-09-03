@@ -8,4 +8,7 @@ smoke_test_logs/
 method_1_section_selection/outputs/
 psmbench_local_baseline/outputs/
 prompt_experiment/outputs/
+/split_experiment/outputs/
 run_logs/
+
+**/manifests/
