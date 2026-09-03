@@ -1,4 +1,9 @@
 ﻿Data Source,Split Method,Model,Total Protocols,State Precision,State Recall,State F1,Exact Transition Precision,Exact Transition Recall,Exact Transition F1,Partial Transition Precision,Partial Transition Recall,Partial Transition F1
+Prompt Experiment Results 1,PSMBench Original Segments,gemma3_12b_no_think,14,0.374,0.841,0.473,0.2,0.279,0.219,0.227,0.324,0.25
+Prompt Experiment Results 1,PSMBench Original Segments,gemma3_27b_no_think,14,0.348,0.785,0.441,0.144,0.37,0.198,0.164,0.425,0.226
+Prompt Experiment Results 1,PSMBench Original Segments,mistral-small3.1_24b_no_think,14,0.392,0.923,0.509,0.154,0.424,0.21,0.178,0.491,0.243
+Prompt Experiment Results 1,PSMBench Original Segments,qwen3.5_27b_no_think,14,0.563,0.817,0.629,0.273,0.468,0.328,0.312,0.544,0.373
+Prompt Experiment Results 1,PSMBench Original Segments,qwen3.5_9b_no_think,14,0.619,0.714,0.641,0.209,0.307,0.235,0.271,0.369,0.296
 Split Experiment Results,Whole Document,gemma3_12b_no_think,12,0.729,0.663,0.656,0.239,0.14,0.173,0.391,0.203,0.258
 Split Experiment Results,Whole Document,gemma3_27b_no_think,12,0.788,0.668,0.703,0.273,0.183,0.213,0.358,0.246,0.284
 Split Experiment Results,Whole Document,mistral-small3.1_24b_no_think,12,0.657,0.652,0.648,0.228,0.268,0.226,0.301,0.329,0.279
