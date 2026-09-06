@@ -4,7 +4,7 @@ from config.models.model_names import ModelName
 from config.models.model_profiles import ModelProfile, get_model_profile
 from config.models.model_types import ModelConfig, ProfileName
 from config.ollama_settings import OllamaConnection, get_ollama_connection
-from config.paths import RECURSIVE_SECTION_SPLITTING_ORIGINAL_RESPONSES_DIR, RECURSIVE_SECTION_SPLITTING_PROMPTS_DIR
+from config.paths import REFERENCED_CONTEXT_SPLITTING_ORIGINAL_RESPONSES_DIR, REFERENCED_CONTEXT_SPLITTING_PROMPTS_DIR
 
 from research_pipeline.output_controls import get_output_control
 from research_pipeline.model_selection import get_selected_model_configs, get_selected_profile_names
@@ -19,7 +19,7 @@ from utils.ollama_client import call_ollama_with_model_routing
 
 # load extraction Prompts from the local Prompt file.
 def _load_extraction_prompts(protocol: str) -> dict[str, list[str]]:
-    prompts_file: Path = RECURSIVE_SECTION_SPLITTING_PROMPTS_DIR / "ollama_json_schema_output_extraction_prompts.json"
+    prompts_file: Path = REFERENCED_CONTEXT_SPLITTING_PROMPTS_DIR / "ollama_json_schema_output_extraction_prompts.json"
 
     if not prompts_file.is_file():
         raise FileNotFoundError(f"Could not find the extraction Prompt file: {prompts_file}")
@@ -45,14 +45,17 @@ def _build_save_response_path(protocol: str, model_name: str, profile_name: Prof
 
     file_name: str = f"{protocol}_{safe_model_name}_{safe_profile_name}_ollama_json_schema_output_extraction_responses.json"
 
-    output_file: Path = RECURSIVE_SECTION_SPLITTING_ORIGINAL_RESPONSES_DIR / file_name
+    output_file: Path = REFERENCED_CONTEXT_SPLITTING_ORIGINAL_RESPONSES_DIR / file_name
 
     return output_file
 
 
-# run all recursive section extraction Prompts for one protocol and model.
+# run all referenced context extraction Prompts for one protocol and model.
 def _run_extraction_psm(protocol: str, prompts: list[str], model_config: ModelConfig, profile_name: ProfileName, model_profile: ModelProfile, output_control: OutputControl, connection: OllamaConnection) -> Path:
     response_records: list[dict[str, object]] = []
+
+    # build the output path before sending requests.
+    output_file: Path = _build_save_response_path(protocol=protocol, model_name=model_config["name"].value, profile_name=profile_name)
 
     prompt_count: int = len(prompts)
 
@@ -73,8 +76,10 @@ def _run_extraction_psm(protocol: str, prompts: list[str], model_config: ModelCo
 
         response_records.append(response_copy)
 
-    output_file: Path = _build_save_response_path(protocol=protocol, model_name=model_config["name"].value, profile_name=profile_name)
+        # save all completed responses after each successful request.
+        save_json_file(file_path=output_file, data=response_records)
 
+    # preserve the final save, including an empty Prompt list.
     save_json_file(file_path=output_file, data=response_records)
 
     print(f"Saved extraction responses: {output_file}")
@@ -82,7 +87,7 @@ def _run_extraction_psm(protocol: str, prompts: list[str], model_config: ModelCo
     return output_file
 
 
-# run recursive section extraction for the selected protocols and models.
+# run referenced context extraction for the selected protocols and models.
 def extraction_psm(extraction_prompts: dict[str, list[str]], arguments: SplitExperimentArguments) -> list[Path]:
     connection: OllamaConnection = get_ollama_connection(connection_mode=arguments["connection_mode"])
 

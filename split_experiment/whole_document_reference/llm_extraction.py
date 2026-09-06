@@ -10,7 +10,7 @@ from config.paths import WHOLE_DOCUMENT_REFERENCE_CONTEXT_EXCLUSIONS_FILE, WHOLE
 
 from research_pipeline.output_controls import get_output_control
 from research_pipeline.types import OutputControl
-from research_pipeline.model_selection import get_selected_model_configs
+from research_pipeline.model_selection import get_selected_model_configs, get_selected_profile_names
 
 from split_experiment.command_line import read_command_line_to_value
 from split_experiment.types import SplitExperimentArguments, WholeDocumentContextExclusion
@@ -121,33 +121,35 @@ def extraction_psm(extraction_prompts: dict[str, list[str]], arguments: SplitExp
     output_control: OutputControl = get_output_control(output_control_name="ollama_json_schema_output")
 
     for model_config in model_configs:
-        if model_config["name"] == ModelName.QWQ_32B:
+        if arguments["model"] == ModelName.ALL and arguments["profile"] == "default" and model_config["name"] == ModelName.QWQ_32B:
             continue
 
-        profile_name: ProfileName = model_config["default_profile"]
-        model_profile: ModelProfile = get_model_profile(profile_name=profile_name)
+        profile_names: list[ProfileName] = get_selected_profile_names(model_config=model_config, profile=arguments["profile"])
 
-        for protocol, prompts in extraction_prompts.items():
-            if len(prompts) != 1:
-                raise ValueError(f"Whole document extraction requires exactly one Prompt for {protocol}.")
+        for profile_name in profile_names:
+            model_profile: ModelProfile = get_model_profile(profile_name=profile_name)
 
-            prompt: str = prompts[0]
-            prompt_token_count: int = _count_prompt_tokens(prompt=prompt)
-            num_ctx: int = int(model_profile["options"]["num_ctx"])
-            num_predict: int = int(model_profile["options"]["num_predict"])
-            maximum_input_tokens: int = num_ctx - num_predict
+            for protocol, prompts in extraction_prompts.items():
+                if len(prompts) != 1:
+                    raise ValueError(f"Whole document extraction requires exactly one Prompt for {protocol}.")
 
-            if prompt_token_count > maximum_input_tokens:
-                context_exclusion: WholeDocumentContextExclusion = _build_context_exclusion(protocol=protocol, model_config=model_config, profile_name=profile_name, model_profile=model_profile, prompt_token_count=prompt_token_count)
+                prompt: str = prompts[0]
+                prompt_token_count: int = _count_prompt_tokens(prompt=prompt)
+                num_ctx: int = int(model_profile["options"]["num_ctx"])
+                num_predict: int = int(model_profile["options"]["num_predict"])
+                maximum_input_tokens: int = num_ctx - num_predict
 
-                context_exclusions.append(context_exclusion)
+                if prompt_token_count > maximum_input_tokens:
+                    context_exclusion: WholeDocumentContextExclusion = _build_context_exclusion(protocol=protocol, model_config=model_config, profile_name=profile_name, model_profile=model_profile, prompt_token_count=prompt_token_count)
 
-                print(f"Skipped context exclusion: protocol={protocol}, model={model_config['name'].value}, prompt_tokens={prompt_token_count}, maximum_input_tokens={maximum_input_tokens}")
-                continue
+                    context_exclusions.append(context_exclusion)
 
-            response_file: Path = _run_extraction_psm(protocol=protocol, prompt=prompt, model_config=model_config, profile_name=profile_name, model_profile=model_profile, output_control=output_control, connection=connection)
+                    print(f"Skipped context exclusion: protocol={protocol}, model={model_config['name'].value}, prompt_tokens={prompt_token_count}, maximum_input_tokens={maximum_input_tokens}")
+                    continue
 
-            response_files.append(response_file)
+                response_file: Path = _run_extraction_psm(protocol=protocol, prompt=prompt, model_config=model_config, profile_name=profile_name, model_profile=model_profile, output_control=output_control, connection=connection)
+
+                response_files.append(response_file)
 
     save_json_file(file_path=WHOLE_DOCUMENT_REFERENCE_CONTEXT_EXCLUSIONS_FILE, data=context_exclusions)
 

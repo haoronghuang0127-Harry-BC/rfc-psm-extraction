@@ -149,5 +149,26 @@ RECURSIVE_SECTION_SPLITTING_FINAL_FSMS_DIR: Final[Path] = RECURSIVE_SECTION_SPLI
 # recursive section splitting evaluation directory
 RECURSIVE_SECTION_SPLITTING_EVALUATIONS_DIR: Final[Path] = RECURSIVE_SECTION_SPLITTING_OUTPUT_DIR / "evaluations"
 
+# referenced context splitting output directory
+REFERENCED_CONTEXT_SPLITTING_OUTPUT_DIR: Final[Path] = SPLIT_EXPERIMENT_OUTPUT_DIR / "referenced_context_splitting"
+# referenced context segment directory
+REFERENCED_CONTEXT_SPLITTING_SEGMENTS_DIR: Final[Path] = REFERENCED_CONTEXT_SPLITTING_OUTPUT_DIR / "segments"
+# referenced context splitting manifest directory
+REFERENCED_CONTEXT_SPLITTING_MANIFESTS_DIR: Final[Path] = REFERENCED_CONTEXT_SPLITTING_OUTPUT_DIR / "manifests"
+# referenced context splitting prompt directory
+REFERENCED_CONTEXT_SPLITTING_PROMPTS_DIR: Final[Path] = REFERENCED_CONTEXT_SPLITTING_OUTPUT_DIR / "prompts"
+# referenced context splitting response directory
+REFERENCED_CONTEXT_SPLITTING_RESPONSES_DIR: Final[Path] = REFERENCED_CONTEXT_SPLITTING_OUTPUT_DIR / "responses"
+# referenced context splitting original response directory
+REFERENCED_CONTEXT_SPLITTING_ORIGINAL_RESPONSES_DIR: Final[Path] = REFERENCED_CONTEXT_SPLITTING_RESPONSES_DIR / "original"
+# referenced context splitting partial FSM directory
+REFERENCED_CONTEXT_SPLITTING_PARTIAL_FSMS_DIR: Final[Path] = REFERENCED_CONTEXT_SPLITTING_RESPONSES_DIR / "partial_fsms"
+# referenced context splitting combination response directory
+REFERENCED_CONTEXT_SPLITTING_COMBINATION_RESPONSES_DIR: Final[Path] = REFERENCED_CONTEXT_SPLITTING_RESPONSES_DIR / "combination_response"
+# referenced context splitting final FSM directory
+REFERENCED_CONTEXT_SPLITTING_FINAL_FSMS_DIR: Final[Path] = REFERENCED_CONTEXT_SPLITTING_OUTPUT_DIR / "final_fsms"
+# referenced context splitting evaluation directory
+REFERENCED_CONTEXT_SPLITTING_EVALUATIONS_DIR: Final[Path] = REFERENCED_CONTEXT_SPLITTING_OUTPUT_DIR / "evaluations"
+
 
 

@@ -16,7 +16,7 @@ _MODEL_PROFILES: dict[ProfileName, ModelProfile] = {
         "description": "Qwen 256K context without thinking",
         "options": {
             "num_ctx": 262144,
-            "num_predict": 32768,
+            "num_predict": 65536,
             "temperature": 0.0,
             "top_p": 0.9,
             "top_k": 40,
@@ -30,7 +30,7 @@ _MODEL_PROFILES: dict[ProfileName, ModelProfile] = {
         "description": "Qwen 256K context with thinking",
         "options": {
             "num_ctx": 262144,
-            "num_predict": 32768,
+            "num_predict": 65536,
             "temperature": 0.0,
             "top_p": 0.9,
             "top_k": 40,

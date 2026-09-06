@@ -4,7 +4,7 @@ from config.models.model_names import ModelName
 from config.models.model_profiles import ModelProfile, get_model_profile
 from config.models.model_types import ModelConfig, ProfileName
 from config.ollama_settings import OllamaConnection, get_ollama_connection
-from config.paths import FIXED_TOKEN_SPLITTING_COMBINATION_RESPONSES_DIR, FIXED_TOKEN_SPLITTING_PROMPTS_DIR
+from config.paths import REFERENCED_CONTEXT_SPLITTING_COMBINATION_RESPONSES_DIR, REFERENCED_CONTEXT_SPLITTING_PROMPTS_DIR
 from config.protocol.protocol_util import get_all_protocol_files
 
 from research_pipeline.output_controls import get_output_control
@@ -20,7 +20,7 @@ from utils.ollama_client import call_ollama_with_model_routing
 
 # load all combination Prompts from the local file.
 def _load_combination_prompts() -> dict[str, str]:
-    prompts_file: Path = FIXED_TOKEN_SPLITTING_PROMPTS_DIR / "combination_prompts.json"
+    prompts_file: Path = REFERENCED_CONTEXT_SPLITTING_PROMPTS_DIR / "combination_prompts.json"
 
     if not prompts_file.is_file():
         raise FileNotFoundError(f"Could not find the combination Prompt file: {prompts_file}")
@@ -68,7 +68,7 @@ def _run_combination_psm(prompt_name: str, prompt: str, connection: OllamaConnec
     response_copy["prompt_name"] = prompt_name
     response_copy["profile_name"] = profile_name.value
 
-    output_file: Path = FIXED_TOKEN_SPLITTING_COMBINATION_RESPONSES_DIR / f"{prompt_name}_combination_response.json"
+    output_file: Path = REFERENCED_CONTEXT_SPLITTING_COMBINATION_RESPONSES_DIR / f"{prompt_name}_combination_response.json"
 
     save_json_file(file_path=output_file, data=response_copy)
 
@@ -77,7 +77,7 @@ def _run_combination_psm(prompt_name: str, prompt: str, connection: OllamaConnec
     return output_file
 
 
-# run fixed token combination for the selected protocols and models.
+# run referenced context combination for the selected protocols and models.
 def combination_psm(combination_prompts: dict[str, str], arguments: SplitExperimentArguments) -> list[Path]:
     connection: OllamaConnection = get_ollama_connection(connection_mode=arguments["connection_mode"])
     model_configs: list[ModelConfig] = get_selected_model_configs(model_name=arguments["model"])

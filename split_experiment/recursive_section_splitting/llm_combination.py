@@ -8,7 +8,7 @@ from config.paths import RECURSIVE_SECTION_SPLITTING_COMBINATION_RESPONSES_DIR, 
 from config.protocol.protocol_util import get_all_protocol_files
 
 from research_pipeline.output_controls import get_output_control
-from research_pipeline.model_selection import get_selected_model_configs
+from research_pipeline.model_selection import get_selected_model_configs, get_selected_profile_names
 from research_pipeline.types import OutputControl
 
 from split_experiment.command_line import read_command_line_to_value
@@ -87,27 +87,29 @@ def combination_psm(combination_prompts: dict[str, str], arguments: SplitExperim
     response_files: list[Path] = []
 
     for model_config in model_configs:
-        if model_config["name"] == ModelName.QWQ_32B:
+        if arguments["model"] == ModelName.ALL and arguments["profile"] == "default" and model_config["name"] == ModelName.QWQ_32B:
             continue
 
-        profile_name: ProfileName = model_config["default_profile"]
-        model_profile: ModelProfile = get_model_profile(profile_name=profile_name)
+        profile_names: list[ProfileName] = get_selected_profile_names(model_config=model_config, profile=arguments["profile"])
 
-        print(f"Starting model combination: model={model_config['name'].value}, profile={profile_name.value}")
+        for profile_name in profile_names:
+            model_profile: ModelProfile = get_model_profile(profile_name=profile_name)
 
-        for protocol in protocol_names:
-            prompt_name: str = _build_combination_prompt_name(protocol=protocol, model_name=model_config["name"].value, profile_name=profile_name)
-            prompt: str | None = combination_prompts.get(prompt_name)
+            print(f"Starting model combination: model={model_config['name'].value}, profile={profile_name.value}")
 
-            if prompt is None:
-                print(f"Skipped missing combination Prompt: {prompt_name}")
-                continue
+            for protocol in protocol_names:
+                prompt_name: str = _build_combination_prompt_name(protocol=protocol, model_name=model_config["name"].value, profile_name=profile_name)
+                prompt: str | None = combination_prompts.get(prompt_name)
 
-            response_file: Path = _run_combination_psm(prompt_name=prompt_name, prompt=prompt, connection=connection, model_config=model_config, profile_name=profile_name, model_profile=model_profile, output_control=output_control)
+                if prompt is None:
+                    print(f"Skipped missing combination Prompt: {prompt_name}")
+                    continue
 
-            response_files.append(response_file)
+                response_file: Path = _run_combination_psm(prompt_name=prompt_name, prompt=prompt, connection=connection, model_config=model_config, profile_name=profile_name, model_profile=model_profile, output_control=output_control)
 
-        print(f"Completed model combination: model={model_config['name'].value}, profile={profile_name.value}")
+                response_files.append(response_file)
+
+            print(f"Completed model combination: model={model_config['name'].value}, profile={profile_name.value}")
 
     return response_files
 

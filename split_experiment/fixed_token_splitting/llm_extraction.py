@@ -8,7 +8,7 @@ from config.paths import FIXED_TOKEN_SPLITTING_ORIGINAL_RESPONSES_DIR, FIXED_TOK
 
 from research_pipeline.output_controls import get_output_control
 from research_pipeline.types import OutputControl
-from research_pipeline.model_selection import get_selected_model_configs
+from research_pipeline.model_selection import get_selected_model_configs, get_selected_profile_names
 
 from split_experiment.command_line import read_command_line_to_value
 from split_experiment.types import SplitExperimentArguments
@@ -92,16 +92,18 @@ def extraction_psm(extraction_prompts: dict[str, list[str]], arguments: SplitExp
     response_files: list[Path] = []
 
     for model_config in model_configs:
-        if model_config["name"] == ModelName.QWQ_32B:
+        if arguments["model"] == ModelName.ALL and arguments["profile"] == "default" and model_config["name"] == ModelName.QWQ_32B:
             continue
 
-        profile_name: ProfileName = model_config["default_profile"]
-        model_profile: ModelProfile = get_model_profile(profile_name=profile_name)
+        profile_names: list[ProfileName] = get_selected_profile_names(model_config=model_config, profile=arguments["profile"])
 
-        for protocol, prompts in extraction_prompts.items():
-            response_file: Path = _run_extraction_psm(protocol=protocol, prompts=prompts, model_config=model_config, profile_name=profile_name, model_profile=model_profile, output_control=output_control, connection=connection)
+        for profile_name in profile_names:
+            model_profile: ModelProfile = get_model_profile(profile_name=profile_name)
 
-            response_files.append(response_file)
+            for protocol, prompts in extraction_prompts.items():
+                response_file: Path = _run_extraction_psm(protocol=protocol, prompts=prompts, model_config=model_config, profile_name=profile_name, model_profile=model_profile, output_control=output_control, connection=connection)
+
+                response_files.append(response_file)
 
     return response_files
 
