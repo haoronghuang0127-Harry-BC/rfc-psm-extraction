@@ -1,0 +1,20 @@
+[
+  "{\n  \"states\": [\n    \"TLS:Anon,MQTT:None\",\n    \"TLS:Anon,MQTT:ace\",\n    \"TLS:Known(RPK/PSK),MQTT:none\",\n    \"TLS:Known(RPK/PSK),MQTT:ace\"\n  ],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [\n    \"TLS:Anon,MQTT:None\",\n    \"TLS:Known(RPK/PSK),MQTT:none\"\n  ],\n  \"transitions\": [\n    {\n      \"from\": \"TLS:Anon,MQTT:None\",\n      \"event\": \"\",\n      \"action\": \"publish token to authz-info topic\",\n      \"to\": \"TLS:Known(RPK/PSK),MQTT:none\"\n    }\n  ]\n}",
+  "{\n  \"states\": [\n    \"CONNECT\",\n    \"AUTHENTICATING\",\n    \"AUTHORIZED\"\n  ],\n  \"transitions\": [\n    {\n      \"from\": \"CONNECT\",\n      \"event\": \"\",\n      \"action\": \"send CONNECT packet with Authentication Method and Data\",\n      \"to\": \"AUTHENTICATING\"\n    },\n    {\n      \"from\": \"AUTHENTICATING\",\n      \"event\": \"receive AUTH packet (reason code 0x18)\",\n      \"action\": \"process challenge, compute signature/MAC, send AUTH response\",\n      \"to\": \"AUTHENTICATING\"\n    },\n    {\n      \"from\": \"AUTHENTICATING\",\n      \"event\": \"receive CONNACK packet with reason code 0x00\",\n      \"action\": \"connection established\",\n      \"to\": \"AUTHORIZED\"\n    },\n    {\n      \"from\": \"AUTHENTICATING\",\n      \"event\": \"receive CONNACK packet with reason code 0x87 or other error\",\n      \"action\": \"connection refused\",\n      \"to\": \"CONNECT\"\n    }\n  ]\n}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\n  \"states\": [],\n  \"transitions\": []\n}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\"states\": [], \"transitions\": []}",
+  "{\n  \"states\": [\n    \"TLS:Anon,MQTT:None\",\n    \"TLS:Anon,MQTT:ace\",\n    \"TLS:Known(RPK/PSK),MQTT:none\",\n    \"TLS:Known(RPK/PSK),MQTT:ace\"\n  ],\n  \"transitions\": []\n}"
+]

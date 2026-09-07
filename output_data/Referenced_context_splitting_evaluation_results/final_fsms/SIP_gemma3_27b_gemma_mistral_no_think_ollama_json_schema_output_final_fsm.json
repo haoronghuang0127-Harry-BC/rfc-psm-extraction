@@ -1,0 +1,742 @@
+{
+  "states": [
+    "User location",
+    "User availability",
+    "User capabilities",
+    "Session setup",
+    "Session management",
+    "Calling",
+    "Proceeding",
+    "Completed",
+    "Terminated",
+    "stateful proxy",
+    "stateless proxy",
+    "Outside of a dialog",
+    "In a dialog",
+    "UAS processing request outside of dialog",
+    "UAS processing request inside of dialog",
+    "Stateless UAS",
+    "Registered",
+    "Unregistered",
+    "Trying",
+    "Confirmed",
+    "dialog",
+    "early dialog",
+    "confirmed dialog",
+    "no dialog",
+    "pending client transactions",
+    "response context found",
+    "stateless forwarding",
+    "Keyring contains address-of-record",
+    "Receiving request with S/MIME body",
+    "Receiving response with S/MIME body",
+    "Sending request with S/MIME body",
+    "Sending response with S/MIME body",
+    "dialog state",
+    "strict-routing proxy",
+    "Provisional 1xx",
+    "Successful 2xx",
+    "Redirection 3xx",
+    "Request Failure 4xx",
+    "Server Failure 5xx",
+    "Global Failures 6xx"
+  ],
+  "transitions": [
+    {
+      "from": "User location",
+      "event": "",
+      "action": "",
+      "to": "User availability"
+    },
+    {
+      "from": "User availability",
+      "event": "",
+      "action": "",
+      "to": "User capabilities"
+    },
+    {
+      "from": "User capabilities",
+      "event": "",
+      "action": "",
+      "to": "Session setup"
+    },
+    {
+      "from": "Session setup",
+      "event": "",
+      "action": "",
+      "to": "Session management"
+    },
+    {
+      "from": "Calling",
+      "event": "INVITE",
+      "action": "start timer A, start timer B",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "timer A",
+      "action": "retransmit request, reset timer A",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "provisional response",
+      "action": "transition to Proceeding",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Calling",
+      "event": "timer B",
+      "action": "inform TU, terminate",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "provisional response",
+      "action": "pass to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "final response",
+      "action": "pass to TU, transition to Completed",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "timer D",
+      "action": "transition to Terminated",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "retransmission of response",
+      "action": "re-pass ACK to transport",
+      "to": "Completed"
+    },
+    {
+      "from": "Terminated",
+      "event": "",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "stateful proxy",
+      "event": "receives INVITE request",
+      "action": "creates a new server transaction",
+      "to": "stateful proxy"
+    },
+    {
+      "from": "stateful proxy",
+      "event": "receives provisional response (101-199)",
+      "action": "reset timer C",
+      "to": "stateful proxy"
+    },
+    {
+      "from": "stateful proxy",
+      "event": "receives final response",
+      "action": "send final response",
+      "to": "stateful proxy"
+    },
+    {
+      "from": "stateful proxy",
+      "event": "timer C fires",
+      "action": "reset timer or terminate client transaction",
+      "to": "stateful proxy"
+    },
+    {
+      "from": "stateful proxy",
+      "event": "receives CANCEL request",
+      "action": "generate CANCEL requests for pending client transactions",
+      "to": "stateful proxy"
+    },
+    {
+      "from": "stateless proxy",
+      "event": "receives request",
+      "action": "validate request",
+      "to": "stateless proxy"
+    },
+    {
+      "from": "stateless proxy",
+      "event": "receives response",
+      "action": "remove topmost Via header field value and forward if address matches",
+      "to": "stateless proxy"
+    },
+    {
+      "from": "Outside of a dialog",
+      "event": "",
+      "action": "",
+      "to": "Outside of a dialog"
+    },
+    {
+      "from": "Outside of a dialog",
+      "event": "request",
+      "action": "forward to UAS",
+      "to": "Outside of a dialog"
+    },
+    {
+      "from": "Outside of a dialog",
+      "event": "request establishing dialog",
+      "action": "forward to UAS",
+      "to": "In a dialog"
+    },
+    {
+      "from": "In a dialog",
+      "event": "request",
+      "action": "process request",
+      "to": "In a dialog"
+    },
+    {
+      "from": "UAS processing request outside of dialog",
+      "event": "request",
+      "action": "authentication",
+      "to": "UAS processing request outside of dialog"
+    },
+    {
+      "from": "UAS processing request outside of dialog",
+      "event": "request",
+      "action": "method inspection",
+      "to": "UAS processing request outside of dialog"
+    },
+    {
+      "from": "UAS processing request outside of dialog",
+      "event": "request",
+      "action": "header inspection",
+      "to": "UAS processing request outside of dialog"
+    },
+    {
+      "from": "UAS processing request outside of dialog",
+      "event": "request",
+      "action": "content processing",
+      "to": "UAS processing request outside of dialog"
+    },
+    {
+      "from": "UAS processing request outside of dialog",
+      "event": "request",
+      "action": "apply extensions",
+      "to": "UAS processing request outside of dialog"
+    },
+    {
+      "from": "UAS processing request outside of dialog",
+      "event": "request",
+      "action": "processing the request",
+      "to": "UAS processing request outside of dialog"
+    },
+    {
+      "from": "UAS processing request outside of dialog",
+      "event": "request with no tag in To header",
+      "action": "check against ongoing transactions",
+      "to": "UAS processing request outside of dialog"
+    },
+    {
+      "from": "UAS processing request outside of dialog",
+      "event": "request with Require header",
+      "action": "check supported extensions",
+      "to": "UAS processing request outside of dialog"
+    },
+    {
+      "from": "UAS processing request inside of dialog",
+      "event": "request",
+      "action": "apply same processing rules as outside of dialog",
+      "to": "UAS processing request inside of dialog"
+    },
+    {
+      "from": "Stateless UAS",
+      "event": "request",
+      "action": "ignore state",
+      "to": "Stateless UAS"
+    },
+    {
+      "from": "Unregistered",
+      "event": "REGISTER request",
+      "action": "create bindings in location service",
+      "to": "Registered"
+    },
+    {
+      "from": "Registered",
+      "event": "REGISTER request",
+      "action": "reading and writing mappings",
+      "to": "Registered"
+    },
+    {
+      "from": "dialog",
+      "event": "BYE",
+      "action": "terminate session",
+      "to": "dialog"
+    },
+    {
+      "from": "dialog",
+      "event": "non-2xx final response",
+      "action": "terminate all sessions and dialogs",
+      "to": "dialog"
+    },
+    {
+      "from": "dialog",
+      "event": "CANCEL",
+      "action": "force a non-2xx response to the INVITE",
+      "to": "dialog"
+    },
+    {
+      "from": "early dialog",
+      "event": "2xx response",
+      "action": "transition to confirmed",
+      "to": "confirmed dialog"
+    },
+    {
+      "from": "early dialog",
+      "event": "non-2xx final response",
+      "action": "terminate early dialog",
+      "to": "no dialog"
+    },
+    {
+      "from": "confirmed dialog",
+      "event": "BYE",
+      "action": "terminate session",
+      "to": "no dialog"
+    },
+    {
+      "from": "confirmed dialog",
+      "event": "non-2xx final response",
+      "action": "terminate dialog",
+      "to": "no dialog"
+    },
+    {
+      "from": "dialog",
+      "event": "481 (Call/Transaction Does Not Exist)",
+      "action": "terminate dialog",
+      "to": "no dialog"
+    },
+    {
+      "from": "dialog",
+      "event": "408 (Request Timeout)",
+      "action": "terminate dialog",
+      "to": "no dialog"
+    },
+    {
+      "from": "no dialog",
+      "event": "INVITE",
+      "action": "construct dialog state",
+      "to": "early dialog"
+    },
+    {
+      "from": "no dialog",
+      "event": "INVITE",
+      "action": "construct early dialog state",
+      "to": "early dialog"
+    },
+    {
+      "from": "dialog",
+      "event": "INVITE",
+      "action": "modify session",
+      "to": "dialog"
+    },
+    {
+      "from": "pending client transactions",
+      "event": "matching CANCEL request",
+      "action": "cancel any pending client transactions",
+      "to": "pending client transactions"
+    },
+    {
+      "from": "response context found",
+      "event": "CANCEL request",
+      "action": "immediately return a 200 (OK) response",
+      "to": "response context found"
+    },
+    {
+      "from": "response context found",
+      "event": "CANCEL request",
+      "action": "generate CANCEL requests for all pending client transactions",
+      "to": "pending client transactions"
+    },
+    {
+      "from": "no response context",
+      "event": "CANCEL request",
+      "action": "statelessly forward the CANCEL request",
+      "to": "stateless forwarding"
+    },
+    {
+      "from": "pending client transactions",
+      "event": "INVITE's Expires header field elapsing",
+      "action": "generate CANCEL requests",
+      "to": "pending client transactions"
+    },
+    {
+      "from": "Receiving request with S/MIME body",
+      "event": "certificate cannot be verified",
+      "action": "notify user of certificate status and request explicit permission",
+      "to": "Receiving request with S/MIME body"
+    },
+    {
+      "from": "Receiving request with S/MIME body",
+      "event": "certificate successfully verified and subject corresponds to From header",
+      "action": "add certificate to local keyring, indexed by address-of-record",
+      "to": "Keyring contains address-of-record"
+    },
+    {
+      "from": "Receiving request with S/MIME body",
+      "event": "415 Unsupported Media Type",
+      "action": "notify user that remote device does not support S/MIME",
+      "to": "Receiving request with S/MIME body"
+    },
+    {
+      "from": "Receiving response with S/MIME body",
+      "event": "certificate cannot be verified",
+      "action": "notify user of certificate status and request explicit permission",
+      "to": "Receiving response with S/MIME body"
+    },
+    {
+      "from": "Receiving response with S/MIME body",
+      "event": "certificate successfully verified and subject corresponds to To header",
+      "action": "add certificate to local keyring, indexed by address-of-record",
+      "to": "Keyring contains address-of-record"
+    },
+    {
+      "from": "Keyring contains address-of-record",
+      "event": "request or response with From header corresponding to value in keyring",
+      "action": "compare certificate offered with existing certificate in keyring",
+      "to": "Keyring contains address-of-record"
+    },
+    {
+      "from": "Keyring contains address-of-record",
+      "event": "discrepancy in certificate",
+      "action": "notify user of change of certificate and acquire user's permission",
+      "to": "Keyring contains address-of-record"
+    },
+    {
+      "from": "Sending request with S/MIME body",
+      "event": "response contains unsecured body",
+      "action": "notify user that session could not be secured",
+      "to": "Sending request with S/MIME body"
+    },
+    {
+      "from": "Sending response with S/MIME body",
+      "event": "request with unsecured body",
+      "action": "notify user that session could not be secured",
+      "to": "Sending response with S/MIME body"
+    },
+    {
+      "from": "dialog state",
+      "event": "INVITE",
+      "action": "adds a Record-Route header field value",
+      "to": "dialog state"
+    },
+    {
+      "from": "dialog state",
+      "event": "200 OK",
+      "action": "adds a Record-Route header field value",
+      "to": "dialog state"
+    },
+    {
+      "from": "dialog state",
+      "event": "BYE",
+      "action": "Route header field value removal",
+      "to": "dialog state"
+    },
+    {
+      "from": "strict-routing proxy",
+      "event": "BYE",
+      "action": "reformats the request",
+      "to": "strict-routing proxy"
+    },
+    {
+      "from": "Provisional 1xx",
+      "event": "100 Trying",
+      "action": "stops retransmissions of an INVITE",
+      "to": "Provisional 1xx"
+    },
+    {
+      "from": "Provisional 1xx",
+      "event": "180 Ringing",
+      "action": "initiate local ringback",
+      "to": "Provisional 1xx"
+    },
+    {
+      "from": "Provisional 1xx",
+      "event": "181 Call Is Being Forwarded",
+      "action": "",
+      "to": "Provisional 1xx"
+    },
+    {
+      "from": "Provisional 1xx",
+      "event": "182 Queued",
+      "action": "update the caller about the status of the queued call",
+      "to": "Provisional 1xx"
+    },
+    {
+      "from": "Provisional 1xx",
+      "event": "183 Session Progress",
+      "action": "",
+      "to": "Provisional 1xx"
+    },
+    {
+      "from": "Successful 2xx",
+      "event": "200 OK",
+      "action": "",
+      "to": "Successful 2xx"
+    },
+    {
+      "from": "Redirection 3xx",
+      "event": "300 Multiple Choices",
+      "action": "",
+      "to": "Redirection 3xx"
+    },
+    {
+      "from": "Redirection 3xx",
+      "event": "301 Moved Permanently",
+      "action": "",
+      "to": "Redirection 3xx"
+    },
+    {
+      "from": "Redirection 3xx",
+      "event": "302 Moved Temporarily",
+      "action": "",
+      "to": "Redirection 3xx"
+    },
+    {
+      "from": "Redirection 3xx",
+      "event": "305 Use Proxy",
+      "action": "",
+      "to": "Redirection 3xx"
+    },
+    {
+      "from": "Redirection 3xx",
+      "event": "380 Alternative Service",
+      "action": "",
+      "to": "Redirection 3xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "400 Bad Request",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "401 Unauthorized",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "402 Payment Required",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "403 Forbidden",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "404 Not Found",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "405 Method Not Allowed",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "406 Not Acceptable",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "407 Proxy Authentication Required",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "408 Request Timeout",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "410 Gone",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "413 Request Entity Too Large",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "414 Request-URI Too Long",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "415 Unsupported Media Type",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "416 Unsupported URI Scheme",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "420 Bad Extension",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "421 Extension Required",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "423 Interval Too Brief",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "480 Temporarily Unavailable",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "481 Call/Transaction Does Not Exist",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "482 Loop Detected",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "483 Too Many Hops",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "484 Address Incomplete",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "485 Ambiguous",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "486 Busy Here",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "487 Request Terminated",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "488 Not Acceptable Here",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "491 Request Pending",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Request Failure 4xx",
+      "event": "493 Undecipherable",
+      "action": "",
+      "to": "Request Failure 4xx"
+    },
+    {
+      "from": "Server Failure 5xx",
+      "event": "500 Server Internal Error",
+      "action": "",
+      "to": "Server Failure 5xx"
+    },
+    {
+      "from": "Server Failure 5xx",
+      "event": "501 Not Implemented",
+      "action": "",
+      "to": "Server Failure 5xx"
+    },
+    {
+      "from": "Server Failure 5xx",
+      "event": "502 Bad Gateway",
+      "action": "",
+      "to": "Server Failure 5xx"
+    },
+    {
+      "from": "Server Failure 5xx",
+      "event": "503 Service Unavailable",
+      "action": "",
+      "to": "Server Failure 5xx"
+    },
+    {
+      "from": "Server Failure 5xx",
+      "event": "504 Server Time-out",
+      "action": "",
+      "to": "Server Failure 5xx"
+    },
+    {
+      "from": "Server Failure 5xx",
+      "event": "505 Version Not Supported",
+      "action": "",
+      "to": "Server Failure 5xx"
+    },
+    {
+      "from": "Server Failure 5xx",
+      "event": "513 Message Too Large",
+      "action": "",
+      "to": "Server Failure 5xx"
+    },
+    {
+      "from": "Global Failures 6xx",
+      "event": "600 Busy Everywhere",
+      "action": "",
+      "to": "Global Failures 6xx"
+    },
+    {
+      "from": "Global Failures 6xx",
+      "event": "603 Decline",
+      "action": "",
+      "to": "Global Failures 6xx"
+    },
+    {
+      "from": "Global Failures 6xx",
+      "event": "604 Does Not Exist Anywhere",
+      "action": "",
+      "to": "Global Failures 6xx"
+    },
+    {
+      "from": "Global Failures 6xx",
+      "event": "606 Not Acceptable",
+      "action": "",
+      "to": "Global Failures 6xx"
+    }
+  ]
+}

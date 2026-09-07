@@ -1,0 +1,857 @@
+{
+  "states": [
+    "SMTP client",
+    "SMTP server",
+    "EHLO",
+    "Initial State",
+    "Receiving Mail Transaction",
+    "Data Input",
+    "Reset State",
+    "Initial state",
+    "Transaction open",
+    "Receiving mail data",
+    "Service closing",
+    "Session Initialized",
+    "Session Open",
+    "Transaction in Progress",
+    "Aborted Transaction",
+    "MAIL Command Received",
+    "RCPT Command(s) Received",
+    "DATA Command Received",
+    "End of Mail Data Received",
+    "Relaying",
+    "Final Delivery",
+    "Gatewaying",
+    "Alias Expansion",
+    "List Expansion",
+    "mail transaction in progress",
+    "no mail transaction in progress",
+    "Initial State",
+    "Mail Transaction Open",
+    "Session Open",
+    "CONNECTION ESTABLISHMENT",
+    "Data Input",
+    "Relay Host to Destination Host",
+    "Transaction in progress",
+    "No transaction in progress",
+    "MX Record Lookup"
+  ],
+  "transitions": [
+    {
+      "from": "SMTP client",
+      "event": "establishes a two-way transmission channel",
+      "action": "",
+      "to": "SMTP server"
+    },
+    {
+      "from": "SMTP server",
+      "event": "receives commands",
+      "action": "sends replies",
+      "to": "SMTP server"
+    },
+    {
+      "from": "SMTP client",
+      "event": "initiates a mail transaction",
+      "action": "",
+      "to": "SMTP server"
+    },
+    {
+      "from": "EHLO",
+      "event": "EHLO",
+      "action": "server informs client of supported extensions",
+      "to": "EHLO"
+    },
+    {
+      "from": "Initial State",
+      "event": "EHLO",
+      "action": "Clear buffers and reset state",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "HELP",
+      "action": "No effect",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "EXPN",
+      "action": "No effect",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "VRFY",
+      "action": "No effect",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "MAIL",
+      "action": "Clear buffers, insert reverse-path",
+      "to": "Receiving Mail Transaction"
+    },
+    {
+      "from": "Receiving Mail Transaction",
+      "event": "RCPT",
+      "action": "Append forward-path",
+      "to": "Receiving Mail Transaction"
+    },
+    {
+      "from": "Receiving Mail Transaction",
+      "event": "DATA",
+      "action": "Accept mail data",
+      "to": "Data Input"
+    },
+    {
+      "from": "Data Input",
+      "event": "<CRLF>.<CRLF>",
+      "action": "Process message, clear buffers",
+      "to": "Receiving Mail Transaction"
+    },
+    {
+      "from": "Receiving Mail Transaction",
+      "event": "RSET",
+      "action": "Clear buffers and reset state",
+      "to": "Initial State"
+    },
+    {
+      "from": "Receiving Mail Transaction",
+      "event": "EHLO",
+      "action": "Clear buffers and reset state",
+      "to": "Initial State"
+    },
+    {
+      "from": "Receiving Mail Transaction",
+      "event": "QUIT",
+      "action": "Close connection",
+      "to": "Initial State"
+    },
+    {
+      "from": "Data Input",
+      "event": "Error",
+      "action": "Do not deliver message",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial state",
+      "event": "EHLO or HELO",
+      "action": "250",
+      "to": "Initial state"
+    },
+    {
+      "from": "Initial state",
+      "event": "MAIL",
+      "action": "250",
+      "to": "Transaction open"
+    },
+    {
+      "from": "Transaction open",
+      "event": "RCPT",
+      "action": "250, 251",
+      "to": "Transaction open"
+    },
+    {
+      "from": "Transaction open",
+      "event": "DATA",
+      "action": "354",
+      "to": "Receiving mail data"
+    },
+    {
+      "from": "Receiving mail data",
+      "event": "<CRLF>.<CRLF>",
+      "action": "250",
+      "to": "Transaction open"
+    },
+    {
+      "from": "Transaction open",
+      "event": "RSET",
+      "action": "250",
+      "to": "Initial state"
+    },
+    {
+      "from": "Transaction open",
+      "event": "QUIT",
+      "action": "221",
+      "to": "Service closing"
+    },
+    {
+      "from": "Initial state",
+      "event": "QUIT",
+      "action": "221",
+      "to": "Service closing"
+    },
+    {
+      "from": "Session Initialized",
+      "event": "EHLO or HELO",
+      "action": "250",
+      "to": "Session Open"
+    },
+    {
+      "from": "Session Open",
+      "event": "MAIL",
+      "action": "250",
+      "to": "Transaction in Progress"
+    },
+    {
+      "from": "Transaction in Progress",
+      "event": "RCPT",
+      "action": "250",
+      "to": "Transaction in Progress"
+    },
+    {
+      "from": "Transaction in Progress",
+      "event": "DATA",
+      "action": "354 Start mail input",
+      "to": "Transaction in Progress"
+    },
+    {
+      "from": "Transaction in Progress",
+      "event": "<CRLF>.<CRLF>",
+      "action": "250 OK",
+      "to": "Session Open"
+    },
+    {
+      "from": "Session Open",
+      "event": "RSET",
+      "action": "250 OK",
+      "to": "Session Open"
+    },
+    {
+      "from": "Transaction in Progress",
+      "event": "RSET",
+      "action": "250 OK",
+      "to": "Session Open"
+    },
+    {
+      "from": "Session Open",
+      "event": "QUIT",
+      "action": "221 OK",
+      "to": "Session Initialized"
+    },
+    {
+      "from": "Transaction in Progress",
+      "event": "QUIT",
+      "action": "221 OK",
+      "to": "Session Initialized"
+    },
+    {
+      "from": "Session Open",
+      "event": "EHLO",
+      "action": "clear all buffers and reset state",
+      "to": "Session Open"
+    },
+    {
+      "from": "Session Initialized",
+      "event": "554",
+      "action": "",
+      "to": "Session Initialized"
+    },
+    {
+      "from": "Session Open",
+      "event": "503",
+      "action": "",
+      "to": "Aborted Transaction"
+    },
+    {
+      "from": "Initial State",
+      "event": "MAIL command",
+      "action": "reset state tables and buffers",
+      "to": "MAIL Command Received"
+    },
+    {
+      "from": "MAIL Command Received",
+      "event": "RCPT command",
+      "action": "store forward-path",
+      "to": "RCPT Command(s) Received"
+    },
+    {
+      "from": "RCPT Command(s) Received",
+      "event": "RCPT command",
+      "action": "store forward-path",
+      "to": "RCPT Command(s) Received"
+    },
+    {
+      "from": "RCPT Command(s) Received",
+      "event": "DATA command",
+      "action": "start mail data transfer",
+      "to": "DATA Command Received"
+    },
+    {
+      "from": "DATA Command Received",
+      "event": "End of mail data indicator",
+      "action": "store message data",
+      "to": "End of Mail Data Received"
+    },
+    {
+      "from": "End of Mail Data Received",
+      "event": "",
+      "action": "process recipients and mail data",
+      "to": "Initial State"
+    },
+    {
+      "from": "MAIL Command Received",
+      "event": "MAIL command",
+      "action": "",
+      "to": "MAIL Command Received"
+    },
+    {
+      "from": "RCPT Command(s) Received",
+      "event": "RCPT command",
+      "action": "",
+      "to": "RCPT Command(s) Received"
+    },
+    {
+      "from": "Relaying",
+      "event": "declines to relay mail",
+      "action": "return 550 response",
+      "to": "Relaying"
+    },
+    {
+      "from": "Relaying",
+      "event": "accepts the task",
+      "action": "establishes a transmission channel",
+      "to": "Relaying"
+    },
+    {
+      "from": "Relaying",
+      "event": "finds destination incorrect or undeliverable",
+      "action": "constructs an \"undeliverable mail\" notification message",
+      "to": "Final Delivery"
+    },
+    {
+      "from": "Gatewaying",
+      "event": "MAIL command",
+      "action": "reset state tables and buffers",
+      "to": "Gatewaying"
+    },
+    {
+      "from": "Gatewaying",
+      "event": "RCPT command",
+      "action": "store forward-path",
+      "to": "Gatewaying"
+    },
+    {
+      "from": "Gatewaying",
+      "event": "DATA command",
+      "action": "354 Intermediate reply",
+      "to": "Gatewaying"
+    },
+    {
+      "from": "Gatewaying",
+      "event": "end of mail data indicator",
+      "action": "250 OK reply",
+      "to": "Gatewaying"
+    },
+    {
+      "from": "Gatewaying",
+      "event": "forwarding a message into or out of the Internet environment",
+      "action": "prepend a Received: line",
+      "to": "Gatewaying"
+    },
+    {
+      "from": "Gatewaying",
+      "event": "header fields rewritten",
+      "action": "inspect message body",
+      "to": "Gatewaying"
+    },
+    {
+      "from": "Alias Expansion",
+      "event": "receive message",
+      "action": "replace pseudo-mailbox address with expanded addresses",
+      "to": "Alias Expansion"
+    },
+    {
+      "from": "List Expansion",
+      "event": "receive message",
+      "action": "replace pseudo-mailbox address with expanded addresses; change return address to list administrator",
+      "to": "List Expansion"
+    },
+    {
+      "from": "no mail transaction in progress",
+      "event": "EHLO",
+      "action": "clear all buffers and reset the state",
+      "to": "initial state"
+    },
+    {
+      "from": "no mail transaction in progress",
+      "event": "HELO",
+      "action": "reply properly",
+      "to": "initial state"
+    },
+    {
+      "from": "no mail transaction in progress",
+      "event": "MAIL",
+      "action": "clear the reverse-path buffer, the forward-path buffer, and the mail data buffer, and it inserts the reverse-path information",
+      "to": "mail transaction in progress"
+    },
+    {
+      "from": "mail transaction in progress",
+      "event": "RCPT",
+      "action": "append its forward-path argument to the forward-path buffer",
+      "to": "mail transaction in progress"
+    },
+    {
+      "from": "mail transaction in progress",
+      "event": "DATA",
+      "action": "append the mail data to the mail data buffer",
+      "to": "mail transaction in progress"
+    },
+    {
+      "from": "mail transaction in progress",
+      "event": "RSET",
+      "action": "discard any stored sender, recipients, and mail data",
+      "to": "initial state"
+    },
+    {
+      "from": "mail transaction in progress",
+      "event": "EHLO",
+      "action": "clear all buffers and reset the state",
+      "to": "initial state"
+    },
+    {
+      "from": "mail transaction in progress",
+      "event": "QUIT",
+      "action": "abort any current uncompleted mail transaction",
+      "to": "no mail transaction in progress"
+    },
+    {
+      "from": "no mail transaction in progress",
+      "event": "NOOP",
+      "action": "no effect",
+      "to": "no mail transaction in progress"
+    },
+    {
+      "from": "no mail transaction in progress",
+      "event": "HELP",
+      "action": "no effect",
+      "to": "no mail transaction in progress"
+    },
+    {
+      "from": "no mail transaction in progress",
+      "event": "EXPN",
+      "action": "no effect",
+      "to": "no mail transaction in progress"
+    },
+    {
+      "from": "no mail transaction in progress",
+      "event": "VRFY",
+      "action": "no effect",
+      "to": "no mail transaction in progress"
+    },
+    {
+      "from": "Initial State",
+      "event": "EHLO",
+      "action": "",
+      "to": "Session Open"
+    },
+    {
+      "from": "Session Open",
+      "event": "RSET",
+      "action": "reset state as if EHLO had not been issued",
+      "to": "Session Open"
+    },
+    {
+      "from": "Session Open",
+      "event": "EHLO",
+      "action": "clear all buffers and reset state",
+      "to": "Session Open"
+    },
+    {
+      "from": "Session Open",
+      "event": "NOOP",
+      "action": "",
+      "to": "Session Open"
+    },
+    {
+      "from": "Session Open",
+      "event": "HELP",
+      "action": "",
+      "to": "Session Open"
+    },
+    {
+      "from": "Session Open",
+      "event": "EXPN",
+      "action": "",
+      "to": "Session Open"
+    },
+    {
+      "from": "Session Open",
+      "event": "VRFY",
+      "action": "",
+      "to": "Session Open"
+    },
+    {
+      "from": "Session Open",
+      "event": "RSET",
+      "action": "",
+      "to": "Session Open"
+    },
+    {
+      "from": "Session Open",
+      "event": "MAIL",
+      "action": "",
+      "to": "Mail Transaction Open"
+    },
+    {
+      "from": "Mail Transaction Open",
+      "event": "RSET",
+      "action": "",
+      "to": "Session Open"
+    },
+    {
+      "from": "Mail Transaction Open",
+      "event": "EHLO",
+      "action": "clear all buffers and reset state",
+      "to": "Session Open"
+    },
+    {
+      "from": "Mail Transaction Open",
+      "event": "QUIT",
+      "action": "",
+      "to": "Session Open"
+    },
+    {
+      "from": "Session Open",
+      "event": "QUIT",
+      "action": "",
+      "to": "Initial State"
+    },
+    {
+      "from": "CONNECTION ESTABLISHMENT",
+      "event": "220",
+      "action": "",
+      "to": "EHLO or HELO"
+    },
+    {
+      "from": "CONNECTION ESTABLISHMENT",
+      "event": "554",
+      "action": "",
+      "to": "CONNECTION ESTABLISHMENT"
+    },
+    {
+      "from": "EHLO or HELO",
+      "event": "250",
+      "action": "",
+      "to": "MAIL"
+    },
+    {
+      "from": "EHLO or HELO",
+      "event": "504",
+      "action": "",
+      "to": "EHLO or HELO"
+    },
+    {
+      "from": "EHLO or HELO",
+      "event": "550",
+      "action": "",
+      "to": "EHLO or HELO"
+    },
+    {
+      "from": "EHLO or HELO",
+      "event": "502",
+      "action": "",
+      "to": "EHLO or HELO"
+    },
+    {
+      "from": "MAIL",
+      "event": "250",
+      "action": "",
+      "to": "RCPT"
+    },
+    {
+      "from": "MAIL",
+      "event": "552",
+      "action": "",
+      "to": "MAIL"
+    },
+    {
+      "from": "MAIL",
+      "event": "451",
+      "action": "",
+      "to": "MAIL"
+    },
+    {
+      "from": "MAIL",
+      "event": "452",
+      "action": "",
+      "to": "MAIL"
+    },
+    {
+      "from": "MAIL",
+      "event": "550",
+      "action": "",
+      "to": "MAIL"
+    },
+    {
+      "from": "MAIL",
+      "event": "553",
+      "action": "",
+      "to": "MAIL"
+    },
+    {
+      "from": "MAIL",
+      "event": "503",
+      "action": "",
+      "to": "MAIL"
+    },
+    {
+      "from": "MAIL",
+      "event": "455",
+      "action": "",
+      "to": "MAIL"
+    },
+    {
+      "from": "MAIL",
+      "event": "555",
+      "action": "",
+      "to": "MAIL"
+    },
+    {
+      "from": "RCPT",
+      "event": "250",
+      "action": "",
+      "to": "RCPT"
+    },
+    {
+      "from": "RCPT",
+      "event": "251",
+      "action": "",
+      "to": "RCPT"
+    },
+    {
+      "from": "RCPT",
+      "event": "550",
+      "action": "",
+      "to": "RCPT"
+    },
+    {
+      "from": "RCPT",
+      "event": "551",
+      "action": "",
+      "to": "RCPT"
+    },
+    {
+      "from": "RCPT",
+      "event": "552",
+      "action": "",
+      "to": "RCPT"
+    },
+    {
+      "from": "RCPT",
+      "event": "553",
+      "action": "",
+      "to": "RCPT"
+    },
+    {
+      "from": "RCPT",
+      "event": "450",
+      "action": "",
+      "to": "RCPT"
+    },
+    {
+      "from": "RCPT",
+      "event": "451",
+      "action": "",
+      "to": "RCPT"
+    },
+    {
+      "from": "RCPT",
+      "event": "452",
+      "action": "",
+      "to": "RCPT"
+    },
+    {
+      "from": "RCPT",
+      "event": "503",
+      "action": "",
+      "to": "RCPT"
+    },
+    {
+      "from": "RCPT",
+      "event": "455",
+      "action": "",
+      "to": "RCPT"
+    },
+    {
+      "from": "RCPT",
+      "event": "555",
+      "action": "",
+      "to": "RCPT"
+    },
+    {
+      "from": "DATA",
+      "event": "354",
+      "action": "data",
+      "to": "DATA"
+    },
+    {
+      "from": "DATA",
+      "event": "250",
+      "action": "",
+      "to": "DATA"
+    },
+    {
+      "from": "DATA",
+      "event": "552",
+      "action": "",
+      "to": "DATA"
+    },
+    {
+      "from": "DATA",
+      "event": "554",
+      "action": "",
+      "to": "DATA"
+    },
+    {
+      "from": "DATA",
+      "event": "451",
+      "action": "",
+      "to": "DATA"
+    },
+    {
+      "from": "DATA",
+      "event": "452",
+      "action": "",
+      "to": "DATA"
+    },
+    {
+      "from": "DATA",
+      "event": "450",
+      "action": "",
+      "to": "DATA"
+    },
+    {
+      "from": "DATA",
+      "event": "550",
+      "action": "",
+      "to": "DATA"
+    },
+    {
+      "from": "DATA",
+      "event": "503",
+      "action": "",
+      "to": "DATA"
+    },
+    {
+      "from": "DATA",
+      "event": "554",
+      "action": "",
+      "to": "DATA"
+    },
+    {
+      "from": "Receiving message",
+      "event": "Receive message",
+      "action": "Insert trace information",
+      "to": "Receiving message"
+    },
+    {
+      "from": "Receiving message",
+      "event": "Accept message for relaying",
+      "action": "Add Received header",
+      "to": "Relaying message"
+    },
+    {
+      "from": "Receiving message",
+      "event": "Accept message for final delivery",
+      "action": "Add Received header and return-path",
+      "to": "Final delivery"
+    },
+    {
+      "from": "Relaying message",
+      "event": "Relay message",
+      "action": "Add Received header",
+      "to": "Relaying message"
+    },
+    {
+      "from": "Relaying message",
+      "event": "Final delivery",
+      "action": "Remove return-path and rebuild MAIL command",
+      "to": "Final delivery"
+    },
+    {
+      "from": "Final delivery",
+      "event": "Final delivery",
+      "action": "Remove Return-path header fields",
+      "to": "Final delivery"
+    },
+    {
+      "from": "Final delivery",
+      "event": "Undeliverable mail",
+      "action": "Send notification message with null return path",
+      "to": "Final delivery"
+    },
+    {
+      "from": "Locating Target Host",
+      "event": "DNS lookup succeeds, MX record found",
+      "action": "",
+      "to": "MX Record Lookup"
+    },
+    {
+      "from": "Locating Target Host",
+      "event": "DNS lookup fails, non-existent domain",
+      "action": "Report as error",
+      "to": "Locating Target Host"
+    },
+    {
+      "from": "Locating Target Host",
+      "event": "DNS lookup fails, temporary error",
+      "action": "Queue and retry",
+      "to": "Locating Target Host"
+    },
+    {
+      "from": "Locating Target Host",
+      "event": "Empty list of MXs returned",
+      "action": "Treat as implicit MX with preference 0",
+      "to": "MX Record Lookup"
+    },
+    {
+      "from": "Locating Target Host",
+      "event": "MX records present, but unusable, or implicit MX unusable",
+      "action": "Report as error",
+      "to": "Locating Target Host"
+    },
+    {
+      "from": "MX Record Lookup",
+      "event": "MX record data field contains domain name",
+      "action": "Query domain name for address record",
+      "to": "MX Record Lookup"
+    },
+    {
+      "from": "MX Record Lookup",
+      "event": "MX record data field does not return address record",
+      "action": "Outside scope of standard",
+      "to": "MX Record Lookup"
+    },
+    {
+      "from": "MX Record Lookup",
+      "event": "Multiple MX records found",
+      "action": "Sort by preference",
+      "to": "MX Record Lookup"
+    },
+    {
+      "from": "MX Record Lookup",
+      "event": "Multihomed host found",
+      "action": "Order list by preference",
+      "to": "MX Record Lookup"
+    },
+    {
+      "from": "Relaying Message",
+      "event": "MX record found",
+      "action": "Sort MX records by preference, discard higher preference records",
+      "to": "Relaying Message"
+    },
+    {
+      "from": "Relaying Message",
+      "event": "No matching records left",
+      "action": "Report as error, return undeliverable",
+      "to": "Undeliverable Mail"
+    },
+    {
+      "from": "Relaying Message",
+      "event": "Records remain",
+      "action": "Try best preference first",
+      "to": "Relaying Message"
+    }
+  ]
+}

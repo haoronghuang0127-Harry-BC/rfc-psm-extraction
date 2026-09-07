@@ -1,0 +1,325 @@
+{
+  "states": [
+    "Not Authenticated",
+    "Authenticated",
+    "Selected",
+    "Logout",
+    "connection established",
+    "not yet authenticated",
+    "authenticated state",
+    "not authenticated state",
+    "Authenticated State",
+    "Selected State",
+    "IDLE",
+    "selected",
+    "authenticated"
+  ],
+  "transitions": [
+    {
+      "from": "connection established",
+      "event": "server greeting (OK)",
+      "action": "",
+      "to": "Not Authenticated"
+    },
+    {
+      "from": "connection established",
+      "event": "server greeting (PREAUTH)",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "connection established",
+      "event": "server greeting (BYE)",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "successful LOGIN or AUTHENTICATE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Authenticated",
+      "event": "successful SELECT or EXAMINE command",
+      "action": "",
+      "to": "Selected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "Selected",
+      "event": "CLOSE or UNSELECT command, unsolicited CLOSED response code, or failed SELECT or EXAMINE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "LOGOUT command, server shutdown, or connection closed",
+      "action": "",
+      "to": "Logout"
+    },
+    {
+      "from": "not yet authenticated",
+      "event": "OK response",
+      "action": "",
+      "to": "not yet authenticated"
+    },
+    {
+      "from": "not yet authenticated",
+      "event": "PREAUTH response",
+      "action": "",
+      "to": "authenticated state"
+    },
+    {
+      "from": "not yet authenticated",
+      "event": "LOGIN or AUTHENTICATE command",
+      "action": "OK response",
+      "to": "authenticated state"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "CLOSE or UNSELECT command, unsolicited CLOSED response code, or failed SELECT or EXAMINE command",
+      "action": "",
+      "to": "Authenticated"
+    },
+    {
+      "from": "not authenticated state",
+      "event": "AUTHENTICATE",
+      "action": "establishes authentication",
+      "to": "authenticated state"
+    },
+    {
+      "from": "not authenticated state",
+      "event": "LOGIN",
+      "action": "establishes authentication",
+      "to": "authenticated state"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "SELECT",
+      "action": "OK - select completed",
+      "to": "Selected State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "SELECT",
+      "action": "NO - select failure",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Selected State",
+      "event": "SELECT",
+      "action": "OK - select completed",
+      "to": "Selected State"
+    },
+    {
+      "from": "Selected State",
+      "event": "SELECT",
+      "action": "NO - select failure",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "EXAMINE",
+      "action": "OK - examine completed, now in selected state",
+      "to": "Selected State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "EXAMINE",
+      "action": "NO - examine failure, now in authenticated state: no such mailbox, can't access mailbox",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "DELETE",
+      "action": "OK - delete completed",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "DELETE",
+      "action": "NO - delete failure: can't delete mailbox with that name",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "DELETE",
+      "action": "BAD - command unknown or arguments invalid",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "RENAME",
+      "action": "OK - rename completed",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "RENAME",
+      "action": "NO - rename failure: can't rename mailbox with that name, can't rename to mailbox with that name",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "RENAME",
+      "action": "BAD - command unknown or arguments invalid",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated",
+      "event": "SUBSCRIBE",
+      "action": "OK - subscribe completed",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "SUBSCRIBE",
+      "action": "NO - subscribe failure: can't subscribe to that name",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "SUBSCRIBE",
+      "action": "BAD - command unknown or arguments invalid",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "UNSUBSCRIBE",
+      "action": "OK - unsubscribe completed",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "UNSUBSCRIBE",
+      "action": "NO - unsubscribe failure: can't unsubscribe that name",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "UNSUBSCRIBE",
+      "action": "BAD - command unknown or arguments invalid",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "NAMESPACE",
+      "action": "OK - command completed; NO - Can't complete the command; BAD - arguments invalid; untagged NAMESPACE response",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "APPEND",
+      "action": "OK - append completed",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "APPEND",
+      "action": "NO - append error: can't append to that mailbox, error in flags or date/time or message text",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "APPEND",
+      "action": "BAD - command unknown or arguments invalid",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Authenticated State",
+      "event": "IDLE",
+      "action": "+ idling",
+      "to": "IDLE"
+    },
+    {
+      "from": "IDLE",
+      "event": "DONE",
+      "action": "OK - IDLE completed after client sent DONE",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "selected",
+      "event": "CLOSE",
+      "action": "OK - close completed, now in authenticated state",
+      "to": "authenticated"
+    },
+    {
+      "from": "selected",
+      "event": "CLOSE",
+      "action": "BAD - command unknown or arguments invalid",
+      "to": "selected"
+    },
+    {
+      "from": "Selected State",
+      "event": "UNSELECT",
+      "action": "OK - unselect completed, now in authenticated state",
+      "to": "Authenticated State"
+    },
+    {
+      "from": "Selected State",
+      "event": "UNSELECT",
+      "action": "BAD - no mailbox selected, or argument supplied but none permitted",
+      "to": "Selected State"
+    },
+    {
+      "from": "Not Authenticated",
+      "event": "PREAUTH response",
+      "action": "connection moves directly to authenticated state",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Selected",
+      "event": "SELECT or EXAMINE command on another mailbox",
+      "action": "CLOSED response code returned, previously selected mailbox closed implicitly",
+      "to": "Selected"
+    },
+    {
+      "from": "authenticated state",
+      "event": "AUTHENTICATE command",
+      "action": "OK - authenticate completed",
+      "to": "authenticated state"
+    },
+    {
+      "from": "authenticated state",
+      "event": "LOGIN command",
+      "action": "OK - login completed",
+      "to": "authenticated state"
+    },
+    {
+      "from": "selected state",
+      "event": "CLOSE command",
+      "action": "OK - close completed",
+      "to": "authenticated state"
+    },
+    {
+      "from": "selected state",
+      "event": "UNSELECT command",
+      "action": "OK - unselect completed",
+      "to": "authenticated state"
+    },
+    {
+      "from": "authenticated state",
+      "event": "SELECT command",
+      "action": "OK - select completed",
+      "to": "selected state"
+    },
+    {
+      "from": "authenticated state",
+      "event": "EXAMINE command",
+      "action": "OK - examine completed",
+      "to": "selected state"
+    }
+  ]
+}

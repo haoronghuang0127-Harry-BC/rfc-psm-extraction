@@ -1,0 +1,381 @@
+{
+  "states": [
+    "User",
+    "SMTP client",
+    "SMTP server",
+    "File System",
+    "Intermediate destination",
+    "Final destination",
+    "Relay",
+    "Gateway",
+    "Session Initiation",
+    "Mail Transactions",
+    "Forwarding for Address Correction or Updating",
+    "Relaying and Mail Handling",
+    "Mailbox and Address",
+    "Connection Established",
+    "Session Initialized",
+    "Mail Transaction in Progress",
+    "Data Input in Progress",
+    "Greeting Received",
+    "EHLO/HELO Sent",
+    "Initial State",
+    "Mail Transaction State",
+    "RCPT State",
+    "Data State",
+    "Connection Establishment",
+    "EHLO or HELO",
+    "MAIL",
+    "RCPT",
+    "DATA",
+    "RSET",
+    "VRFY",
+    "EXPN",
+    "HELP",
+    "NOOP",
+    "QUIT",
+    "Idle",
+    "Expanding Alias",
+    "Expanding List",
+    "Mail Gatewaying",
+    "Locating the Target Host",
+    "Mail eXchanger Record Processing",
+    "Relaying and Mail Routing",
+    "Receiver-SMTP Accepting Message",
+    "Receiver-SMTP Notification Required",
+    "Receiver-SMTP Loop Detection",
+    "Receiver-SMTP Compensating for Irregularities",
+    "Minimum Implementation",
+    "Transparency",
+    "Sizes and Timeouts",
+    "Local-part",
+    "Domain",
+    "Path",
+    "Command Line",
+    "Reply Line",
+    "Text Line",
+    "Message Content",
+    "Recipients Buffer",
+    "Treatment When Limits Exceeded",
+    "Too Many Recipients Code",
+    "Initial 220 Message",
+    "MAIL Command",
+    "RCPT Command",
+    "DATA Initiation",
+    "Data Block",
+    "DATA Termination",
+    "Server Timeout",
+    "Sending Strategy",
+    "Receiving Strategy",
+    "Initialized",
+    "Session Open"
+  ],
+  "transitions": [
+    {
+      "from": "Session Initiation",
+      "event": "EHLO",
+      "action": "clear buffers and reset state",
+      "to": "Mail Transactions"
+    },
+    {
+      "from": "Mail Transactions",
+      "event": "MAIL",
+      "action": "clear buffers",
+      "to": "Mail Transactions"
+    },
+    {
+      "from": "Mail Transactions",
+      "event": "RCPT",
+      "action": "append to forward-path buffer",
+      "to": "Mail Transactions"
+    },
+    {
+      "from": "Mail Transactions",
+      "event": "DATA",
+      "action": "append to mail data buffer",
+      "to": "Mail Transactions"
+    },
+    {
+      "from": "Forwarding for Address Correction or Updating",
+      "event": "",
+      "action": "forwarding",
+      "to": "Forwarding for Address Correction or Updating"
+    },
+    {
+      "from": "Relaying and Mail Handling",
+      "event": "MAIL",
+      "action": "relay message",
+      "to": "Relaying and Mail Handling"
+    },
+    {
+      "from": "Relaying and Mail Handling",
+      "event": "RCPT",
+      "action": "relay message",
+      "to": "Relaying and Mail Handling"
+    },
+    {
+      "from": "Mailbox and Address",
+      "event": "",
+      "action": "deliver message",
+      "to": "Mailbox and Address"
+    },
+    {
+      "from": "Connection Established",
+      "event": "Server responds with opening message",
+      "action": "MAY include software and version information",
+      "to": "Session Initialized"
+    },
+    {
+      "from": "Session Initialized",
+      "event": "Client sends QUIT",
+      "action": "Server MUST wait for client to send QUIT before closing connection",
+      "to": "Connection Established"
+    },
+    {
+      "from": "Session Initialized",
+      "event": "Client sends MAIL",
+      "action": "Clears buffers, inserts reverse-path",
+      "to": "Mail Transaction in Progress"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "Client sends DATA",
+      "action": "Server sends 354 Start mail input",
+      "to": "Data Input in Progress"
+    },
+    {
+      "from": "Data Input in Progress",
+      "event": "<CRLF>.<CRLF>",
+      "action": "Server processes mail transaction information",
+      "to": "Mail Transaction in Progress"
+    },
+    {
+      "from": "Greeting Received",
+      "event": "EHLO",
+      "action": "Server provides list of extensions",
+      "to": "EHLO/HELO Sent"
+    },
+    {
+      "from": "Greeting Received",
+      "event": "HELO",
+      "action": "Server does not return extended EHLO-style response",
+      "to": "EHLO/HELO Sent"
+    },
+    {
+      "from": "Initial State",
+      "event": "MAIL command",
+      "action": "Return 250 OK or error reply",
+      "to": "Mail Transaction State"
+    },
+    {
+      "from": "Mail Transaction State",
+      "event": "RCPT command",
+      "action": "Return 250 OK or error reply",
+      "to": "RCPT State"
+    },
+    {
+      "from": "RCPT State",
+      "event": "DATA command",
+      "action": "Initiate transfer of mail data and terminate with end of mail data indicator",
+      "to": "Data State"
+    },
+    {
+      "from": "Data State",
+      "event": "end of mail data indicator",
+      "action": "Return 250 OK and process stored recipients and mail data",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "EHLO or HELO",
+      "action": "Clear state tables and buffers",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "MAIL",
+      "action": "Clear reverse-path, forward-path, and mail data buffers",
+      "to": "Mail Transaction in Progress"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "RSET",
+      "action": "Clear buffers and state tables",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "QUIT",
+      "action": "Send OK reply and close transmission channel",
+      "to": "Initial State"
+    },
+    {
+      "from": "Connected",
+      "event": "QUIT",
+      "action": "221 reply, close connection",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "421 response code",
+      "action": "Shutdown SMTP service",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "Timeout",
+      "action": "421 response code",
+      "to": "Connected"
+    },
+    {
+      "from": "Initial State",
+      "event": "Message delivered to pseudo-mailbox (alias)",
+      "action": "Replace pseudo-mailbox address with expanded addresses",
+      "to": "Expanding Alias"
+    },
+    {
+      "from": "Initial State",
+      "event": "Message delivered to pseudo-mailbox (list)",
+      "action": "Replace pseudo-mailbox address with expanded addresses; Change return address to list administrator",
+      "to": "Expanding List"
+    },
+    {
+      "from": "Expanding Alias",
+      "event": "",
+      "action": "Deliver or forward to each expanded address",
+      "to": "Initial State"
+    },
+    {
+      "from": "Expanding List",
+      "event": "",
+      "action": "Deliver or forward to each expanded address",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initialized",
+      "event": "EHLO",
+      "action": "clear buffers, reset state",
+      "to": "Session Open"
+    },
+    {
+      "from": "Session Open",
+      "event": "EHLO",
+      "action": "clear buffers, reset state",
+      "to": "Session Open"
+    },
+    {
+      "from": "Session Open",
+      "event": "MAIL",
+      "action": "begin mail transaction",
+      "to": "Mail Transaction Open"
+    },
+    {
+      "from": "Mail Transaction Open",
+      "event": "RSET",
+      "action": "abort mail transaction",
+      "to": "Session Open"
+    },
+    {
+      "from": "Mail Transaction Open",
+      "event": "new EHLO",
+      "action": "abort mail transaction",
+      "to": "Session Open"
+    },
+    {
+      "from": "Mail Transaction Open",
+      "event": "QUIT",
+      "action": "abort mail transaction",
+      "to": "Session Open"
+    },
+    {
+      "from": "Session Open",
+      "event": "QUIT",
+      "action": "close connection",
+      "to": "Session Open"
+    },
+    {
+      "from": "Connection Establishment",
+      "event": "",
+      "action": "220 <domain> Service ready",
+      "to": "EHLO or HELO"
+    },
+    {
+      "from": "EHLO or HELO",
+      "event": "",
+      "action": "250",
+      "to": "MAIL"
+    },
+    {
+      "from": "EHLO or HELO",
+      "event": "",
+      "action": "504",
+      "to": "MAIL"
+    },
+    {
+      "from": "MAIL",
+      "event": "",
+      "action": "250",
+      "to": "RCPT"
+    },
+    {
+      "from": "MAIL",
+      "event": "",
+      "action": "552",
+      "to": "RCPT"
+    },
+    {
+      "from": "RCPT",
+      "event": "",
+      "action": "250",
+      "to": "DATA"
+    },
+    {
+      "from": "RCPT",
+      "event": "",
+      "action": "251",
+      "to": "DATA"
+    },
+    {
+      "from": "DATA",
+      "event": "",
+      "action": "354",
+      "to": "Idle"
+    },
+    {
+      "from": "RSET",
+      "event": "",
+      "action": "250",
+      "to": "Idle"
+    },
+    {
+      "from": "VRFY",
+      "event": "",
+      "action": "250",
+      "to": "Idle"
+    },
+    {
+      "from": "EXPN",
+      "event": "",
+      "action": "250",
+      "to": "Idle"
+    },
+    {
+      "from": "HELP",
+      "event": "",
+      "action": "211",
+      "to": "Idle"
+    },
+    {
+      "from": "NOOP",
+      "event": "",
+      "action": "250",
+      "to": "Idle"
+    },
+    {
+      "from": "QUIT",
+      "event": "",
+      "action": "221",
+      "to": "Idle"
+    }
+  ]
+}

@@ -1,0 +1,855 @@
+{
+  "states": [
+    "User location",
+    "User availability",
+    "User capabilities",
+    "Session setup",
+    "Session management",
+    "Idle",
+    "Ringing",
+    "Established",
+    "Calling",
+    "Proceeding",
+    "Completed",
+    "Terminated",
+    "UAC",
+    "UAS",
+    "Proxy",
+    "Redirect Server",
+    "Registrar",
+    "Server",
+    "Client",
+    "User Agent Client",
+    "User Agent Server",
+    "Stateful Proxy",
+    "Stateless Proxy",
+    "UAS Behavior",
+    "Method Inspection",
+    "Header Inspection",
+    "To and Request-URI",
+    "Merged Requests",
+    "Require",
+    "Content Processing",
+    "Applying Extensions",
+    "Processing the Request",
+    "Generating the Response",
+    "Sending a Provisional Response",
+    "Stateless UAS Behavior",
+    "early",
+    "confirmed",
+    "UAC Behavior",
+    "Request Processing",
+    "Proxy Route Processing",
+    "Strict Routing Proxy",
+    "Record-Route Rewriting",
+    "Client Transaction",
+    "Response Context",
+    "Server Transaction",
+    "Stateless Proxy",
+    "Client Transport Sending Requests",
+    "Server Transport Receiving Requests",
+    "Client Transport Receiving Responses",
+    "Server Transport Sending Responses",
+    "Initial",
+    "Min-Expires",
+    "normal",
+    "non-urgent",
+    "urgent",
+    "emergency",
+    "Proxy-sensitive features required",
+    "U1",
+    "P1",
+    "P2",
+    "U2",
+    "P3",
+    "P4",
+    "Unauthenticated",
+    "Authenticated",
+    "1xx",
+    "2xx",
+    "3xx",
+    "4xx",
+    "5xx",
+    "6xx",
+    "100 Trying",
+    "180 Ringing",
+    "181 Call Is Being Forwarded",
+    "182 Queued",
+    "183 Session Progress",
+    "200 OK",
+    "300 Multiple Choices",
+    "301 Moved Permanently",
+    "302 Moved Temporarily",
+    "305 Use Proxy",
+    "380 Alternative Service",
+    "400 Bad Request",
+    "401 Unauthorized",
+    "403 Forbidden",
+    "404 Not Found",
+    "405 Method Not Allowed",
+    "406 Not Acceptable",
+    "407 Proxy Authentication Required",
+    "408 Request Timeout",
+    "410 Gone",
+    "413 Request Entity Too Large",
+    "414 Request-URI Too Long",
+    "415 Unsupported Media Type",
+    "416 Unsupported URI Scheme",
+    "420 Bad Extension",
+    "421 Extension Required",
+    "423 Interval Too Brief",
+    "480 Temporarily Unavailable",
+    "481 Call/Transaction Does Not Exist",
+    "482 Loop Detected",
+    "483 Too Many Hops",
+    "484 Address Incomplete",
+    "485 Ambiguous",
+    "486 Busy Here",
+    "487 Request Terminated",
+    "488 Not Acceptable Here",
+    "491 Request Pending",
+    "493 Undecipherable",
+    "500 Server Internal Error",
+    "501 Not Implemented",
+    "502 Bad Gateway",
+    "503 Service Unavailable",
+    "504 Server Time-out",
+    "505 Version Not Supported",
+    "513 Message Too Large",
+    "600 Busy Everywhere",
+    "603 Decline",
+    "604 Does Not Exist Anywhere",
+    "606 Not Acceptable",
+    "Registration",
+    "Session Setup",
+    "identity"
+  ],
+  "transitions": [
+    {
+      "from": "Idle",
+      "event": "INVITE",
+      "action": "Send 100 Trying, Forward INVITE",
+      "to": "Ringing"
+    },
+    {
+      "from": "Ringing",
+      "event": "200 OK",
+      "action": "Establish Session",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "BYE",
+      "action": "Send 200 OK",
+      "to": "Idle"
+    },
+    {
+      "from": "Calling",
+      "event": "INVITE",
+      "action": "send request",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "1xx",
+      "action": "pass to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx",
+      "action": "pass to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Request Timeout",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "ACK",
+      "action": "generate ACK",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer B fires",
+      "action": "retransmit request",
+      "to": "Calling"
+    },
+    {
+      "from": "UAS Behavior",
+      "event": "request outside of a dialog",
+      "action": "MUST be performed",
+      "to": "UAS Behavior"
+    },
+    {
+      "from": "Method Inspection",
+      "event": "recognizes but does not support the method",
+      "action": "MUST generate a 405 (Method Not Allowed) response",
+      "to": "Method Inspection"
+    },
+    {
+      "from": "Header Inspection",
+      "event": "does not understand a header field",
+      "action": "MUST ignore that header field and continue processing the message",
+      "to": "Header Inspection"
+    },
+    {
+      "from": "To and Request-URI",
+      "event": "To header field is not the identity of the UAS",
+      "action": "MAY apply any policy",
+      "to": "To and Request-URI"
+    },
+    {
+      "from": "Merged Requests",
+      "event": "request has no tag",
+      "action": "MUST check the request against ongoing transactions",
+      "to": "Merged Requests"
+    },
+    {
+      "from": "Require",
+      "event": "does not understand an option-tag",
+      "action": "MUST respond by generating a response with status code 420 (Bad Extension)",
+      "to": "Require"
+    },
+    {
+      "from": "Content Processing",
+      "event": "bodies whose type is not understood",
+      "action": "MUST reject the request with a 415 (Unsupported Media Type) response",
+      "to": "Content Processing"
+    },
+    {
+      "from": "Applying Extensions",
+      "event": "desired extension is not supported",
+      "action": "SHOULD rely only on baseline SIP",
+      "to": "Applying Extensions"
+    },
+    {
+      "from": "Processing the Request",
+      "event": "all checks are passed",
+      "action": "processing becomes method-specific",
+      "to": "Processing the Request"
+    },
+    {
+      "from": "Generating the Response",
+      "event": "all procedures are completed",
+      "action": "hands the response back to the server transaction",
+      "to": "Generating the Response"
+    },
+    {
+      "from": "Sending a Provisional Response",
+      "event": "non-INVITE request",
+      "action": "SHOULD NOT issue a provisional response",
+      "to": "Sending a Provisional Response"
+    },
+    {
+      "from": "Stateless UAS Behavior",
+      "event": "retransmission of a request",
+      "action": "regenerates the response",
+      "to": "Stateless UAS Behavior"
+    },
+    {
+      "from": "Redirect Server",
+      "event": "receiving a request other than CANCEL",
+      "action": "refuses the request or gathers locations and returns a 3xx response",
+      "to": "Redirect Server"
+    },
+    {
+      "from": "Redirect Server",
+      "event": "receiving a well-formed CANCEL request",
+      "action": "returns a 2xx response",
+      "to": "Redirect Server"
+    },
+    {
+      "from": "calling",
+      "event": "timer A fires",
+      "action": "reset A, INVITE sent",
+      "to": "calling"
+    },
+    {
+      "from": "calling",
+      "event": "timer B fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "calling",
+      "event": "provisional response",
+      "action": "transition to Proceeding",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "timer E fires",
+      "action": "send request, reset E",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "timer F fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "UAC",
+      "event": "re-INVITE",
+      "action": "create new offer",
+      "to": "UAC"
+    },
+    {
+      "from": "UAS",
+      "event": "re-INVITE",
+      "action": "modify session",
+      "to": "UAS"
+    },
+    {
+      "from": "Early Dialog",
+      "event": "2xx response",
+      "action": "transition to confirmed state",
+      "to": "Confirmed Dialog"
+    },
+    {
+      "from": "INVITE client transaction",
+      "event": "ongoing INVITE client transaction",
+      "action": "wait until completed or terminated",
+      "to": "INVITE client transaction"
+    },
+    {
+      "from": "INVITE server transaction",
+      "event": "ongoing INVITE server transaction",
+      "action": "wait until confirmed or terminated",
+      "to": "INVITE server transaction"
+    },
+    {
+      "from": "UAC",
+      "event": "BYE",
+      "action": "construct BYE request",
+      "to": "UAC"
+    },
+    {
+      "from": "UAS",
+      "event": "BYE",
+      "action": "process BYE request",
+      "to": "UAS"
+    },
+    {
+      "from": "Stateful Proxy",
+      "event": "incoming request",
+      "action": "decide if needs to respond directly",
+      "to": "Stateful Proxy"
+    },
+    {
+      "from": "Stateful Proxy",
+      "event": "request arrives",
+      "action": "decides if it needs to respond to the request on its own",
+      "to": "Stateful Proxy"
+    },
+    {
+      "from": "Stateful Proxy",
+      "event": "transition",
+      "action": "discard state",
+      "to": "Stateless Proxy"
+    },
+    {
+      "from": "Stateless Proxy",
+      "event": "incoming request",
+      "action": "forwards request downstream",
+      "to": "Stateless Proxy"
+    },
+    {
+      "from": "Stateless Proxy",
+      "event": "response received",
+      "action": "forwards response upstream",
+      "to": "Stateless Proxy"
+    },
+    {
+      "from": "Stateless Proxy",
+      "event": "transition",
+      "action": "discard state",
+      "to": "Stateless Proxy"
+    },
+    {
+      "from": "Stateless UAS",
+      "event": "request received",
+      "action": "regenerate response",
+      "to": "Stateless UAS"
+    },
+    {
+      "from": "Calling",
+      "event": "timer A fires",
+      "action": "retransmit the request",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "timer B fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "provisional response",
+      "action": "pass to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "timer E fires",
+      "action": "send request, reset E",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "timer F fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "final response",
+      "action": "pass to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "timer K fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "U1",
+      "event": "INVITE",
+      "action": "send INVITE, add Record-Route",
+      "to": "P1"
+    },
+    {
+      "from": "P1",
+      "event": "INVITE",
+      "action": "forward INVITE, add Record-Route",
+      "to": "P2"
+    },
+    {
+      "from": "P2",
+      "event": "INVITE",
+      "action": "forward INVITE, add Record-Route, rewrite Request-URI",
+      "to": "U2"
+    },
+    {
+      "from": "U2",
+      "event": "INVITE",
+      "action": "respond with 200 OK, set dialog state, add Record-Route",
+      "to": "callee"
+    },
+    {
+      "from": "callee",
+      "event": "BYE",
+      "action": "returns a 2xx response",
+      "to": "U1"
+    },
+    {
+      "from": "U1",
+      "event": "BYE",
+      "action": "construct BYE, add Route",
+      "to": "P1"
+    },
+    {
+      "from": "P1",
+      "event": "BYE",
+      "action": "remove Route value, forward BYE",
+      "to": "P2"
+    },
+    {
+      "from": "P2",
+      "event": "BYE",
+      "action": "remove Route value, forward BYE",
+      "to": "U2"
+    },
+    {
+      "from": "U2",
+      "event": "INVITE",
+      "action": "respond with 200 OK, add Record-Route",
+      "to": "P4"
+    },
+    {
+      "from": "P4",
+      "event": "BYE",
+      "action": "returns a 2xx response",
+      "to": "P3"
+    },
+    {
+      "from": "P3",
+      "event": "BYE",
+      "action": "forward to P2",
+      "to": "P2"
+    },
+    {
+      "from": "P2",
+      "event": "BYE",
+      "action": "rewrite Request-URI, forward to P1",
+      "to": "P1"
+    },
+    {
+      "from": "P1",
+      "event": "BYE",
+      "action": "remove Route value, forward to U1",
+      "to": "U1"
+    },
+    {
+      "from": "U1",
+      "event": "INVITE",
+      "action": "send INVITE, rewrite Record-Route",
+      "to": "U2"
+    },
+    {
+      "from": "Calling",
+      "event": "timer A fires",
+      "action": "retransmit request; reset timer A",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "provisional response",
+      "action": "transition to Proceeding; pass response to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "timer E fires",
+      "action": "retransmit the request; reset timer E",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "final response",
+      "action": "pass response to TU; transition to Completed",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "timer D fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "final response",
+      "action": "",
+      "to": "Completed"
+    },
+    {
+      "from": "Calling",
+      "event": "timer B fires",
+      "action": "inform TU that a timeout has occurred",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "timer F fires",
+      "action": "inform TU that a timeout has occurred; transition to Terminated",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "final response (300-699)",
+      "action": "pass response to TU; transition to Completed",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "timer G fires",
+      "action": "pass response to transport layer; reset timer G",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "ACK received",
+      "action": "transition to Confirmed state",
+      "to": "Confirmed"
+    },
+    {
+      "from": "Completed",
+      "event": "timer H fires or Transport Err.",
+      "action": "inform TU that a transaction failure has occurred; transition to Terminated",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "TU passes a provisional response",
+      "action": "pass response to transport layer; enter Proceeding state",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "retransmission of the request",
+      "action": "pass the most recently sent provisional response to the transport layer for retransmission",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "TU passes a final response (status codes 200-699)",
+      "action": "enter Completed state; pass response to transport layer",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "retransmission of the request",
+      "action": "pass the final response to the transport layer for retransmission",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "timer J fires",
+      "action": "transition to Terminated state",
+      "to": "Terminated"
+    },
+    {
+      "from": "UAC",
+      "event": "retransmission of 2xx",
+      "action": "re-pass ACK to transport",
+      "to": "Completed"
+    },
+    {
+      "from": "UAS",
+      "event": "retransmission of 2xx",
+      "action": "re-pass ACK to transport",
+      "to": "Completed"
+    },
+    {
+      "from": "UAC",
+      "event": "BYE",
+      "action": "construct BYE request",
+      "to": "UAC"
+    },
+    {
+      "from": "UAS",
+      "event": "BYE",
+      "action": "process BYE request",
+      "to": "UAS"
+    },
+    {
+      "from": "U1",
+      "event": "INVITE",
+      "action": "send INVITE, set Contact, add Record-Route",
+      "to": "P1"
+    },
+    {
+      "from": "P1",
+      "event": "INVITE",
+      "action": "lookup DNS, forward INVITE, add Record-Route",
+      "to": "P2"
+    },
+    {
+      "from": "P2",
+      "event": "INVITE",
+      "action": "run location service, rewrite Request-URI, add Record-Route, resolve Request-URI",
+      "to": "U2"
+    },
+    {
+      "from": "U2",
+      "event": "INVITE",
+      "action": "respond with 200 OK, set dialog state, set route set",
+      "to": "U2"
+    },
+    {
+      "from": "U2",
+      "event": "BYE",
+      "action": "send BYE, resolve URI in Route header field",
+      "to": "P4"
+    },
+    {
+      "from": "P4",
+      "event": "BYE",
+      "action": "remove Route header field value, reformat request, forward to P3",
+      "to": "P3"
+    },
+    {
+      "from": "P3",
+      "event": "BYE",
+      "action": "forward to P2",
+      "to": "P2"
+    },
+    {
+      "from": "P2",
+      "event": "BYE",
+      "action": "rewrite request, forward to P1",
+      "to": "P1"
+    },
+    {
+      "from": "P1",
+      "event": "BYE",
+      "action": "remove Route header field value, forward to U1",
+      "to": "U1"
+    },
+    {
+      "from": "U1",
+      "event": "BYE",
+      "action": "resolve URI in topmost Route header field value using DNS, construct BYE request, add Route header field",
+      "to": "P1"
+    },
+    {
+      "from": "U1",
+      "event": "INVITE",
+      "action": "send INVITE, set Contact, add Record-Route",
+      "to": "P1"
+    },
+    {
+      "from": "P1",
+      "event": "INVITE",
+      "action": "lookup DNS, forward INVITE, add Record-Route",
+      "to": "P2"
+    },
+    {
+      "from": "P2",
+      "event": "INVITE",
+      "action": "run location service, rewrite Request-URI, add Record-Route, resolve Request-URI",
+      "to": "U2"
+    },
+    {
+      "from": "U2",
+      "event": "200 OK",
+      "action": "set dialog state, set route set",
+      "to": "U2"
+    },
+    {
+      "from": "U2",
+      "event": "BYE",
+      "action": "send BYE, resolve URI in Route header field",
+      "to": "P4"
+    },
+    {
+      "from": "P4",
+      "event": "BYE",
+      "action": "remove Route header field value, reformat request, forward to P3",
+      "to": "P3"
+    },
+    {
+      "from": "P3",
+      "event": "BYE",
+      "action": "forward to P2",
+      "to": "P2"
+    },
+    {
+      "from": "P2",
+      "event": "BYE",
+      "action": "rewrite request, forward to P1",
+      "to": "P1"
+    },
+    {
+      "from": "P1",
+      "event": "BYE",
+      "action": "remove Route header field value, forward to U1",
+      "to": "U1"
+    },
+    {
+      "from": "U1",
+      "event": "BYE",
+      "action": "resolve URI in topmost Route header field value using DNS, construct BYE request, add Route header field",
+      "to": "P1"
+    },
+    {
+      "from": "U1",
+      "event": "INVITE",
+      "action": "send INVITE, rewrite Record-Route",
+      "to": "U2"
+    },
+    {
+      "from": "U2",
+      "event": "INVITE",
+      "action": "respond with 200 OK, add Record-Route",
+      "to": "P4"
+    },
+    {
+      "from": "P4",
+      "event": "BYE",
+      "action": "remove Route header field value, reformat request, forward to P3",
+      "to": "P3"
+    },
+    {
+      "from": "P3",
+      "event": "BYE",
+      "action": "forward to P2",
+      "to": "P2"
+    },
+    {
+      "from": "P2",
+      "event": "BYE",
+      "action": "rewrite request, forward to P1",
+      "to": "P1"
+    },
+    {
+      "from": "P1",
+      "event": "BYE",
+      "action": "remove Route header field value, forward to U1",
+      "to": "U1"
+    },
+    {
+      "from": "U1",
+      "event": "BYE",
+      "action": "set dialog state, set route set",
+      "to": "U1"
+    },
+    {
+      "from": "U1",
+      "event": "INVITE",
+      "action": "send INVITE, set Contact",
+      "to": "P1"
+    },
+    {
+      "from": "P1",
+      "event": "INVITE",
+      "action": "lookup DNS, forward INVITE",
+      "to": "P2"
+    },
+    {
+      "from": "P2",
+      "event": "INVITE",
+      "action": "run location service, rewrite Request-URI, add Record-Route",
+      "to": "U2"
+    },
+    {
+      "from": "U2",
+      "event": "INVITE",
+      "action": "respond with 200 OK, set dialog state, set route set",
+      "to": "U2"
+    },
+    {
+      "from": "U2",
+      "event": "BYE",
+      "action": "send BYE, resolve URI in Route header field",
+      "to": "P4"
+    },
+    {
+      "from": "P4",
+      "event": "BYE",
+      "action": "remove Route header field value, reformat request, forward to P3",
+      "to": "P3"
+    },
+    {
+      "from": "P3",
+      "event": "BYE",
+      "action": "forward to P2",
+      "to": "P2"
+    },
+    {
+      "from": "P2",
+      "event": "BYE",
+      "action": "rewrite request, forward to P1",
+      "to": "P1"
+    },
+    {
+      "from": "P1",
+      "event": "BYE",
+      "action": "remove Route header field value, forward to U1",
+      "to": "U1"
+    },
+    {
+      "from": "U1",
+      "event": "BYE",
+      "action": "resolve URI in topmost Route header field value using DNS, construct BYE request, add Route header field",
+      "to": "P1"
+    }
+  ]
+}

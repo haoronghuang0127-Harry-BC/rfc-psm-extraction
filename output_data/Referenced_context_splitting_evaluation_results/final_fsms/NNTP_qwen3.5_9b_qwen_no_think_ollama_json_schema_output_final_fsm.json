@@ -1,0 +1,135 @@
+{
+  "states": [
+    "transit",
+    "reader",
+    "Transit mode",
+    "Reading mode",
+    "Initial Connection",
+    "Reader Mode",
+    "invalid",
+    "valid",
+    "initial"
+  ],
+  "transitions": [
+    {
+      "from": "transit",
+      "event": "MODE READER",
+      "action": "switch to reader mode",
+      "to": "reader"
+    },
+    {
+      "from": "reader",
+      "event": "MODE READER",
+      "action": "reset state and switch modes (if supported)",
+      "to": "transit"
+    },
+    {
+      "from": "Transit mode",
+      "event": "MODE READER command",
+      "action": "advertise READER capability, cease advertising MODE-READER capability",
+      "to": "Reading mode"
+    },
+    {
+      "from": "Transit mode",
+      "event": "client uses any command except CAPABILITIES",
+      "action": "server may cease to advertise MODE-READER capability",
+      "to": "Transit mode"
+    },
+    {
+      "from": "Transit mode",
+      "event": "MODE READER",
+      "action": "switch to reading mode, advertise READER capability, stop advertising MODE-READER capability",
+      "to": "Reading mode"
+    },
+    {
+      "from": "Transit mode",
+      "event": "",
+      "action": "advertise MODE-READER capability",
+      "to": "Transit mode"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "200 Service available, posting allowed",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "201 Service available, posting prohibited",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "400 Service temporarily unavailable",
+      "to": "Closed"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "502 Service permanently unavailable",
+      "to": "Closed"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "MODE READER",
+      "action": "200/201 response (same meaning as initial greeting)",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "MODE READER",
+      "action": "502 Transit service only",
+      "to": "Closed"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "",
+      "action": "200/201 response (same meaning as initial greeting)",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "MODE READER",
+      "action": "502 Reading service permanently unavailable",
+      "to": "Closed"
+    },
+    {
+      "from": "invalid",
+      "event": "GROUP group",
+      "action": "211 number low high group",
+      "to": "valid"
+    },
+    {
+      "from": "invalid",
+      "event": "LISTGROUP [group [range]]",
+      "action": "211 number low high group list follows",
+      "to": "valid"
+    },
+    {
+      "from": "valid",
+      "event": "GROUP group",
+      "action": "211 number low high group",
+      "to": "valid"
+    },
+    {
+      "from": "valid",
+      "event": "LISTGROUP [group [range]]",
+      "action": "211 number low high group list follows",
+      "to": "valid"
+    },
+    {
+      "from": "initial",
+      "event": "MODE READER",
+      "action": "switch to reader mode",
+      "to": "reader"
+    },
+    {
+      "from": "initial",
+      "event": "",
+      "action": "advertise READER capability",
+      "to": "reader"
+    }
+  ]
+}

@@ -1,0 +1,417 @@
+{
+  "states": [
+    "Client",
+    "Broker",
+    "TLS:Anon,MQTT:None",
+    "TLS:Anon,MQTT:ace",
+    "TLS:Known(RPK/PSK),MQTT:none",
+    "TLS:Known(RPK/PSK),MQTT:ace",
+    "MQTT Client",
+    "Client Authorization Server Interface",
+    "Broker-AS interface",
+    "Pub/Sub Interface",
+    "Authorization Server",
+    "Unauthenticated Connection",
+    "Token Publishing",
+    "Authenticated Connection",
+    "Client-RS Authentication Methods over TLS and MQTT",
+    "Raw Public Key Mode",
+    "Pre-Shared Key Mode",
+    "CONNECT Sent",
+    "Waiting for CONNACK",
+    "AUTH Sent",
+    "Broker Processing AUTH",
+    "Clean Start",
+    "Existing Session",
+    "New Session",
+    "Token Validation",
+    "PoP Challenge Sent",
+    "PoP Challenge Received",
+    "PoP Success",
+    "DISCONNECT Sent",
+    "Idle",
+    "Authorized",
+    "Unauthorized",
+    "Connected",
+    "Reauthenticating",
+    "Disconnected",
+    "Tokenless AS discovery",
+    "Token transport via CONNECT packet",
+    "Token transport via authz-info topic",
+    "Token introspection",
+    "Client authentication over TLS",
+    "Client authentication over MQTT",
+    "Reauthentication",
+    "Session Established",
+    "Permissions Revoked",
+    "Token Validation Pending"
+  ],
+  "transitions": [
+    {
+      "from": "Client",
+      "event": "connection requests",
+      "action": "",
+      "to": "Broker"
+    },
+    {
+      "from": "Client",
+      "event": "publish requests",
+      "action": "",
+      "to": "Broker"
+    },
+    {
+      "from": "Client",
+      "event": "subscribe requests",
+      "action": "",
+      "to": "Broker"
+    },
+    {
+      "from": "Broker",
+      "event": "publish requests",
+      "action": "",
+      "to": "Client"
+    },
+    {
+      "from": "TLS:Anon,MQTT:None",
+      "event": "",
+      "action": "",
+      "to": "TLS:Anon,MQTT:ace"
+    },
+    {
+      "from": "TLS:Anon,MQTT:ace",
+      "event": "",
+      "action": "",
+      "to": "TLS:Known(RPK/PSK),MQTT:none"
+    },
+    {
+      "from": "TLS:Known(RPK/PSK),MQTT:none",
+      "event": "",
+      "action": "",
+      "to": "TLS:Anon,MQTT:None"
+    },
+    {
+      "from": "MQTT Client",
+      "event": "PUBLISH packet",
+      "action": "",
+      "to": "Broker"
+    },
+    {
+      "from": "Broker",
+      "event": "MQTT Control Packet",
+      "action": "",
+      "to": "Broker"
+    },
+    {
+      "from": "Client",
+      "event": "Token request",
+      "action": "Client Authorization Server Interface",
+      "to": "Client Authorization Server Interface"
+    },
+    {
+      "from": "Client Authorization Server Interface",
+      "event": "Access token",
+      "action": "Client Authorization Server Interface",
+      "to": "Client"
+    },
+    {
+      "from": "Client",
+      "event": "Connection request",
+      "action": "access token",
+      "to": "Broker"
+    },
+    {
+      "from": "Broker",
+      "event": "Connection response",
+      "action": "Connection response",
+      "to": "Broker"
+    },
+    {
+      "from": "Client",
+      "event": "Introspection request (optional)",
+      "action": "Broker-AS interface",
+      "to": "Broker-AS interface"
+    },
+    {
+      "from": "Broker-AS interface",
+      "event": "Introspection response (optional)",
+      "action": "Broker-AS interface",
+      "to": "Broker"
+    },
+    {
+      "from": "Client",
+      "event": "",
+      "action": "access token",
+      "to": "Authorization Server"
+    },
+    {
+      "from": "Authorization Server",
+      "event": "",
+      "action": "access token",
+      "to": "Client"
+    },
+    {
+      "from": "Client-RS Authentication Methods over TLS and MQTT",
+      "event": "Client publishes and subscribes to only public topics",
+      "action": "",
+      "to": "TLS:Anon,MQTT:None"
+    },
+    {
+      "from": "Client-RS Authentication Methods over TLS and MQTT",
+      "event": "Client authenticates over MQTT",
+      "action": "",
+      "to": "TLS:Anon,MQTT:ace"
+    },
+    {
+      "from": "Client-RS Authentication Methods over TLS and MQTT",
+      "event": "Client authenticates over TLS",
+      "action": "",
+      "to": "TLS:Known(RPK/PSK),MQTT:none"
+    },
+    {
+      "from": "Client-RS Authentication Methods over TLS and MQTT",
+      "event": "Client authenticates over TLS and MQTT",
+      "action": "",
+      "to": "TLS:Known(RPK/PSK),MQTT:ace"
+    },
+    {
+      "from": "Unauthenticated Connection",
+      "event": "Client Connection Request",
+      "action": "Connect to Broker and publish token to \"authz-info\"",
+      "to": "Token Publishing"
+    },
+    {
+      "from": "Token Publishing",
+      "event": "PUBLISH to \"authz-info\"",
+      "action": "Disconnect from Broker",
+      "to": "Unauthenticated Connection"
+    },
+    {
+      "from": "Token Publishing",
+      "event": "Token Validation Failure",
+      "action": "Send DISCONNECT with reason code 0x87 or 0x99",
+      "to": "Unauthenticated Connection"
+    },
+    {
+      "from": "Token Publishing",
+      "event": "Token Validation Success",
+      "action": "Reconnect using client authentication over TLS",
+      "to": "Authenticated Connection"
+    },
+    {
+      "from": "CONNECT Sent",
+      "event": "CONNACK Received",
+      "action": "Continue",
+      "to": "Waiting for CONNACK"
+    },
+    {
+      "from": "CONNECT Sent",
+      "event": "Broker AUTH",
+      "action": "Send AUTH",
+      "to": "AUTH Sent"
+    },
+    {
+      "from": "AUTH Sent",
+      "event": "Broker Response",
+      "action": "Process Response",
+      "to": "Broker Processing AUTH"
+    },
+    {
+      "from": "Waiting for CONNACK",
+      "event": "Clean Start Flag Set",
+      "action": "Signal New Session",
+      "to": "New Session"
+    },
+    {
+      "from": "Waiting for CONNACK",
+      "event": "Clean Start Flag Not Set",
+      "action": "Resume Existing Session",
+      "to": "Existing Session"
+    },
+    {
+      "from": "Existing Session",
+      "event": "Token Provided",
+      "action": "Validate Token",
+      "to": "Token Validation"
+    },
+    {
+      "from": "New Session",
+      "event": "Token Provided",
+      "action": "Validate Token",
+      "to": "Token Validation"
+    },
+    {
+      "from": "Token Validation",
+      "event": "PoP Challenge Required",
+      "action": "Send PoP Challenge",
+      "to": "PoP Challenge Sent"
+    },
+    {
+      "from": "PoP Challenge Sent",
+      "event": "Client Response",
+      "action": "Validate Response",
+      "to": "PoP Challenge Received"
+    },
+    {
+      "from": "PoP Challenge Received",
+      "event": "Response Valid",
+      "action": "Accept Connection",
+      "to": "Waiting for CONNACK"
+    },
+    {
+      "from": "PoP Challenge Received",
+      "event": "Response Invalid",
+      "action": "Send DISCONNECT",
+      "to": "DISCONNECT Sent"
+    },
+    {
+      "from": "Idle",
+      "event": "CONNECT",
+      "action": "check token expiration",
+      "to": "Authorized"
+    },
+    {
+      "from": "Authorized",
+      "event": "PUBLISH",
+      "action": "match Topic Name against scope",
+      "to": "Authorized"
+    },
+    {
+      "from": "Authorized",
+      "event": "SUBSCRIBE",
+      "action": "match Topic Filter against scope",
+      "to": "Authorized"
+    },
+    {
+      "from": "Authorized",
+      "event": "PUBLISH",
+      "action": "authorization failure",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Authorized",
+      "event": "SUBSCRIBE",
+      "action": "authorization failure",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Unauthorized",
+      "event": "reauthentication",
+      "action": "send AUTH packet",
+      "to": "Idle"
+    },
+    {
+      "from": "Connected",
+      "event": "CONNECT, PUBLISH, or SUBSCRIBE packet received or sent",
+      "action": "check for token expiration",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "PINGREQ packet received",
+      "action": "SHOULD check for token expiration",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "token expiration",
+      "action": "send PUBACK, SUBACK, or DISCONNECT with 'Not authorized'",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "PUBACK or SUBACK signaling loss of authorization",
+      "action": "reauthenticate",
+      "to": "Reauthenticating"
+    },
+    {
+      "from": "Reauthenticating",
+      "event": "AUTH packet with reason code 0x19 (Reauthentication)",
+      "action": "send AUTH packet with Authentication Method as 'ace' and new token",
+      "to": "Reauthenticating"
+    },
+    {
+      "from": "Reauthenticating",
+      "event": "reauthentication fails",
+      "action": "send DISCONNECT packet with reason code 0x87 (Not Authorized)",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Disconnected",
+      "event": "Client DISCONNECT",
+      "action": "Broker doesn't store Session State, keeps retained messages",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "Client DISCONNECT",
+      "action": "Broker MAY store Session State, including token and introspection result",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "network errors or server disconnection due to a protocol error",
+      "action": "Send Will Message",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "PUBLISH packet with RETAIN flag set",
+      "action": "Store the most recent message for the associated topic",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "access token validation",
+      "action": "cache token",
+      "to": "Session Established"
+    },
+    {
+      "from": "Session Established",
+      "event": "publish/subscribe request",
+      "action": "authorize with cached token",
+      "to": "Session Established"
+    },
+    {
+      "from": "Session Established",
+      "event": "permissions revocation",
+      "action": "may still grant publish/subscribe",
+      "to": "Permissions Revoked"
+    },
+    {
+      "from": "Permissions Revoked",
+      "event": "access token expiration",
+      "action": "re-evaluate permissions",
+      "to": "Session Established"
+    },
+    {
+      "from": "Connected",
+      "event": "repeated token transfer attempts to authz-info topic",
+      "action": "monitor Client behavior",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "repeated connection attempts",
+      "action": "monitor Client behavior",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "abnormal terminations",
+      "action": "monitor Client behavior",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "Clients that connect but do not send any data",
+      "action": "monitor Client behavior",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "long Session Expiry Interval",
+      "action": "maintain Client's MQTT Session State",
+      "to": "Connected"
+    }
+  ]
+}

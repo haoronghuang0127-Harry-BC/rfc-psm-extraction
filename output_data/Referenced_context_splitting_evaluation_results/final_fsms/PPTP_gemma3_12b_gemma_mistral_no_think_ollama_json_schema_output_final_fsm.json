@@ -1,0 +1,98 @@
+{
+  "states": [
+    "PAC",
+    "PNS",
+    "Control Connection Established",
+    "Start-Control-Connection-Request Sent",
+    "idle",
+    "wait_ctl_reply",
+    "established",
+    "wait_stop_reply",
+    "wait_reply",
+    "Echo-Reply Reception",
+    "Incoming-Call-Reply Processing",
+    "Incoming-Call-Connected",
+    "None",
+    "Not-Connected",
+    "Bad-Format",
+    "Bad-Value",
+    "No-Resource",
+    "Bad-Call ID",
+    "PAC-Error",
+    "Control Connection State"
+  ],
+  "transitions": [
+    {
+      "from": "PAC",
+      "event": "",
+      "action": "responsible for functions 1, 2, and possibly 3",
+      "to": "PNS"
+    },
+    {
+      "from": "PAC",
+      "event": "",
+      "action": "responsible for functions 4, 5, and 6",
+      "to": "PNS"
+    },
+    {
+      "from": "Control Connection Established",
+      "event": "Start-Control-Connection-Request",
+      "action": "Send Start-Control-Connection-Request",
+      "to": "Start-Control-Connection-Request Sent"
+    },
+    {
+      "from": "idle",
+      "event": "TCP Open Indication",
+      "action": "Send Start Control Connection Request",
+      "to": "wait_ctl_reply"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Receive Start Ctl Connection Reply Version OK",
+      "action": "move to established",
+      "to": "established"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Receive Start Ctl Connection Reply Version Not OK",
+      "action": "Send Stop Control Connection Request",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "established",
+      "event": "Receive Stop Control Connection Request",
+      "action": "Send Stop Control Connection Reply and close TCP connection",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "wait_stop_reply",
+      "event": "Receive Stop-Control-Connection-Reply",
+      "action": "Close TCP connection and become idle",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Start Control Connection Request",
+      "action": "prepare to receive PPTP messages",
+      "to": "wait_reply"
+    },
+    {
+      "from": "wait_reply",
+      "event": "Receive Incoming Call Reply Not Accepting",
+      "action": "move back into the idle state",
+      "to": "idle"
+    },
+    {
+      "from": "wait_reply",
+      "event": "Receive Incoming Call Reply Accept-ing",
+      "action": "Send Incoming-Call-Connected message and enter the established state",
+      "to": "established"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Outgoing Call Request",
+      "action": "allocate physical channel to dial on",
+      "to": "wait_reply"
+    }
+  ]
+}

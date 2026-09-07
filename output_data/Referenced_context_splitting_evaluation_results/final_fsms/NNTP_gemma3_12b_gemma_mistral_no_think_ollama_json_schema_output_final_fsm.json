@@ -1,0 +1,330 @@
+{
+  "states": [
+    "Connected",
+    "Inactivity Timer",
+    "Initial Connection",
+    "Reader Mode",
+    "Transit Mode",
+    "Authenticated",
+    "Greeting Received",
+    "Command Processing",
+    "Pipeline Active",
+    "Idle",
+    "Posting",
+    "Transfer",
+    "Initial State",
+    "NEWGROUPS",
+    "First session",
+    "Subsequent sessions",
+    "LIST",
+    "Error",
+    "Overview/NOV database",
+    "Article Metadata",
+    "Newsgroup Selected",
+    "Overview.FMT Description",
+    "HDR Processing",
+    "Listing Headers",
+    "Listening",
+    "Command Reception",
+    "Response Reception",
+    "Continuation Reception",
+    "Service Available",
+    "Service Unavailable"
+  ],
+  "transitions": [
+    {
+      "from": "Connected",
+      "event": "receipt of any command",
+      "action": "reset autologout timer",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "receipt of any significant amount of data",
+      "action": "reset autologout timer",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "",
+      "action": "close connection without sending any response",
+      "to": "Inactivity Timer"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "200 Service available, posting allowed",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "201 Service available, posting prohibited",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "400 Service temporarily unavailable",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "502 Service permanently unavailable",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "MODE READER",
+      "action": "200 Posting allowed",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "MODE READER",
+      "action": "201 Posting prohibited",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "MODE READER",
+      "action": "502 Reading service permanently unavailable",
+      "to": "Initial Connection"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "",
+      "action": "200 Posting allowed",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "",
+      "action": "201 Posting prohibited",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Reader Mode",
+      "event": "XSECRET",
+      "action": "290 Password for fred accepted",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Transit mode",
+      "event": "MODE READER",
+      "action": "advertise READER, cease MODE-READER",
+      "to": "Reading mode"
+    },
+    {
+      "from": "Mode Switching",
+      "event": "MODE READER",
+      "action": "200 or 201 response, change capability list",
+      "to": "Reading Mode"
+    },
+    {
+      "from": "Reading Mode",
+      "event": "MODE READER",
+      "action": "200 or 201 response, no state change",
+      "to": "Reading Mode"
+    },
+    {
+      "from": "Greeting Received",
+      "event": "",
+      "action": "send command",
+      "to": "Command Processing"
+    },
+    {
+      "from": "Command Processing",
+      "event": "command",
+      "action": "process command, allow pipelining",
+      "to": "Pipeline Active"
+    },
+    {
+      "from": "Pipeline Active",
+      "event": "MUST NOT be pipelined command",
+      "action": "end pipeline",
+      "to": "Command Processing"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "200 Service available, posting allowed",
+      "to": "Service Available"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "201 Service available, posting prohibited",
+      "to": "Service Available"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "400 Service temporarily unavailable",
+      "to": "Service Unavailable"
+    },
+    {
+      "from": "Initial Connection",
+      "event": "",
+      "action": "502 Service permanently unavailable",
+      "to": "Service Unavailable"
+    },
+    {
+      "from": "Service Available",
+      "event": "MODE READER",
+      "action": "200 Posting allowed",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Service Available",
+      "event": "MODE READER",
+      "action": "201 Posting prohibited",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Service Available",
+      "event": "MODE READER",
+      "action": "502 Reading service permanently unavailable",
+      "to": "Service Unavailable"
+    },
+    {
+      "from": "Transit Mode",
+      "event": "MODE READER",
+      "action": "200 Reader mode, posting permitted",
+      "to": "Reader Mode"
+    },
+    {
+      "from": "Idle",
+      "event": "POST",
+      "action": "send 340 or 440",
+      "to": "Posting"
+    },
+    {
+      "from": "Idle",
+      "event": "IHAVE",
+      "action": "send 335, 435, or 436",
+      "to": "Transfer"
+    },
+    {
+      "from": "Posting",
+      "event": "article data",
+      "action": "send 240 or 441",
+      "to": "Idle"
+    },
+    {
+      "from": "Transfer",
+      "event": "article data",
+      "action": "send 235, 436, or 437",
+      "to": "Idle"
+    },
+    {
+      "from": "Initial State",
+      "event": "HELP",
+      "action": "100 Help text follows",
+      "to": "Initial State"
+    },
+    {
+      "from": "First session",
+      "event": "DATE command",
+      "action": "record result",
+      "to": "First session"
+    },
+    {
+      "from": "First session",
+      "event": "NEWNEWS command",
+      "action": "construct response",
+      "to": "First session"
+    },
+    {
+      "from": "Subsequent sessions",
+      "event": "DATE command",
+      "action": "hold result in temporary storage",
+      "to": "Subsequent sessions"
+    },
+    {
+      "from": "Subsequent sessions",
+      "event": "NEWNEWS command",
+      "action": "overwrite saved timestamp",
+      "to": "Subsequent sessions"
+    },
+    {
+      "from": "Idle",
+      "event": "LIST",
+      "action": "Send 215",
+      "to": "LIST"
+    },
+    {
+      "from": "LIST",
+      "event": "keyword recognised",
+      "action": "Send 215",
+      "to": "LIST"
+    },
+    {
+      "from": "LIST",
+      "event": "keyword not recognised",
+      "action": "Send 501",
+      "to": "Error"
+    },
+    {
+      "from": "LIST",
+      "event": "server does not maintain information",
+      "action": "Send 503",
+      "to": "Error"
+    },
+    {
+      "from": "Idle",
+      "event": "capability LIST",
+      "action": "Send capability list",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "LIST OVERVIEW.FMT",
+      "action": "215 Information follows (multi-line)",
+      "to": "Overview.FMT Description"
+    },
+    {
+      "from": "Idle",
+      "event": "HDR",
+      "action": "Initiate HDR processing",
+      "to": "HDR Processing"
+    },
+    {
+      "from": "Idle",
+      "event": "LIST HEADERS",
+      "action": "Send 215",
+      "to": "Listing Headers"
+    },
+    {
+      "from": "Idle",
+      "event": "",
+      "action": "greeting",
+      "to": "Listening"
+    },
+    {
+      "from": "Listening",
+      "event": "<command-line>",
+      "action": "receive command",
+      "to": "Command Reception"
+    },
+    {
+      "from": "Command Reception",
+      "event": "<response>",
+      "action": "send response",
+      "to": "Response Reception"
+    },
+    {
+      "from": "Response Reception",
+      "event": "3xx response",
+      "action": "",
+      "to": "Continuation Reception"
+    },
+    {
+      "from": "Continuation Reception",
+      "event": "<command-continuation>",
+      "action": "receive continuation",
+      "to": "Command Reception"
+    }
+  ]
+}

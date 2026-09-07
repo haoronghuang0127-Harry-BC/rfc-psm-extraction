@@ -1,0 +1,291 @@
+{
+  "states": [
+    "INIT",
+    "INIT-REBOOT",
+    "REBOOT",
+    "REBOOTING",
+    "SELECTING",
+    "REQUESTING",
+    "BOUND",
+    "RENEWING",
+    "REBINDING"
+  ],
+  "transitions": [
+    {
+      "from": "INIT",
+      "event": "DHCPDISCOVER",
+      "action": "broadcasts the DHCPDISCOVER on the local hardware broadcast address to the 0xffffffff IP broadcast address and 'DHCP server' UDP port",
+      "to": "SELECTING"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPOFFER",
+      "action": "collect replies",
+      "to": "SELECTING"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPNAK",
+      "action": "Restart",
+      "to": "REBOOT"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPNAK",
+      "action": "Discard offer",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPACK",
+      "action": "Discard",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPREQUEST",
+      "action": "broadcasts the DHCPREQUEST on the local hardware broadcast address to the 'DHCP server' UDP port",
+      "to": "BOUND"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPNAK",
+      "action": "discards the offer",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPNAK",
+      "action": "Restart",
+      "to": "REBOOT"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPNAK",
+      "action": "Discard offer",
+      "to": "INIT-REBOOT"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPACK",
+      "action": "record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPACK",
+      "action": "not accept",
+      "to": "INIT-REBOOT"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPREQUEST",
+      "action": "Send DHCPREQUEST",
+      "to": "REBOOTING"
+    },
+    {
+      "from": "REBOOT",
+      "event": "DHCPNAK",
+      "action": "Restart",
+      "to": "REBOOT"
+    },
+    {
+      "from": "REBOOT",
+      "event": "DHCPNAK",
+      "action": "Discard offer",
+      "to": "REBOOT"
+    },
+    {
+      "from": "REBOOT",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBOOT",
+      "event": "DHCPOFFER",
+      "action": "Collect replies",
+      "to": "SELECTING"
+    },
+    {
+      "from": "REBOOTING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBOOTING",
+      "event": "DHCPNAK",
+      "action": "Halt network",
+      "to": "REBOOTING"
+    },
+    {
+      "from": "REBOOTING",
+      "event": "DHCPOFFER",
+      "action": "Discard",
+      "to": "REBOOTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPOFFER",
+      "action": "collects DHCPOFFER messages over a period of time, selects one DHCPOFFER message from the (possibly many) incoming DHCPOFFER messages",
+      "to": "REQUESTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPREQUEST",
+      "action": "broadcast DHCPREQUEST",
+      "to": "REQUESTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPNAK",
+      "action": "Halt network",
+      "to": "REBOOTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPOFFER",
+      "action": "Collect replies",
+      "to": "SELECTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPACK",
+      "action": "records the lease expiration time as the sum of the time at which the original request was sent and the duration of the lease from the DHCPACK message",
+      "to": "BOUND"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPACK",
+      "action": "record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPNAK",
+      "action": "discards the offer",
+      "to": "INIT"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPNAK",
+      "action": "Halt network",
+      "to": "REBOOTING"
+    },
+    {
+      "from": "REQUESTING",
+      "event": "DHCPOFFER",
+      "action": "Discard",
+      "to": "REQUESTING"
+    },
+    {
+      "from": "BOUND",
+      "event": "T1 expires",
+      "action": "sends DHCPREQUEST to leasing server",
+      "to": "RENEWING"
+    },
+    {
+      "from": "BOUND",
+      "event": "T1 expires",
+      "action": "send DHCPREQUEST to leasing server",
+      "to": "RENEWING"
+    },
+    {
+      "from": "BOUND",
+      "event": "T2 expires",
+      "action": "broadcasts DHCPREQUEST",
+      "to": "REBINDING"
+    },
+    {
+      "from": "BOUND",
+      "event": "T2 expires",
+      "action": "Broadcast DHCPREQUEST",
+      "to": "REBINDING"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPNAK",
+      "action": "Halt network",
+      "to": "REBOOTING"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPOFFER",
+      "action": "Discard",
+      "to": "BOUND"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPRELEASE",
+      "action": "sends DHCPRELEASE message to the server",
+      "to": "INIT"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPACK",
+      "action": "records the lease expiration time as the sum of the time at which the DHCPREQUEST message was sent and the duration of the lease from the DHCPACK message",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPACK",
+      "action": "record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEWING",
+      "event": "T2 expires",
+      "action": "broadcasts DHCPREQUEST",
+      "to": "REBINDING"
+    },
+    {
+      "from": "RENEWING",
+      "event": "T2 expires",
+      "action": "Broadcast DHCPREQUEST",
+      "to": "REBINDING"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPNAK",
+      "action": "Halt network",
+      "to": "REBOOTING"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPACK",
+      "action": "records the lease expiration time as the sum of the time at which the DHCPREQUEST message was sent and the duration of the lease from the DHCPACK message",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPACK",
+      "action": "record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPNAK",
+      "action": "halts network processing",
+      "to": "INIT"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPNAK",
+      "action": "Halt network",
+      "to": "REBOOTING"
+    }
+  ]
+}

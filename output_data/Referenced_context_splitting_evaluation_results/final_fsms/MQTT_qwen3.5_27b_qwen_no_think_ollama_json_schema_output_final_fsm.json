@@ -1,0 +1,130 @@
+{
+  "states": [
+    "Session",
+    "Network Connection",
+    "New Session",
+    "Existing Session",
+    "Authenticated",
+    "Reauthentication",
+    "Disconnected",
+    "Session State stored",
+    "Session State discarded",
+    "Unauthenticated"
+  ],
+  "transitions": [
+    {
+      "from": "New Session",
+      "event": "CONNECT packet with Clean Start flag set to 1",
+      "action": "Broker sets Session Present flag to 0 in CONNACK",
+      "to": "New Session"
+    },
+    {
+      "from": "Existing Session",
+      "event": "CONNECT packet with Clean Start flag set to 0 and associated Client Identifier",
+      "action": "Broker resumes communications based on existing Session state and sets Session Present flag to 1 in CONNACK",
+      "to": "Existing Session"
+    },
+    {
+      "from": "New Session",
+      "event": "CONNECT packet with Clean Start flag set to 0 but no associated Client Identifier",
+      "action": "Broker creates a new Session and sets Session Present flag to 0 in CONNACK",
+      "to": "New Session"
+    },
+    {
+      "from": "Existing Session",
+      "event": "Client Identifier collision (new Client connects with same ID)",
+      "action": "Broker sends DISCONNECT packet with reason code 0x8E (Session taken over) and closes connection to existing Client",
+      "to": "New Session"
+    },
+    {
+      "from": "Authenticated",
+      "event": "Token expiration detected on CONNECT, PUBLISH, SUBSCRIBE, or PINGREQ",
+      "action": "Send PUBACK, SUBACK, or DISCONNECT with reason code 'Not authorized'; close Network Connection",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Authenticated",
+      "event": "Client initiates reauthentication",
+      "action": "Send AUTH packet with reason code 0x19 (Reauthentication), Authentication Method 'ace', and new token in Authentication Data using challenge-response PoP",
+      "to": "Reauthentication"
+    },
+    {
+      "from": "Reauthentication",
+      "event": "Broker validates reauthentication request",
+      "action": "Accept if Client previously submitted a token with proof of possession; otherwise deny",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Reauthentication",
+      "event": "Reauthentication fails",
+      "action": "Send DISCONNECT packet with reason code 0x87 (Not Authorized)",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Session State stored",
+      "event": "Client DISCONNECT with Session Expiry Interval set to 0",
+      "action": "Broker doesn't store the Session State but MUST keep the retained messages",
+      "to": "Session State discarded"
+    },
+    {
+      "from": "New Session",
+      "event": "CONNECT with Clean flag = 1",
+      "action": "Broker creates a new Session and sets Session Present flag to 0 in CONNACK",
+      "to": "New Session"
+    },
+    {
+      "from": "Existing Session",
+      "event": "CONNECT with Clean flag = 0",
+      "action": "Broker resumes communications based on current Session state and sets Session Present flag to 1 in CONNACK",
+      "to": "Existing Session"
+    },
+    {
+      "from": "New Session",
+      "event": "CONNECT with Clean flag = 0 and no associated Session",
+      "action": "Broker creates a new Session and sets Session Present flag to 0 in CONNACK",
+      "to": "New Session"
+    },
+    {
+      "from": "Existing Session",
+      "event": "PUBLISH authorization failure",
+      "action": "Broker ignores PUBLISH packet and disconnects Client",
+      "to": "New Session"
+    },
+    {
+      "from": "Existing Session",
+      "event": "Broker-Client PUBLISH authorization failure due to expired token",
+      "action": "Broker disconnects Client",
+      "to": "New Session"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "CONNECT with Authentication Data (token only)",
+      "action": "Send AUTH packet with reason code 0x18 (Continue Authentication) containing 8-byte RS nonce",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "AUTH packet with Client Nonce and MAC/Signature",
+      "action": "Validate token and signature; Send CONNACK packet with reason code 0x00 (Success)",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Unauthenticated",
+      "event": "CONNECT with Authentication Data (token + MAC/Signature over TLS exporter)",
+      "action": "Validate token and signature; Send CONNACK packet with appropriate response code",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "AUTH packet with reason code 0x19 (Reauthentication) containing new token",
+      "action": "Validate new token and signature; Send CONNACK or DISCONNECT based on validation",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "Token expiration detected",
+      "action": "Send PUBACK, SUBACK, or DISCONNECT packet with reason code 0x87 (Not authorized)",
+      "to": "Unauthenticated"
+    }
+  ]
+}

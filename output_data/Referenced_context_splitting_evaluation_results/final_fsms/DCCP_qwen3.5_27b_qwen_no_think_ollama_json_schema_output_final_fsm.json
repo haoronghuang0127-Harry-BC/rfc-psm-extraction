@@ -1,0 +1,638 @@
+{
+  "states": [
+    "CLOSED",
+    "LISTEN",
+    "REQUEST",
+    "RESPOND",
+    "PARTOPEN",
+    "OPEN",
+    "CLOSEREQ",
+    "CLOSING",
+    "TIMEWAIT",
+    "STABLE",
+    "CHANGING",
+    "UNSTABLE",
+    "Send NDP Count = 0",
+    "Send NDP Count = 1",
+    "bidirectional",
+    "unidirectional",
+    "Received",
+    "Received ECN Marked",
+    "Not Yet Received",
+    "Send Ack Vector 0",
+    "Send Ack Vector 1",
+    "ECN Incapable",
+    "Connection Reset",
+    "State 0",
+    "State 1",
+    "State 3"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "send DCCP-Request",
+      "action": "",
+      "to": "REQUEST"
+    },
+    {
+      "from": "LISTEN",
+      "event": "receive DCCP-Request",
+      "action": "send DCCP-Response",
+      "to": "RESPOND"
+    },
+    {
+      "from": "REQUEST",
+      "event": "receive DCCP-Response",
+      "action": "send DCCP-Ack or DCCP-DataAck",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "receive valid DCCP-Ack",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "receive valid packet other than DCCP-Response, DCCP-Reset, or DCCP-Sync",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "server decides to close connection",
+      "action": "send DCCP-CloseReq",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "OPEN",
+      "event": "client or server decides to close connection",
+      "action": "send DCCP-Close",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "receive DCCP-Close",
+      "action": "send DCCP-Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "receive DCCP-Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "2MSL timer expires",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "REQUEST",
+      "event": "timeout or give up",
+      "action": "send DCCP-Reset with Reset Code 2 (Aborted)",
+      "to": "CLOSED"
+    },
+    {
+      "from": "RESPOND",
+      "event": "timeout",
+      "action": "send DCCP-Reset with Reset Code 2 (Aborted)",
+      "to": "CLOSED"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "timeout > 4MSL",
+      "action": "reset connection with Reset Code 2 (Aborted)",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "receive sequence-valid DCCP-CloseReq",
+      "action": "send DCCP-Sync and ignore DCCP-CloseReq",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "OPEN",
+      "event": "receive valid DCCP-Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "REQUEST",
+      "event": "receive valid DCCP-Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "RESPOND",
+      "event": "receive valid DCCP-Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "receive valid DCCP-Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "receive valid DCCP-Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "CLOSING",
+      "event": "receive valid DCCP-Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "REQUEST",
+      "event": "receive sequence-valid DCCP-Sync",
+      "action": "respond with DCCP-Reset",
+      "to": "REQUEST"
+    },
+    {
+      "from": "CLOSED",
+      "event": "receive DCCP-Data packet",
+      "action": "generate DCCP-Sync",
+      "to": "CLOSED"
+    },
+    {
+      "from": "OPEN",
+      "event": "server decides to close",
+      "action": "send DCCP-CloseReq",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "OPEN",
+      "event": "client decides to close",
+      "action": "send DCCP-Close",
+      "to": "CLOSING"
+    },
+    {
+      "from": "OPEN",
+      "event": "server decides to hold TIMEWAIT",
+      "action": "send DCCP-Close",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "receive valid DCCP-CloseReq",
+      "action": "respond with DCCP-Sync",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "receive valid DCCP-Close",
+      "action": "send DCCP-Reset with Reset Code 1",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "receive valid DCCP-CloseReq",
+      "action": "respond with DCCP-Sync",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "receive valid DCCP-Close",
+      "action": "send DCCP-Reset with Reset Code 1",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "2MSL wait time expires",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "REQUEST",
+      "event": "give up on connection",
+      "action": "send DCCP-Reset with Reset Code 2",
+      "to": "CLOSED"
+    },
+    {
+      "from": "REQUEST",
+      "event": "receive DCCP-Response",
+      "action": "send DCCP-Ack",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "timeout of not less than 4MSL",
+      "action": "send DCCP-Reset with Reset Code 2",
+      "to": "CLOSED"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "remain in PARTOPEN for more than 4MSL",
+      "action": "reset connection with Reset Code 2",
+      "to": "CLOSED"
+    },
+    {
+      "from": "STABLE",
+      "event": "snd Change L",
+      "action": "",
+      "to": "CHANGING"
+    },
+    {
+      "from": "STABLE",
+      "event": "rcv Change R",
+      "action": "calc new value, snd Confirm L",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "rcv Confirm R",
+      "action": "accept value",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "rcv empty Confirm R",
+      "action": "revert to old value",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "pref list changes",
+      "action": "",
+      "to": "UNSTABLE"
+    },
+    {
+      "from": "UNSTABLE",
+      "event": "snd Change L",
+      "action": "",
+      "to": "CHANGING"
+    },
+    {
+      "from": "OPEN",
+      "event": "receive sequence-invalid packet",
+      "action": "send DCCP-Sync",
+      "to": "OPEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "receive DCCP-Request",
+      "action": "send DCCP-Sync",
+      "to": "OPEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "receive DCCP-Sync",
+      "action": "send DCCP-Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "Send NDP Count = 0",
+      "event": "Change R(Send NDP Count, 1)",
+      "action": "",
+      "to": "Send NDP Count = 1"
+    },
+    {
+      "from": "CLOSED",
+      "event": "client decides to initiate a connection",
+      "action": "enters REQUEST state, chooses initial sequence number, sends DCCP-Request packet",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "receives DCCP-Response",
+      "action": "",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "gives up on DCCP-Requests after some time",
+      "action": "sends DCCP-Reset packet with Reset Code 2, Aborted",
+      "to": "CLOSED"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "receives valid packet other than DCCP-Response, DCCP-Reset, or DCCP-Sync from server",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "remains in PARTOPEN for more than 4MSL (8 minutes)",
+      "action": "resets connection with Reset Code 2, Aborted",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "receives DCCP-Request",
+      "action": "moves to RESPOND state, sends DCCP-Response message",
+      "to": "RESPOND"
+    },
+    {
+      "from": "RESPOND",
+      "event": "receives valid DCCP-Ack from client",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "timeout of not less than 4MSL (8 minutes)",
+      "action": "sends DCCP-Reset with Reset Code 2, Aborted",
+      "to": "CLOSED"
+    },
+    {
+      "from": "RESPOND",
+      "event": "refuses connection due to Destination Port not open, Bad Service Code, or Too Busy",
+      "action": "sends DCCP-Reset packet with Reset Code 7, 8, or 9",
+      "to": "LISTEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "Send DCCP-CloseReq",
+      "action": "",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "Receive DCCP-Close",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "OPEN",
+      "event": "Send DCCP-Close",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "Receive DCCP-Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "2MSL timeout",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "OPEN",
+      "event": "Receive DCCP-Close",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "Send DCCP-Reset",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "OPEN",
+      "event": "Receive DCCP-CloseReq",
+      "action": "Respond with DCCP-Sync",
+      "to": "OPEN"
+    },
+    {
+      "from": "CLOSED",
+      "event": "passive open",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "CLOSED",
+      "event": "active open",
+      "action": "snd Request",
+      "to": "REQUEST"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv Request",
+      "action": "snd Response",
+      "to": "RESPOND"
+    },
+    {
+      "from": "REQUEST",
+      "event": "rcv Response",
+      "action": "snd Ack",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "rcv Ack/DataAck",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "rcv packet",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "server active close",
+      "action": "snd CloseReq",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "OPEN",
+      "event": "active close or rcv CloseReq",
+      "action": "snd Close",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "rcv Close",
+      "action": "snd Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSING",
+      "event": "rcv Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "OPEN",
+      "event": "rcv Close",
+      "action": "snd Reset",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "P.type == Request or P contains a valid Init Cookie option",
+      "action": "Set S := new socket for this port pair; S.state = RESPOND; Choose S.ISS; Initialize S.GAR := S.ISS; Set S.ISR, S.GSR, S.SWL, S.SWH from packet or Init Cookies",
+      "to": "RESPOND"
+    },
+    {
+      "from": "REQUEST",
+      "event": "P.type == Response and S.AWL <= P.ackno <= S.AWH",
+      "action": "Set S.GSR, S.ISR, S.SWL, S.SWH; S.state := PARTOPEN; Set PARTOPEN timer",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "P.type == Reset and S.AWL <= P.ackno <= S.AWH",
+      "action": "Set S.GSR, S.ISR, S.SWL, S.SWH; Tear down connection; S.state := TIMEWAIT; Set TIMEWAIT timer",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "RESPOND",
+      "event": "P.type == Request",
+      "action": "Send Response, possibly containing Init Cookie; If Init Cookie was sent, Destroy S",
+      "to": "RESPOND"
+    },
+    {
+      "from": "RESPOND",
+      "event": "P.type != Request",
+      "action": "S.OSR := P.seqno; S.state := OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "P.type == Response",
+      "action": "Send Ack",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "P.type != Sync and P.type != Response",
+      "action": "S.OSR := P.seqno; S.state := OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "CLOSING",
+      "event": "P.type == CloseReq and S.state < CLOSEREQ",
+      "action": "Generate Close; S.state := CLOSING; Set CLOSING timer",
+      "to": "CLOSING"
+    },
+    {
+      "from": "OPEN",
+      "event": "P.type == Reset",
+      "action": "Tear down connection; S.state := TIMEWAIT; Set TIMEWAIT timer",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "bidirectional",
+      "event": "DCCP B goes quiescent",
+      "action": "",
+      "to": "unidirectional"
+    },
+    {
+      "from": "unidirectional",
+      "event": "acknowledge a DCCP-Data or DCCP-DataAck packet from DCCP B",
+      "action": "",
+      "to": "bidirectional"
+    },
+    {
+      "from": "Not Yet Received",
+      "event": "Packet received unmarked",
+      "action": "",
+      "to": "Received"
+    },
+    {
+      "from": "Not Yet Received",
+      "event": "Packet received ECN marked",
+      "action": "",
+      "to": "Received ECN Marked"
+    },
+    {
+      "from": "Received",
+      "event": "Packet reported as ECN marked in new Ack Vector",
+      "action": "",
+      "to": "Received ECN Marked"
+    },
+    {
+      "from": "Received ECN Marked",
+      "event": "Packet reported as unmarked in new Ack Vector",
+      "action": "",
+      "to": "Received"
+    },
+    {
+      "from": "Send Ack Vector 0",
+      "event": "Change R(Send Ack Vector, 1)",
+      "action": "DCCP A sends Ack Vector options on its acknowledgements",
+      "to": "Send Ack Vector 1"
+    },
+    {
+      "from": "ECN Incapable",
+      "event": "other endpoint sends data inappropriately",
+      "action": "send Data Dropped options with Drop Code 0",
+      "to": "ECN Incapable"
+    },
+    {
+      "from": "ECN Incapable",
+      "event": "verified aggression after multiple round-trip times",
+      "action": "reset the connection with Reset Code 11, Aggression Penalty",
+      "to": "Connection Reset"
+    },
+    {
+      "from": "LISTEN",
+      "event": "DCCP-Request",
+      "action": "send DCCP-Response",
+      "to": "RESPOND"
+    },
+    {
+      "from": "RESPOND",
+      "event": "valid DCCP-Ack",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "State 0",
+      "event": "Received State 0",
+      "action": "",
+      "to": "State 0"
+    },
+    {
+      "from": "State 0",
+      "event": "Received State 1",
+      "action": "",
+      "to": "State 0 or State 1"
+    },
+    {
+      "from": "State 0",
+      "event": "Received State 3",
+      "action": "",
+      "to": "State 0"
+    },
+    {
+      "from": "State 1",
+      "event": "Received State 0",
+      "action": "",
+      "to": "State 0 or State 1"
+    },
+    {
+      "from": "State 1",
+      "event": "Received State 1",
+      "action": "",
+      "to": "State 1"
+    },
+    {
+      "from": "State 1",
+      "event": "Received State 3",
+      "action": "",
+      "to": "State 1"
+    },
+    {
+      "from": "State 3",
+      "event": "Received State 0",
+      "action": "",
+      "to": "State 0"
+    },
+    {
+      "from": "State 3",
+      "event": "Received State 1",
+      "action": "",
+      "to": "State 1"
+    },
+    {
+      "from": "State 3",
+      "event": "Received State 3",
+      "action": "",
+      "to": "State 3"
+    }
+  ]
+}

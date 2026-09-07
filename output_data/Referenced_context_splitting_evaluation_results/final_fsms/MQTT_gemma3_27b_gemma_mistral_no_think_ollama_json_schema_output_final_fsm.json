@@ -1,0 +1,397 @@
+{
+  "states": [
+    "Connected",
+    "Not Connected",
+    "Authenticating",
+    "Token Validated",
+    "Token Invalid",
+    "Token acquisition",
+    "Access token issued",
+    "Introspection request (optional)",
+    "Introspection response (optional)",
+    "TLS:Anon,MQTT:None",
+    "TLS:Anon,MQTT:ace",
+    "TLS:Known(RPK/PSK),MQTT:none",
+    "TLS:Known(RPK/PSK),MQTT:ace",
+    "Client connects to Broker to publish token",
+    "Client disconnects from Broker",
+    "Client reconnects using client authentication",
+    "Client Authentication over TLS",
+    "Raw Public Key Mode",
+    "Pre-Shared Key Mode",
+    "Waiting for CONNACK",
+    "Disconnected",
+    "Authorized",
+    "Unauthorized",
+    "Authenticated",
+    "Not Authorized",
+    "Retained Message Active",
+    "New Session",
+    "Existing Session",
+    "mqtt_tls",
+    "Token validation",
+    "Reauthentication"
+  ],
+  "transitions": [
+    {
+      "from": "Not Connected",
+      "event": "Client Connection Request",
+      "action": "publish token to \"authz-info\"",
+      "to": "Authenticating"
+    },
+    {
+      "from": "Authenticating",
+      "event": "Broker receives token",
+      "action": "store and index token",
+      "to": "Token Validated"
+    },
+    {
+      "from": "Authenticating",
+      "event": "token is not valid",
+      "action": "discard token",
+      "to": "Token Invalid"
+    },
+    {
+      "from": "Token Validated",
+      "event": "Valid token",
+      "action": "resume communications",
+      "to": "Connected"
+    },
+    {
+      "from": "Token Invalid",
+      "event": "Invalid token",
+      "action": "send DISCONNECT packet with reason code 0x87",
+      "to": "Not Connected"
+    },
+    {
+      "from": "Token Invalid",
+      "event": "Invalid Payload",
+      "action": "send DISCONNECT packet with reason code 0x99",
+      "to": "Not Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "",
+      "action": "",
+      "to": "Connected"
+    },
+    {
+      "from": "Token acquisition",
+      "event": "Token request",
+      "action": "Verify request",
+      "to": "Access token issued"
+    },
+    {
+      "from": "Access token issued",
+      "event": "Introspection request",
+      "action": "RS-AS interface",
+      "to": "Introspection request (optional)"
+    },
+    {
+      "from": "Introspection request (optional)",
+      "event": "Introspection response",
+      "action": "RS-AS interface",
+      "to": "Introspection response (optional)"
+    },
+    {
+      "from": "TLS:Anon,MQTT:None",
+      "event": "Publishing to \"authz-info\" topic",
+      "action": "",
+      "to": "TLS:Known(RPK/PSK),MQTT:none"
+    },
+    {
+      "from": "TLS:Anon,MQTT:ace",
+      "event": "Token validation",
+      "action": "",
+      "to": "TLS:Known(RPK/PSK),MQTT:none"
+    },
+    {
+      "from": "TLS:Known(RPK/PSK),MQTT:none",
+      "event": "",
+      "action": "",
+      "to": "TLS:Known(RPK/PSK),MQTT:none"
+    },
+    {
+      "from": "TLS:Known(RPK/PSK),MQTT:ace",
+      "event": "",
+      "action": "token transported in CONNECT packet overwrites any permissions passed during the TLS authentication",
+      "to": "TLS:Known(RPK/PSK),MQTT:ace"
+    },
+    {
+      "from": "Client connects to Broker to publish token",
+      "event": "PUBLISH packet with invalid payload",
+      "action": "send a DISCONNECT with reason code 0x99 (Payload format invalid)",
+      "to": "Client disconnects from Broker"
+    },
+    {
+      "from": "Client connects to Broker to publish token",
+      "event": "PUBLISH packet with invalid token",
+      "action": "send a DISCONNECT packet with reason code 0x87 (Not authorized)",
+      "to": "Client disconnects from Broker"
+    },
+    {
+      "from": "Client connects to Broker to publish token",
+      "event": "PUBLISH packet with valid token",
+      "action": "",
+      "to": "Client disconnects from Broker"
+    },
+    {
+      "from": "Client disconnects from Broker",
+      "event": "",
+      "action": "",
+      "to": "Client reconnects using client authentication"
+    },
+    {
+      "from": "Client Authentication over TLS",
+      "event": "Client uploads access token",
+      "action": "publish to authz-info topic",
+      "to": "Client Authentication over TLS"
+    },
+    {
+      "from": "Client Authentication over TLS",
+      "event": "initiate handshake",
+      "action": "",
+      "to": "Raw Public Key Mode"
+    },
+    {
+      "from": "Client Authentication over TLS",
+      "event": "initiate handshake",
+      "action": "",
+      "to": "Pre-Shared Key Mode"
+    },
+    {
+      "from": "Raw Public Key Mode",
+      "event": "",
+      "action": "",
+      "to": "Raw Public Key Mode"
+    },
+    {
+      "from": "Pre-Shared Key Mode",
+      "event": "TLS 1.3 with pre-shared keys",
+      "action": "use PSK extension",
+      "to": "Pre-Shared Key Mode"
+    },
+    {
+      "from": "Pre-Shared Key Mode",
+      "event": "previously uploaded token",
+      "action": "create COSE_Key or JWK structure",
+      "to": "Pre-Shared Key Mode"
+    },
+    {
+      "from": "Pre-Shared Key Mode",
+      "event": "access token upload",
+      "action": "",
+      "to": "Pre-Shared Key Mode"
+    },
+    {
+      "from": "Waiting for CONNACK",
+      "event": "CONNACK packet received",
+      "action": "",
+      "to": "Authenticating"
+    },
+    {
+      "from": "Authenticating",
+      "event": "AUTH packet (reason code 0x18)",
+      "action": "",
+      "to": "Authenticating"
+    },
+    {
+      "from": "Authenticating",
+      "event": "Token validation success",
+      "action": "",
+      "to": "Connected"
+    },
+    {
+      "from": "Authenticating",
+      "event": "Token validation failure",
+      "action": "Send DISCONNECT packet",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "Reauthentication request",
+      "action": "",
+      "to": "Authenticating"
+    },
+    {
+      "from": "Connected",
+      "event": "PUBLISH or SUBSCRIBE",
+      "action": "introspect token or use cached validation result",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "",
+      "action": "set Session Present to 0",
+      "to": "Connected"
+    },
+    {
+      "from": "Connected",
+      "event": "",
+      "action": "set Session Present to 1",
+      "to": "Connected"
+    },
+    {
+      "from": "Unauthorized",
+      "event": "Authentication Failure",
+      "action": "respond with CONNACK reason code 0x87",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Unauthorized",
+      "event": "Authentication Failure",
+      "action": "trigger AS discovery, include User Property",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Authenticated",
+      "event": "CONNECT, PUBLISH, or SUBSCRIBE packet received or sent",
+      "action": "Check token expiration",
+      "to": "Not Authorized"
+    },
+    {
+      "from": "Authenticated",
+      "event": "PINGREQ packet received",
+      "action": "Check token expiration",
+      "to": "Not Authorized"
+    },
+    {
+      "from": "Authenticated",
+      "event": "Periodic check",
+      "action": "Check token expiration",
+      "to": "Not Authorized"
+    },
+    {
+      "from": "Not Authorized",
+      "event": "PUBACK or SUBACK",
+      "action": "Reauthentication",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "Reauthentication request (AUTH packet with reason code 0x19)",
+      "action": "Send AUTH packet with reason code 0x18 (Continue Authentication)",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Authenticated",
+      "event": "Reauthentication fails",
+      "action": "Send DISCONNECT packet with reason code 0x87 (Not Authorized)",
+      "to": "Not Authorized"
+    },
+    {
+      "from": "Connected",
+      "event": "Client DISCONNECT",
+      "action": "keep retained messages, MAY store Session State",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Disconnected",
+      "event": "network errors or server disconnection due to a protocol error",
+      "action": "send Will Message",
+      "to": "Disconnected"
+    },
+    {
+      "from": "Connected",
+      "event": "PUBLISH packet with RETAIN flag set",
+      "action": "store message",
+      "to": "Retained Message Active"
+    },
+    {
+      "from": "Retained Message Active",
+      "event": "new subscriber",
+      "action": "publish retained message",
+      "to": "Retained Message Active"
+    },
+    {
+      "from": "Retained Message Active",
+      "event": "token expiry or message expiry interval",
+      "action": "discard retained message",
+      "to": "Disconnected"
+    },
+    {
+      "from": "New Session",
+      "event": "CONNECT packet with User Name and Password",
+      "action": "resume communications",
+      "to": "Existing Session"
+    },
+    {
+      "from": "Existing Session",
+      "event": "Clean flag = 0",
+      "action": "resume communications",
+      "to": "Existing Session"
+    },
+    {
+      "from": "New Session",
+      "event": "CONNECT packet with User Name and Password",
+      "action": "create a new Session",
+      "to": "Existing Session"
+    },
+    {
+      "from": "Existing Session",
+      "event": "Client-Broker PUBLISH authorization failure",
+      "action": "disconnect the Client",
+      "to": "New Session"
+    },
+    {
+      "from": "Existing Session",
+      "event": "SUBSCRIBE authorization failure",
+      "action": "return 0x80 in SUBACK",
+      "to": "Existing Session"
+    },
+    {
+      "from": "Existing Session",
+      "event": "Broker-Client PUBLISH authorization failure",
+      "action": "disconnect the Client",
+      "to": "New Session"
+    },
+    {
+      "from": "New Session",
+      "event": "CONNECT without a token",
+      "action": "fail",
+      "to": "New Session"
+    },
+    {
+      "from": "TLS:Anon,MQTT:None",
+      "event": "publish to \"authz-info\" topic",
+      "action": "disconnect, reconnect using TLS:Known(RPK/PSK),MQTT:none",
+      "to": "TLS:Known(RPK/PSK),MQTT:none"
+    },
+    {
+      "from": "TLS:Anon,MQTT:ace",
+      "event": "token validation",
+      "action": "validate token",
+      "to": "Token validation"
+    },
+    {
+      "from": "TLS:Known(RPK/PSK),MQTT:none",
+      "event": "",
+      "action": "",
+      "to": "TLS:Known(RPK/PSK),MQTT:none"
+    },
+    {
+      "from": "TLS:Known(RPK/PSK),MQTT:ace",
+      "event": "",
+      "action": "token transported in CONNECT packet overwrites permissions",
+      "to": "TLS:Known(RPK/PSK),MQTT:ace"
+    },
+    {
+      "from": "Token validation",
+      "event": "token is valid",
+      "action": "",
+      "to": "TLS:Anon,MQTT:ace"
+    },
+    {
+      "from": "Token validation",
+      "event": "token is not valid",
+      "action": "discard token",
+      "to": "Token validation"
+    },
+    {
+      "from": "Reauthentication",
+      "event": "AUTH packet with reason code 0x19 (Reauthentication)",
+      "action": "transport new token",
+      "to": "Token validation"
+    }
+  ]
+}

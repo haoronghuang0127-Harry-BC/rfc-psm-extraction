@@ -1,0 +1,1078 @@
+{
+  "states": [
+    "SMTP client",
+    "SMTP server",
+    "Mail Transfer Agent",
+    "Mail User Agent",
+    "Message Store",
+    "Originating system",
+    "Delivery SMTP system",
+    "Relay SMTP system",
+    "Gateway SMTP system",
+    "Mailbox",
+    "Address",
+    "Initial",
+    "Mail Transaction",
+    "Data Transfer",
+    "Final",
+    "Initial State",
+    "Mail Transaction State",
+    "End of Mail Data State",
+    "Session Termination",
+    "MAIL Command",
+    "RCPT Command",
+    "DATA Command",
+    "Message Forwarding",
+    "Message Rejection",
+    "VRFY Command",
+    "EXPN Command",
+    "Relay SMTP Server",
+    "SMTP Client",
+    "Mail Submission Server",
+    "Mail Gateway",
+    "Message Originating SMTP System",
+    "Delivery SMTP Server",
+    "Forwarding System",
+    "Gateway SMTP",
+    "Intermediate Relay SMTP Server",
+    "Message Submission Servers",
+    "Message Originating SMTP Server",
+    "Relay SMTP",
+    "SMTP Servers",
+    "Undeliverable Mail Notification Message",
+    "SMTP Session",
+    "Connection Closed",
+    "Alias",
+    "List",
+    "Data State",
+    "End of Session",
+    "Session Initialized",
+    "Session Closed",
+    "Connection Establishment",
+    "Command Issued",
+    "Reply Received",
+    "Locating the Target Host",
+    "DNS Lookup",
+    "MX Record Found",
+    "CNAME Record Found",
+    "Non-existent Domain Error",
+    "Temporary Error",
+    "Empty List of MXs",
+    "Usable MX Records",
+    "Unusable MX Records",
+    "Address Resolution",
+    "Message Queued",
+    "Message Retried",
+    "Message Delivered",
+    "Message Relayed",
+    "Message Handled",
+    "Message Returned as Undeliverable",
+    "Accepted Message",
+    "Delivery Failure",
+    "Loop Detection",
+    "Message Dropping",
+    "Message Relay",
+    "Message Submission",
+    "Unsolicited Message",
+    "Ready",
+    "Closing Transmission Channel"
+  ],
+  "transitions": [
+    {
+      "from": "Initial",
+      "event": "EHLO",
+      "action": "Server responds with 250 OK",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "HELO",
+      "action": "Server responds with 250 OK",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "MAIL",
+      "action": "Server responds with 250 OK",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RCPT",
+      "action": "Server responds with 250 OK",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "DATA",
+      "action": "Server responds with 354 Start mail input",
+      "to": "Data Transfer"
+    },
+    {
+      "from": "Data Transfer",
+      "event": "<CRLF>.<CRLF>",
+      "action": "Server processes mail data",
+      "to": "Final"
+    },
+    {
+      "from": "Final",
+      "event": "QUIT",
+      "action": "Server responds with 221 Service closing transmission channel",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "RSET",
+      "action": "Server responds with 250 OK",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "NOOP",
+      "action": "Server responds with 250 OK",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "VRFY",
+      "action": "Server responds with 250 OK",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "EXPN",
+      "action": "Server responds with 250 OK",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "HELP",
+      "action": "Server responds with 211 or 214",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial State",
+      "event": "EHLO",
+      "action": "250 OK",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "HELO",
+      "action": "250 OK",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "MAIL",
+      "action": "250 OK",
+      "to": "Mail Transaction State"
+    },
+    {
+      "from": "Mail Transaction State",
+      "event": "RCPT",
+      "action": "250 OK",
+      "to": "Mail Transaction State"
+    },
+    {
+      "from": "Mail Transaction State",
+      "event": "DATA",
+      "action": "354 Start mail input",
+      "to": "End of Mail Data State"
+    },
+    {
+      "from": "End of Mail Data State",
+      "event": "<CRLF>.<CRLF>",
+      "action": "250 OK",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "RSET",
+      "action": "250 OK",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "QUIT",
+      "action": "221 OK",
+      "to": "End of Session"
+    },
+    {
+      "from": "Mail Transaction State",
+      "event": "RSET",
+      "action": "250 OK",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction State",
+      "event": "QUIT",
+      "action": "221 OK",
+      "to": "End of Session"
+    },
+    {
+      "from": "End of Mail Data State",
+      "event": "RSET",
+      "action": "250 OK",
+      "to": "Initial State"
+    },
+    {
+      "from": "End of Mail Data State",
+      "event": "QUIT",
+      "action": "221 OK",
+      "to": "End of Session"
+    },
+    {
+      "from": "Initial",
+      "event": "EHLO or HELO",
+      "action": "250 OK",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Initial",
+      "event": "QUIT",
+      "action": "221 OK",
+      "to": "Session Termination"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "MAIL",
+      "action": "250 OK",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RCPT",
+      "action": "250 OK",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "DATA",
+      "action": "354 Start mail input; end with <CRLF>.<CRLF>",
+      "to": "Data Transfer"
+    },
+    {
+      "from": "Data Transfer",
+      "event": "<CRLF>.<CRLF>",
+      "action": "250 OK",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RSET",
+      "action": "250 OK",
+      "to": "Initial"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "QUIT",
+      "action": "221 OK",
+      "to": "Session Termination"
+    },
+    {
+      "from": "Data Transfer",
+      "event": "QUIT",
+      "action": "221 OK",
+      "to": "Session Termination"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "MAIL",
+      "action": "reset state tables and buffers",
+      "to": "MAIL Command"
+    },
+    {
+      "from": "MAIL Command",
+      "event": "RCPT",
+      "action": "store the forward-path",
+      "to": "RCPT Command"
+    },
+    {
+      "from": "RCPT Command",
+      "event": "DATA",
+      "action": "consider all succeeding lines up to but not including the end of mail data indicator to be the message text",
+      "to": "DATA Command"
+    },
+    {
+      "from": "DATA Command",
+      "event": "<CRLF>.<CRLF>",
+      "action": "process the stored recipients and mail data",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Message Forwarding",
+      "event": "",
+      "action": "Provide address-updating information with a 251 code or forward silently and return a 250 code",
+      "to": "Message Forwarding"
+    },
+    {
+      "from": "Message Rejection",
+      "event": "",
+      "action": "Provide address-updating information with a 551 code or reject the message as undeliverable with a 550 code",
+      "to": "Message Rejection"
+    },
+    {
+      "from": "VRFY Command",
+      "event": "VRFY",
+      "action": "Return 250 with user mailbox or 553 with ambiguity or 550 with error",
+      "to": "VRFY Command"
+    },
+    {
+      "from": "EXPN Command",
+      "event": "EXPN",
+      "action": "Return 250 with mailing list members or 550 with error",
+      "to": "EXPN Command"
+    },
+    {
+      "from": "Relay SMTP Server",
+      "event": "",
+      "action": "accepts or rejects the task of relaying the mail",
+      "to": "SMTP Client"
+    },
+    {
+      "from": "Relay SMTP Server",
+      "event": "",
+      "action": "constructs an undeliverable mail notification message",
+      "to": "Undeliverable Mail Notification Message"
+    },
+    {
+      "from": "SMTP Client",
+      "event": "",
+      "action": "establishes a transmission channel to the next SMTP server",
+      "to": "Relay SMTP Server"
+    },
+    {
+      "from": "Mail Submission Server",
+      "event": "",
+      "action": "sends all messages to a single server for processing and subsequent distribution",
+      "to": "Relay SMTP Server"
+    },
+    {
+      "from": "Mail Gateway",
+      "event": "",
+      "action": "prepends a Received: line",
+      "to": "Mail Gateway"
+    },
+    {
+      "from": "Message Originating SMTP System",
+      "event": "",
+      "action": "sends a message that already contains a Return-path header field",
+      "to": "Message Originating SMTP System"
+    },
+    {
+      "from": "Delivery SMTP Server",
+      "event": "",
+      "action": "inserts a return-path line at the beginning of the mail data",
+      "to": "Delivery SMTP Server"
+    },
+    {
+      "from": "Forwarding System",
+      "event": "",
+      "action": "removes the return path and rebuilds the MAIL command",
+      "to": "Forwarding System"
+    },
+    {
+      "from": "Gateway SMTP",
+      "event": "",
+      "action": "inserts a return-path header field",
+      "to": "Gateway SMTP"
+    },
+    {
+      "from": "Intermediate Relay SMTP Server",
+      "event": "",
+      "action": "does not inspect the message data",
+      "to": "Intermediate Relay SMTP Server"
+    },
+    {
+      "from": "Message Submission Servers",
+      "event": "",
+      "action": "sends messages to a single server for processing and subsequent distribution",
+      "to": "Relay SMTP Server"
+    },
+    {
+      "from": "Message Originating SMTP Server",
+      "event": "",
+      "action": "sends a message that already contains a Return-path header field",
+      "to": "Message Originating SMTP Server"
+    },
+    {
+      "from": "Relay SMTP",
+      "event": "",
+      "action": "constructs an undeliverable mail notification message",
+      "to": "Undeliverable Mail Notification Message"
+    },
+    {
+      "from": "SMTP Server",
+      "event": "",
+      "action": "inserts trace information at the beginning of the message content",
+      "to": "SMTP Server"
+    },
+    {
+      "from": "SMTP Servers",
+      "event": "",
+      "action": "prepends Received lines to messages",
+      "to": "SMTP Servers"
+    },
+    {
+      "from": "SMTP Session",
+      "event": "QUIT",
+      "action": "221 reply",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "SMTP Session",
+      "event": "Shutdown",
+      "action": "421 response",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "SMTP Session",
+      "event": "Timeout",
+      "action": "",
+      "to": "Connection Closed"
+    },
+    {
+      "from": "SMTP Session",
+      "event": "Connection Close",
+      "action": "",
+      "to": "SMTP Session"
+    },
+    {
+      "from": "Initial State",
+      "event": "EHLO",
+      "action": "250 OK",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "HELO",
+      "action": "250 OK",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "MAIL",
+      "action": "250 OK",
+      "to": "Mail Transaction State"
+    },
+    {
+      "from": "Mail Transaction State",
+      "event": "RCPT",
+      "action": "250 OK",
+      "to": "Mail Transaction State"
+    },
+    {
+      "from": "Mail Transaction State",
+      "event": "DATA",
+      "action": "354 Start mail input",
+      "to": "Data State"
+    },
+    {
+      "from": "Data State",
+      "event": "<CRLF>.<CRLF>",
+      "action": "250 OK",
+      "to": "End of Mail Data State"
+    },
+    {
+      "from": "Initial State",
+      "event": "RSET",
+      "action": "250 OK",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction State",
+      "event": "RSET",
+      "action": "250 OK",
+      "to": "Initial State"
+    },
+    {
+      "from": "Data State",
+      "event": "RSET",
+      "action": "250 OK",
+      "to": "Initial State"
+    },
+    {
+      "from": "End of Mail Data State",
+      "event": "RSET",
+      "action": "250 OK",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "QUIT",
+      "action": "221 Service closing transmission channel",
+      "to": "End of Session"
+    },
+    {
+      "from": "Mail Transaction State",
+      "event": "QUIT",
+      "action": "221 Service closing transmission channel",
+      "to": "End of Session"
+    },
+    {
+      "from": "Data State",
+      "event": "QUIT",
+      "action": "221 Service closing transmission channel",
+      "to": "End of Session"
+    },
+    {
+      "from": "End of Mail Data State",
+      "event": "QUIT",
+      "action": "221 Service closing transmission channel",
+      "to": "End of Session"
+    },
+    {
+      "from": "Session Initialized",
+      "event": "EHLO",
+      "action": "clear all buffers and reset the state",
+      "to": "Session Initialized"
+    },
+    {
+      "from": "Session Initialized",
+      "event": "MAIL",
+      "action": "",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RSET",
+      "action": "",
+      "to": "Session Initialized"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "EHLO",
+      "action": "clear all buffers and reset the state",
+      "to": "Session Initialized"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "QUIT",
+      "action": "",
+      "to": "Session Closed"
+    },
+    {
+      "from": "Session Initialized",
+      "event": "QUIT",
+      "action": "",
+      "to": "Session Closed"
+    },
+    {
+      "from": "SMTP Server",
+      "event": "X command",
+      "action": "500 Command not recognized",
+      "to": "SMTP Server"
+    },
+    {
+      "from": "Connection Establishment",
+      "event": "",
+      "action": "S: 220",
+      "to": "Command Issued"
+    },
+    {
+      "from": "Connection Establishment",
+      "event": "",
+      "action": "E: 554",
+      "to": "Command Issued"
+    },
+    {
+      "from": "Command Issued",
+      "event": "EHLO or HELO",
+      "action": "S: 250",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "EHLO or HELO",
+      "action": "E: 504",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "EHLO or HELO",
+      "action": "E: 550",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "EHLO or HELO",
+      "action": "E: 502",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "MAIL",
+      "action": "S: 250",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "MAIL",
+      "action": "E: 552",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "MAIL",
+      "action": "E: 451",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "MAIL",
+      "action": "E: 452",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "MAIL",
+      "action": "E: 550",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "MAIL",
+      "action": "E: 553",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "MAIL",
+      "action": "E: 503",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "MAIL",
+      "action": "E: 455",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "MAIL",
+      "action": "E: 555",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "RCPT",
+      "action": "S: 250",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "RCPT",
+      "action": "S: 251",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "RCPT",
+      "action": "E: 550",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "RCPT",
+      "action": "E: 551",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "RCPT",
+      "action": "E: 552",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "RCPT",
+      "action": "E: 553",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "RCPT",
+      "action": "E: 450",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "RCPT",
+      "action": "E: 451",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "RCPT",
+      "action": "E: 452",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "RCPT",
+      "action": "E: 503",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "RCPT",
+      "action": "E: 455",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "RCPT",
+      "action": "E: 555",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "DATA",
+      "action": "I: 354 -> data -> S: 250",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "DATA",
+      "action": "I: 354 -> data -> E: 552",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "DATA",
+      "action": "I: 354 -> data -> E: 554",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "DATA",
+      "action": "I: 354 -> data -> E: 451",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "DATA",
+      "action": "I: 354 -> data -> E: 452",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "DATA",
+      "action": "I: 354 -> data -> E: 450",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "DATA",
+      "action": "I: 354 -> data -> E: 550",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "DATA",
+      "action": "E: 503",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "DATA",
+      "action": "E: 554",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "RSET",
+      "action": "S: 250",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "VRFY",
+      "action": "S: 250",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "VRFY",
+      "action": "S: 251",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "VRFY",
+      "action": "S: 252",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "VRFY",
+      "action": "E: 550",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "VRFY",
+      "action": "E: 551",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "VRFY",
+      "action": "E: 553",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "VRFY",
+      "action": "E: 502",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "VRFY",
+      "action": "E: 504",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "EXPN",
+      "action": "S: 250",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "EXPN",
+      "action": "S: 252",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "EXPN",
+      "action": "E: 550",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "EXPN",
+      "action": "E: 500",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "EXPN",
+      "action": "E: 502",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "EXPN",
+      "action": "E: 504",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "HELP",
+      "action": "S: 211",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "HELP",
+      "action": "S: 214",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "HELP",
+      "action": "E: 502",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "HELP",
+      "action": "E: 504",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "NOOP",
+      "action": "S: 250",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Command Issued",
+      "event": "QUIT",
+      "action": "S: 221",
+      "to": "Reply Received"
+    },
+    {
+      "from": "Locating the Target Host",
+      "event": "DNS lookup performed",
+      "action": "Resolve domain name",
+      "to": "DNS Lookup"
+    },
+    {
+      "from": "DNS Lookup",
+      "event": "MX record found",
+      "action": "Process MX record",
+      "to": "MX Record Found"
+    },
+    {
+      "from": "DNS Lookup",
+      "event": "CNAME record found",
+      "action": "Process CNAME record",
+      "to": "CNAME Record Found"
+    },
+    {
+      "from": "DNS Lookup",
+      "event": "Non-existent domain error",
+      "action": "Report error",
+      "to": "Non-existent Domain Error"
+    },
+    {
+      "from": "DNS Lookup",
+      "event": "Temporary error",
+      "action": "Queue message",
+      "to": "Message Queued"
+    },
+    {
+      "from": "DNS Lookup",
+      "event": "Empty list of MXs",
+      "action": "Treat as implicit MX",
+      "to": "Empty List of MXs"
+    },
+    {
+      "from": "MX Record Found",
+      "event": "Usable MX records",
+      "action": "Proceed with address resolution",
+      "to": "Usable MX Records"
+    },
+    {
+      "from": "MX Record Found",
+      "event": "Unusable MX records",
+      "action": "Report error",
+      "to": "Unusable MX Records"
+    },
+    {
+      "from": "Usable MX Records",
+      "event": "Address resolution successful",
+      "action": "Attempt delivery",
+      "to": "Address Resolution"
+    },
+    {
+      "from": "Message Queued",
+      "event": "Retry attempt",
+      "action": "Retry delivery",
+      "to": "Message Retried"
+    },
+    {
+      "from": "Address Resolution",
+      "event": "Delivery successful",
+      "action": "Deliver message",
+      "to": "Message Delivered"
+    },
+    {
+      "from": "Address Resolution",
+      "event": "Relay message",
+      "action": "Relay message",
+      "to": "Message Relayed"
+    },
+    {
+      "from": "Message Relayed",
+      "event": "Message handled",
+      "action": "Handle message",
+      "to": "Message Handled"
+    },
+    {
+      "from": "Message Relayed",
+      "event": "Message undeliverable",
+      "action": "Return message as undeliverable",
+      "to": "Message Returned as Undeliverable"
+    },
+    {
+      "from": "Accepted Message",
+      "event": "Delivery Failure",
+      "action": "Formulate and mail a notification message",
+      "to": "Delivery Failure"
+    },
+    {
+      "from": "Accepted Message",
+      "event": "Loop Detection",
+      "action": "Reject the message",
+      "to": "Loop Detection"
+    },
+    {
+      "from": "Accepted Message",
+      "event": "Unsolicited Message",
+      "action": "Drop the message without notification",
+      "to": "Message Dropping"
+    },
+    {
+      "from": "Accepted Message",
+      "event": "Message Relay",
+      "action": "Relay the message",
+      "to": "Message Relay"
+    },
+    {
+      "from": "Accepted Message",
+      "event": "Message Submission",
+      "action": "Complete the message if necessary",
+      "to": "Message Submission"
+    },
+    {
+      "from": "Accepted Message",
+      "event": "Message Rejection",
+      "action": "Reject the message",
+      "to": "Message Rejection"
+    },
+    {
+      "from": "Ready",
+      "event": "EHLO",
+      "action": "250-foo.com greets bar.com\n250-8BITMIME\n250-SIZE\n250-DSN\n250 HELP",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "MAIL FROM",
+      "action": "250 OK",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RCPT TO",
+      "action": "250 OK",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RCPT TO",
+      "action": "550 No such user here",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "DATA",
+      "action": "354 Start mail input; end with <CRLF>.<CRLF>",
+      "to": "Data Input"
+    },
+    {
+      "from": "Data Input",
+      "event": ".",
+      "action": "250 OK",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "RSET",
+      "action": "250 OK",
+      "to": "Mail Transaction"
+    },
+    {
+      "from": "Mail Transaction",
+      "event": "QUIT",
+      "action": "221 foo.com Service closing transmission channel",
+      "to": "Closing Transmission Channel"
+    }
+  ]
+}

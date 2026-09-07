@@ -1,0 +1,434 @@
+{
+  "states": [
+    "DCCP A",
+    "DCCP B",
+    "HC-Sender",
+    "HC-Receiver",
+    "CLOSED",
+    "LISTEN",
+    "REQUEST",
+    "RESPOND",
+    "PARTOPEN",
+    "OPEN",
+    "CLOSEREQ",
+    "CLOSING",
+    "TIMEWAIT",
+    "DCCP-Response",
+    "Initial",
+    "Server wants to close the connection but does not want to hold its TIMEWAIT state",
+    "Negotiation Initiation",
+    "Negotiation Completion",
+    "Negotiation in Progress",
+    "Invalid Change Option Received",
+    "STABLE",
+    "CHANGING",
+    "UNSTABLE",
+    "DCCP Endpoint",
+    "Normal",
+    "ECN Capable",
+    "ECN Incapable",
+    "New Connection",
+    "Ack Ratio Controlled",
+    "HC-Receiver (CCID 2)",
+    "Bidirectional Connection",
+    "Unidirectional Connection"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "DCCP-Request",
+      "action": "Send DCCP-Request",
+      "to": "REQUEST"
+    },
+    {
+      "from": "LISTEN",
+      "event": "DCCP-Request",
+      "action": "Send DCCP-Response",
+      "to": "RESPOND"
+    },
+    {
+      "from": "REQUEST",
+      "event": "DCCP-Response",
+      "action": "Send DCCP-Ack",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "DCCP-Ack",
+      "action": "Send DCCP-Data",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "DCCP-Ack",
+      "action": "Send DCCP-Data",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "DCCP-CloseReq",
+      "action": "Send DCCP-CloseReq",
+      "to": "CLOSING"
+    },
+    {
+      "from": "OPEN",
+      "event": "DCCP-Close",
+      "action": "Send DCCP-Close",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "DCCP-Reset",
+      "action": "Send DCCP-Reset",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "OPEN",
+      "event": "DCCP-Close",
+      "action": "Send DCCP-Close",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "DCCP-Response",
+      "event": "DCCP-Request",
+      "action": "Send DCCP-Response",
+      "to": "DCCP-Response"
+    },
+    {
+      "from": "Initial",
+      "event": "DCCP-Close",
+      "action": "elicit a DCCP-Reset packet",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial",
+      "event": "DCCP-CloseReq",
+      "action": "indicates that the server wants to close the connection but does not want to hold its TIMEWAIT state",
+      "to": "Server wants to close the connection but does not want to hold its TIMEWAIT state"
+    },
+    {
+      "from": "LISTEN",
+      "event": "DCCP-Request",
+      "action": "",
+      "to": "RESPOND"
+    },
+    {
+      "from": "RESPOND",
+      "event": "DCCP-Ack",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "DCCP-CloseReq",
+      "action": "",
+      "to": "CLOSEREQ"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "DCCP-Close",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "DCCP-Reset",
+      "action": "",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "OPEN",
+      "event": "DCCP-Close",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "DCCP-Reset",
+      "action": "",
+      "to": "CLOSED"
+    },
+    {
+      "from": "REQUEST",
+      "event": "DCCP-Response",
+      "action": "",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "valid packet other than DCCP-Response, DCCP-Reset, or DCCP-Sync",
+      "action": "",
+      "to": "OPEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "timeout",
+      "action": "send DCCP-Reset with Reset Code 2, Aborted",
+      "to": "CLOSED"
+    },
+    {
+      "from": "STABLE",
+      "event": "rcv Change R",
+      "action": "calc new value, snd Confirm L",
+      "to": "CHANGING"
+    },
+    {
+      "from": "STABLE",
+      "event": "rcv Confirm R",
+      "action": "ignore",
+      "to": "STABLE"
+    },
+    {
+      "from": "STABLE",
+      "event": "rcv Change L",
+      "action": "calc new value, snd Confirm R",
+      "to": "CHANGING"
+    },
+    {
+      "from": "CHANGING",
+      "event": "rcv Confirm R",
+      "action": "accept value",
+      "to": "STABLE"
+    },
+    {
+      "from": "CHANGING",
+      "event": "rcv Change R",
+      "action": "calc new value, snd Confirm L",
+      "to": "CHANGING"
+    },
+    {
+      "from": "CHANGING",
+      "event": "pref list changes",
+      "action": "transition to UNSTABLE",
+      "to": "UNSTABLE"
+    },
+    {
+      "from": "UNSTABLE",
+      "event": "snd Change L",
+      "action": "transition to CHANGING",
+      "to": "CHANGING"
+    },
+    {
+      "from": "Negotiation Initiation",
+      "event": "Change L option",
+      "action": "retransmit until response",
+      "to": "Negotiation Completion"
+    },
+    {
+      "from": "Negotiation Initiation",
+      "event": "Change R option",
+      "action": "retransmit until response",
+      "to": "Negotiation Completion"
+    },
+    {
+      "from": "Negotiation in Progress",
+      "event": "Change R",
+      "action": "Send Confirm R option",
+      "to": "Negotiation in Progress"
+    },
+    {
+      "from": "Negotiation in Progress",
+      "event": "Change L",
+      "action": "Send Confirm L option",
+      "to": "Negotiation in Progress"
+    },
+    {
+      "from": "Negotiation in Progress",
+      "event": "Invalid Change option",
+      "action": "Send empty Confirm option",
+      "to": "Invalid Change Option Received"
+    },
+    {
+      "from": "HC-Receiver (CCID 2)",
+      "event": "receives Ack Vector",
+      "action": "resend Ack Vector information",
+      "to": "HC-Receiver (CCID 2)"
+    },
+    {
+      "from": "HC-Sender",
+      "event": "HC-Receiver requests ack",
+      "action": "inform HC-Receiver that ack received",
+      "to": "HC-Sender"
+    },
+    {
+      "from": "Bidirectional Connection",
+      "event": "",
+      "action": "acks-of-acks contained in normal acknowledgements",
+      "to": "Bidirectional Connection"
+    },
+    {
+      "from": "Bidirectional Connection",
+      "event": "DCCP B goes quiescent",
+      "action": "transition to unidirectional",
+      "to": "Unidirectional Connection"
+    },
+    {
+      "from": "Unidirectional Connection",
+      "event": "DCCP A receives DCCP-Data or DCCP-DataAck from DCCP B",
+      "action": "transition to bidirectional",
+      "to": "Bidirectional Connection"
+    },
+    {
+      "from": "Unidirectional Connection",
+      "event": "",
+      "action": "CCID defines acks-of-acks generation",
+      "to": "Unidirectional Connection"
+    },
+    {
+      "from": "DCCP A",
+      "event": "DCCP-Sync",
+      "action": "elicit an acknowledgement",
+      "to": "DCCP A"
+    },
+    {
+      "from": "DCCP B",
+      "event": "DCCP A acknowledges DCCP B's acknowledgements",
+      "action": "free up information about previously acknowledged data packets from A; shrink the size of future acknowledgements; manipulate the rate at which future acknowledgements are sent",
+      "to": "DCCP B"
+    },
+    {
+      "from": "New Connection",
+      "event": "Connection Establishment",
+      "action": "Set Ack Ratio to 2",
+      "to": "New Connection"
+    },
+    {
+      "from": "New Connection",
+      "event": "Congestion",
+      "action": "Raise Ack Ratio",
+      "to": "Ack Ratio Controlled"
+    },
+    {
+      "from": "Ack Ratio Controlled",
+      "event": "No Congestion",
+      "action": "Lower Ack Ratio",
+      "to": "New Connection"
+    },
+    {
+      "from": "LISTEN",
+      "event": "Request",
+      "action": "Generate new socket, set S.state = RESPOND, choose S.ISS, initialize S.GAR, set S.ISR, S.GSR, S.SWL, S.SWH",
+      "to": "RESPOND"
+    },
+    {
+      "from": "LISTEN",
+      "event": "Reset",
+      "action": "Generate Reset(No Connection)",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "REQUEST",
+      "event": "Response",
+      "action": "Set sequence number variables, continue with PARTOPEN",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "REQUEST",
+      "event": "Reset",
+      "action": "Generate Reset(Packet Error)",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "OPEN",
+      "event": "CloseReq",
+      "action": "Generate Close",
+      "to": "CLOSING"
+    },
+    {
+      "from": "OPEN",
+      "event": "Close",
+      "action": "Generate Reset(Closed)",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "CLOSEREQ",
+      "event": "Close",
+      "action": "Generate Close",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "Reset",
+      "action": "snd Reset",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "2MSL timer expires",
+      "action": "transition to CLOSED",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "Request or contains a valid Init Cookie option",
+      "action": "Set S := new socket for this port pair; S.state = RESPOND; Choose S.ISS; Initialize S.GAR := S.ISS; Set S.ISR, S.GSR, S.SWL, S.SWH from packet or Init Cookies; Continue with S.state == RESPOND",
+      "to": "RESPOND"
+    },
+    {
+      "from": "REQUEST",
+      "event": "Response or Reset and S.AWL <= P.ackno <= S.AWH",
+      "action": "Set S.GSR, S.ISR, S.SWL, S.SWH",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "Response or Reset and not (S.AWL <= P.ackno <= S.AWH)",
+      "action": "Generate Reset(Packet Error)",
+      "to": "REQUEST"
+    },
+    {
+      "from": "REQUEST",
+      "event": "",
+      "action": "S.state := PARTOPEN; Set PARTOPEN timer; Continue with S.state == PARTOPEN",
+      "to": "PARTOPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "Response",
+      "action": "Send Ack",
+      "to": "OPEN"
+    },
+    {
+      "from": "PARTOPEN",
+      "event": "Sync",
+      "action": "S.OSR := P.seqno; S.state := OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "Request",
+      "action": "Send Response, possibly containing Init Cookie; If Init Cookie was sent, Destroy S and return",
+      "to": "LISTEN"
+    },
+    {
+      "from": "RESPOND",
+      "event": "",
+      "action": "S.OSR := P.seqno; S.state := OPEN",
+      "to": "OPEN"
+    },
+    {
+      "from": "OPEN",
+      "event": "CloseReq",
+      "action": "Generate Close",
+      "to": "CLOSING"
+    },
+    {
+      "from": "OPEN",
+      "event": "Close",
+      "action": "Generate Reset(Closed); Tear down connection",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "TIMEWAIT",
+      "event": "packet",
+      "action": "Generate Reset(No Connection)",
+      "to": "TIMEWAIT"
+    },
+    {
+      "from": "CLOSED",
+      "event": "Reset",
+      "action": "transition to TIMEWAIT",
+      "to": "TIMEWAIT"
+    }
+  ]
+}

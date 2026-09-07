@@ -1,0 +1,343 @@
+{
+  "states": [
+    "Initial State",
+    "Mail Transaction In Progress",
+    "Mail Transaction in Progress",
+    "Mail Transaction State",
+    "Mail Transaction Open",
+    "Mail Transaction Complete",
+    "initialized",
+    "mail_transaction_open",
+    "CONNECTION ESTABLISHMENT",
+    "EHLO or HELO",
+    "MAIL",
+    "RCPT",
+    "DATA",
+    "RSET",
+    "VRFY",
+    "EXPN",
+    "HELP",
+    "NOOP",
+    "QUIT"
+  ],
+  "transitions": [
+    {
+      "from": "Initial State",
+      "event": "EHLO or HELO",
+      "action": "clear all buffers and reset state tables",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "MAIL",
+      "action": "reset reverse-path buffer, forward-path buffer, mail data buffer; insert reverse-path information",
+      "to": "Mail Transaction In Progress"
+    },
+    {
+      "from": "Mail Transaction In Progress",
+      "event": "RCPT",
+      "action": "append forward-path argument to forward-path buffer",
+      "to": "Mail Transaction In Progress"
+    },
+    {
+      "from": "Mail Transaction In Progress",
+      "event": "DATA",
+      "action": "process stored recipients and mail data; clear buffers",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction In Progress",
+      "event": "RSET",
+      "action": "discard stored sender, recipients, and mail data; clear all buffers and state tables",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction In Progress",
+      "event": "EHLO (re-issued)",
+      "action": "clear all buffers and reset the state exactly as if a RSET command had been issued",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "EHLO or HELO",
+      "action": "Confirm initial state, clear buffers and state tables",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "RCPT",
+      "action": "Append forward-path argument to forward-path buffer",
+      "to": "Mail Transaction in Progress"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "DATA",
+      "action": "Append mail data to mail data buffer; upon completion, process transaction and clear buffers",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "EHLO",
+      "action": "Clear all buffers and reset state exactly as if a RSET command had been issued",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction in Progress",
+      "event": "QUIT",
+      "action": "Abort any current uncompleted mail transaction",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "EHLO",
+      "action": "clear all buffers and state tables",
+      "to": "Mail Transaction State"
+    },
+    {
+      "from": "Mail Transaction State",
+      "event": "RSET",
+      "action": "discard stored sender, recipients, and mail data; clear all buffers and state tables",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction State",
+      "event": "EHLO",
+      "action": "clear all buffers and reset the state exactly as if a RSET command had been issued",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction State",
+      "event": "QUIT",
+      "action": "abort any current uncompleted mail transaction; send 221 OK reply and close transmission channel",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction Open",
+      "event": "MAIL command",
+      "action": "reset all state tables and buffers",
+      "to": "Mail Transaction Open"
+    },
+    {
+      "from": "Mail Transaction Open",
+      "event": "RCPT command",
+      "action": "store forward-path",
+      "to": "Mail Transaction Open"
+    },
+    {
+      "from": "Mail Transaction Open",
+      "event": "DATA command",
+      "action": "consider succeeding lines as message text until end of mail data indicator",
+      "to": "Mail Transaction Complete"
+    },
+    {
+      "from": "Mail Transaction Complete",
+      "event": "end of mail data indicator",
+      "action": "confirm transaction and process stored recipients and mail data",
+      "to": "Mail Transaction Open"
+    },
+    {
+      "from": "Initial State",
+      "event": "EHLO",
+      "action": "clear all buffers and state tables",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "HELO",
+      "action": "clear all buffers and state tables",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "RSET",
+      "action": "no effect (buffers already cleared)",
+      "to": "Initial State"
+    },
+    {
+      "from": "Initial State",
+      "event": "MAIL",
+      "action": "clear reverse-path, forward-path, and mail data buffers; insert reverse-path from argument",
+      "to": "Mail Transaction Open"
+    },
+    {
+      "from": "Mail Transaction Open",
+      "event": "RCPT",
+      "action": "append forward-path to forward-path buffer",
+      "to": "Mail Transaction Open"
+    },
+    {
+      "from": "Mail Transaction Open",
+      "event": "DATA",
+      "action": "append mail data to mail data buffer; clear buffers on completion",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction Open",
+      "event": "RSET",
+      "action": "discard stored sender, recipients, and mail data; clear all buffers and state tables",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction Open",
+      "event": "EHLO",
+      "action": "clear all buffers and reset state exactly as if RSET had been issued",
+      "to": "Initial State"
+    },
+    {
+      "from": "Mail Transaction Open",
+      "event": "QUIT",
+      "action": "abort any current uncompleted mail transaction",
+      "to": "Initial State"
+    },
+    {
+      "from": "initialized",
+      "event": "EHLO",
+      "action": "clear all buffers and reset the state exactly as if a RSET command had been issued",
+      "to": "initialized"
+    },
+    {
+      "from": "initialized",
+      "event": "MAIL",
+      "action": "begins a mail transaction",
+      "to": "mail_transaction_open"
+    },
+    {
+      "from": "mail_transaction_open",
+      "event": "RSET",
+      "action": "aborts the transaction",
+      "to": "initialized"
+    },
+    {
+      "from": "mail_transaction_open",
+      "event": "EHLO",
+      "action": "clear all buffers and reset the state exactly as if a RSET command had been issued",
+      "to": "initialized"
+    },
+    {
+      "from": "mail_transaction_open",
+      "event": "QUIT",
+      "action": "connection closure",
+      "to": "initialized"
+    },
+    {
+      "from": "CONNECTION ESTABLISHMENT",
+      "event": "",
+      "action": "S: 220",
+      "to": "EHLO or HELO"
+    },
+    {
+      "from": "CONNECTION ESTABLISHMENT",
+      "event": "",
+      "action": "E: 554",
+      "to": "CONNECTION ESTABLISHMENT"
+    },
+    {
+      "from": "EHLO or HELO",
+      "event": "",
+      "action": "S: 250",
+      "to": "MAIL"
+    },
+    {
+      "from": "EHLO or HELO",
+      "event": "",
+      "action": "E: 504, 550, 502",
+      "to": "CONNECTION ESTABLISHMENT"
+    },
+    {
+      "from": "MAIL",
+      "event": "",
+      "action": "S: 250",
+      "to": "RCPT"
+    },
+    {
+      "from": "MAIL",
+      "event": "",
+      "action": "E: 552, 451, 452, 550, 553, 503, 455, 555",
+      "to": "CONNECTION ESTABLISHMENT"
+    },
+    {
+      "from": "RCPT",
+      "event": "",
+      "action": "S: 250, 251",
+      "to": "DATA"
+    },
+    {
+      "from": "RCPT",
+      "event": "",
+      "action": "E: 550, 551, 552, 553, 450, 451, 452, 503, 455, 555",
+      "to": "CONNECTION ESTABLISHMENT"
+    },
+    {
+      "from": "DATA",
+      "event": "",
+      "action": "I: 354 -> data",
+      "to": "DATA"
+    },
+    {
+      "from": "DATA",
+      "event": "",
+      "action": "S: 250",
+      "to": "MAIL"
+    },
+    {
+      "from": "DATA",
+      "event": "",
+      "action": "E: 552, 554, 451, 452, 450, 550",
+      "to": "CONNECTION ESTABLISHMENT"
+    },
+    {
+      "from": "RSET",
+      "event": "",
+      "action": "S: 250",
+      "to": "MAIL"
+    },
+    {
+      "from": "VRFY",
+      "event": "",
+      "action": "S: 250, 251, 252",
+      "to": "MAIL"
+    },
+    {
+      "from": "VRFY",
+      "event": "",
+      "action": "E: 550, 551, 553, 502, 504",
+      "to": "CONNECTION ESTABLISHMENT"
+    },
+    {
+      "from": "EXPN",
+      "event": "",
+      "action": "S: 250, 252",
+      "to": "MAIL"
+    },
+    {
+      "from": "EXPN",
+      "event": "",
+      "action": "E: 550, 500, 502, 504",
+      "to": "CONNECTION ESTABLISHMENT"
+    },
+    {
+      "from": "HELP",
+      "event": "",
+      "action": "S: 211, 214",
+      "to": "MAIL"
+    },
+    {
+      "from": "HELP",
+      "event": "",
+      "action": "E: 502, 504",
+      "to": "CONNECTION ESTABLISHMENT"
+    },
+    {
+      "from": "NOOP",
+      "event": "",
+      "action": "S: 250",
+      "to": "MAIL"
+    },
+    {
+      "from": "QUIT",
+      "event": "",
+      "action": "S: 221",
+      "to": "CONNECTION ESTABLISHMENT"
+    }
+  ]
+}

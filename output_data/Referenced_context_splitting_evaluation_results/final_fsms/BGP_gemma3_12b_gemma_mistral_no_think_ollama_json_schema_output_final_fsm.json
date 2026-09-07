@@ -1,0 +1,181 @@
+{
+  "states": [
+    "Adj-RIB-In",
+    "Adj-RIB-Out",
+    "Loc-RIB",
+    "BGP speaking system",
+    "Connection Established",
+    "Connection Live",
+    "Connection Error",
+    "CLOSED",
+    "OpenSent",
+    "OpenConfirm",
+    "Established",
+    "Idle",
+    "Connect",
+    "Active",
+    "Decision Process",
+    "Phase 1",
+    "Phase 2",
+    "Phase 3",
+    "BGP FSM"
+  ],
+  "transitions": [
+    {
+      "from": "BGP speaking system",
+      "event": "exchange network reachability information",
+      "action": "advertise routes",
+      "to": "Connection Established"
+    },
+    {
+      "from": "Connection Established",
+      "event": "initial data flow",
+      "action": "send Adj-Ribs-Out",
+      "to": "Connection Live"
+    },
+    {
+      "from": "Connection Live",
+      "event": "periodic KEEPALIVE messages",
+      "action": "maintain connection",
+      "to": "Connection Live"
+    },
+    {
+      "from": "Connection Live",
+      "event": "error condition",
+      "action": "send NOTIFICATION message and close connection",
+      "to": "Connection Error"
+    },
+    {
+      "from": "CLOSED",
+      "event": "TCP connection established",
+      "action": "Send OPEN message",
+      "to": "OpenSent"
+    },
+    {
+      "from": "OpenSent",
+      "event": "Receive OPEN message",
+      "action": "Send KEEPALIVE message",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "Receive KEEPALIVE message",
+      "action": "Maintain connection",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "Hold Timer Expired",
+      "action": "Send NOTIFICATION message with Cease error",
+      "to": "CLOSED"
+    },
+    {
+      "from": "Idle",
+      "event": "ManualStart",
+      "action": "initializes all BGP resources, sets ConnectRetryCounter to zero, starts the ConnectRetryTimer, initiates a TCP connection, listens for a connection, changes state to Connect",
+      "to": "Connect"
+    },
+    {
+      "from": "Idle",
+      "event": "AutomaticStart",
+      "action": "initializes all BGP resources, sets ConnectRetryCounter to zero, starts the ConnectRetryTimer, initiates a TCP connection, listens for a connection, changes state to Connect",
+      "to": "Connect"
+    },
+    {
+      "from": "Idle",
+      "event": "ManualStart_with_PassiveTcpEstablishment",
+      "action": "initializes all BGP resources, sets the ConnectRetryCounter to zero, starts the ConnectRetryTimer, listens for a connection, changes state to Active",
+      "to": "Active"
+    },
+    {
+      "from": "Idle",
+      "event": "AutomaticStart_with_PassiveTcpEstablishment",
+      "action": "initializes all BGP resources, sets the ConnectRetryCounter to zero, starts the ConnectRetryTimer, listens for a connection, changes state to Active",
+      "to": "Active"
+    },
+    {
+      "from": "Connect",
+      "event": "ManualStop",
+      "action": "drops the TCP connection, releases all BGP resources, sets ConnectRetryCounter to zero, stops the ConnectRetryTimer and sets ConnectRetryTimer to zero, changes state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "ConnectRetryTimer_Expires",
+      "action": "drops the TCP connection, restarts the ConnectRetryTimer, stops the DelayOpenTimer and resets the timer to zero, initiates a TCP connection, continues to listen for a connection, stays in the Connect state",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "DelayOpenTimer_Expires",
+      "action": "sends an OPEN message to its peer, sets the HoldTimer to a large value, changes its state to OpenSent",
+      "to": "OpenSent"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "receipt of an OPEN message",
+      "action": "compare BGP Identifiers; close existing connection and accept new connection if local BGP Identifier is less than remote one; otherwise, close newly created connection and continue using existing one",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "Established",
+      "event": "connection collision",
+      "action": "close newly created connection",
+      "to": "Established"
+    },
+    {
+      "from": "Decision Process",
+      "event": "UPDATE message",
+      "action": "calculate degree of preference",
+      "to": "Phase 1"
+    },
+    {
+      "from": "Phase 1",
+      "event": "new route or replacement route",
+      "action": "locks Adj-RIB-In",
+      "to": "Phase 2"
+    },
+    {
+      "from": "Phase 2",
+      "event": "completion of Phase 1",
+      "action": "chooses best route",
+      "to": "Phase 3"
+    },
+    {
+      "from": "Phase 3",
+      "event": "Loc-RIB modification",
+      "action": "advertises routes",
+      "to": "Phase 3"
+    },
+    {
+      "from": "Active",
+      "event": "ConnectRetryTimer_Expires",
+      "action": "restarts the ConnectRetryTimer, initiates a TCP connection, continues to listen for a connection, changes its state to Connect",
+      "to": "Connect"
+    },
+    {
+      "from": "Active",
+      "event": "DelayOpenTimer_Expires",
+      "action": "sets the ConnectRetryTimer to zero, stops and clears the DelayOpenTimer, completes the BGP initialization, sends the OPEN message to its peer, sets its hold timer to a large value, changes its state to OpenSent",
+      "to": "OpenSent"
+    },
+    {
+      "from": "OpenSent",
+      "event": "HoldTimer_Expires",
+      "action": "sends a NOTIFICATION message with the Error Code Hold Timer Expired, sets the ConnectRetryTimer to zero, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter, changes its state to Idle",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "KeepaliveTimer_Expires",
+      "action": "sends a KEEPALIVE message, restarts its KeepaliveTimer",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "KeepaliveTimer_Expires",
+      "action": "sends a KEEPALIVE message, restarts its KeepaliveTimer",
+      "to": "Established"
+    }
+  ]
+}

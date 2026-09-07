@@ -1,0 +1,156 @@
+{
+  "states": [
+    "Control Connection Established",
+    "Control Connection Down",
+    "idle",
+    "wait_ctl_reply",
+    "established",
+    "wait_stop_reply",
+    "Wait-Connect",
+    "Wait-Disconnect",
+    "Session Startup",
+    "Transmitting Data",
+    "Window Overflow",
+    "Time-Out Occurs"
+  ],
+  "transitions": [
+    {
+      "from": "Control Connection Established",
+      "event": "Stop-Control-Connection-Request",
+      "action": "clear active user calls",
+      "to": "Control Connection Down"
+    },
+    {
+      "from": "Control Connection Down",
+      "event": "",
+      "action": "",
+      "to": "Control Connection Down"
+    },
+    {
+      "from": "idle",
+      "event": "TCP Open Indication",
+      "action": "Send Start Control Connection Request",
+      "to": "wait_ctl_reply"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Start-Control-Connection-Reply",
+      "action": "examine for compatible version",
+      "to": "established"
+    },
+    {
+      "from": "wait_ctl_reply",
+      "event": "Start-Control-Connection-Reply Version Not OK",
+      "action": "send Stop-Control-Connection-Request",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "established",
+      "event": "Local Terminate",
+      "action": "Send Stop Control Request",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "established",
+      "event": "Stop-Control-Connection-Request",
+      "action": "Send Stop-Control-Connection-Reply",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "wait_stop_reply",
+      "event": "Stop-Control-Connection-Reply",
+      "action": "close TCP connection",
+      "to": "idle"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Start Control Connection Request",
+      "action": "examine version field",
+      "to": "established"
+    },
+    {
+      "from": "idle",
+      "event": "Receive Start Control Connection Request Version Not OK",
+      "action": "send Start Control Connection Reply with Error; close TCP connection",
+      "to": "idle"
+    },
+    {
+      "from": "established",
+      "event": "Receive Call Clear Request",
+      "action": "send Call-Disconnect-Notify",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "established",
+      "event": "telco call dropped",
+      "action": "send Call-Disconnect-Notify",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "established",
+      "event": "local disconnect",
+      "action": "send Call-Disconnect-Notify",
+      "to": "wait_stop_reply"
+    },
+    {
+      "from": "Wait-Connect",
+      "event": "Receive Incoming Call Reply Accept",
+      "action": "Answer call; Send Call Connected",
+      "to": "established"
+    },
+    {
+      "from": "Wait-Connect",
+      "event": "Receive Incoming Call Reply Not Accepting",
+      "action": "move back into idle state",
+      "to": "idle"
+    },
+    {
+      "from": "Wait-Disconnect",
+      "event": "Receive Call Disconnect Notify",
+      "action": "move back to idle state",
+      "to": "idle"
+    },
+    {
+      "from": "Session Startup",
+      "event": "Beginning to transmit data",
+      "action": "set initial window size to half the maximum size the receiver requested, with a minimum size of one packet",
+      "to": "Transmitting Data"
+    },
+    {
+      "from": "Transmitting Data",
+      "event": "Number of packets awaiting acknowledgment is equal to the current window size",
+      "action": "stop sending packets",
+      "to": "Transmitting Data"
+    },
+    {
+      "from": "Transmitting Data",
+      "event": "Receiver successfully digests each window",
+      "action": "bump up the window size on the transmitter by one packet until the maximum is reached",
+      "to": "Transmitting Data"
+    },
+    {
+      "from": "Transmitting Data",
+      "event": "Window overflows with too many incoming packets",
+      "action": "throw away excess packets",
+      "to": "Window Overflow"
+    },
+    {
+      "from": "Window Overflow",
+      "event": "",
+      "action": "should not arise if the sliding window procedures are being properly followed",
+      "to": "Transmitting Data"
+    },
+    {
+      "from": "Transmitting Data",
+      "event": "Packet time-out",
+      "action": "adjust the size of the transmit window down to one half its value",
+      "to": "Time-Out Occurs"
+    },
+    {
+      "from": "Time-Out Occurs",
+      "event": "",
+      "action": "resume transmission with the window starting at one half the size of the transmit window when the time-out occurred and adjusting upward by one each time the transmit window is filled with packets that are all acknowledged without time-outs",
+      "to": "Transmitting Data"
+    }
+  ]
+}

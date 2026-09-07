@@ -1,0 +1,489 @@
+{
+  "states": [
+    "early",
+    "confirmed",
+    "terminated",
+    "Calling",
+    "Proceeding",
+    "Completed",
+    "Stateful Proxy",
+    "Stateless Proxy",
+    "Trying"
+  ],
+  "transitions": [
+    {
+      "from": "early",
+      "event": "",
+      "action": "receive 2xx response",
+      "to": "confirmed"
+    },
+    {
+      "from": "early",
+      "event": "no response or non-2xx response",
+      "action": "dialog terminates",
+      "to": "terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "",
+      "action": "INVITE sent",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer A fires",
+      "action": "Retransmit INVITE, Reset Timer A",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer B fires",
+      "action": "Inform TU of timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "Receive 1xx response",
+      "action": "Pass to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Calling",
+      "event": "Receive 300-699 response",
+      "action": "Generate ACK, Pass response to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer E fires",
+      "action": "Retransmit request",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer F fires",
+      "action": "Inform TU of timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Receive 1xx response",
+      "action": "Pass to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Receive 2xx response",
+      "action": "Generate ACK, Pass response to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Receive 300-699 response",
+      "action": "Generate ACK, Pass response to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer D fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Receive retransmitted response",
+      "action": "Retransmit ACK",
+      "to": "Completed"
+    },
+    {
+      "from": "Stateful Proxy",
+      "event": "",
+      "action": "transition to stateless operation",
+      "to": "Stateless Proxy"
+    },
+    {
+      "from": "Stateless Proxy",
+      "event": "",
+      "action": "transition to stateful mode",
+      "to": "Stateful Proxy"
+    },
+    {
+      "from": "Calling",
+      "event": "receive provisional response",
+      "action": "pass response to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Calling",
+      "event": "receive final response (300-699)",
+      "action": "pass response to TU, generate ACK",
+      "to": "Completed"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer B fires",
+      "action": "inform TU of timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "receive 2xx response",
+      "action": "pass response to TU, destroy transaction",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive final response (300-699)",
+      "action": "pass response to TU, generate ACK",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer F fires",
+      "action": "inform TU of timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "",
+      "action": "pass request to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "TU passes 2xx response",
+      "action": "send response, transition to Terminated",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "TU passes 300-699 response",
+      "action": "send response, enter Completed state",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "ACK received",
+      "action": "",
+      "to": "Confirmed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer H fires",
+      "action": "indicate transaction failure to TU, transition to Terminated",
+      "to": "Terminated"
+    },
+    {
+      "from": "Confirmed",
+      "event": "Timer I fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer A fires",
+      "action": "retransmit request, reset Timer A to 2*T1",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "receive 1xx response",
+      "action": "pass response to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Calling",
+      "event": "receive 300-699 response",
+      "action": "pass response to TU, generate ACK",
+      "to": "Completed"
+    },
+    {
+      "from": "Calling",
+      "event": "receive 2xx response",
+      "action": "pass response to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive 1xx response",
+      "action": "pass response to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive 300-699 response",
+      "action": "pass response to TU, generate ACK",
+      "to": "Completed"
+    },
+    {
+      "from": "Calling",
+      "event": "receive 2xx response",
+      "action": "pass response to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "receive 2xx response",
+      "action": "pass response to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer D fires",
+      "action": "terminate transaction",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "receive retransmitted final response",
+      "action": "re-pass ACK to transport",
+      "to": "Completed"
+    },
+    {
+      "from": "confirmed",
+      "event": "",
+      "action": "dialog transitioned to confirmed state",
+      "to": "confirmed"
+    },
+    {
+      "from": "Calling",
+      "event": "INVITE from TU",
+      "action": "",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer A fires",
+      "action": "INVITE sent, Reset A",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "Transport Err.",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "1xx",
+      "action": "1xx to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Calling",
+      "event": "2xx",
+      "action": "2xx to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "300-699",
+      "action": "ACK sent, resp. to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer F fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Transport Err.",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "1xx",
+      "action": "1xx to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx",
+      "action": "2xx to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699",
+      "action": "ACK sent, resp. to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer D fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "",
+      "action": "pass request to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "1xx from TU",
+      "action": "send response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx from TU",
+      "action": "send response",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699 from TU",
+      "action": "send response",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "ACK",
+      "action": "",
+      "to": "Confirmed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer H fires",
+      "action": "Inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Transport Err.",
+      "action": "Inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Confirmed",
+      "event": "Timer I fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer E fires",
+      "action": "reset timer with MIN(2*T1, T2)",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer F fires",
+      "action": "inform TU about timeout, enter Terminated state",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "provisional response received",
+      "action": "pass response to TU, move to Proceeding state",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "final response (200-699) received",
+      "action": "pass response to TU, transition to Completed state",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer E fires",
+      "action": "retransmit request, reset timer with T2",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer F fires",
+      "action": "inform TU of timeout, transition to Terminated state",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "final response (200-699) received",
+      "action": "pass response to TU, generate ACK, transition to Completed state",
+      "to": "Completed"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer A fires",
+      "action": "retransmit request, reset timer with 2*T1",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer B fires",
+      "action": "inform TU that timeout occurred",
+      "to": "Terminated"
+    },
+    {
+      "from": "Calling",
+      "event": "provisional response received",
+      "action": "transition to Proceeding state",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Calling",
+      "event": "response (300-699) received",
+      "action": "pass response to TU, generate ACK, transition to Completed state",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx response received",
+      "action": "pass response to TU, enter Terminated state",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer D fires",
+      "action": "move to Terminated state",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "1xx response received",
+      "action": "pass response to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Completed",
+      "event": "ACK received",
+      "action": "transition to Confirmed state",
+      "to": "Confirmed"
+    },
+    {
+      "from": "Confirmed",
+      "event": "Timer I fires",
+      "action": "transition to Terminated state",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "request retransmission received",
+      "action": "discard request",
+      "to": "Trying"
+    },
+    {
+      "from": "Proceeding",
+      "event": "request retransmission received",
+      "action": "pass most recent provisional response to transport for retransmission",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Completed",
+      "event": "request retransmission received",
+      "action": "pass final response to transport for retransmission",
+      "to": "Completed"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer E fires",
+      "action": "reset timer with MIN(4*T1, T2)",
+      "to": "Trying"
+    }
+  ]
+}

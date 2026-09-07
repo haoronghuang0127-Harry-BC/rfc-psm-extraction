@@ -1,0 +1,1502 @@
+{
+  "states": [
+    "INIT",
+    "READY",
+    "PLAY",
+    "PAUSE",
+    "RECORD",
+    "TEARDOWN",
+    "Presentation Description",
+    "Init",
+    "Play state",
+    "On-demand",
+    "Dynamic On-demand",
+    "Live",
+    "Live with Recording",
+    "Random-Access",
+    "Beginning-Only",
+    "No-Seeking",
+    "Unlimited",
+    "Time-Limited",
+    "Time-Duration",
+    "Immutable",
+    "Dynamic",
+    "Time-Progressing",
+    "Request Received",
+    "Final Response Sent",
+    "Informational Response Sent",
+    "Persistent Connection",
+    "Transient Connection",
+    "Connection Open",
+    "Connection Closed",
+    "Waiting for Response",
+    "Processing Request",
+    "Responding with 100 Continue",
+    "Responder Unresponsive",
+    "Transport Delay",
+    "Overloaded",
+    "Not Overloaded",
+    "RTSP Session",
+    "Media Initialization Phase",
+    "Session Established",
+    "Session Termination Initiated",
+    "Session Terminated",
+    "Connection Established",
+    "Connection Termination Initiated",
+    "RTSP Proxy",
+    "Caching Proxy",
+    "Translator Proxy",
+    "Access Proxy",
+    "Security Proxy",
+    "Auditing Proxy",
+    "TLS Session Setup",
+    "Certificate Approval",
+    "Request Forwarding",
+    "Serving Stream",
+    "Stale Entry",
+    "Validating Cache Entry",
+    "Fresh Entry",
+    "Requesting",
+    "Processing",
+    "Session Not Established",
+    "User-Approved TLS Procedure",
+    "Acceptable Content-Coding",
+    "Unacceptable Content-Coding",
+    "Message with non-identity content-coding",
+    "Message with identity content-coding",
+    "Message with multiple encodings",
+    "Message with unacceptable content-coding",
+    "Message with body",
+    "Message without body",
+    "Message with clock",
+    "Message without clock",
+    "Message with Date header",
+    "Message without Date header",
+    "Cached message",
+    "Uncached message",
+    "Server with clock",
+    "Server without clock",
+    "Client with clock",
+    "Client without clock",
+    "DESCRIBE Request with If-None-Match",
+    "304 Not Modified",
+    "412 Precondition Failed",
+    "Other Status",
+    "SETUP response",
+    "PLAY response",
+    "PAUSE response",
+    "PLAY_NOTIFY request",
+    "GET_PARAMETER request",
+    "GET_PARAMETER response",
+    "Session Context Created",
+    "Session Context Not Created",
+    "RAP",
+    "CoRAP",
+    "First-Prior",
+    "Next",
+    "Session Timeout",
+    "Initial",
+    "Session Setup",
+    "Media Presentation",
+    "Feature Negotiation",
+    "Initial Request",
+    "Redirected to Secure Connection",
+    "TCP/TLS Connection Established",
+    "Session Description Retrieved",
+    "Setup Requests Sent",
+    "Media Delivery Initiated",
+    "TCP Connection Established",
+    "TCP Connection Not Established",
+    "Media Flowing",
+    "Media Paused",
+    "Session Teardown",
+    "PLAY request ongoing",
+    "PLAY request completed",
+    "PLAY request replaced",
+    "PLAY request with gap",
+    "RTP Session",
+    "SSRC Collision"
+  ],
+  "transitions": [
+    {
+      "from": "INIT",
+      "event": "DESCRIBE",
+      "action": "Provide media description",
+      "to": "READY"
+    },
+    {
+      "from": "READY",
+      "event": "SETUP",
+      "action": "Establish media stream",
+      "to": "READY"
+    },
+    {
+      "from": "READY",
+      "event": "PLAY",
+      "action": "Start media playback",
+      "to": "PLAY"
+    },
+    {
+      "from": "PLAY",
+      "event": "PAUSE",
+      "action": "Pause media playback",
+      "to": "PAUSE"
+    },
+    {
+      "from": "PAUSE",
+      "event": "PLAY",
+      "action": "Resume media playback",
+      "to": "PLAY"
+    },
+    {
+      "from": "PLAY",
+      "event": "TEARDOWN",
+      "action": "Terminate media stream",
+      "to": "TEARDOWN"
+    },
+    {
+      "from": "PAUSE",
+      "event": "TEARDOWN",
+      "action": "Terminate media stream",
+      "to": "TEARDOWN"
+    },
+    {
+      "from": "READY",
+      "event": "TEARDOWN",
+      "action": "Terminate media stream",
+      "to": "TEARDOWN"
+    },
+    {
+      "from": "Init",
+      "event": "SETUP",
+      "action": "create RTSP session context, store relevant parameters and state, generate session identifier",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP",
+      "action": "add media resource under common control",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP",
+      "action": "change transport parameters",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PAUSE",
+      "action": "",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "start sending data from the specified range",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PAUSE",
+      "action": "halt delivery",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY",
+      "action": "replace the current PLAY action with the new one",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY_NOTIFY",
+      "action": "indicate end of stream",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY_NOTIFY",
+      "action": "update media properties",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY_NOTIFY",
+      "action": "change scale",
+      "to": "Play"
+    },
+    {
+      "from": "Init",
+      "event": "SETUP",
+      "action": "NRM=1, RP=0.0",
+      "to": "Ready"
+    },
+    {
+      "from": "Init",
+      "event": "SETUP",
+      "action": "3rr Redirect",
+      "to": "Init"
+    },
+    {
+      "from": "Init",
+      "event": "S -> C: REDIRECT",
+      "action": "Terminate all SES",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP",
+      "action": "NRM +=1",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP",
+      "action": "Change transport param",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN",
+      "action": "No session hdr, NRM = 0",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN",
+      "action": "Session hdr, NRM -= 1",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "Play from RP",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "According to range",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PAUSE",
+      "action": "Return PP",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SC:REDIRECT",
+      "action": "Set RedP",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SC:REDIRECT",
+      "action": "Session is removed",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "Timeout",
+      "action": "",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "RedP reached",
+      "action": "TEARDOWN of session",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "PAUSE",
+      "action": "Set RP to present point",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "End of media",
+      "action": "Set RP = End of media",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "End of range",
+      "action": "Set RP = End of range",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY",
+      "action": "Play from present point",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY",
+      "action": "According to range",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SC:PLAY_NOTIFY",
+      "action": "200",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP",
+      "action": "455",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP",
+      "action": "Change transport param.",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "TEARDOWN",
+      "action": "No session hdr",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "TEARDOWN",
+      "action": "No Session hdr, NRM=0",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "TEARDOWN",
+      "action": "455",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SC:REDIRECT",
+      "action": "Set RedP",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SC:REDIRECT",
+      "action": "Session is removed",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "RedP reached",
+      "action": "TEARDOWN of session",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "Timeout",
+      "action": "Stop Media playout",
+      "to": "Init"
+    },
+    {
+      "from": "Init",
+      "event": "SETUP",
+      "action": "Session header with session identifier",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "Start sending media",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PAUSE",
+      "action": "Stop sending media",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "TEARDOWN",
+      "action": "Stop sending media and free resources",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN",
+      "action": "Stop sending media and free resources",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP",
+      "action": "Change transport parameters",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP",
+      "action": "Change transport parameters",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "start sending media-stream data in the direction S->C",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PAUSE",
+      "action": "interrupt (halt) stream delivery",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "TEARDOWN",
+      "action": "stop the stream delivery for the given URI, freeing the resources associated with it",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN",
+      "action": "stop the stream delivery for the given URI, freeing the resources associated with it",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP",
+      "action": "change transport parameters",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP",
+      "action": "change transport parameters",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "start media playback",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PAUSE",
+      "action": "pause media playback",
+      "to": "Pause"
+    },
+    {
+      "from": "Pause",
+      "event": "PLAY",
+      "action": "resume media playback",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PAUSE",
+      "action": "pause media playback",
+      "to": "Pause"
+    },
+    {
+      "from": "Play",
+      "event": "TEARDOWN",
+      "action": "stop media playback and close session",
+      "to": "Ready"
+    },
+    {
+      "from": "Pause",
+      "event": "TEARDOWN",
+      "action": "stop media playback and close session",
+      "to": "Ready"
+    },
+    {
+      "from": "Record",
+      "event": "RECORD",
+      "action": "start media recording",
+      "to": "Record"
+    },
+    {
+      "from": "Record",
+      "event": "PAUSE",
+      "action": "pause media recording",
+      "to": "Pause"
+    },
+    {
+      "from": "Record",
+      "event": "TEARDOWN",
+      "action": "stop media recording and close session",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "position the normal play time to the beginning of the range specified in the received Range header, within the limits of the media resource and in accordance with the Seek-Style header",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY",
+      "action": "replace the current PLAY action with the new one requested",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY_NOTIFY with Notify-Reason: media-properties-update",
+      "action": "Client decides further actions based on Media-Range header",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "GET_PARAMETER request with Media-Range header",
+      "action": "Server includes current Media-Range header in 200 OK response",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY_NOTIFY",
+      "action": "Client responds with 200 OK",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY_NOTIFY with Notify-Reason: end-of-stream",
+      "action": "Client receives end-of-stream notification",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY_NOTIFY with Notify-Reason: media-properties-update",
+      "action": "Client receives media-properties-update notification",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY_NOTIFY with Notify-Reason: scale-change",
+      "action": "Client receives scale-change notification",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PAUSE",
+      "action": "interrupt stream delivery, set pause point, return Range header with unplayed range",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN",
+      "action": "halt media delivery and destroy session state",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "TEARDOWN",
+      "action": "halt media delivery and destroy session state",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN",
+      "action": "remove the indicated media stream and associated resources from the session",
+      "to": "Ready"
+    },
+    {
+      "from": "Session Established",
+      "event": "REDIRECT",
+      "action": "Terminate-Reason header included, Location header provided",
+      "to": "Session Termination Initiated"
+    },
+    {
+      "from": "Session Termination Initiated",
+      "event": "Client performs redirection",
+      "action": "Client sends response to server",
+      "to": "Session Terminated"
+    },
+    {
+      "from": "Session Termination Initiated",
+      "event": "Terminate-Reason header with time parameter",
+      "action": "Client terminates session before redirection time",
+      "to": "Session Terminated"
+    },
+    {
+      "from": "Session Termination Initiated",
+      "event": "REDIRECT request times out",
+      "action": "Server terminates session or transport connection",
+      "to": "Session Terminated"
+    },
+    {
+      "from": "Connection Established",
+      "event": "REDIRECT without Session header",
+      "action": "Location header provided, proxies disconnect and reconnect",
+      "to": "Connection Termination Initiated"
+    },
+    {
+      "from": "Connection Termination Initiated",
+      "event": "Proxies respond to REDIRECT",
+      "action": "Proxies disconnect from requesting server and connect to new server",
+      "to": "Connection Terminated"
+    },
+    {
+      "from": "RTSP Proxy",
+      "event": "Client Request",
+      "action": "Determine Proxy Type",
+      "to": "Caching Proxy"
+    },
+    {
+      "from": "RTSP Proxy",
+      "event": "Client Request",
+      "action": "Determine Proxy Type",
+      "to": "Translator Proxy"
+    },
+    {
+      "from": "RTSP Proxy",
+      "event": "Client Request",
+      "action": "Determine Proxy Type",
+      "to": "Access Proxy"
+    },
+    {
+      "from": "RTSP Proxy",
+      "event": "Client Request",
+      "action": "Determine Proxy Type",
+      "to": "Security Proxy"
+    },
+    {
+      "from": "RTSP Proxy",
+      "event": "Client Request",
+      "action": "Determine Proxy Type",
+      "to": "Auditing Proxy"
+    },
+    {
+      "from": "Caching Proxy",
+      "event": "SETUP or PLAY Request",
+      "action": "Check Cache",
+      "to": "Caching Proxy"
+    },
+    {
+      "from": "Caching Proxy",
+      "event": "Cache Miss",
+      "action": "Forward Request to Server",
+      "to": "Request Forwarding"
+    },
+    {
+      "from": "Translator Proxy",
+      "event": "Client Request",
+      "action": "Translate Addresses, Protocols, or Encodings",
+      "to": "Translator Proxy"
+    },
+    {
+      "from": "Access Proxy",
+      "event": "Client Request",
+      "action": "Translate Addresses",
+      "to": "Access Proxy"
+    },
+    {
+      "from": "Security Proxy",
+      "event": "Client Request",
+      "action": "Open Firewall Pinholes",
+      "to": "Security Proxy"
+    },
+    {
+      "from": "Auditing Proxy",
+      "event": "Client Request",
+      "action": "Log and Audit Session",
+      "to": "Auditing Proxy"
+    },
+    {
+      "from": "RTSP Proxy",
+      "event": "TLS Session Required",
+      "action": "Setup TLS Session",
+      "to": "TLS Session Setup"
+    },
+    {
+      "from": "TLS Session Setup",
+      "event": "Certificate Chain Present",
+      "action": "Forward Request",
+      "to": "Request Forwarding"
+    },
+    {
+      "from": "TLS Session Setup",
+      "event": "Certificate Chain Absent",
+      "action": "Request Certificate Approval",
+      "to": "Certificate Approval"
+    },
+    {
+      "from": "Certificate Approval",
+      "event": "Certificate Approved",
+      "action": "Forward Request",
+      "to": "Request Forwarding"
+    },
+    {
+      "from": "Certificate Approval",
+      "event": "Certificate Rejected",
+      "action": "Terminate Connection",
+      "to": "RTSP Proxy"
+    },
+    {
+      "from": "Serving Stream",
+      "event": "DESCRIBE request",
+      "action": "Answer DESCRIBE request",
+      "to": "Serving Stream"
+    },
+    {
+      "from": "Stale Entry",
+      "event": "Client request",
+      "action": "Check with origin server",
+      "to": "Validating Cache Entry"
+    },
+    {
+      "from": "Validating Cache Entry",
+      "event": "Validator matches",
+      "action": "Respond with 304 (Not Modified)",
+      "to": "Fresh Entry"
+    },
+    {
+      "from": "Validating Cache Entry",
+      "event": "Validator does not match",
+      "action": "Return full response",
+      "to": "Fresh Entry"
+    },
+    {
+      "from": "Requesting",
+      "event": "100 Continue",
+      "action": "The requesting agent SHOULD continue with its request",
+      "to": "Processing"
+    },
+    {
+      "from": "Processing",
+      "event": "",
+      "action": "The responding agent MUST send a final response after the request has been completed",
+      "to": "Requesting"
+    },
+    {
+      "from": "Session Not Established",
+      "event": "DESCRIBE or SETUP",
+      "action": "3rr response with Location header",
+      "to": "Session Not Established"
+    },
+    {
+      "from": "Session Established",
+      "event": "3rr response",
+      "action": "TEARDOWN request for the session and MAY reestablish the session using the resource indicated by the Location",
+      "to": "Session Not Established"
+    },
+    {
+      "from": "Play state",
+      "event": "PLAY_NOTIFY",
+      "action": "include a Request-Status header to indicate which request the notification is for and its completion status",
+      "to": "Play state"
+    },
+    {
+      "from": "Play state",
+      "event": "PLAY_NOTIFY",
+      "action": "include a Range header and the Scale header if the scale value is not 1",
+      "to": "Play state"
+    },
+    {
+      "from": "Play state",
+      "event": "PLAY_NOTIFY",
+      "action": "include a Media-Properties and Date header and SHOULD include a Media-Range header",
+      "to": "Play state"
+    },
+    {
+      "from": "Play state",
+      "event": "PLAY_NOTIFY",
+      "action": "include a Range header with the media time when the change took effect, a Scale header with the new value in use, a Session header with the identifier for the session to which it applies, and a Date header with the server wallclock time of the change",
+      "to": "Play state"
+    },
+    {
+      "from": "Server Error 5xx",
+      "event": "",
+      "action": "The server SHOULD include a message body containing an explanation of the error situation and whether it is a temporary or permanent condition. User agents SHOULD display any included message body to the user.",
+      "to": "Server Error 5xx"
+    },
+    {
+      "from": "User-Approved TLS Procedure",
+      "event": "470 Connection Authorization Required",
+      "action": "include the Accept-Credentials header including the hash over the DER-encoded certificate for all trusted proxies in the chain",
+      "to": "User-Approved TLS Procedure"
+    },
+    {
+      "from": "User-Approved TLS Procedure",
+      "event": "407 Proxy Authentication Required",
+      "action": "include the Accept-Credentials header including the hash over the DER-encoded certificate for all trusted proxies in the chain",
+      "to": "User-Approved TLS Procedure"
+    },
+    {
+      "from": "Acceptable Content-Coding",
+      "event": "Accept-Encoding field present and content-coding is acceptable",
+      "action": "",
+      "to": "Acceptable Content-Coding"
+    },
+    {
+      "from": "Acceptable Content-Coding",
+      "event": "Accept-Encoding field present and content-coding is not acceptable",
+      "action": "Send 406 (Not Acceptable) status code",
+      "to": "Unacceptable Content-Coding"
+    },
+    {
+      "from": "Unacceptable Content-Coding",
+      "event": "Accept-Encoding field not present",
+      "action": "Assume any content-coding is acceptable",
+      "to": "Acceptable Content-Coding"
+    },
+    {
+      "from": "Message with non-identity content-coding",
+      "event": "",
+      "action": "Server responds with 415 (Unsupported Media Type)",
+      "to": "Message with unacceptable content-coding"
+    },
+    {
+      "from": "Message with multiple encodings",
+      "event": "",
+      "action": "List content-codings in order applied",
+      "to": "Message with non-identity content-coding"
+    },
+    {
+      "from": "Message with body",
+      "event": "",
+      "action": "Include Date header",
+      "to": "Message with Date header"
+    },
+    {
+      "from": "Message without body",
+      "event": "",
+      "action": "Include Date header",
+      "to": "Message with Date header"
+    },
+    {
+      "from": "Message with clock",
+      "event": "",
+      "action": "Include Date header",
+      "to": "Message with Date header"
+    },
+    {
+      "from": "Message without clock",
+      "event": "",
+      "action": "",
+      "to": "Message without Date header"
+    },
+    {
+      "from": "Message without Date header",
+      "event": "",
+      "action": "Assign Date header",
+      "to": "Cached message"
+    },
+    {
+      "from": "Message with Date header",
+      "event": "",
+      "action": "",
+      "to": "Cached message"
+    },
+    {
+      "from": "Message without Date header",
+      "event": "",
+      "action": "",
+      "to": "Uncached message"
+    },
+    {
+      "from": "Server with clock",
+      "event": "",
+      "action": "Include Date header",
+      "to": "Message with Date header"
+    },
+    {
+      "from": "Server without clock",
+      "event": "",
+      "action": "",
+      "to": "Message without Date header"
+    },
+    {
+      "from": "Client with clock",
+      "event": "",
+      "action": "Include Date header",
+      "to": "Message with Date header"
+    },
+    {
+      "from": "Client without clock",
+      "event": "",
+      "action": "",
+      "to": "Message without Date header"
+    },
+    {
+      "from": "DESCRIBE Request with If-None-Match",
+      "event": "If-None-Match header matches",
+      "action": "respond with 304 (Not Modified) including cache-related header fields",
+      "to": "304 Not Modified"
+    },
+    {
+      "from": "DESCRIBE Request with If-None-Match",
+      "event": "If-None-Match header matches and If-Modified-Since header does not match",
+      "action": "perform the requested method",
+      "to": "Other Status"
+    },
+    {
+      "from": "DESCRIBE Request with If-None-Match",
+      "event": "If-None-Match header does not match",
+      "action": "perform the requested method",
+      "to": "Other Status"
+    },
+    {
+      "from": "DESCRIBE Request with If-None-Match",
+      "event": "If-None-Match header matches and request method is not DESCRIBE",
+      "action": "respond with 412 (Precondition Failed)",
+      "to": "412 Precondition Failed"
+    },
+    {
+      "from": "DESCRIBE Request with If-None-Match",
+      "event": "If-None-Match header matches and If-Modified-Since header matches",
+      "action": "do not perform the requested method",
+      "to": "DESCRIBE Request with If-None-Match"
+    },
+    {
+      "from": "RTSP Session",
+      "event": "SETUP response",
+      "action": "include Media-Properties header",
+      "to": "RTSP Session"
+    },
+    {
+      "from": "RTSP Session",
+      "event": "PLAY_NOTIFY request",
+      "action": "modify Media-Properties",
+      "to": "RTSP Session"
+    },
+    {
+      "from": "RTSP Session",
+      "event": "GET_PARAMETER request",
+      "action": "include Media-Properties header without value",
+      "to": "RTSP Session"
+    },
+    {
+      "from": "SETUP response",
+      "event": "",
+      "action": "include Media-Range header",
+      "to": "SETUP response"
+    },
+    {
+      "from": "PLAY response",
+      "event": "",
+      "action": "include Media-Range header",
+      "to": "PLAY response"
+    },
+    {
+      "from": "PAUSE response",
+      "event": "",
+      "action": "include Media-Range header",
+      "to": "PAUSE response"
+    },
+    {
+      "from": "PLAY_NOTIFY request",
+      "event": "Media-Property-Update",
+      "action": "include Media-Range header",
+      "to": "PLAY_NOTIFY request"
+    },
+    {
+      "from": "GET_PARAMETER request",
+      "event": "",
+      "action": "include Media-Range header",
+      "to": "GET_PARAMETER response"
+    },
+    {
+      "from": "DESCRIBE Response",
+      "event": "SETUP Request",
+      "action": "If-Match header for which the MTag validation check fails MUST generate a response using 412 (Precondition Failed)",
+      "to": "SETUP Response"
+    },
+    {
+      "from": "SETUP Request",
+      "event": "If-Match",
+      "action": "SETUP request with the If-Match header for which the MTag validation check fails MUST generate a response using 412 (Precondition Failed)",
+      "to": "SETUP Response"
+    },
+    {
+      "from": "GET_PARAMETER Response",
+      "event": "If-None-Match",
+      "action": "If any of the message body tags match the message body tag of the message body that would have been returned in the response to a similar DESCRIBE request (without the If-None-Match header) on that resource, then the server MUST NOT perform the requested method, unless required to do so because the resource's modification date fails to match that supplied in an If-Modified-Since header field in the request",
+      "to": "GET_PARAMETER Response"
+    },
+    {
+      "from": "Play state",
+      "event": "PLAY_NOTIFY",
+      "action": "Notify-Reason: end-of-stream",
+      "to": "Play state"
+    },
+    {
+      "from": "Play state",
+      "event": "PLAY_NOTIFY",
+      "action": "Notify-Reason: media-properties-update",
+      "to": "Play state"
+    },
+    {
+      "from": "Play state",
+      "event": "PLAY_NOTIFY",
+      "action": "Notify-Reason: scale-change",
+      "to": "Play state"
+    },
+    {
+      "from": "Session Context Not Created",
+      "event": "SETUP request with Pipelined-Requests header",
+      "action": "Create binding between Pipelined-Requests identifier and RTSP session ID",
+      "to": "Session Context Created"
+    },
+    {
+      "from": "Session Context Created",
+      "event": "Request with Pipelined-Requests header",
+      "action": "Process request as if it contained the Session header with the found session ID",
+      "to": "Session Context Created"
+    },
+    {
+      "from": "Session Context Created",
+      "event": "Session termination",
+      "action": "Delete the Pipelined-Requests identifier and its binding to a session",
+      "to": "Session Context Not Created"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "start sending data via the mechanism specified in SETUP and which part of the media should be played out",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PAUSE",
+      "action": "interrupt (halt) the stream delivery immediately",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY",
+      "action": "replace the current PLAY action with the new one requested",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "start sending data via the mechanism specified in SETUP and which part of the media should be played out",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY_NOTIFY",
+      "action": "report how the PLAY request concluded, either in success or in failure",
+      "to": "Play"
+    },
+    {
+      "from": "Init",
+      "event": "SETUP",
+      "action": "include RTP-Info header in response",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "include RTP-Info header in response",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP",
+      "action": "include RTP-Info header in response",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "GET_PARAMETER",
+      "action": "include RTP-Info header in response",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY_NOTIFY",
+      "action": "include RTP-Info header in response",
+      "to": "Play"
+    },
+    {
+      "from": "RAP",
+      "event": "",
+      "action": "server locates the closest previous random access point and delivers from that",
+      "to": "RAP"
+    },
+    {
+      "from": "CoRAP",
+      "event": "",
+      "action": "server uses RAP policy if condition is fulfilled, otherwise continues from current pause point",
+      "to": "CoRAP"
+    },
+    {
+      "from": "First-Prior",
+      "event": "",
+      "action": "server starts delivery with the media unit that has a playout time first prior to the requested time",
+      "to": "First-Prior"
+    },
+    {
+      "from": "Next",
+      "event": "",
+      "action": "server delivers the next media units after the provided start time of the range",
+      "to": "Next"
+    },
+    {
+      "from": "RTSP Session",
+      "event": "TEARDOWN",
+      "action": "",
+      "to": "Session Timeout"
+    },
+    {
+      "from": "RTSP Session",
+      "event": "REDIRECT",
+      "action": "",
+      "to": "Session Timeout"
+    },
+    {
+      "from": "RTSP Session",
+      "event": "Session Timeout",
+      "action": "",
+      "to": "Session Timeout"
+    },
+    {
+      "from": "Not Overloaded",
+      "event": "Overload detected",
+      "action": "Send 503 (Service Unavailable) or 553 (Proxy Unavailable) response with Retry-After header",
+      "to": "Overloaded"
+    },
+    {
+      "from": "Overloaded",
+      "event": "Retry-After period expires",
+      "action": "Allow new requests",
+      "to": "Not Overloaded"
+    },
+    {
+      "from": "Init",
+      "event": "SETUP",
+      "action": "Session header generated",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "Stream delivery started",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PAUSE",
+      "action": "Stream delivery halted",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "TEARDOWN",
+      "action": "Session state destroyed",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN",
+      "action": "Session state destroyed",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP",
+      "action": "Transport parameters changed",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP",
+      "action": "Transport parameters changed",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "Start playing the media",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PAUSE",
+      "action": "Pause the media",
+      "to": "Pause"
+    },
+    {
+      "from": "Pause",
+      "event": "PLAY",
+      "action": "Resume playing the media",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "TEARDOWN",
+      "action": "Stop playing the media",
+      "to": "Ready"
+    },
+    {
+      "from": "Pause",
+      "event": "TEARDOWN",
+      "action": "Stop playing the media",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "RECORD",
+      "action": "Start recording the media",
+      "to": "Record"
+    },
+    {
+      "from": "Record",
+      "event": "PAUSE",
+      "action": "Pause recording the media",
+      "to": "Pause"
+    },
+    {
+      "from": "Record",
+      "event": "TEARDOWN",
+      "action": "Stop recording the media",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "GET_PARAMETER",
+      "action": "respond with the current playing point or pause point as the start of the range",
+      "to": "Play"
+    },
+    {
+      "from": "Pause",
+      "event": "GET_PARAMETER",
+      "action": "respond with the current playing point or pause point as the start of the range",
+      "to": "Pause"
+    },
+    {
+      "from": "Ready",
+      "event": "GET_PARAMETER",
+      "action": "respond with the current playing point or pause point as the start of the range",
+      "to": "Ready"
+    },
+    {
+      "from": "Play state",
+      "event": "GET_PARAMETER request",
+      "action": "include both the Range header and the RTP-Info header",
+      "to": "Play state"
+    },
+    {
+      "from": "Initial",
+      "event": "DESCRIBE",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Session Established"
+    },
+    {
+      "from": "Session Established",
+      "event": "SETUP",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Session Established"
+    },
+    {
+      "from": "Session Established",
+      "event": "PLAY",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Playing"
+    },
+    {
+      "from": "Playing",
+      "event": "PAUSE",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Paused"
+    },
+    {
+      "from": "Paused",
+      "event": "PLAY",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Playing"
+    },
+    {
+      "from": "Playing",
+      "event": "TEARDOWN",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Initial"
+    },
+    {
+      "from": "Paused",
+      "event": "TEARDOWN",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Initial"
+    },
+    {
+      "from": "Initial Request",
+      "event": "DESCRIBE rtsp://example.com/twister.3gp RTSP/2.0",
+      "action": "RTSP/2.0 301 Moved Permanently",
+      "to": "Redirected to Secure Connection"
+    },
+    {
+      "from": "Redirected to Secure Connection",
+      "event": "Establish TCP/TLS connection",
+      "action": "Verify server's certificate",
+      "to": "TCP/TLS Connection Established"
+    },
+    {
+      "from": "TCP/TLS Connection Established",
+      "event": "DESCRIBE rtsps://example.com/twister.3gp RTSP/2.0",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Session Description Retrieved"
+    },
+    {
+      "from": "Session Description Retrieved",
+      "event": "SETUP rtsps://example.com/twister.3gp/trackID=1 RTSP/2.0",
+      "action": "",
+      "to": "Setup Requests Sent"
+    },
+    {
+      "from": "Session Description Retrieved",
+      "event": "SETUP rtsps://example.com/twister.3gp/trackID=4 RTSP/2.0",
+      "action": "",
+      "to": "Setup Requests Sent"
+    },
+    {
+      "from": "Setup Requests Sent",
+      "event": "PLAY rtsps://example.com/twister.3gp/ RTSP/2.0",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Media Delivery Initiated"
+    },
+    {
+      "from": "Initial",
+      "event": "GET /sessions.html HTTP/1.1",
+      "action": "HTTP/1.1 200 OK",
+      "to": "Session Setup"
+    },
+    {
+      "from": "Session Setup",
+      "event": "DESCRIBE rtsp://live.example.com/concert/audio RTSP/2.0",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Session Setup"
+    },
+    {
+      "from": "Session Setup",
+      "event": "SETUP rtsp://live.example.com/concert/audio RTSP/2.0",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Media Presentation"
+    },
+    {
+      "from": "Media Presentation",
+      "event": "PLAY rtsp://live.example.com/concert/audio RTSP/2.0",
+      "action": "RTSP/2.0 200 OK",
+      "to": "Media Presentation"
+    },
+    {
+      "from": "Initial",
+      "event": "OPTIONS rtsp://media.example.com/movie/twister.3gp RTSP/2.0",
+      "action": "S->C: RTSP/2.0 200 OK",
+      "to": "Feature Negotiation"
+    },
+    {
+      "from": "Feature Negotiation",
+      "event": "SETUP rtsp://media.example.com/twister.3gp/trackID=1 RTSP/2.0",
+      "action": "S->C: RTSP/2.0 200 OK",
+      "to": "Session Setup"
+    },
+    {
+      "from": "TCP Connection Not Established",
+      "event": "SETUP request with RTP/AVP/TCP",
+      "action": "Server responds with 2xx reply containing Transport option specifying RTP/AVP/TCP",
+      "to": "TCP Connection Established"
+    },
+    {
+      "from": "TCP Connection Established",
+      "event": "PLAY request",
+      "action": "Media begins to flow from server to client over the RTP TCP connection",
+      "to": "Media Flowing"
+    },
+    {
+      "from": "Media Flowing",
+      "event": "PAUSE request",
+      "action": "Media flow is paused",
+      "to": "Media Paused"
+    },
+    {
+      "from": "Media Paused",
+      "event": "PLAY request",
+      "action": "Media flow resumes",
+      "to": "Media Flowing"
+    },
+    {
+      "from": "Media Flowing",
+      "event": "TEARDOWN request",
+      "action": "TCP connections for RTP and RTCP are closed",
+      "to": "Session Teardown"
+    },
+    {
+      "from": "Media Paused",
+      "event": "TEARDOWN request",
+      "action": "TCP connections for RTP and RTCP are closed",
+      "to": "Session Teardown"
+    },
+    {
+      "from": "PLAY request ongoing",
+      "event": "PLAY request replaces ongoing PLAY request",
+      "action": "RTP timestamps and sequence numbers are set to be continuous",
+      "to": "PLAY request replaced"
+    },
+    {
+      "from": "PLAY request completed",
+      "event": "PLAY request follows completed PLAY request",
+      "action": "RTP stream with gaps in the RTP timeline",
+      "to": "PLAY request with gap"
+    },
+    {
+      "from": "PLAY request with gap",
+      "event": "PLAY request with live streams",
+      "action": "RTP sequence number may not be monotonically increasing",
+      "to": "PLAY request with gap"
+    },
+    {
+      "from": "PLAY",
+      "event": "PAUSE",
+      "action": "Server pauses the media stream and reflects the duration in the RTP timestamp",
+      "to": "PAUSE"
+    },
+    {
+      "from": "PAUSE",
+      "event": "PLAY",
+      "action": "Server resumes the media stream and adjusts the RTP timestamp to reflect the elapsed time",
+      "to": "PLAY"
+    },
+    {
+      "from": "RTP Session",
+      "event": "SSRC collision",
+      "action": "server waits to see if client changes SSRC",
+      "to": "SSRC Collision"
+    },
+    {
+      "from": "SSRC Collision",
+      "event": "client changes SSRC",
+      "action": "conflict resolved",
+      "to": "RTP Session"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "start media stream",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PAUSE",
+      "action": "pause media stream",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY",
+      "action": "replace the previous request",
+      "to": "Play"
+    }
+  ]
+}

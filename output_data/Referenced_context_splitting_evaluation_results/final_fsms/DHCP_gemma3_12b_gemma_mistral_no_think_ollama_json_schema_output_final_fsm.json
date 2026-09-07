@@ -1,0 +1,152 @@
+{
+  "states": [
+    "INIT",
+    "REBOOTING",
+    "BOUND",
+    "RENEWING",
+    "REBINDING",
+    "SELECTING",
+    "REBOOT",
+    "INIT-REBOOT"
+  ],
+  "transitions": [
+    {
+      "from": "INIT",
+      "event": "DHCPDISCOVER",
+      "action": "Broadcast DHCPDISCOVER",
+      "to": "SELECTING"
+    },
+    {
+      "from": "INIT",
+      "event": "DHCPNAK/Restart",
+      "action": "",
+      "to": "REBOOT"
+    },
+    {
+      "from": "INIT",
+      "event": "Discard offer",
+      "action": "Send DHCPDISCOVER",
+      "to": "REBOOT"
+    },
+    {
+      "from": "REBOOTING",
+      "event": "DHCPREQUEST",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBOOTING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBOOTING",
+      "event": "DHCPOFFER",
+      "action": "Collect replies",
+      "to": "SELECTING"
+    },
+    {
+      "from": "REBOOT",
+      "event": "DHCPNAK/Restart",
+      "action": "Send DHCPDISCOVER",
+      "to": "REBOOTING"
+    },
+    {
+      "from": "REBOOT",
+      "event": "DHCPNAK",
+      "action": "Discard offer",
+      "to": "REBOOT"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPOFFER",
+      "action": "Collect DHCPOFFER messages",
+      "to": "SELECTING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPREQUEST",
+      "action": "Send DHCPREQUEST",
+      "to": "BOUND"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPNAK",
+      "action": "Halt network",
+      "to": "INIT"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPOFFER",
+      "action": "Select offer/send DHCPREQUEST",
+      "to": "BOUND"
+    },
+    {
+      "from": "BOUND",
+      "event": "T1 expires",
+      "action": "Send DHCPREQUEST",
+      "to": "RENEWING"
+    },
+    {
+      "from": "BOUND",
+      "event": "T2 expires",
+      "action": "Send DHCPREQUEST",
+      "to": "REBINDING"
+    },
+    {
+      "from": "BOUND",
+      "event": "DHCPNAK",
+      "action": "Halt network",
+      "to": "INIT"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPNAK",
+      "action": "Halt network",
+      "to": "INIT"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPACK",
+      "action": "Record lease, set timers T1, T2",
+      "to": "BOUND"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPNAK",
+      "action": "Halt network",
+      "to": "INIT"
+    },
+    {
+      "from": "INIT-REBOOT",
+      "event": "DHCPREQUEST",
+      "action": "MUST be broadcast",
+      "to": "REBINDING"
+    },
+    {
+      "from": "SELECTING",
+      "event": "DHCPREQUEST",
+      "action": "Client inserts the address of the selected server in 'server identifier', 'ciaddr' MUST be zero, 'requested IP address' MUST be filled in with the yiaddr value from the chosen DHCPOFFER",
+      "to": "RENEWING"
+    },
+    {
+      "from": "RENEWING",
+      "event": "DHCPREQUEST",
+      "action": "SHOULD NOT conflict with those in the earlier DHCPOFFER message",
+      "to": "RENEWING"
+    },
+    {
+      "from": "REBINDING",
+      "event": "DHCPREQUEST",
+      "action": "MUST be broadcast to the 0xffffffff IP broadcast address",
+      "to": "REBINDING"
+    }
+  ]
+}

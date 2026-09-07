@@ -1,0 +1,498 @@
+{
+  "states": [
+    "Adj-RIB-In",
+    "Adj-RIB-Out",
+    "Loc-RIB",
+    "Feasible route",
+    "Unfeasible route",
+    "BGP connection established",
+    "Route advertised",
+    "Route withdrawn",
+    "OpenConfirm",
+    "OpenSent",
+    "Established",
+    "Idle",
+    "Connect",
+    "Active",
+    "Well-known mandatory",
+    "Well-known discretionary",
+    "Optional transitive",
+    "Optional non-transitive"
+  ],
+  "transitions": [
+    {
+      "from": "Adj-RIB-In",
+      "event": "",
+      "action": "",
+      "to": "Loc-RIB"
+    },
+    {
+      "from": "Loc-RIB",
+      "event": "",
+      "action": "",
+      "to": "Adj-RIB-Out"
+    },
+    {
+      "from": "Adj-RIB-Out",
+      "event": "UPDATE message",
+      "action": "advertisement",
+      "to": "Adj-RIB-In"
+    },
+    {
+      "from": "Feasible route",
+      "event": "",
+      "action": "",
+      "to": "Unfeasible route"
+    },
+    {
+      "from": "BGP connection established",
+      "event": "UPDATE message with WITHDRAWN ROUTES field",
+      "action": "mark route as no longer available for use",
+      "to": "Route withdrawn"
+    },
+    {
+      "from": "BGP connection established",
+      "event": "UPDATE message with replacement route",
+      "action": "advertise replacement route",
+      "to": "Route advertised"
+    },
+    {
+      "from": "BGP connection established",
+      "event": "connection close",
+      "action": "implicitly removes all routes",
+      "to": "Route withdrawn"
+    },
+    {
+      "from": "Route advertised",
+      "event": "attribute change",
+      "action": "advertise a replacement route",
+      "to": "Route advertised"
+    },
+    {
+      "from": "Idle",
+      "event": "receipt of OPEN message",
+      "action": "examine connections in OpenConfirm state",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "local BGP Identifier < remote BGP Identifier",
+      "action": "close existing connection, accept remote connection",
+      "to": "Established"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "local BGP Identifier > remote BGP Identifier",
+      "action": "close newly created connection, continue using existing one",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "Hold Timer Expired",
+      "action": "send NOTIFICATION message, close connection",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "collision with existing connection",
+      "action": "send NOTIFICATION message with Error Code Cease",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "collision with existing connection",
+      "action": "send NOTIFICATION message with Error Code Cease",
+      "to": "Idle"
+    },
+    {
+      "from": "Well-known mandatory",
+      "event": "update with NLRI",
+      "action": "pass attributes to peers",
+      "to": "Well-known mandatory"
+    },
+    {
+      "from": "Well-known discretionary",
+      "event": "update with NLRI",
+      "action": "MAY or MAY NOT be sent",
+      "to": "Well-known discretionary"
+    },
+    {
+      "from": "Optional transitive",
+      "event": "unrecognized attribute received",
+      "action": "accept and pass to peers with Partial bit set to 1",
+      "to": "Optional transitive"
+    },
+    {
+      "from": "Optional non-transitive",
+      "event": "unrecognized attribute received",
+      "action": "quietly ignore",
+      "to": "Optional non-transitive"
+    },
+    {
+      "from": "Idle",
+      "event": "ManualStart",
+      "action": "initializes all BGP resources for the peer connection, sets ConnectRetryCounter to zero, starts the ConnectRetryTimer with the initial value, initiates a TCP connection to the other BGP peer, listens for a connection that may be initiated by the remote BGP peer",
+      "to": "Connect"
+    },
+    {
+      "from": "Idle",
+      "event": "AutomaticStart",
+      "action": "initializes all BGP resources for the peer connection, sets ConnectRetryCounter to zero, starts the ConnectRetryTimer with the initial value, initiates a TCP connection to the other BGP peer, listens for a connection that may be initiated by the remote BGP peer",
+      "to": "Connect"
+    },
+    {
+      "from": "Idle",
+      "event": "ManualStop",
+      "action": "ignored",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "AutomaticStop",
+      "action": "ignored",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "ManualStop",
+      "action": "drops the TCP connection, releases all BGP resources, sets ConnectRetryCounter to zero, stops the ConnectRetryTimer and sets ConnectRetryTimer to zero",
+      "to": "Idle"
+    },
+    {
+      "from": "Connect",
+      "event": "ConnectRetryTimer_Expires",
+      "action": "drops the TCP connection, restarts the ConnectRetryTimer, stops the DelayOpenTimer and resets the timer to zero, initiates a TCP connection to the other BGP peer, continues to listen for a connection that may be initiated by the remote BGP peer",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "DelayOpenTimer_Expires",
+      "action": "sends an OPEN message to its peer, sets the HoldTimer to a large value",
+      "to": "OpenSent"
+    },
+    {
+      "from": "Connect",
+      "event": "TcpConnection_Valid",
+      "action": "processes the TCP connection",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "Tcp_CR_Invalid",
+      "action": "rejects the TCP connection",
+      "to": "Connect"
+    },
+    {
+      "from": "Active",
+      "event": "ManualStop",
+      "action": "sends the NOTIFICATION with a Cease, releases all BGP resources, drops the TCP connection, sets the ConnectRetryCounter to zero",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "AutomaticStop",
+      "action": "sends the NOTIFICATION with a Cease, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1",
+      "to": "Idle"
+    },
+    {
+      "from": "Active",
+      "event": "ConnectRetryTimer_Expires",
+      "action": "restarts the ConnectRetryTimer, initiates a TCP connection to the other BGP peer, continues to listen for a TCP connection that may be initiated by the remote BGP peer",
+      "to": "Connect"
+    },
+    {
+      "from": "Active",
+      "event": "DelayOpenTimer_Expires",
+      "action": "sets the ConnectRetryTimer to zero, stops and clears the DelayOpenTimer, completes the BGP initialization, sends the OPEN message to its peer, sets its hold timer to a large value",
+      "to": "OpenSent"
+    },
+    {
+      "from": "Active",
+      "event": "TcpConnection_Valid",
+      "action": "processes the TCP connection",
+      "to": "Active"
+    },
+    {
+      "from": "Active",
+      "event": "Tcp_CR_Invalid",
+      "action": "rejects the TCP connection",
+      "to": "Active"
+    },
+    {
+      "from": "OpenSent",
+      "event": "ManualStop",
+      "action": "sends the NOTIFICATION with a Cease, releases all BGP resources, drops the TCP connection, sets the ConnectRetryCounter to zero",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "AutomaticStop",
+      "action": "sends the NOTIFICATION with a Cease, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "HoldTimer_Expires",
+      "action": "sends a NOTIFICATION message with the Error Code Hold Timer Expired, releases all BGP resources, drops the TCP connection, increments the ConnectRetryCounter by 1",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "KeepaliveTimer_Expires",
+      "action": "sends a KEEPALIVE message, restarts the KeepaliveTimer",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenSent",
+      "event": "TcpConnection_Valid",
+      "action": "processes the TCP connection",
+      "to": "OpenSent"
+    },
+    {
+      "from": "OpenSent",
+      "event": "Tcp_CR_Invalid",
+      "action": "ignored",
+      "to": "OpenSent"
+    },
+    {
+      "from": "OpenSent",
+      "event": "TcpConnectionFails",
+      "action": "drops the TCP connection",
+      "to": "Active"
+    },
+    {
+      "from": "OpenSent",
+      "event": "BGPOpen",
+      "action": "resets the DelayOpenTimer to zero, sets the BGP ConnectRetryTimer to zero, sends a KEEPALIVE message, sets a KeepaliveTimer, sets the HoldTimer",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenSent",
+      "event": "BGPOpenMsgErr",
+      "action": "sends a NOTIFICATION message with the appropriate error code",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenSent",
+      "event": "OpenCollisionDump",
+      "action": "sends a NOTIFICATION with a Cease, releases all BGP resources, drops the TCP connection",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "ManualStop",
+      "action": "sends the NOTIFICATION message with a Cease, releases all BGP resources, drops the TCP connection",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "AutomaticStop",
+      "action": "sends the NOTIFICATION message with a Cease, releases all BGP resources, drops the TCP connection",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "HoldTimer_Expires",
+      "action": "sends a NOTIFICATION message with the Error Code Hold Timer Expired, releases all BGP resources, drops the TCP connection",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "KeepaliveTimer_Expires",
+      "action": "sends a KEEPALIVE message, restarts the KeepaliveTimer",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "TcpConnection_Valid",
+      "action": "tracks the second connection",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "Tcp_CR_Invalid",
+      "action": "ignored",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "TcpConnectionFails",
+      "action": "releases all BGP resources, drops the TCP connection",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "BGPOpen",
+      "action": "collision detection",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "NotifMsgVerErr",
+      "action": "releases all BGP resources, drops the TCP connection",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "KEEPALIVE",
+      "action": "restarts its HoldTimer",
+      "to": "Established"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "UpdateMsg",
+      "action": "processes the message, restarts its HoldTimer",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "ManualStop",
+      "action": "sends the NOTIFICATION message with a Cease, releases all BGP resources, drops the TCP connection",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "AutomaticStop",
+      "action": "sends the NOTIFICATION message with a Cease, releases all BGP resources, drops the TCP connection",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "HoldTimer_Expires",
+      "action": "sends a NOTIFICATION message with the Error Code Hold Timer Expired, releases all BGP resources, drops the TCP connection",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "KeepaliveTimer_Expires",
+      "action": "sends a KEEPALIVE message, restarts the KeepaliveTimer",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "TcpConnection_Valid",
+      "action": "tracks the second connection",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "Tcp_CR_Invalid",
+      "action": "ignored",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "TcpConnectionFails",
+      "action": "releases all BGP resources, drops the TCP connection",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "UPDATE message",
+      "action": "check validity of each field",
+      "to": "Established"
+    },
+    {
+      "from": "Idle",
+      "event": "ManualStart_with_PassiveTcpEstablishment",
+      "action": "initializes all BGP resources, sets ConnectRetryCounter to zero, starts the ConnectRetryTimer with the initial value, listens for a connection that may be initiated by the remote peer",
+      "to": "Active"
+    },
+    {
+      "from": "Idle",
+      "event": "AutomaticStart_with_PassiveTcpEstablishment",
+      "action": "initializes all BGP resources, sets ConnectRetryCounter to zero, starts the ConnectRetryTimer with the initial value, listens for a connection that may be initiated by the remote peer",
+      "to": "Active"
+    },
+    {
+      "from": "Idle",
+      "event": "connect attempt",
+      "action": "",
+      "to": "Connect"
+    },
+    {
+      "from": "Connect",
+      "event": "",
+      "action": "",
+      "to": "Active"
+    },
+    {
+      "from": "Active",
+      "event": "OPEN message received",
+      "action": "examine OpenConfirm connections",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenSent",
+      "event": "OPEN message received",
+      "action": "examine OpenConfirm connections",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "collision detected",
+      "action": "close connection",
+      "to": "Idle"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "collision detected",
+      "action": "close connection",
+      "to": "Idle"
+    },
+    {
+      "from": "Established",
+      "event": "connection collision",
+      "action": "closing of the newly created connection",
+      "to": "Idle"
+    },
+    {
+      "from": "Idle",
+      "event": "receipt of an OPEN message",
+      "action": "examine all connections that are in the OpenConfirm state",
+      "to": "OpenConfirm"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "BGP Identifier of the local system is less than the remote one",
+      "action": "closes the BGP connection that already exists, and accepts the BGP connection initiated by the remote system",
+      "to": "Established"
+    },
+    {
+      "from": "OpenConfirm",
+      "event": "BGP Identifier of the local system is not less than the remote one",
+      "action": "closes the newly created BGP connection, and continues to use the existing one",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "connection collision",
+      "action": "closing of the newly created connection",
+      "to": "Established"
+    },
+    {
+      "from": "any state",
+      "event": "fatal error",
+      "action": "send NOTIFICATION message, close BGP connection",
+      "to": "Idle"
+    },
+    {
+      "from": "any state",
+      "event": "Hold Timer Expired",
+      "action": "send NOTIFICATION message, close BGP connection",
+      "to": "Idle"
+    },
+    {
+      "from": "any state",
+      "event": "Cease",
+      "action": "send NOTIFICATION message",
+      "to": "Idle"
+    },
+    {
+      "from": "any state",
+      "event": "receipt of a NOTIFICATION message",
+      "action": "log locally, bring to the attention of the administration",
+      "to": "Idle"
+    }
+  ]
+}

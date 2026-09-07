@@ -1,0 +1,567 @@
+{
+  "states": [
+    "Init",
+    "Ready",
+    "Play",
+    "Play_NOTIFY",
+    "Play_Notify",
+    "non-aggregated control",
+    "aggregated control",
+    "Persistent Connection",
+    "Transient Connection",
+    "Connection Timeout",
+    "On-demand",
+    "Dynamic On-demand",
+    "Live",
+    "Live with Recording",
+    "Beginning-Only",
+    "No-Seeking",
+    "RAP",
+    "CoRAP",
+    "First-Prior",
+    "Next",
+    "Established RTSP Session",
+    "General RTSP Server",
+    "RTSP Proxy",
+    "Load-Balancing RTSP Proxy",
+    "Idle",
+    "Established",
+    "Connecting",
+    "Recovering",
+    "Requester",
+    "Responder",
+    "200 OK",
+    "Established Session",
+    "Internal Server Error",
+    "Not Implemented",
+    "Bad Gateway",
+    "Service Unavailable",
+    "Gateway Timeout",
+    "RTSP Version Not Supported",
+    "Option Not Supported",
+    "Proxy Unavailable",
+    "Aggregated Session",
+    "PLAY state",
+    "PLAY",
+    "SETUP 200 OK",
+    "PLAY Request",
+    "RTSP session",
+    "TLS connection",
+    "MIKEY Initiator message",
+    "MIKEY response message",
+    "RTSP request",
+    "RTSP response",
+    "Initial State",
+    "Negotiation State",
+    "Setup State",
+    "Initial",
+    "PLAY",
+    "PAUSE",
+    "PLAY after PAUSE",
+    "Session-level control",
+    "Media-level control",
+    "Aggregate Control Not Available",
+    "Aggregate Control Available",
+    "RTSP PLAY mode",
+    "SETUP Received",
+    "PLAY Sent",
+    "PAUSE Received",
+    "TEARDOWN Received",
+    "PLAY request replaces an ongoing request",
+    "RTSP session with media that lacks random access properties",
+    "PLAY request after a completed PLAY operation",
+    "Transport Protocol Identifier Registry",
+    "Transport Modes",
+    "Transport Parameters",
+    "Ready",
+    "Play State"
+  ],
+  "transitions": [
+    {
+      "from": "Init",
+      "event": "SETUP",
+      "action": "create session, respond with Session header and Transport header",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP",
+      "action": "create session, respond with Session header and Transport header",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP",
+      "action": "change transport parameters, respond with Transport header",
+      "to": "Play"
+    },
+    {
+      "from": "Init",
+      "event": "SETUP",
+      "action": "create session, respond with Session header and Transport header",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP",
+      "action": "create session, respond with Session header and Transport header",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "position normal play time, deliver stream data",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PAUSE",
+      "action": "halt delivery, report pause point",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY",
+      "action": "replace current PLAY action",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY_NOTIFY",
+      "action": "indicate end of content or range",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP",
+      "action": "NRM=1, RP=0.0",
+      "to": "Ready"
+    },
+    {
+      "from": "Init",
+      "event": "SETUP",
+      "action": "3rr Redirect",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP",
+      "action": "NRM +=1",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP",
+      "action": "Change transport param.",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN",
+      "action": "No session hdr, NRM = 0",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN",
+      "action": "No Session hdr, NRM -= 1",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "Play from present point",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "According to range",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PAUSE",
+      "action": "Set RP to present point",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SC:REDIRECT",
+      "action": "Set RedP",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SC:REDIRECT",
+      "action": "Session is removed",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "Timeout",
+      "action": "Stop Media playout",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY",
+      "action": "Play from present point",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY",
+      "action": "According to range",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SC:PLAY_NOTIFY",
+      "action": "200",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP",
+      "action": "455",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP",
+      "action": "455",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP",
+      "action": "Change transport param.",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "TEARDOWN",
+      "action": "455",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "SC:REDIRECT",
+      "action": "Set RedP",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "RedP reached",
+      "action": "TEARDOWN of session",
+      "to": "Init"
+    },
+    {
+      "from": "Play",
+      "event": "Timeout",
+      "action": "Stop Media playout",
+      "to": "Init"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "start sending data",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PAUSE",
+      "action": "interrupt delivery, set pause point",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP",
+      "action": "change transport parameters",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP",
+      "action": "change transport parameters",
+      "to": "Play"
+    },
+    {
+      "from": "Init",
+      "event": "SETUP",
+      "action": "create RTSP session",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "start delivery",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PAUSE",
+      "action": "interrupt delivery",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP",
+      "action": "change transport parameters",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "TEARDOWN",
+      "action": "terminate session",
+      "to": "Ready"
+    },
+    {
+      "from": "Idle",
+      "event": "TCP Connection",
+      "action": "Send Initial Request",
+      "to": "Connecting"
+    },
+    {
+      "from": "Connecting",
+      "event": "RTSP Response",
+      "action": "Handle Response",
+      "to": "Established"
+    },
+    {
+      "from": "Established",
+      "event": "TCP Connection Loss",
+      "action": "Set up new connection",
+      "to": "Recovering"
+    },
+    {
+      "from": "Recovering",
+      "event": "New TCP Connection",
+      "action": "Send Initial Request",
+      "to": "Connecting"
+    },
+    {
+      "from": "Requester",
+      "event": "Timeout (10 seconds)",
+      "action": "Abort connection by closing TCP connection",
+      "to": "Requester"
+    },
+    {
+      "from": "Responder",
+      "event": "Request received",
+      "action": "Respond within 5 seconds or send 100 (Continue) response",
+      "to": "Responder"
+    },
+    {
+      "from": "Persistent Connection",
+      "event": "",
+      "action": "aggregate client requests",
+      "to": "Persistent Connection"
+    },
+    {
+      "from": "Persistent Connection",
+      "event": "queued request",
+      "action": "send on new connection",
+      "to": "Persistent Connection"
+    },
+    {
+      "from": "Persistent Connection",
+      "event": "no other request",
+      "action": "send keep-alive request",
+      "to": "Persistent Connection"
+    },
+    {
+      "from": "Transient Connection",
+      "event": "",
+      "action": "close connection",
+      "to": "Connection Timeout"
+    },
+    {
+      "from": "Connection Timeout",
+      "event": "10 seconds elapse",
+      "action": "abort connection",
+      "to": "Connection Timeout"
+    },
+    {
+      "from": "Established RTSP Session",
+      "event": "request resulting in 503 response",
+      "action": "send 503 response with Session header",
+      "to": "Established RTSP Session"
+    },
+    {
+      "from": "General RTSP Server",
+      "event": "request not session specific",
+      "action": "send 503 response with Retry-After header",
+      "to": "General RTSP Server"
+    },
+    {
+      "from": "General RTSP Server",
+      "event": "request to create new RTSP session",
+      "action": "send 503 response with Retry-After header",
+      "to": "General RTSP Server"
+    },
+    {
+      "from": "RTSP Proxy",
+      "event": "overload or unavailable",
+      "action": "send 553 response",
+      "to": "RTSP Proxy"
+    },
+    {
+      "from": "RTSP Proxy",
+      "event": "request associated with existing RTSP session",
+      "action": "send 553 response",
+      "to": "RTSP Proxy"
+    },
+    {
+      "from": "RTSP Proxy",
+      "event": "request to create new session or general proxy request",
+      "action": "send 553 response",
+      "to": "RTSP Proxy"
+    },
+    {
+      "from": "Load-Balancing RTSP Proxy",
+      "event": "503 or 553 response or TCP timeout from server",
+      "action": "retry other addresses or proxies",
+      "to": "Load-Balancing RTSP Proxy"
+    },
+    {
+      "from": "Load-Balancing RTSP Proxy",
+      "event": "no response or TCP timeout from all addresses",
+      "action": "wait before sending new requests, delay according to Retry-After headers, initial wait timer 5 seconds, doubling until 30 minutes, variation to mean value",
+      "to": "Load-Balancing RTSP Proxy"
+    },
+    {
+      "from": "PLAY Request",
+      "event": "SETUP 200 OK",
+      "action": "MUST use a symbolic value representing \"now\"",
+      "to": "PLAY Request"
+    },
+    {
+      "from": "PLAY Request",
+      "event": "SETUP 200 OK",
+      "action": "MAY send",
+      "to": "PLAY Request"
+    },
+    {
+      "from": "Established Session",
+      "event": "3rr response for a request in relation to an established session",
+      "action": "SHOULD send a TEARDOWN request for the session and MAY reestablish the session using the resource indicated by the Location",
+      "to": "Established Session"
+    },
+    {
+      "from": "PLAY",
+      "event": "PLAY",
+      "action": "stop playout, start delivering media, send 200 OK, send PLAY_NOTIFY, set pause point",
+      "to": "Play"
+    },
+    {
+      "from": "PLAY",
+      "event": "PLAY",
+      "action": "replace current PLAY action",
+      "to": "Play"
+    },
+    {
+      "from": "PLAY",
+      "event": "PLAY",
+      "action": "change scale, send 200 OK, send RTP-Info",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "position normal play time, deliver stream data",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY",
+      "action": "replace current PLAY action",
+      "to": "Play"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY_NOTIFY",
+      "action": "inform client",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PAUSE",
+      "action": "interrupt delivery, set pause point",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "PAUSE",
+      "action": "interrupt delivery, set pause point",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP",
+      "action": "change transport parameters",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "SETUP",
+      "action": "change transport parameters",
+      "to": "Play"
+    },
+    {
+      "from": "Init",
+      "event": "SETUP",
+      "action": "create session",
+      "to": "Ready"
+    },
+    {
+      "from": "Ready",
+      "event": "PLAY",
+      "action": "start playing",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "PAUSE",
+      "action": "halt delivery",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "PAUSE",
+      "action": "interrupt delivery",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY",
+      "action": "replace current play",
+      "to": "Play"
+    },
+    {
+      "from": "Ready",
+      "event": "SETUP",
+      "action": "change transport parameters",
+      "to": "Ready"
+    },
+    {
+      "from": "Play",
+      "event": "PLAY_NOTIFY",
+      "action": "send Notify-Reason response-header",
+      "to": "Play"
+    },
+    {
+      "from": "SETUP 200 OK",
+      "event": "PLAY request with Range header",
+      "action": "MUST use a symbolic value representing \"now\"",
+      "to": "PLAY Request"
+    },
+    {
+      "from": "SETUP 200 OK",
+      "event": "PLAY request without Range header",
+      "action": "MAY send",
+      "to": "PLAY Request"
+    }
+  ]
+}

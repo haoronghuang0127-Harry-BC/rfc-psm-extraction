@@ -1,0 +1,123 @@
+{
+  "states": [
+    "AUTHORIZATION",
+    "TRANSACTION",
+    "UPDATE"
+  ],
+  "transitions": [
+    {
+      "from": "AUTHORIZATION",
+      "event": "",
+      "action": "+OK POP3 server ready",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "USER and PASS command combination or APOP command",
+      "action": "positive status indicator",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "negative status indicator",
+      "action": "",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "USER name",
+      "action": "+OK",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "PASS string",
+      "action": "+OK",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "QUIT",
+      "action": "+OK",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "AUTHORIZATION",
+      "event": "APOP name digest",
+      "action": "+OK",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "QUIT command",
+      "action": "server releases resources and says goodbye",
+      "to": "UPDATE"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "QUIT",
+      "action": "",
+      "to": "UPDATE"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "STAT",
+      "action": "+OK/-ERR",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "LIST [msg]",
+      "action": "+OK/-ERR",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "RETR msg",
+      "action": "+OK/-ERR",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "DELE msg",
+      "action": "+OK/-ERR",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "NOOP",
+      "action": "+OK/-ERR",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "RSET",
+      "action": "+OK/-ERR",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "QUIT",
+      "action": "+OK/-ERR",
+      "to": "AUTHORIZATION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "TOP msg n",
+      "action": "+OK/-ERR",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "TRANSACTION",
+      "event": "UIDL [msg]",
+      "action": "+OK/-ERR",
+      "to": "TRANSACTION"
+    },
+    {
+      "from": "UPDATE",
+      "event": "",
+      "action": "TCP connection is closed",
+      "to": "AUTHORIZATION"
+    }
+  ]
+}

@@ -1,0 +1,366 @@
+{
+  "states": [
+    "LISTEN",
+    "SYN-SENT",
+    "SYN-RECEIVED",
+    "ESTABLISHED",
+    "FIN-WAIT-1",
+    "FIN-WAIT-2",
+    "CLOSE-WAIT",
+    "CLOSING",
+    "LAST-ACK",
+    "TIME-WAIT",
+    "CLOSED",
+    "Idle Connection",
+    "urgent mode",
+    "normal mode",
+    "Zero Window",
+    "Normal Operation",
+    "OPEN",
+    "TCB"
+  ],
+  "transitions": [
+    {
+      "from": "CLOSED",
+      "event": "active OPEN",
+      "action": "create TCB, snd SYN",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "CLOSED",
+      "event": "passive OPEN",
+      "action": "create TCB",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv SYN",
+      "action": "snd SYN,ACK",
+      "to": "SYN-RCVD"
+    },
+    {
+      "from": "SYN-RCVD",
+      "event": "rcv ACK of SYN",
+      "action": "",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "rcv FIN",
+      "action": "snd FIN",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "rcv ACK of FIN",
+      "action": "",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "rcv FIN",
+      "action": "snd ACK",
+      "to": "CLOSING"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "rcv FIN",
+      "action": "snd ACK",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "rcv FIN",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "rcv ACK of FIN",
+      "action": "",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "Timeout=2MSL",
+      "action": "delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-RCVD",
+      "event": "rcv RST",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv RST",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "CLOSED",
+      "event": "SYN",
+      "action": "send SYN",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "SYN-ACK",
+      "action": "send ACK",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "RST",
+      "action": "return to LISTEN",
+      "to": "LISTEN"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "ACK",
+      "action": "send ACK",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "DATA",
+      "action": "send ACK",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "SYN",
+      "action": "send SYN-ACK",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "CLOSED",
+      "event": "RESET",
+      "action": "return to LISTEN",
+      "to": "LISTEN"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "RESET",
+      "action": "return to LISTEN",
+      "to": "LISTEN"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "RESET",
+      "action": "abort connection",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "duplicate SYN",
+      "action": "send RST",
+      "to": "LISTEN"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "Close",
+      "action": "construct and place a FIN segment on the outgoing segment queue",
+      "to": "FIN-WAIT-1"
+    },
+    {
+      "from": "FIN-WAIT-1",
+      "event": "ACK of FIN",
+      "action": "",
+      "to": "FIN-WAIT-2"
+    },
+    {
+      "from": "FIN-WAIT-2",
+      "event": "rcv FIN",
+      "action": "snd ACK",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "CLOSE-WAIT",
+      "event": "rcv FIN",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "rcv ACK of FIN",
+      "action": "",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "2 MSL",
+      "action": "delete TCB",
+      "to": "CLOSED"
+    },
+    {
+      "from": "SYN-RCVD",
+      "event": "rcv RST",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "rcv RST",
+      "action": "",
+      "to": "LISTEN"
+    },
+    {
+      "from": "Idle Connection",
+      "event": "no incoming segments received and no new or unacknowledged data to be sent for an interval",
+      "action": "send probe segment",
+      "to": "Idle Connection"
+    },
+    {
+      "from": "normal mode",
+      "event": "receive sequence number catches up to the urgent pointer",
+      "action": "tell user to go into normal mode",
+      "to": "normal mode"
+    },
+    {
+      "from": "normal mode",
+      "event": "urgent pointer is in advance of the receive sequence number",
+      "action": "tell the user to go into urgent mode",
+      "to": "urgent mode"
+    },
+    {
+      "from": "urgent mode",
+      "event": "urgent pointer is updated",
+      "action": "update will be invisible to the user",
+      "to": "urgent mode"
+    },
+    {
+      "from": "Normal Operation",
+      "event": "window shrinks to zero",
+      "action": "probe it",
+      "to": "Zero Window"
+    },
+    {
+      "from": "Zero Window",
+      "event": "acknowledgments in response to probe segments",
+      "action": "allow the connection to stay open",
+      "to": "Normal Operation"
+    },
+    {
+      "from": "Normal Operation",
+      "event": "window shrinks",
+      "action": "be robust against window shrinking",
+      "to": "Normal Operation"
+    },
+    {
+      "from": "LISTEN",
+      "event": "OPEN (local port, remote socket, active/passive)",
+      "action": "creates a new connection record",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "OPEN (local port, remote socket, active/passive)",
+      "action": "creates a new connection record",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "OPEN",
+      "action": "begin the procedure to synchronize the connection",
+      "to": "SYN-SENT"
+    },
+    {
+      "from": "SYN-SENT",
+      "event": "SEND",
+      "action": "automatic OPEN",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "SEND",
+      "action": "",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "RECEIVE",
+      "action": "",
+      "to": "SYN-RECEIVED"
+    },
+    {
+      "from": "SYN-RECEIVED",
+      "event": "CLOSE",
+      "action": "graceful operation",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "RECEIVE",
+      "action": "continue to RECEIVE",
+      "to": "CLOSING"
+    },
+    {
+      "from": "CLOSING",
+      "event": "SEND",
+      "action": "transmit outstanding SENDs",
+      "to": "CLOSING"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "CLOSE user call",
+      "action": "push function",
+      "to": "ESTABLISHED"
+    },
+    {
+      "from": "ESTABLISHED",
+      "event": "CLOSE",
+      "action": "",
+      "to": "CLOSING"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "SYN",
+      "action": "assign its initial sequence number for the new connection to be larger than the largest sequence number it used on the previous connection incarnation",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "TIME-WAIT",
+      "event": "SYN",
+      "action": "return to TIME-WAIT state if the SYN turns out to be an old duplicate",
+      "to": "TIME-WAIT"
+    },
+    {
+      "from": "CLOSED",
+      "event": "SEGMENT ARRIVES with RST",
+      "action": "discarded",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSED",
+      "event": "SEGMENT ARRIVES without RST and ACK bit off",
+      "action": "send RST with SEQ=0, ACK=SEG.SEQ+SEG.LEN, CTL=RST,ACK",
+      "to": "CLOSED"
+    },
+    {
+      "from": "CLOSED",
+      "event": "SEGMENT ARRIVES without RST and ACK bit on",
+      "action": "send RST with SEQ=SEG.ACK, CTL=RST",
+      "to": "CLOSED"
+    },
+    {
+      "from": "LISTEN",
+      "event": "RST",
+      "action": "ignore",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "ACK",
+      "action": "form and send RST",
+      "to": "LISTEN"
+    },
+    {
+      "from": "LISTEN",
+      "event": "SYN",
+      "action": "check security; set RCV.NXT, IRS, queue control/text; select ISS, send SYN segment; set SND.NXT, SND.UNA",
+      "to": "SYN-RECEIVED"
+    }
+  ]
+}

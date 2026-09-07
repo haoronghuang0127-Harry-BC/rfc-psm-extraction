@@ -1,0 +1,2069 @@
+{
+  "states": [
+    "Initial",
+    "Trying",
+    "Proceeding",
+    "Completed",
+    "Terminated",
+    "calling",
+    "early",
+    "confirmed",
+    "Dialog",
+    "Existing Dialog",
+    "Ongoing INVITE Client Transaction",
+    "Ongoing INVITE Server Transaction",
+    "Completed INVITE Transaction",
+    "Terminated INVITE Transaction",
+    "Confirmed Dialog",
+    "Early Dialog",
+    "Terminated Dialog",
+    "Session",
+    "Stateless Proxy",
+    "Stateful Proxy",
+    "Client Transaction",
+    "Server Transaction",
+    "Transaction Stateful Proxy",
+    "Call Stateful Proxy",
+    "Transaction User",
+    "UAC Core",
+    "UAS Core",
+    "Provisional Response",
+    "Final Response",
+    "Pending client transactions",
+    "Provisional response received",
+    "Final response received",
+    "CANCEL request received",
+    "CANCEL request forwarded",
+    "CANCEL request processed",
+    "Response context found",
+    "Response context not found",
+    "Processing Responses",
+    "Transaction Layer Errors",
+    "Unrecognized Responses",
+    "Vias",
+    "Processing 3xx Responses",
+    "Processing 4xx Responses",
+    "UAS Behavior",
+    "Method Inspection",
+    "Header Inspection",
+    "Content Processing",
+    "Applying Extensions",
+    "Processing the Request",
+    "Generating the Response",
+    "Sending a Provisional Response",
+    "Stateless UAS Behavior",
+    "Redirect Server",
+    "Transaction State",
+    "Registration",
+    "Location Service",
+    "Request Validation",
+    "Proxy Behavior",
+    "Determining Request Targets",
+    "Request Forwarding",
+    "Unauthorized",
+    "Authorized",
+    "Proxy Authentication Required",
+    "Proxy Authentication Successful",
+    "Unauthorized or Proxy Authentication Required",
+    "Unauthorized or Proxy Authentication Required with multiple challenges",
+    "Authenticated",
+    "Processing REGISTER Request",
+    "423 Interval Too Brief",
+    "Content-Disposition: session",
+    "Content-Disposition: render",
+    "Content-Disposition: icon",
+    "Content-Disposition: alert",
+    "Provisional",
+    "Successful",
+    "Redirection",
+    "Request Failure",
+    "Server Failure",
+    "Global Failures",
+    "UAC Sends Request with S/MIME Body",
+    "UAS Receives Request with S/MIME Body",
+    "UAS Sends Response with S/MIME Body",
+    "UAC Receives Response with S/MIME Body",
+    "Certificate Validation",
+    "Certificate Verification",
+    "Certificate Addition to Keyring",
+    "Certificate Discrepancy Notification",
+    "Certificate Change Notification",
+    "Rejection of Undecipherable Request",
+    "Notification of Unsecured Session",
+    "Handling of Optional S/MIME Body",
+    "Registration",
+    "Session Setup",
+    "Media Session",
+    "Session Termination"
+  ],
+  "transitions": [
+    {
+      "from": "Initial",
+      "event": "INVITE",
+      "action": "100 Trying",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "180 Ringing",
+      "action": "",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "200 OK",
+      "action": "ACK",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "BYE",
+      "action": "200 OK",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "CANCEL",
+      "action": "487 Request Terminated",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "CANCEL",
+      "action": "487 Request Terminated",
+      "to": "Terminated"
+    },
+    {
+      "from": "early",
+      "event": "180 Ringing",
+      "action": "",
+      "to": "early"
+    },
+    {
+      "from": "early",
+      "event": "100 Trying",
+      "action": "",
+      "to": "early"
+    },
+    {
+      "from": "early",
+      "event": "2xx",
+      "action": "",
+      "to": "confirmed"
+    },
+    {
+      "from": "early",
+      "event": "4xx",
+      "action": "",
+      "to": "terminated"
+    },
+    {
+      "from": "early",
+      "event": "5xx",
+      "action": "",
+      "to": "terminated"
+    },
+    {
+      "from": "early",
+      "event": "6xx",
+      "action": "",
+      "to": "terminated"
+    },
+    {
+      "from": "early",
+      "event": "timeout",
+      "action": "",
+      "to": "terminated"
+    },
+    {
+      "from": "confirmed",
+      "event": "BYE",
+      "action": "",
+      "to": "terminated"
+    },
+    {
+      "from": "confirmed",
+      "event": "timeout",
+      "action": "",
+      "to": "terminated"
+    },
+    {
+      "from": "confirmed",
+      "event": "481 Call/Transaction Does Not Exist",
+      "action": "",
+      "to": "terminated"
+    },
+    {
+      "from": "confirmed",
+      "event": "408 Request Timeout",
+      "action": "",
+      "to": "terminated"
+    },
+    {
+      "from": "confirmed",
+      "event": "re-INVITE",
+      "action": "",
+      "to": "confirmed"
+    },
+    {
+      "from": "confirmed",
+      "event": "491 Request Pending",
+      "action": "",
+      "to": "confirmed"
+    },
+    {
+      "from": "confirmed",
+      "event": "487 Request Terminated",
+      "action": "",
+      "to": "terminated"
+    },
+    {
+      "from": "confirmed",
+      "event": "488 Not Acceptable Here",
+      "action": "",
+      "to": "confirmed"
+    },
+    {
+      "from": "confirmed",
+      "event": "486 Busy Here",
+      "action": "",
+      "to": "terminated"
+    },
+    {
+      "from": "confirmed",
+      "event": "600 Busy Everywhere",
+      "action": "",
+      "to": "terminated"
+    },
+    {
+      "from": "confirmed",
+      "event": "603 Decline",
+      "action": "",
+      "to": "terminated"
+    },
+    {
+      "from": "confirmed",
+      "event": "606 Not Acceptable",
+      "action": "",
+      "to": "terminated"
+    },
+    {
+      "from": "confirmed",
+      "event": "3xx",
+      "action": "",
+      "to": "confirmed"
+    },
+    {
+      "from": "confirmed",
+      "event": "CANCEL",
+      "action": "",
+      "to": "terminated"
+    },
+    {
+      "from": "terminated",
+      "event": "",
+      "action": "",
+      "to": "terminated"
+    },
+    {
+      "from": "completed",
+      "event": "",
+      "action": "",
+      "to": "completed"
+    },
+    {
+      "from": "calling",
+      "event": "Timer A fires",
+      "action": "INVITE sent",
+      "to": "calling"
+    },
+    {
+      "from": "calling",
+      "event": "1xx",
+      "action": "1xx to TU",
+      "to": "proceeding"
+    },
+    {
+      "from": "calling",
+      "event": "300-699",
+      "action": "ACK sent, resp. to TU",
+      "to": "completed"
+    },
+    {
+      "from": "calling",
+      "event": "2xx",
+      "action": "2xx to TU",
+      "to": "terminated"
+    },
+    {
+      "from": "proceeding",
+      "event": "Timer A fires",
+      "action": "INVITE sent",
+      "to": "proceeding"
+    },
+    {
+      "from": "proceeding",
+      "event": "1xx",
+      "action": "1xx to TU",
+      "to": "proceeding"
+    },
+    {
+      "from": "proceeding",
+      "event": "300-699",
+      "action": "ACK sent, resp. to TU",
+      "to": "completed"
+    },
+    {
+      "from": "completed",
+      "event": "Timer D fires",
+      "action": "",
+      "to": "terminated"
+    },
+    {
+      "from": "completed",
+      "event": "300-699",
+      "action": "ACK sent",
+      "to": "completed"
+    },
+    {
+      "from": "trying",
+      "event": "Timer E fires",
+      "action": "send req",
+      "to": "trying"
+    },
+    {
+      "from": "trying",
+      "event": "1xx",
+      "action": "resp. to TU",
+      "to": "proceeding"
+    },
+    {
+      "from": "trying",
+      "event": "200-699",
+      "action": "resp. to TU",
+      "to": "completed"
+    },
+    {
+      "from": "proceeding",
+      "event": "Timer E fires",
+      "action": "send req",
+      "to": "proceeding"
+    },
+    {
+      "from": "proceeding",
+      "event": "200-699",
+      "action": "resp. to TU",
+      "to": "completed"
+    },
+    {
+      "from": "completed",
+      "event": "Timer K fires",
+      "action": "",
+      "to": "terminated"
+    },
+    {
+      "from": "completed",
+      "event": "200-699",
+      "action": "",
+      "to": "completed"
+    },
+    {
+      "from": "Client Transaction",
+      "event": "INVITE request",
+      "action": "create a new client transaction",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Client Transaction",
+      "event": "final response",
+      "action": "terminate the client transaction",
+      "to": "Completed"
+    },
+    {
+      "from": "Client Transaction",
+      "event": "CANCEL request",
+      "action": "terminate the client transaction",
+      "to": "Terminated"
+    },
+    {
+      "from": "Server Transaction",
+      "event": "INVITE request",
+      "action": "create a new server transaction",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Server Transaction",
+      "event": "final response",
+      "action": "terminate the server transaction",
+      "to": "Completed"
+    },
+    {
+      "from": "Server Transaction",
+      "event": "CANCEL request",
+      "action": "terminate the server transaction",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "final response",
+      "action": "transition to Completed",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "CANCEL request",
+      "action": "transition to Terminated",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "",
+      "action": "",
+      "to": "Completed"
+    },
+    {
+      "from": "Terminated",
+      "event": "",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Transaction Stateful Proxy",
+      "event": "new request",
+      "action": "create a new server transaction",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Transaction Stateful Proxy",
+      "event": "final response",
+      "action": "terminate the server transaction",
+      "to": "Completed"
+    },
+    {
+      "from": "Stateless Proxy",
+      "event": "new request",
+      "action": "forward the request",
+      "to": "Stateless Proxy"
+    },
+    {
+      "from": "Stateful Proxy",
+      "event": "new request",
+      "action": "create a new server transaction",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Stateful Proxy",
+      "event": "final response",
+      "action": "terminate the server transaction",
+      "to": "Completed"
+    },
+    {
+      "from": "Dialog",
+      "event": "INVITE request",
+      "action": "establish a dialog",
+      "to": "Dialog"
+    },
+    {
+      "from": "Call Stateful Proxy",
+      "event": "INVITE request",
+      "action": "retain state for the dialog",
+      "to": "Call Stateful Proxy"
+    },
+    {
+      "from": "Transaction User",
+      "event": "new request",
+      "action": "process the request",
+      "to": "Transaction User"
+    },
+    {
+      "from": "UAC Core",
+      "event": "new request",
+      "action": "create a new client transaction",
+      "to": "Proceeding"
+    },
+    {
+      "from": "UAS Core",
+      "event": "new request",
+      "action": "create a new server transaction",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Processing Responses",
+      "event": "",
+      "action": "The transaction layer performs its processing and then passes the response up to the TU",
+      "to": "Processing Responses"
+    },
+    {
+      "from": "Processing Responses",
+      "event": "timeout error",
+      "action": "Treat as if a 408 (Request Timeout) status code has been received",
+      "to": "Transaction Layer Errors"
+    },
+    {
+      "from": "Processing Responses",
+      "event": "fatal transport error",
+      "action": "Treat as a 503 (Service Unavailable) status code",
+      "to": "Transaction Layer Errors"
+    },
+    {
+      "from": "Processing Responses",
+      "event": "unrecognized final response",
+      "action": "Treat as the x00 response code of that class",
+      "to": "Unrecognized Responses"
+    },
+    {
+      "from": "Processing Responses",
+      "event": "unrecognized provisional response",
+      "action": "Treat as 183 (Session Progress)",
+      "to": "Unrecognized Responses"
+    },
+    {
+      "from": "Processing Responses",
+      "event": "more than one Via header field value",
+      "action": "Discard the message",
+      "to": "Vias"
+    },
+    {
+      "from": "Processing Responses",
+      "event": "3xx response",
+      "action": "Use the URI(s) in the Contact header field to formulate one or more new requests",
+      "to": "Processing 3xx Responses"
+    },
+    {
+      "from": "Processing Responses",
+      "event": "401 (Unauthorized) or 407 (Proxy Authentication Required) response",
+      "action": "Follow the authorization procedures to retry the request with credentials",
+      "to": "Processing 4xx Responses"
+    },
+    {
+      "from": "Processing Responses",
+      "event": "413 (Request Entity Too Large) response",
+      "action": "Retry the request, either omitting the body or using one of a smaller length",
+      "to": "Processing 4xx Responses"
+    },
+    {
+      "from": "Processing Responses",
+      "event": "415 (Unsupported Media Type) response",
+      "action": "Retry sending the request, using content with types listed in the Accept header field",
+      "to": "Processing 4xx Responses"
+    },
+    {
+      "from": "Processing Responses",
+      "event": "416 (Unsupported URI Scheme) response",
+      "action": "Retry the request, using a SIP URI",
+      "to": "Processing 4xx Responses"
+    },
+    {
+      "from": "Processing Responses",
+      "event": "420 (Bad Extension) response",
+      "action": "Retry the request, omitting any extensions listed in the Unsupported header field",
+      "to": "Processing 4xx Responses"
+    },
+    {
+      "from": "UAS Behavior",
+      "event": "",
+      "action": "process the request in the order of the steps",
+      "to": "Method Inspection"
+    },
+    {
+      "from": "Method Inspection",
+      "event": "UAS recognizes but does not support the method",
+      "action": "generate a 405 (Method Not Allowed) response",
+      "to": "Generating the Response"
+    },
+    {
+      "from": "Method Inspection",
+      "event": "UAS supports the method",
+      "action": "",
+      "to": "Header Inspection"
+    },
+    {
+      "from": "Header Inspection",
+      "event": "UAS does not understand a header field",
+      "action": "ignore that header field",
+      "to": "Header Inspection"
+    },
+    {
+      "from": "Header Inspection",
+      "event": "UAS understands all header fields",
+      "action": "",
+      "to": "Content Processing"
+    },
+    {
+      "from": "Content Processing",
+      "event": "UAS does not understand the body type, language, or encoding",
+      "action": "reject the request with a 415 (Unsupported Media Type) response",
+      "to": "Generating the Response"
+    },
+    {
+      "from": "Content Processing",
+      "event": "UAS understands the body type, language, and encoding",
+      "action": "",
+      "to": "Applying Extensions"
+    },
+    {
+      "from": "Applying Extensions",
+      "event": "UAS needs an extension not supported by the client",
+      "action": "send a 421 (Extension Required) response",
+      "to": "Generating the Response"
+    },
+    {
+      "from": "Applying Extensions",
+      "event": "UAS does not need an extension not supported by the client",
+      "action": "",
+      "to": "Processing the Request"
+    },
+    {
+      "from": "Processing the Request",
+      "event": "all checks are passed",
+      "action": "",
+      "to": "Generating the Response"
+    },
+    {
+      "from": "Generating the Response",
+      "event": "UAS wishes to construct a response",
+      "action": "follow the general procedures detailed in the following subsections",
+      "to": "Sending a Provisional Response"
+    },
+    {
+      "from": "Sending a Provisional Response",
+      "event": "UAS is a stateless UAS",
+      "action": "do not send provisional responses",
+      "to": "Stateless UAS Behavior"
+    },
+    {
+      "from": "Sending a Provisional Response",
+      "event": "UAS is not a stateless UAS",
+      "action": "send a provisional response if necessary",
+      "to": "Generating the Response"
+    },
+    {
+      "from": "Redirect Server",
+      "event": "Receive Request",
+      "action": "Gather list of alternative locations from location service and return 3xx response",
+      "to": "Transaction State"
+    },
+    {
+      "from": "Redirect Server",
+      "event": "Receive CANCEL Request",
+      "action": "Return 2xx response",
+      "to": "Transaction State"
+    },
+    {
+      "from": "Redirect Server",
+      "event": "Receive Request",
+      "action": "Refuse the request",
+      "to": "Transaction State"
+    },
+    {
+      "from": "calling",
+      "event": "Timer A fires",
+      "action": "Reset A, INVITE sent",
+      "to": "calling"
+    },
+    {
+      "from": "calling",
+      "event": "1xx response received",
+      "action": "Provisional response passed to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "calling",
+      "event": "300-699 response received",
+      "action": "Response passed to TU, ACK sent",
+      "to": "Completed"
+    },
+    {
+      "from": "calling",
+      "event": "Timer B fires",
+      "action": "Inform TU of timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699 response received",
+      "action": "Response passed to TU, ACK sent",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx response received",
+      "action": "Response passed to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer B fires",
+      "action": "Inform TU of timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer D fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Final response retransmission received",
+      "action": "ACK re-passed to transport layer",
+      "to": "Completed"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer E fires",
+      "action": "Request sent",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "1xx response received",
+      "action": "Response passed to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "200-699 response received",
+      "action": "Response passed to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer F fires",
+      "action": "Inform TU of timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer E fires",
+      "action": "Request sent",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "200-699 response received",
+      "action": "Response passed to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer F fires",
+      "action": "Inform TU of timeout",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer K fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Final response retransmission received",
+      "action": "",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx response received",
+      "action": "Response passed to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699 response received",
+      "action": "Response passed to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer H fires",
+      "action": "Inform TU of transaction failure",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "ACK received",
+      "action": "",
+      "to": "Confirmed"
+    },
+    {
+      "from": "Confirmed",
+      "event": "Timer I fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Registration",
+      "event": "REGISTER request",
+      "action": "create a binding explicitly",
+      "to": "Location Service"
+    },
+    {
+      "from": "calling",
+      "event": "Timer A fires",
+      "action": "Reset A, INVITE sent",
+      "to": "calling"
+    },
+    {
+      "from": "calling",
+      "event": "Timer B fires",
+      "action": "inform TU",
+      "to": "terminated"
+    },
+    {
+      "from": "calling",
+      "event": "1xx response",
+      "action": "1xx to TU",
+      "to": "proceeding"
+    },
+    {
+      "from": "calling",
+      "event": "300-699 response",
+      "action": "ACK sent, resp. to TU",
+      "to": "completed"
+    },
+    {
+      "from": "proceeding",
+      "event": "Timer E fires",
+      "action": "Reset E, INVITE sent",
+      "to": "proceeding"
+    },
+    {
+      "from": "proceeding",
+      "event": "Timer F fires",
+      "action": "inform TU",
+      "to": "terminated"
+    },
+    {
+      "from": "proceeding",
+      "event": "300-699 response",
+      "action": "ACK sent, resp. to TU",
+      "to": "completed"
+    },
+    {
+      "from": "proceeding",
+      "event": "2xx response",
+      "action": "2xx to TU",
+      "to": "terminated"
+    },
+    {
+      "from": "completed",
+      "event": "Timer D fires",
+      "action": "",
+      "to": "terminated"
+    },
+    {
+      "from": "completed",
+      "event": "300-699 response",
+      "action": "ACK sent",
+      "to": "completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "100 (Trying) response",
+      "action": "send 100 (Trying) response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "101-199 from TU",
+      "action": "send response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx from TU",
+      "action": "send response",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699 from TU",
+      "action": "send response",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Request retransmission",
+      "action": "pass the most recent provisional response to the transport layer for retransmission",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer G fires",
+      "action": "pass the response to the transport layer for retransmission",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "ACK received",
+      "action": "",
+      "to": "Confirmed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer H fires",
+      "action": "indicate to the TU that a transaction failure has occurred",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "1xx from TU",
+      "action": "send response",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "200-699 from TU",
+      "action": "send response",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer J fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "early",
+      "event": "2xx final response",
+      "action": "transition to confirmed state",
+      "to": "confirmed"
+    },
+    {
+      "from": "early",
+      "event": "non-2xx final response",
+      "action": "terminate early dialog",
+      "to": "early"
+    },
+    {
+      "from": "confirmed",
+      "event": "BYE request",
+      "action": "terminate session and dialog",
+      "to": "confirmed"
+    },
+    {
+      "from": "calling",
+      "event": "Timer A fires",
+      "action": "Reset A, INVITE sent",
+      "to": "calling"
+    },
+    {
+      "from": "calling",
+      "event": "1xx response",
+      "action": "1xx to TU",
+      "to": "proceeding"
+    },
+    {
+      "from": "calling",
+      "event": "300-699 response",
+      "action": "ACK sent, resp. to TU",
+      "to": "completed"
+    },
+    {
+      "from": "calling",
+      "event": "2xx response",
+      "action": "",
+      "to": "terminated"
+    },
+    {
+      "from": "calling",
+      "event": "Timer B fires",
+      "action": "inform TU",
+      "to": "terminated"
+    },
+    {
+      "from": "proceeding",
+      "event": "1xx response",
+      "action": "1xx to TU",
+      "to": "proceeding"
+    },
+    {
+      "from": "proceeding",
+      "event": "300-699 response",
+      "action": "ACK sent, resp. to TU",
+      "to": "completed"
+    },
+    {
+      "from": "proceeding",
+      "event": "2xx response",
+      "action": "",
+      "to": "terminated"
+    },
+    {
+      "from": "proceeding",
+      "event": "Timer B fires",
+      "action": "inform TU",
+      "to": "terminated"
+    },
+    {
+      "from": "completed",
+      "event": "300-699 response",
+      "action": "ACK sent, resp. to TU",
+      "to": "completed"
+    },
+    {
+      "from": "completed",
+      "event": "Timer D fires",
+      "action": "",
+      "to": "terminated"
+    },
+    {
+      "from": "Existing Dialog",
+      "event": "UAC sends re-INVITE",
+      "action": "UAC creates new offer with full session description",
+      "to": "Existing Dialog"
+    },
+    {
+      "from": "Existing Dialog",
+      "event": "UAC receives 481 (Call/Transaction Does Not Exist) or 408 (Request Timeout) or timeout",
+      "action": "UAC terminates the dialog by sending BYE",
+      "to": "Terminated Dialog"
+    },
+    {
+      "from": "Existing Dialog",
+      "event": "UAC receives 491 response",
+      "action": "UAC starts a timer with a random value",
+      "to": "Existing Dialog"
+    },
+    {
+      "from": "Existing Dialog",
+      "event": "UAC receives 2xx response",
+      "action": "UAC sends ACK",
+      "to": "Confirmed Dialog"
+    },
+    {
+      "from": "Existing Dialog",
+      "event": "UAC receives non-2xx final response",
+      "action": "Session parameters remain unchanged",
+      "to": "Existing Dialog"
+    },
+    {
+      "from": "Ongoing INVITE Client Transaction",
+      "event": "Transaction reaches completed or terminated state",
+      "action": "UAC can initiate a new INVITE",
+      "to": "Existing Dialog"
+    },
+    {
+      "from": "Ongoing INVITE Server Transaction",
+      "event": "Transaction reaches confirmed or terminated state",
+      "action": "UAC can initiate a new INVITE",
+      "to": "Existing Dialog"
+    },
+    {
+      "from": "Existing Dialog",
+      "event": "UAS receives re-INVITE",
+      "action": "UAS checks session description for changes",
+      "to": "Existing Dialog"
+    },
+    {
+      "from": "Existing Dialog",
+      "event": "UAS receives re-INVITE with unacceptable session description",
+      "action": "UAS rejects with 488 (Not Acceptable Here) response",
+      "to": "Existing Dialog"
+    },
+    {
+      "from": "Existing Dialog",
+      "event": "UAS generates 2xx response and does not receive ACK",
+      "action": "UAS generates BYE to terminate the dialog",
+      "to": "Terminated Dialog"
+    },
+    {
+      "from": "Existing Dialog",
+      "event": "UAS receives INVITE with lower CSeq sequence number",
+      "action": "UAS returns 500 (Server Internal Error) response",
+      "to": "Existing Dialog"
+    },
+    {
+      "from": "Existing Dialog",
+      "event": "UAS receives INVITE while sending INVITE on the same dialog",
+      "action": "UAS returns 491 (Request Pending) response",
+      "to": "Existing Dialog"
+    },
+    {
+      "from": "Early Dialog",
+      "event": "UAC receives 2xx response",
+      "action": "Early dialog transitions to confirmed dialog",
+      "to": "Confirmed Dialog"
+    },
+    {
+      "from": "Early Dialog",
+      "event": "UAC receives non-2xx final response",
+      "action": "Early dialog terminates",
+      "to": "Terminated Dialog"
+    },
+    {
+      "from": "Confirmed Dialog",
+      "event": "UAC sends BYE",
+      "action": "Dialog terminates",
+      "to": "Terminated Dialog"
+    },
+    {
+      "from": "Early Dialog",
+      "event": "2xx response",
+      "action": "transition to Confirmed Dialog",
+      "to": "Confirmed Dialog"
+    },
+    {
+      "from": "Early Dialog",
+      "event": "non-2xx final response",
+      "action": "terminate all sessions and dialogs",
+      "to": "Terminated"
+    },
+    {
+      "from": "Confirmed Dialog",
+      "event": "BYE request",
+      "action": "terminate session and dialog",
+      "to": "Terminated"
+    },
+    {
+      "from": "Session",
+      "event": "BYE request",
+      "action": "terminate session",
+      "to": "Terminated"
+    },
+    {
+      "from": "Session",
+      "event": "non-2xx final response to INVITE",
+      "action": "terminate all sessions and dialogs",
+      "to": "Terminated"
+    },
+    {
+      "from": "Stateful Proxy",
+      "event": "",
+      "action": "discard state",
+      "to": "Stateless Proxy"
+    },
+    {
+      "from": "Calling",
+      "event": "Timer A fires",
+      "action": "Reset A, INVITE sent",
+      "to": "Calling"
+    },
+    {
+      "from": "Calling",
+      "event": "1xx response received",
+      "action": "Pass response to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Calling",
+      "event": "300-699 response received",
+      "action": "Pass response to TU, ACK sent",
+      "to": "Completed"
+    },
+    {
+      "from": "Calling",
+      "event": "2xx response received",
+      "action": "Pass response to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699 response received",
+      "action": "Pass response to TU, ACK sent",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx response received",
+      "action": "Pass response to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer D fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Final response retransmission received",
+      "action": "ACK re-passed to transport layer",
+      "to": "Completed"
+    },
+    {
+      "from": "Trying",
+      "event": "1xx response received",
+      "action": "Pass response to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "200-699 response received",
+      "action": "Pass response to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "200-699 response received",
+      "action": "Pass response to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer K fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "INVITE",
+      "action": "Pass INV to TU, send 100 if TU won't in 200ms",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699 from TU",
+      "action": "send response",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx from TU",
+      "action": "send response",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer G fires",
+      "action": "send response",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "ACK received",
+      "action": "",
+      "to": "Confirmed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer H fires",
+      "action": "Inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Confirmed",
+      "event": "Timer I fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Request Validation",
+      "event": "Reasonable Syntax check fails",
+      "action": "respond with an error code",
+      "to": "Proxy Behavior"
+    },
+    {
+      "from": "Request Validation",
+      "event": "URI scheme check fails",
+      "action": "reject the request with a 416 (Unsupported URI Scheme) response",
+      "to": "Proxy Behavior"
+    },
+    {
+      "from": "Request Validation",
+      "event": "Max-Forwards check fails",
+      "action": "return a 483 (Too many hops) response",
+      "to": "Proxy Behavior"
+    },
+    {
+      "from": "Request Validation",
+      "event": "Loop Detection check fails",
+      "action": "return a 482 (Loop Detected) response",
+      "to": "Proxy Behavior"
+    },
+    {
+      "from": "Request Validation",
+      "event": "Proxy-Require check fails",
+      "action": "return a 420 (Bad Extension) response",
+      "to": "Proxy Behavior"
+    },
+    {
+      "from": "Request Validation",
+      "event": "Proxy-Authorization check fails",
+      "action": "inspect the request as described in Section 22.3",
+      "to": "Proxy Behavior"
+    },
+    {
+      "from": "Determining Request Targets",
+      "event": "",
+      "action": "If the Request-URI of the request contains an maddr parameter, the Request-URI MUST be placed into the target set as the only target URI, and the proxy MUST proceed to Request Forwarding",
+      "to": "Request Forwarding"
+    },
+    {
+      "from": "Determining Request Targets",
+      "event": "",
+      "action": "If the domain of the Request-URI indicates a domain this element is not responsible for, the Request-URI MUST be placed into the target set as the only target, and the element MUST proceed to Request Forwarding",
+      "to": "Request Forwarding"
+    },
+    {
+      "from": "Determining Request Targets",
+      "event": "",
+      "action": "If the Request-URI does not provide sufficient information for the proxy to determine the target set, it SHOULD return a 485 (Ambiguous) response",
+      "to": "Determining Request Targets"
+    },
+    {
+      "from": "Determining Request Targets",
+      "event": "",
+      "action": "If the Request-URI indicates a resource at this proxy that does not exist, the proxy MUST return a 404 (Not Found) response",
+      "to": "Determining Request Targets"
+    },
+    {
+      "from": "Determining Request Targets",
+      "event": "",
+      "action": "If the target set remains empty after applying all of the above, the proxy MUST return an error response, which SHOULD be the 480 (Temporarily Unavailable) response",
+      "to": "Determining Request Targets"
+    },
+    {
+      "from": "calling",
+      "event": "Timer A fires",
+      "action": "Reset A, INVITE sent",
+      "to": "calling"
+    },
+    {
+      "from": "calling",
+      "event": "Timer B fires",
+      "action": "inform TU",
+      "to": "terminated"
+    },
+    {
+      "from": "calling",
+      "event": "1xx response",
+      "action": "pass response to TU",
+      "to": "proceeding"
+    },
+    {
+      "from": "calling",
+      "event": "300-699 response",
+      "action": "pass response to TU, ACK sent",
+      "to": "completed"
+    },
+    {
+      "from": "calling",
+      "event": "2xx response",
+      "action": "pass response to TU",
+      "to": "terminated"
+    },
+    {
+      "from": "proceeding",
+      "event": "1xx response",
+      "action": "pass response to TU",
+      "to": "proceeding"
+    },
+    {
+      "from": "proceeding",
+      "event": "300-699 response",
+      "action": "pass response to TU, ACK sent",
+      "to": "completed"
+    },
+    {
+      "from": "proceeding",
+      "event": "2xx response",
+      "action": "pass response to TU",
+      "to": "terminated"
+    },
+    {
+      "from": "proceeding",
+      "event": "Timer B fires",
+      "action": "inform TU",
+      "to": "terminated"
+    },
+    {
+      "from": "completed",
+      "event": "Timer D fires",
+      "action": "",
+      "to": "terminated"
+    },
+    {
+      "from": "completed",
+      "event": "300-699 response retransmission",
+      "action": "ACK sent",
+      "to": "completed"
+    },
+    {
+      "from": "trying",
+      "event": "Timer E fires",
+      "action": "Reset E, send request",
+      "to": "trying"
+    },
+    {
+      "from": "trying",
+      "event": "Timer F fires",
+      "action": "inform TU",
+      "to": "terminated"
+    },
+    {
+      "from": "trying",
+      "event": "1xx response",
+      "action": "pass response to TU",
+      "to": "proceeding"
+    },
+    {
+      "from": "trying",
+      "event": "200-699 response",
+      "action": "pass response to TU",
+      "to": "completed"
+    },
+    {
+      "from": "proceeding",
+      "event": "Timer E fires",
+      "action": "send request",
+      "to": "proceeding"
+    },
+    {
+      "from": "proceeding",
+      "event": "Timer F fires",
+      "action": "inform TU",
+      "to": "terminated"
+    },
+    {
+      "from": "proceeding",
+      "event": "200-699 response",
+      "action": "pass response to TU",
+      "to": "completed"
+    },
+    {
+      "from": "completed",
+      "event": "Timer K fires",
+      "action": "",
+      "to": "terminated"
+    },
+    {
+      "from": "Client Transaction",
+      "event": "Receive Provisional Response",
+      "action": "Update timer C",
+      "to": "Provisional Response"
+    },
+    {
+      "from": "Client Transaction",
+      "event": "Receive Final Response",
+      "action": "Forward the response",
+      "to": "Final Response"
+    },
+    {
+      "from": "Provisional Response",
+      "event": "Receive Final Response",
+      "action": "Forward the response",
+      "to": "Final Response"
+    },
+    {
+      "from": "Final Response",
+      "event": "All client transactions terminated",
+      "action": "Choose and forward the best response",
+      "to": "Terminated"
+    },
+    {
+      "from": "Client Transaction",
+      "event": "Timer C expires",
+      "action": "Forward 408 (Request Timeout) response",
+      "to": "Terminated"
+    },
+    {
+      "from": "Pending client transactions",
+      "event": "CANCEL request received",
+      "action": "cancel any pending client transactions associated with a response context",
+      "to": "CANCEL request processed"
+    },
+    {
+      "from": "Pending client transactions",
+      "event": "Provisional response received",
+      "action": "generate CANCEL requests for pending INVITE client transactions based on the period specified in the INVITE's Expires header field elapsing",
+      "to": "Provisional response received"
+    },
+    {
+      "from": "Provisional response received",
+      "event": "CANCEL request received",
+      "action": "search its existing response contexts for the server transaction handling the request associated with this CANCEL",
+      "to": "Response context found"
+    },
+    {
+      "from": "Provisional response received",
+      "event": "CANCEL request received",
+      "action": "statelessly forward the CANCEL request",
+      "to": "CANCEL request forwarded"
+    },
+    {
+      "from": "Response context found",
+      "event": "",
+      "action": "return a 200 (OK) response to the CANCEL request",
+      "to": "CANCEL request processed"
+    },
+    {
+      "from": "CANCEL request forwarded",
+      "event": "",
+      "action": "generate CANCEL requests for all pending client transactions in the context",
+      "to": "CANCEL request processed"
+    },
+    {
+      "from": "Final response received",
+      "event": "CANCEL request received",
+      "action": "generate CANCEL requests for all pending client transactions associated with this response context",
+      "to": "CANCEL request processed"
+    },
+    {
+      "from": "Stateless Proxy",
+      "event": "Receive Request",
+      "action": "Validate request, choose target, forward request, do not retransmit",
+      "to": "Stateless Proxy"
+    },
+    {
+      "from": "Stateless Proxy",
+      "event": "Receive Response",
+      "action": "Inspect sent-by value in topmost Via header, forward response if match, discard if no match",
+      "to": "Stateless Proxy"
+    },
+    {
+      "from": "early dialog",
+      "event": "2xx response",
+      "action": "transition to confirmed state",
+      "to": "confirmed"
+    },
+    {
+      "from": "confirmed",
+      "event": "ACK",
+      "action": "",
+      "to": "confirmed"
+    },
+    {
+      "from": "calling",
+      "event": "Timer A fires",
+      "action": "Reset A, INVITE sent",
+      "to": "calling"
+    },
+    {
+      "from": "calling",
+      "event": "1xx response",
+      "action": "pass response to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "calling",
+      "event": "300-699 response",
+      "action": "pass response to TU, generate ACK",
+      "to": "Completed"
+    },
+    {
+      "from": "calling",
+      "event": "2xx response",
+      "action": "pass response to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "calling",
+      "event": "Timer B fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699 response",
+      "action": "pass response to TU, generate ACK",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx response",
+      "action": "pass response to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer D fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "retransmission of final response",
+      "action": "re-pass ACK to transport layer",
+      "to": "Completed"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer E fires",
+      "action": "send request",
+      "to": "Trying"
+    },
+    {
+      "from": "Trying",
+      "event": "Timer F fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "1xx response",
+      "action": "pass response to TU",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Trying",
+      "event": "200-699 response",
+      "action": "pass response to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer E fires",
+      "action": "send request",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "Timer F fires",
+      "action": "inform TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "200-699 response",
+      "action": "pass response to TU",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "Timer K fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "2xx response from TU",
+      "action": "pass response to transport layer for transmission",
+      "to": "Terminated"
+    },
+    {
+      "from": "Proceeding",
+      "event": "300-699 response from TU",
+      "action": "pass response to transport layer for transmission",
+      "to": "Completed"
+    },
+    {
+      "from": "Proceeding",
+      "event": "request retransmission",
+      "action": "pass most recent provisional response to transport layer for retransmission",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Completed",
+      "event": "ACK received",
+      "action": "",
+      "to": "Confirmed"
+    },
+    {
+      "from": "Completed",
+      "event": "timer H fires",
+      "action": "indicate transaction failure to TU",
+      "to": "Terminated"
+    },
+    {
+      "from": "Completed",
+      "event": "timer G fires",
+      "action": "pass response to transport layer for retransmission",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "request retransmission",
+      "action": "pass response to transport for retransmission",
+      "to": "Completed"
+    },
+    {
+      "from": "Confirmed",
+      "event": "timer I fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Trying",
+      "event": "1xx response from TU",
+      "action": "pass response to transport layer for transmission",
+      "to": "Proceeding"
+    },
+    {
+      "from": "Proceeding",
+      "event": "200-699 response from TU",
+      "action": "pass response to transport layer for transmission",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "request retransmission",
+      "action": "pass final response to transport layer for retransmission",
+      "to": "Completed"
+    },
+    {
+      "from": "Completed",
+      "event": "timer J fires",
+      "action": "",
+      "to": "Terminated"
+    },
+    {
+      "from": "Unauthorized",
+      "event": "401 (Unauthorized)",
+      "action": "UAS sends WWW-Authenticate header field",
+      "to": "Unauthorized"
+    },
+    {
+      "from": "Unauthorized",
+      "event": "UAC receives 401 (Unauthorized)",
+      "action": "UAC re-originates the request with Authorization header field",
+      "to": "Authorized"
+    },
+    {
+      "from": "Processing REGISTER Request",
+      "event": "423 (Interval Too Brief) response",
+      "action": "UA MAY retry the registration after making the expiration interval of all contact addresses in the REGISTER request equal to or greater than the expiration interval within the Min-Expires header field of the 423 (Interval Too Brief) response",
+      "to": "Processing REGISTER Request"
+    },
+    {
+      "from": "Processing REGISTER Request",
+      "event": "requested expiration interval is greater than zero AND smaller than one hour AND less than a registrar-configured minimum",
+      "action": "reject the registration with a response of 423 (Interval Too Brief). This response MUST contain a Min-Expires header field that states the minimum expiration interval the registrar is willing to honor",
+      "to": "423 Interval Too Brief"
+    },
+    {
+      "from": "Proxy Authentication Required",
+      "event": "407 (Proxy Authentication Required)",
+      "action": "UAC re-originates the request with proper credentials",
+      "to": "Proxy Authentication Successful"
+    },
+    {
+      "from": "Proxy Authentication Required",
+      "event": "UAC fails to provide credentials",
+      "action": "Proxy servers do not forward requests",
+      "to": "Proxy Authentication Required"
+    },
+    {
+      "from": "Unauthorized",
+      "event": "401 (Unauthorized) response",
+      "action": "UAC re-originates the request with proper credentials",
+      "to": "Authorized"
+    },
+    {
+      "from": "Unauthorized",
+      "event": "401 (Unauthorized) response",
+      "action": "UAC attempts to retry the request with a username of 'anonymous' and no password",
+      "to": "Authorized"
+    },
+    {
+      "from": "Provisional",
+      "event": "",
+      "action": "",
+      "to": "Successful"
+    },
+    {
+      "from": "Provisional",
+      "event": "",
+      "action": "",
+      "to": "Redirection"
+    },
+    {
+      "from": "Provisional",
+      "event": "",
+      "action": "",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Provisional",
+      "event": "",
+      "action": "",
+      "to": "Server Failure"
+    },
+    {
+      "from": "Provisional",
+      "event": "",
+      "action": "",
+      "to": "Global Failures"
+    },
+    {
+      "from": "Successful",
+      "event": "",
+      "action": "",
+      "to": "Provisional"
+    },
+    {
+      "from": "Successful",
+      "event": "",
+      "action": "",
+      "to": "Redirection"
+    },
+    {
+      "from": "Successful",
+      "event": "",
+      "action": "",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Successful",
+      "event": "",
+      "action": "",
+      "to": "Server Failure"
+    },
+    {
+      "from": "Successful",
+      "event": "",
+      "action": "",
+      "to": "Global Failures"
+    },
+    {
+      "from": "Redirection",
+      "event": "",
+      "action": "",
+      "to": "Provisional"
+    },
+    {
+      "from": "Redirection",
+      "event": "",
+      "action": "",
+      "to": "Successful"
+    },
+    {
+      "from": "Redirection",
+      "event": "",
+      "action": "",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Redirection",
+      "event": "",
+      "action": "",
+      "to": "Server Failure"
+    },
+    {
+      "from": "Redirection",
+      "event": "",
+      "action": "",
+      "to": "Global Failures"
+    },
+    {
+      "from": "Request Failure",
+      "event": "",
+      "action": "",
+      "to": "Provisional"
+    },
+    {
+      "from": "Request Failure",
+      "event": "",
+      "action": "",
+      "to": "Successful"
+    },
+    {
+      "from": "Request Failure",
+      "event": "",
+      "action": "",
+      "to": "Redirection"
+    },
+    {
+      "from": "Request Failure",
+      "event": "",
+      "action": "",
+      "to": "Server Failure"
+    },
+    {
+      "from": "Request Failure",
+      "event": "",
+      "action": "",
+      "to": "Global Failures"
+    },
+    {
+      "from": "Server Failure",
+      "event": "",
+      "action": "",
+      "to": "Provisional"
+    },
+    {
+      "from": "Server Failure",
+      "event": "",
+      "action": "",
+      "to": "Successful"
+    },
+    {
+      "from": "Server Failure",
+      "event": "",
+      "action": "",
+      "to": "Redirection"
+    },
+    {
+      "from": "Server Failure",
+      "event": "",
+      "action": "",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Server Failure",
+      "event": "",
+      "action": "",
+      "to": "Global Failures"
+    },
+    {
+      "from": "Global Failures",
+      "event": "",
+      "action": "",
+      "to": "Provisional"
+    },
+    {
+      "from": "Global Failures",
+      "event": "",
+      "action": "",
+      "to": "Successful"
+    },
+    {
+      "from": "Global Failures",
+      "event": "",
+      "action": "",
+      "to": "Redirection"
+    },
+    {
+      "from": "Global Failures",
+      "event": "",
+      "action": "",
+      "to": "Request Failure"
+    },
+    {
+      "from": "Global Failures",
+      "event": "",
+      "action": "",
+      "to": "Server Failure"
+    },
+    {
+      "from": "Unauthorized",
+      "event": "401 (Unauthorized) response",
+      "action": "UAC re-originates the request with proper credentials",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Proxy Authentication Required",
+      "event": "407 (Proxy Authentication Required) response",
+      "action": "UAC re-originates the request with proper credentials",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Unauthorized or Proxy Authentication Required",
+      "event": "401 (Unauthorized) or 407 (Proxy Authentication Required) response",
+      "action": "UAC re-originates the request with proper credentials",
+      "to": "Authenticated"
+    },
+    {
+      "from": "Unauthorized or Proxy Authentication Required with multiple challenges",
+      "event": "401 (Unauthorized) or 407 (Proxy Authentication Required) response with multiple challenges",
+      "action": "UAC includes an Authorization value for each WWW-Authenticate value and a Proxy-Authorization value for each Proxy-Authenticate value",
+      "to": "Authenticated"
+    },
+    {
+      "from": "UAC Sends Request with S/MIME Body",
+      "event": "UAS Receives Request",
+      "action": "UAS validates the certificate",
+      "to": "Certificate Validation"
+    },
+    {
+      "from": "Certificate Validation",
+      "event": "Certificate Verification",
+      "action": "UAS verifies the certificate",
+      "to": "Certificate Verification"
+    },
+    {
+      "from": "Certificate Verification",
+      "event": "Certificate Verification Successful",
+      "action": "UAS adds certificate to keyring",
+      "to": "Certificate Addition to Keyring"
+    },
+    {
+      "from": "Certificate Verification",
+      "event": "Certificate Verification Failed",
+      "action": "UAS notifies user and requests permission",
+      "to": "Certificate Validation"
+    },
+    {
+      "from": "UAS Sends Response with S/MIME Body",
+      "event": "UAC Receives Response",
+      "action": "UAC validates the certificate",
+      "to": "Certificate Validation"
+    },
+    {
+      "from": "Certificate Validation",
+      "event": "Certificate Verification",
+      "action": "UAC verifies the certificate",
+      "to": "Certificate Verification"
+    },
+    {
+      "from": "Certificate Verification",
+      "event": "Certificate Verification Successful",
+      "action": "UAC adds certificate to keyring",
+      "to": "Certificate Addition to Keyring"
+    },
+    {
+      "from": "Certificate Verification",
+      "event": "Certificate Verification Failed",
+      "action": "UAC notifies user and requests permission",
+      "to": "Certificate Validation"
+    },
+    {
+      "from": "UAC Receives Response with S/MIME Body",
+      "event": "Certificate Discrepancy Detected",
+      "action": "UAC notifies user of certificate change",
+      "to": "Certificate Change Notification"
+    },
+    {
+      "from": "UAS Receives Request with S/MIME Body",
+      "event": "Certificate Discrepancy Detected",
+      "action": "UAS notifies user of certificate change",
+      "to": "Certificate Change Notification"
+    },
+    {
+      "from": "UAC Receives Response with S/MIME Body",
+      "event": "Encrypted with Unknown Public Key",
+      "action": "UAC rejects request with 493 Undecipherable",
+      "to": "Rejection of Undecipherable Request"
+    },
+    {
+      "from": "UAC Sends Request with S/MIME Body",
+      "event": "Receives Unsecured Response",
+      "action": "UAC notifies user of unsecured session",
+      "to": "Notification of Unsecured Session"
+    },
+    {
+      "from": "UAS Receives Request with S/MIME Body",
+      "event": "Receives Unsecured Request",
+      "action": "UAS notifies user of unsecured session",
+      "to": "Notification of Unsecured Session"
+    },
+    {
+      "from": "UAC Sends Request with S/MIME Body",
+      "event": "Receives 415 Unsupported Media Type",
+      "action": "UAC notifies user of unsupported S/MIME",
+      "to": "Handling of Optional S/MIME Body"
+    },
+    {
+      "from": "Registration",
+      "event": "REGISTER",
+      "action": "200 OK",
+      "to": "Registration"
+    },
+    {
+      "from": "Session Setup",
+      "event": "INVITE",
+      "action": "100 Trying",
+      "to": "Session Setup"
+    },
+    {
+      "from": "Session Setup",
+      "event": "180 Ringing",
+      "action": "",
+      "to": "Session Setup"
+    },
+    {
+      "from": "Session Setup",
+      "event": "200 OK",
+      "action": "ACK",
+      "to": "Media Session"
+    },
+    {
+      "from": "Media Session",
+      "event": "BYE",
+      "action": "200 OK",
+      "to": "Session Termination"
+    }
+  ]
+}
