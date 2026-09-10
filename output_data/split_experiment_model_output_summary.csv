@@ -27,3 +27,8 @@ Split Experiment Results,Recursive Section Splitting,qwen3.5_27b_think,14,0.607,
 Split Experiment Results,Recursive Section Splitting,qwen3.5_9b_no_think,14,0.643,0.714,0.654,0.207,0.361,0.241,0.246,0.411,0.283
 Split Experiment Results,Recursive Section Splitting,qwen3.5_9b_think,14,0.482,0.637,0.529,0.168,0.325,0.218,0.235,0.383,0.266
 Split Experiment Results,Recursive Section Splitting,qwq_32b_think,14,0.513,0.781,0.562,0.17,0.375,0.219,0.199,0.433,0.256
+Split Experiment Results,Referenced Context Splitting,gemma3_12b_no_think,14,0.274,0.923,0.385,0.175,0.291,0.195,0.196,0.358,0.226
+Split Experiment Results,Referenced Context Splitting,gemma3_27b_no_think,14,0.366,0.893,0.486,0.152,0.4,0.21,0.172,0.464,0.241
+Split Experiment Results,Referenced Context Splitting,mistral-small3.1_24b_no_think,14,0.293,0.939,0.411,0.115,0.53,0.182,0.136,0.59,0.211
+Split Experiment Results,Referenced Context Splitting,qwen3.5_27b_no_think,14,0.473,0.861,0.572,0.159,0.533,0.229,0.186,0.596,0.259
+Split Experiment Results,Referenced Context Splitting,qwen3.5_9b_no_think,14,0.577,0.757,0.628,0.186,0.416,0.231,0.213,0.455,0.254
