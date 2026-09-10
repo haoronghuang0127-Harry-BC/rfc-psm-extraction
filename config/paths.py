@@ -11,8 +11,8 @@ CONFIG_FOLDER: Final[Path] = CURRENT_FILE.parent
 # the root path
 PROJECT_FOLDER_DIR: Final[Path] = CONFIG_FOLDER.parent
 
-# PSMBench Project Path
-PSMBENCH_DIR: Final[Path] = PROJECT_FOLDER_DIR / "RFC_PSM_Benchmark-main" 
+# Required PSMBench code and data kept in the project root.
+PSMBENCH_DIR: Final[Path] = PROJECT_FOLDER_DIR / "RFC_PSM_Benchmark-main"
 # PSMBech Output data path
 PSMBENCH_OUTPUT_DIR: Final[Path] = PROJECT_FOLDER_DIR / "output_data"
 # PSMBench original evaluation OutputPath
